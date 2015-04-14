@@ -29,6 +29,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+		'view'=>[
+			'theme'=>[
+				'pathMap'=>[
+					'@app/views'=>'@app/themes/views'
+				],
+				'baseUrl'=>'@web/themes',
+			]
+		],
     ],
     'params' => $params,
 ];
