@@ -36,6 +36,23 @@ Table of Contents
 /*===================================================================================*/
 /*  Helper
 /*===================================================================================*/
+
+fieldset.scheduler-border {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+legend.scheduler-border {
+    font-size: 1em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    border-bottom:none;
+}
+
 .light-bg {
   background-color: #f8f8f8;
 }
@@ -1471,7 +1488,7 @@ header .top-cart-row .top-cart-holder .total-price-basket {
   display: inline-block;
   width: 15px;
   height: 15px;
-  margin: 0px 6px 0 0;
+  margin: 2px 6px 0 0;
   vertical-align: top;
   border: 1px solid #e0e0e0;
   background-color: #fff;
@@ -1548,6 +1565,17 @@ header .top-cart-row .top-cart-holder .total-price-basket {
   position: relative;
   display: inline-block;
   vertical-align: top;
+}
+.le-select-address {
+    background-color: #fff;
+    border: 1px solid #ececec;
+    padding: 5px 16px 7px 5px;
+    color: #3d3d3d;
+    width: 100%;
+    font-size: 13px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
 }
 .le-select .le-select-in {
   width: auto;

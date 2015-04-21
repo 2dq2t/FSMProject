@@ -1,6 +1,13 @@
 <?php
 namespace frontend\controllers;
 
+use Faker\Provider\cs_CZ\DateTime;
+use frontend\models\City;
+use frontend\models\District;
+use frontend\models\User;
+use frontend\models\Useraccount;
+use frontend\models\Ward;
+use frontend\models\Address;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -12,6 +19,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\JSon;
 
 /**
  * Site controller
@@ -167,5 +175,73 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionRegister(){
+
+        $modelUserAccount = new Useraccount();
+
+        $modelUserAccount->PasswordResetToken = "DEFAULT VALUE";
+
+        $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
+        $modelUserAccount->CreatedAt = $time->format('Y-m-d H:i:s');
+
+        $modelUserAccount->Status = "Active";
+
+        $modelUser = new User();
+
+        $modelCity = new City();
+        $modelDistrict = new District();
+        $modelWard = new Ward();
+
+        $modelAddress = new Address();
+
+        if($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()){
+            $modelUserAccount->AddressId = $modelAddress->Ward_Id;
+            if ($modelUserAccount->load(Yii::$app->request->post()) && $modelUserAccount->save()) {
+                $modelUser->UserAccountId = $modelUserAccount->Id;
+                if ($modelUser->load(Yii::$app->request->post()) && $modelUser->save()) {
+                    return $this->redirect(['index']);
+                }
+            }
+        } else {
+            return $this->render('register', [
+                'modelUserAccount' => $modelUserAccount,
+                'modelUser' => $modelUser,
+                'modelCity' => $modelCity,
+                'modelDistrict' => $modelDistrict,
+                'modelWard' => $modelWard,
+                'modelAddress' => $modelAddress,
+            ]);
+        }
+    }
+
+    public function actionSubcat() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out = District::getOptionsByDistrict($city_id);
+                echo Json::encode(['output' => $out, 'selected' => '']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionProd() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $ids = $_POST['depdrop_parents'];
+            $cat_id = empty($ids[0]) ? null : $ids[0];
+            $subcat_id = empty($ids[1]) ? null : $ids[1];
+            if ($cat_id != null && $subcat_id != null) {
+                $data = Ward::getOptionsByWard($subcat_id);
+                echo Json::encode(['output'=>$data, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 }

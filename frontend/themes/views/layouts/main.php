@@ -86,7 +86,7 @@ AppAsset::register($this);
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Dollar (US)</a></li>
                     </ul>
                 </li>
-                <li><a href="authentication.html">Register</a></li>
+                <li><a href="index.php?r=site/register">Register</a></li>
                 <li><a href="authentication.html">Login</a></li>
             </ul>
         </div><!-- /.col -->

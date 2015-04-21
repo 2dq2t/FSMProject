@@ -30,7 +30,6 @@ class AppAsset extends AssetBundle
 		'mediacenter/assets/images/favicon.ico',
     ];
     public $js = [
-		'mediacenter/assets/js/jquery-1.10.2.min.js',
 		'mediacenter/assets/js/jquery-migrate-1.2.1.js',
 		'mediacenter/assets/js/bootstrap.min.js',
 		'http://maps.google.com/maps/api/js?sensor=false&amp;language=en',
