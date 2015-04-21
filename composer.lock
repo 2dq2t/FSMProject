@@ -4,7 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "7192c9011538aa551312dd8f708a7d14",
+=======
+    "hash": "e32d2301ece0cf33a0e0979de5d993eb",
+>>>>>>> origin/master
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -319,6 +323,7 @@
             "time": "2013-11-30 08:25:19"
         },
         {
+<<<<<<< HEAD
             "name": "kartik-v/bootstrap-fileinput",
             "version": "v4.1.8",
             "source": {
@@ -330,12 +335,29 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/dead0e4302567e87e66296290b62da936ec6793e",
                 "reference": "dead0e4302567e87e66296290b62da936ec6793e",
+=======
+            "name": "kartik-v/strength-meter",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/strength-meter.git",
+                "reference": "e2c94d4bdd033171a9650afa69973e48146d5cf6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/strength-meter/zipball/e2c94d4bdd033171a9650afa69973e48146d5cf6",
+                "reference": "e2c94d4bdd033171a9650afa69973e48146d5cf6",
+>>>>>>> origin/master
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
+<<<<<<< HEAD
                     "kartik\\plugins\\fileinput\\": ""
+=======
+                    "kartik\\": ""
+>>>>>>> origin/master
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -349,6 +371,7 @@
                     "homepage": "http://www.krajee.com/"
                 }
             ],
+<<<<<<< HEAD
             "description": "An enhanced HTML 5 file input for Bootstrap 3.x with features for file preview for many file types, multiple selection, ajax uploads, and more.",
             "homepage": "https://github.com/kartik-v/bootstrap-fileinput",
             "keywords": [
@@ -448,6 +471,18 @@
                 "select"
             ],
             "time": "2015-02-01 13:03:27"
+=======
+            "description": "A dynamic strength meter for password input validation with various configurable options.",
+            "homepage": "https://github.com/kartik-v/strength-meter",
+            "keywords": [
+                "bootstrap",
+                "jquery",
+                "meter",
+                "password",
+                "strength"
+            ],
+            "time": "2015-02-15 04:52:51"
+>>>>>>> origin/master
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -496,6 +531,7 @@
             "time": "2015-02-13 03:36:35"
         },
         {
+<<<<<<< HEAD
             "name": "kartik-v/yii2-widget-activeform",
             "version": "v1.4.1",
             "source": {
@@ -606,12 +642,33 @@
                 "shasum": ""
             },
             "require": {
+=======
+            "name": "kartik-v/yii2-password",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-password.git",
+                "reference": "255e290d0f0da958dd3d692f160f6b75787503b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-password/zipball/255e290d0f0da958dd3d692f160f6b75787503b5",
+                "reference": "255e290d0f0da958dd3d692f160f6b75787503b5",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/strength-meter": "*",
+>>>>>>> origin/master
                 "kartik-v/yii2-krajee-base": "*"
             },
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
+<<<<<<< HEAD
                     "kartik\\alert\\": ""
+=======
+                    "kartik\\password\\": ""
+>>>>>>> origin/master
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -625,6 +682,7 @@
                     "homepage": "http://www.krajee.com/"
                 }
             ],
+<<<<<<< HEAD
             "description": "A widget to generate alert based notifications using bootstrap-alert plugin (sub repo split from yii2-widgets)",
             "homepage": "https://github.com/kartik-v/yii2-widget-alert",
             "keywords": [
@@ -1439,6 +1497,23 @@
                 "yii2"
             ],
             "time": "2014-11-09 19:54:17"
+=======
+            "description": "Useful password strength validation utilities for Yii Framework 2.0",
+            "homepage": "https://github.com/kartik-v/yii2-password",
+            "keywords": [
+                "auth",
+                "bootstrap",
+                "extension",
+                "form",
+                "input",
+                "jquery",
+                "password",
+                "strength",
+                "yii",
+                "yii2"
+            ],
+            "time": "2015-03-02 17:54:53"
+>>>>>>> origin/master
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2025,7 +2100,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kartik-v/yii2-password": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
