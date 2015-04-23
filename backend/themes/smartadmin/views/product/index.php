@@ -53,6 +53,19 @@ $this->params['breadcrumbs'][] = $this->title;
         //     'attribute' => 'Id'
         // ],
         [
+            'class'=>'kartik\grid\ExpandRowColumn',
+            'width'=>'50px',
+            'value'=>function ($model, $key, $index, $column) {
+                return GridView::ROW_COLLAPSED;
+            },
+            'detail'=>function ($model, $key, $index, $column) {
+                return Yii::$app->controller->renderPartial('details', ['model'=>$model]);
+            },
+            'headerOptions'=>['class'=>'kartik-sheet-style']
+            //'disabled'=>true,
+            //'detailUrl'=>Url::to(['/site/test-expand'])
+        ],
+        [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'Barcode',
             'editableOptions' => [
@@ -63,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'Name',
+            'pageSummary'=>'Total',
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]
@@ -71,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'SellPrice',
+            'pageSummary' => true,
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]
@@ -79,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'Total',
+            'pageSummary' => true,
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]
