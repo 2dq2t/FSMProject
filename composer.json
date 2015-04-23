@@ -20,7 +20,8 @@
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widgets": "*",
 		"sintret/yii2-chat-adminlte": "dev-master",
-        "kartik-v/yii2-password": "dev-master"
+        "kartik-v/yii2-password": "dev-master",
+        "phpoffice/phpexcel": "dev-develop"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
