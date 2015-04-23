@@ -14,7 +14,7 @@ use Yii;
  * @property Ward $ward
  * @property Order[] $orders
  * @property Staff[] $staff
- * @property Useraccount[] $useraccounts
+ * @property UserAccount[] $useraccounts
  */
 class Address extends \yii\db\ActiveRecord
 {
@@ -79,6 +79,6 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getUseraccounts()
     {
-        return $this->hasMany(Useraccount::className(), ['AddressId' => 'Id']);
+        return $this->hasMany(UserAccount::className(), ['AddressId' => 'Id']);
     }
 }

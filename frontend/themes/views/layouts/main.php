@@ -87,7 +87,7 @@ AppAsset::register($this);
                     </ul>
                 </li>
                 <li><a href="index.php?r=site/register">Register</a></li>
-                <li><a href="authentication.html">Login</a></li>
+                <li><a href="index.php?r=site/login">Login</a></li>
             </ul>
         </div><!-- /.col -->
     </div><!-- /.container -->

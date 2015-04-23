@@ -5,7 +5,7 @@ use Faker\Provider\cs_CZ\DateTime;
 use frontend\models\City;
 use frontend\models\District;
 use frontend\models\User;
-use frontend\models\Useraccount;
+use frontend\models\UserAccount;
 use frontend\models\Ward;
 use frontend\models\Address;
 use Yii;
@@ -80,13 +80,14 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+//        if (!\Yii::$app->user->isGuest) {
+//            return $this->goHome();
+//        }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return var_dump($model->username);
+            //return $this->goHome();
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -179,7 +180,7 @@ class SiteController extends Controller
 
     public function actionRegister(){
 
-        $modelUserAccount = new Useraccount();
+        $modelUserAccount = new UserAccount();
         $modelUser = new User();
         $modelCity = new City();
         $modelDistrict = new District();
@@ -187,7 +188,7 @@ class SiteController extends Controller
         $modelAddress = new Address();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if(Useraccount::find()->where(['UserName' => $_POST['Useraccount']['UserName']])->exists()){
+            if(UserAccount::find()->where(['UserName' => $_POST['Useraccount']['UserName']])->exists()){
                 Yii::$app->getSession()->setFlash('error','Tên Đăng Nhập đã tồn tại');
             }
             else {

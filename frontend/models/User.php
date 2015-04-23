@@ -14,7 +14,7 @@ use Yii;
  * @property integer $UserAccountId
  *
  * @property Order[] $orders
- * @property Useraccount $userAccount
+ * @property UserAccount $userAccount
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -67,6 +67,6 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserAccount()
     {
-        return $this->hasOne(Useraccount::className(), ['Id' => 'UserAccountId']);
+        return $this->hasOne(UserAccount::className(), ['Id' => 'UserAccountId']);
     }
 }
