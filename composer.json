@@ -20,7 +20,13 @@
         "yiisoft/yii2-swiftmailer": "*",
         "kartik-v/yii2-widgets": "*",
 		"sintret/yii2-chat-adminlte": "dev-master",
-        "kartik-v/yii2-password": "dev-master"
+        "kartik-v/yii2-password": "dev-master",
+        "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-mpdf": "dev-master",
+        "kartik-v/yii2-dynagrid": "*",
+        "kartik-v/yii2-editable": "*",
+        "vova07/yii2-imperavi-widget": "*",
+        "zelenin/yii2-summernote-widget": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

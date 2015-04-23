@@ -11,7 +11,25 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+		'gridview' =>  [
+			'class' => '\kartik\grid\Module',
+            'i18n' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => '@kvgrid/messages',
+                'forceTranslation' => true
+            ]
+		],
+        'markdown' => [
+            'class' => 'kartik\markdown\Module',
+            // array the the internalization configuration for this module
+            'i18n' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => '@markdown/messages',
+                'forceTranslation' => true
+            ]
+        ]
+	],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
@@ -29,14 +47,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-		'view'=>[
-			'theme'=>[
-				'pathMap'=>[
-					'@app/views'=>'@app/themes/views'
-				],
-				'baseUrl'=>'@web/themes',
-			]
-		],
+        'view'=>[
+            'theme'=>[
+                'pathMap'=>[
+                    '@app/views'=>'@app/themes/smartadmin/views'
+                ],
+                'baseUrl'=>'@web/themes/smartadmin',
+            ]
+        ],
     ],
     'params' => $params,
 ];
