@@ -978,7 +978,6 @@
         ]
     },
     {
-<<<<<<< HEAD
         "name": "kartik-v/yii2-widget-typeahead",
         "version": "v1.0.0",
         "version_normalized": "1.0.0.0",
@@ -1350,7 +1349,6 @@
             "shasum": ""
         },
         "time": "2015-02-13 14:02:46",
-=======
         "name": "kartik-v/strength-meter",
         "version": "v1.1.1",
         "version_normalized": "1.1.1.0",
@@ -1366,16 +1364,12 @@
             "shasum": ""
         },
         "time": "2015-02-15 04:52:51",
->>>>>>> origin/master
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-<<<<<<< HEAD
-                "kartik\\plugins\\rating\\": ""
-=======
+                "kartik\\plugins\\rating\\": "",
                 "kartik\\": ""
->>>>>>> origin/master
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -1389,7 +1383,6 @@
                 "homepage": "http://www.krajee.com/"
             }
         ],
-<<<<<<< HEAD
         "description": "A simple yet powerful JQuery star rating plugin for Bootstrap.",
         "homepage": "https://github.com/kartik-v/bootstrap-star-rating",
         "keywords": [
@@ -1419,7 +1412,6 @@
             "kartik-v/yii2-krajee-base": "*"
         },
         "time": "2014-11-08 19:30:37",
-=======
         "description": "A dynamic strength meter for password input validation with various configurable options.",
         "homepage": "https://github.com/kartik-v/strength-meter",
         "keywords": [
@@ -1450,16 +1442,12 @@
             "kartik-v/yii2-krajee-base": "*"
         },
         "time": "2015-03-02 17:54:53",
->>>>>>> origin/master
         "type": "yii2-extension",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-<<<<<<< HEAD
-                "kartik\\rating\\": ""
-=======
+                "kartik\\rating\\": "",
                 "kartik\\password\\": ""
->>>>>>> origin/master
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -1473,23 +1461,20 @@
                 "homepage": "http://www.krajee.com/"
             }
         ],
-<<<<<<< HEAD
         "description": "A Yii2 widget for the simple yet powerful bootstrap-star-rating plugin with fractional rating support (sub repo split from yii2-widgets)",
         "homepage": "https://github.com/kartik-v/yii2-widget-rating",
         "keywords": [
-            "Rating",
-=======
+            "Rating"
+        ],
         "description": "Useful password strength validation utilities for Yii Framework 2.0",
         "homepage": "https://github.com/kartik-v/yii2-password",
         "keywords": [
             "auth",
->>>>>>> origin/master
             "bootstrap",
             "extension",
             "form",
             "input",
             "jquery",
-<<<<<<< HEAD
             "plugin",
             "star",
             "widget",
@@ -2161,11 +2146,9 @@
             "extension",
             "form",
             "widget",
-=======
             "password",
             "strength",
             "yii",
->>>>>>> origin/master
             "yii2"
         ]
     }
