@@ -32,9 +32,9 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Detail', 'Ward_Id'], 'required'],
+            [['Detail', 'Ward_Id'], 'required','message'=>'{attribute} không được để trống'],
             [['Ward_Id'], 'integer'],
-            [['Detail'], 'string', 'max' => 100]
+            [['Detail'], 'string', 'max' => 100],
         ];
     }
 
@@ -45,8 +45,8 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             'Id' => 'ID',
-            'Detail' => 'Detail',
-            'Ward_Id' => 'Ward  ID',
+            'Detail' => 'Số nhà / Đường Phố, Thôn xóm',
+            'Ward_Id' => 'Xã / Phường',
         ];
     }
 

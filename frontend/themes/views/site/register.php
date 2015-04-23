@@ -78,6 +78,7 @@ use kartik\widgets\DepDrop;
                                 <?= $form->field($modelUser, 'FullName', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 100,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -126,6 +127,7 @@ use kartik\widgets\DepDrop;
                                 <?= $form->field($modelUser, 'Email', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 100,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -138,6 +140,7 @@ use kartik\widgets\DepDrop;
                                 <?= $form->field($modelUserAccount, 'UserName', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 45,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -179,6 +182,7 @@ use kartik\widgets\DepDrop;
                                 <?= $form->field($modelUser, 'PhoneNumber', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 11,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -188,6 +192,7 @@ use kartik\widgets\DepDrop;
                                 <?= $form->field($modelAddress, 'Detail', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 100,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->

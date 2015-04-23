@@ -42,15 +42,14 @@ class Useraccount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['UserName', 'Password', 'Gender', 'PasswordResetToken', 'CreatedAt', 'AddressId'], 'required','message'=>'{attribute} không được để trống'],
+            [['UserName', 'Password', 'Gender', 'AddressId'], 'required','message'=>'{attribute} không được để trống'],
             [['DOB', 'CreatedAt', 'UpdatedAt'], 'safe'],
-            [['UserName'], 'unique','message' => 'Tên đăng nhập đã tồn tại'],
             [['Gender', 'Status'], 'string'],
             [['AddressId'], 'integer'],
-            [['UserName', 'OrderList'], 'string', 'max' => 45],
-            [['Password'], 'string', 'max' => 20],
+            [['UserName', 'OrderList'], 'string', 'max' => 45, 'min' => 6, 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
+            [['Password'], 'string', 'max' => 100],
             [['RePassword'], 'string', 'max' => 20],
-            ['RePassword', 'compare', 'compareAttribute' => 'Password','message' => 'Xác nhận mật khẩu không khớp'],
+            ['RePassword', 'compare', 'compareAttribute' => 'Password','message' => '{attribute} không khớp'],
             [['Avatar'], 'string', 'max' => 60],
             [['AuthKey', 'PasswordResetToken'], 'string', 'max' => 32]
         ];
@@ -65,7 +64,7 @@ class Useraccount extends \yii\db\ActiveRecord
             'Id' => 'ID',
             'UserName' => 'Tên Đăng Nhập',
             'Password' => 'Mật Khẩu',
-            'RePassword' => 'Mật Khẩu',
+            'RePassword' => 'Xác Nhận Mật Khẩu',
             'Avatar' => 'Avatar',
             'DOB' => 'Dob',
             'Gender' => 'Giới tính',
@@ -98,5 +97,30 @@ class Useraccount extends \yii\db\ActiveRecord
     public function getWishlists()
     {
         return $this->hasMany(Wishlist::className(), ['UserAccount_Id' => 'Id']);
+    }
+
+    public function setPassword($password)
+    {
+        $this->Password = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function register(){
+
+        if($this->validate()){
+            $userAccount = new Useraccount();
+            $userAccount->UserName = $this->UserName;
+            $userAccount->setPassword($this->Password);
+            $userAccount->DOB = $this->DOB;
+            $userAccount->Gender = $this->Gender;
+            $userAccount->PasswordResetToken = "DEFAULT VALUE";
+            $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
+            $userAccount->CreatedAt = $time->format('Y-m-d H:i:s');
+            $userAccount->Status = "Active";
+            $userAccount->AddressId = $this->AddressId;
+            if ($userAccount->save()) {
+                return $userAccount;
+            }
+        }
+        return null;
     }
 }

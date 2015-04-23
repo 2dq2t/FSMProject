@@ -180,40 +180,41 @@ class SiteController extends Controller
     public function actionRegister(){
 
         $modelUserAccount = new Useraccount();
-
-        $modelUserAccount->PasswordResetToken = "DEFAULT VALUE";
-
-        $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
-        $modelUserAccount->CreatedAt = $time->format('Y-m-d H:i:s');
-
-        $modelUserAccount->Status = "Active";
-
         $modelUser = new User();
-
         $modelCity = new City();
         $modelDistrict = new District();
         $modelWard = new Ward();
-
         $modelAddress = new Address();
 
-        if($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()){
-            $modelUserAccount->AddressId = $modelAddress->Ward_Id;
-            if ($modelUserAccount->load(Yii::$app->request->post()) && $modelUserAccount->save()) {
-                $modelUser->UserAccountId = $modelUserAccount->Id;
-                if ($modelUser->load(Yii::$app->request->post()) && $modelUser->save()) {
-                    return $this->redirect(['index']);
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if(Useraccount::find()->where(['UserName' => $_POST['Useraccount']['UserName']])->exists()){
+                Yii::$app->getSession()->setFlash('error','Tên Đăng Nhập đã tồn tại');
+            }
+            else {
+                if ($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()) {
+                    $modelUserAccount->AddressId = $modelAddress->Id;
+                    if ($modelUserAccount->load(Yii::$app->request->post())) {
+                        if ($user = $modelUserAccount->register()) {
+                            $modelUser->UserAccountId = $user->Id;
+                            if ($modelUser->load(Yii::$app->request->post()) && $modelUser->save()) {
+                                return $this->goHome();
+                            }
+                        }
+                    }
                 }
             }
-        } else {
-            return $this->render('register', [
-                'modelUserAccount' => $modelUserAccount,
+        }
+
+
+        return $this->render('register', [
+            'modelUserAccount' => $modelUserAccount,
                 'modelUser' => $modelUser,
                 'modelCity' => $modelCity,
                 'modelDistrict' => $modelDistrict,
                 'modelWard' => $modelWard,
                 'modelAddress' => $modelAddress,
-            ]);
-        }
+        ]);
+
     }
 
     public function actionSubcat() {
