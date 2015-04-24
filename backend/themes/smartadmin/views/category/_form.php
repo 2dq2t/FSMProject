@@ -85,7 +85,7 @@ use yii\widgets\ActiveForm;
                         <fieldset>
                             <section>
                                 <label class="input">
-                                    <?= $form->field($model, 'Name')->textInput(['maxlength' => 45]) ?>
+                                    <?= $form->field($model, 'name')->textInput(['maxlength' => 45]) ?>
                                 </label>
                             </section>
                         </fieldset>

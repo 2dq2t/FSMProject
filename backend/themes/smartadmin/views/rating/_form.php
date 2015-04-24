@@ -31,9 +31,9 @@ use kartik\widgets\StarRating;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
     <?php if (!$model->isNewRecord): ?>
-        <?= Html::a('Preview', ['category/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
+        <?= Html::a('Preview', ['rating/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
     <?php endif; ?>
-    <?= Html::a('Back', ['category/index'], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a('Back', ['rating/index'], ['class' => 'btn btn-danger']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
@@ -83,7 +83,7 @@ use kartik\widgets\StarRating;
                         <fieldset>
                             <section>
                                 <label class="input">
-                                    <?= $form->field($model, 'Rating')->widget(StarRating::classname(), [
+                                    <?= $form->field($model, 'rating')->widget(StarRating::classname(), [
                                         'name' => 'rating_21',
                                         'pluginOptions' => [
                                             'min' => 0,
@@ -114,7 +114,7 @@ use kartik\widgets\StarRating;
                             </section>
                             <section>
                                 <label class="input">
-                                    <?= $form->field($model, 'Description')->textInput(['maxlength' => 100]) ?>
+                                    <?= $form->field($model, 'description')->textInput(['maxlength' => 100]) ?>
                                 </label>
                             </section>
                         </fieldset>

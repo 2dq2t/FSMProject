@@ -228,7 +228,6 @@ AppAsset::register($this);
                         <li><?= HtmL::a('<i class="fa fa-lg fa-fw fa-list"></i> Products', ['product/index']) ?></li>
                         <li><?= HtmL::a('<i class="fa fa-lg fa-fw fa-list-alt"></i> Orders', ['order/index']) ?></li>
                         <li><?= HtmL::a('<i class="fa fa-lg fa-fw fa-star"></i> Rating', ['rating/index']) ?></li>
-                        <li><?= HtmL::a('<i class="fa fa-lg fa-fw fa-cubes"></i> Attribute', ['attribute/index']) ?></li>
                     </ul>
                 </li>
                 <li>

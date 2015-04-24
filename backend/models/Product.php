@@ -7,24 +7,27 @@ use Yii;
 /**
  * This is the model class for table "product".
  *
- * @property integer $Id
- * @property string $Barcode
- * @property string $Name
- * @property double $SellPrice
- * @property string $Description
- * @property integer $Total
- * @property integer $Sold
- * @property integer $Active
- * @property integer $CategoryId
+ * @property integer $id
+ * @property string $barcode
+ * @property string $name
+ * @property double $price
+ * @property double $old_price
+ * @property string $description
+ * @property string $total
+ * @property string $sold
+ * @property double $tax
+ * @property double $fee
+ * @property integer $active
+ * @property integer $category_id
  *
  * @property Image[] $images
  * @property Offer[] $offers
- * @property Orderdetail[] $orderdetails
+ * @property OrderDetail[] $orderDetails
  * @property Category $category
- * @property Productrating[] $productratings
+ * @property ProductRating[] $productRatings
  * @property Rating[] $ratings
- * @property Shoppingcart[] $shoppingcarts
- * @property Wishlist[] $wishlists
+ * @property ShoppingCart[] $shoppingCarts
+ * @property WishList[] $wishLists
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -42,12 +45,12 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Barcode', 'Name', 'SellPrice', 'Description', 'Total', 'Sold', 'Active', 'CategoryId'], 'required'],
-            [['SellPrice'], 'number'],
-            [['Description'], 'string'],
-            [['Total', 'Sold', 'Active', 'CategoryId'], 'integer'],
-            [['Barcode'], 'string', 'max' => 20],
-            [['Name'], 'string', 'max' => 100]
+            [['barcode', 'name', 'price', 'description', 'total', 'sold', 'tax', 'active', 'category_id'], 'required'],
+            [['price', 'old_price', 'tax', 'fee'], 'number'],
+            [['description'], 'string'],
+            [['total', 'sold', 'active', 'category_id'], 'integer'],
+            [['barcode'], 'string', 'max' => 20],
+            [['name'], 'string', 'max' => 100]
         ];
     }
 
@@ -57,15 +60,18 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Barcode' => 'Barcode',
-            'Name' => 'Name',
-            'SellPrice' => 'Sell Price',
-            'Description' => 'Description',
-            'Total' => 'Total',
-            'Sold' => 'Sold',
-            'Active' => 'Active',
-            'CategoryId' => 'Category ID',
+            'id' => 'ID',
+            'barcode' => 'Barcode',
+            'name' => 'Name',
+            'price' => 'Price',
+            'old_price' => 'Old Price',
+            'description' => 'Description',
+            'total' => 'Total',
+            'sold' => 'Sold',
+            'tax' => 'Tax',
+            'fee' => 'Fee',
+            'active' => 'Active',
+            'category_id' => 'Category ID',
         ];
     }
 
@@ -74,7 +80,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(Image::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(Image::className(), ['product_id' => 'id']);
     }
 
     /**
@@ -82,15 +88,15 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getOffers()
     {
-        return $this->hasMany(Offer::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(Offer::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderdetails()
+    public function getOrderDetails()
     {
-        return $this->hasMany(Orderdetail::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(OrderDetail::className(), ['product_d' => 'id']);
     }
 
     /**
@@ -98,15 +104,15 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['Id' => 'CategoryId']);
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductratings()
+    public function getProductRatings()
     {
-        return $this->hasMany(Productrating::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(ProductRating::className(), ['product_id' => 'id']);
     }
 
     /**
@@ -114,22 +120,22 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getRatings()
     {
-        return $this->hasMany(Rating::className(), ['Id' => 'RatingId'])->viaTable('productrating', ['ProductId' => 'Id']);
+        return $this->hasMany(Rating::className(), ['id' => 'rating_id'])->viaTable('product_rating', ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShoppingcarts()
+    public function getShoppingCarts()
     {
-        return $this->hasMany(Shoppingcart::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(ShoppingCart::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWishlists()
+    public function getWishLists()
     {
-        return $this->hasMany(Wishlist::className(), ['ProductId' => 'Id']);
+        return $this->hasMany(WishList::className(), ['product_id' => 'id']);
     }
 }

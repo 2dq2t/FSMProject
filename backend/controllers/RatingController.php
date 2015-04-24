@@ -40,8 +40,8 @@ class RatingController extends Controller
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
             // instantiate your book model for saving
-            $categoryId = Yii::$app->request->post('editableKey');
-            $model = Rating::findOne($categoryId);
+            $rating_id = Yii::$app->request->post('editableKey');
+            $model = Rating::findOne($rating_id);
             // $model = Category::findModel($categoryId);
 
             // store a default json response as desired by editable

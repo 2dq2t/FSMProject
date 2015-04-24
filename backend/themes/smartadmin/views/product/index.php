@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'Barcode',
+            'attribute' => 'barcode',
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'Name',
+            'attribute' => 'name',
             'pageSummary'=>'Total',
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'SellPrice',
+            'attribute' => 'price',
             'pageSummary' => true,
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'Total',
+            'attribute' => 'total',
             'pageSummary' => true,
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => \kartik\grid\EditableColumn::className(),
-            'attribute' => 'Active',
+            'attribute' => 'active',
             'editableOptions' => [
                 'data' => [
                     0 =>  Yii::t('app', 'Inactive'),
@@ -117,10 +117,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'format' => 'raw',
             'value' => function (\backend\models\Product $model) {
-                if ($model === null || $model->Active === null) {
+                if ($model === null || $model->active === null) {
                     return null;
                 }
-                if ($model->Active === 1) {
+                if ($model->active === 1) {
                     $label_class = 'label-success';
                     $value = 'Active';
                 } else {

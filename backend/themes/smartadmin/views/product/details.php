@@ -25,12 +25,12 @@
 
                         <form action="" class="smart-form">
                             <header>
-                                <h4>Product:</h4> <?= $model->Name ?>
+                                <h4>Product:</h4> <?= $model->name ?>
                             </header>
 
                             <?php
-                            $categoryName = \backend\models\Category::findOne($model->CategoryId)['Name'];
-                            $images = \backend\models\Image::find()->where(['ProductId' => $model->Id])->one();
+                            $categoryName = \backend\models\Category::findOne($model->category_id)['name'];
+                            $images = \backend\models\Image::find()->where(['product_id' => $model->id])->one();
                             $actual_link = "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]";
                             $url = sprintf(
                                 "%s://%s%s",
@@ -39,7 +39,7 @@
                                 dirname(dirname(dirname($_SERVER['REQUEST_URI'])))
                             );
 
-                            $path = $url . '/' . $images['Path'];
+                            $path = $url . '/' . $images['path'];
                             ?>
 
                             <fieldset>
@@ -54,12 +54,12 @@
                                     </section>
                                     <section class="col col-10">
                                         <div class="col-md-12">
-                                            <h5>Description:</h5><p><?= $model->Description ?></p>
+                                            <h5>Description:</h5><p><?= $model->description ?></p>
                                         </div>
                                     </section>
                                     <section class="col col-10">
                                         <div class="col-md-12">
-                                            <h5>Sold: </h5><p><?= $model->Sold ?></p>
+                                            <h5>Sold: </h5><p><?= $model->sold ?></p>
                                         </div>
                                     </section>
                                 </div>

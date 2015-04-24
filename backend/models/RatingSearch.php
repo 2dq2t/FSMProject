@@ -18,9 +18,9 @@ class RatingSearch extends Rating
     public function rules()
     {
         return [
-            [['Id'], 'integer'],
-            [['Rating'], 'number'],
-            [['Description'], 'safe'],
+            [['id'], 'integer'],
+            [['rating'], 'number'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -57,11 +57,11 @@ class RatingSearch extends Rating
         }
 
         $query->andFilterWhere([
-            'Id' => $this->Id,
-            'Rating' => $this->Rating,
+            'id' => $this->id,
+            'rating' => $this->rating,
         ]);
 
-        $query->andFilterWhere(['like', 'Description', $this->Description]);
+        $query->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

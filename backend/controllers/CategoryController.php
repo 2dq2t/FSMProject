@@ -39,8 +39,8 @@ class CategoryController extends Controller
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
             // instantiate your book model for saving
-            $categoryId = Yii::$app->request->post('editableKey');
-            $model = Category::findOne($categoryId);
+            $category_id = Yii::$app->request->post('editableKey');
+            $model = Category::findOne($category_id);
             // $model = Category::findModel($categoryId);
 
             // store a default json response as desired by editable

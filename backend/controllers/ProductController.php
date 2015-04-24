@@ -44,8 +44,8 @@ class ProductController extends Controller
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
 
-            $productId = Yii::$app->request->post('editableKey');
-            $model = Product::findOne($productId);
+            $product_id = Yii::$app->request->post('editableKey');
+            $model = Product::findOne($product_id);
 
             if(!$model) {
                 // store a default json response as desired by editable
@@ -82,8 +82,8 @@ class ProductController extends Controller
                 //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
                 // }
 
-                if($model->save() && isset($posted['Active'])) {
-                    if ($posted['Active'] == 1) {
+                if($model->save() && isset($posted['active'])) {
+                    if ($posted['active'] == 1) {
                         $label_class = 'label-success';
                         $value = 'Active';
                     } else {
@@ -134,27 +134,27 @@ class ProductController extends Controller
         $model = new Product();
         $productImages = new Image();
 
-        $file = UploadedFile::getInstances($productImages, 'productImage');
+        $file = UploadedFile::getInstances($productImages, 'product_image');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if($file) {
                 $images = '';
                 foreach($file as $image) {
                     // directory to save image in local
-                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->Id);
+                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
                     FileHelper::createDirectory($dir);
                     // path to save database
-                    $path = 'frontend/web/uploads/products/images/' . $model->Id . '/';
+                    $path = 'frontend/web/uploads/products/images/' . $model->id . '/';
 
                     $productImages = new Image();
-                    $productImages->ProductId = $model->Id;
-                    $productImages->Name = $image->name;
+                    $productImages->product_id = $model->id;
+                    $productImages->name = $image->name;
                     // generate random name for image save
                     $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
-                    $productImages->Path = $path . $imageName;
+                    $productImages->path = $path . $imageName;
                     $images .= $imageName . $image->extension.'###';
 
-                    $productImages->productImage = $images;
+                    $productImages->product_image = $images;
                     $productImages->save();
 
                     $image->saveAs($dir . '/' . $imageName);
@@ -195,11 +195,11 @@ class ProductController extends Controller
         $model = $this->findModel($id);
         $productImages = new Image();
 
-        $images = Image::find()->where(['ProductId' => $id])->all();
+        $images = Image::find()->where(['product_id' => $id])->all();
 
 //        $productImages->productImage = $images;
 
-        $file = UploadedFile::getInstances($productImages, 'productImage');
+        $file = UploadedFile::getInstances($productImages, 'product_image');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if($file) {
@@ -214,17 +214,17 @@ class ProductController extends Controller
                 foreach ($file as $image) {
                     FileHelper::createDirectory($dir);
                     // path to save database
-                    $path = 'frontend/web/uploads/products/images/' . $model->Id . '/';
+                    $path = 'frontend/web/uploads/products/images/' . $model->id . '/';
 
                     $productImages = new Image();
-                    $productImages->ProductId = $model->Id;
-                    $productImages->Name = $image->name;
+                    $productImages->product_id = $model->id;
+                    $productImages->name = $image->name;
                     // generate random name for image save
                     $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
-                    $productImages->Path = $path . $imageName;
+                    $productImages->path = $path . $imageName;
                     $images .= $imageName . $image->extension.'###';
 
-                    $productImages->productImage = $images;
+                    $productImages->product_image = $images;
                     $productImages->save();
 
                     $image->saveAs($dir . '/' . $imageName);
@@ -249,7 +249,7 @@ class ProductController extends Controller
      */
     public function actionDelete($id)
     {
-        $images = Image::find()->where(['ProductId' => $id])->all();
+        $images = Image::find()->where(['product_id' => $id])->all();
         foreach ($images as $image) {
             $image->delete();
         }

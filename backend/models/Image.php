@@ -7,16 +7,16 @@ use Yii;
 /**
  * This is the model class for table "image".
  *
- * @property integer $Id
- * @property string $Name
- * @property string $Path
- * @property integer $ProductId
+ * @property integer $id
+ * @property string $name
+ * @property string $path
+ * @property integer $product_id
  *
  * @property Product $product
  */
 class Image extends \yii\db\ActiveRecord
 {
-    public $productImage = [];
+    public $product_image = [];
     /**
      * @inheritdoc
      */
@@ -31,11 +31,11 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Name', 'Path', 'ProductId'], 'required'],
-            [['ProductId'], 'integer'],
-            [['Name'], 'string', 'max' => 45],
-            [['Path'], 'string', 'max' => 100],
-            [['productImage'], 'file', 'skipOnEmpty'=> true, 'maxFiles' => 10, 'extensions' => 'jpeg, jpg, png, gif']
+            [['name', 'path', 'product_id'], 'required'],
+            [['product_id'], 'integer'],
+            [['name'], 'string', 'max' => 45],
+            [['path'], 'string', 'max' => 100],
+            [['product_image'], 'file', 'skipOnEmpty'=> true, 'maxFiles' => 10, 'extensions' => 'jpeg, jpg, png, gif']
         ];
     }
 
@@ -45,10 +45,10 @@ class Image extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Name' => 'Name',
-            'Path' => 'Path',
-            'ProductId' => 'Product ID',
+            'id' => 'ID',
+            'name' => 'Name',
+            'path' => 'Path',
+            'product_id' => 'Product ID',
         ];
     }
 
@@ -57,6 +57,6 @@ class Image extends \yii\db\ActiveRecord
      */
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['Id' => 'ProductId']);
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 }

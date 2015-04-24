@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'Rating',
+            'attribute' => 'rating',
             // 'value' => function($model, $key, $index, $widget) {
             //     if($model->Rating == 1.5) {
             //         return '<i class="fa fa-fw fa-folder-open"></i>';
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'Description',
+            'attribute' => 'description',
             'editableOptions' => [
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]

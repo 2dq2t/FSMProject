@@ -13,16 +13,16 @@ use backend\models\Category;
 ?>
 
 <?php
-$productImage = [];
+$product_image = [];
 $previewConfig = [];
 
 if(isset($images)) {
     $count = 0;
     foreach ($images as $image) {
-        if($image['Path']){
-            $productImage[] = Html::img(
+        if($image['path']){
+            $product_image[] = Html::img(
             // Yii::$app->urlManagerFrontEnd->baseUrl . '/uploads/' . $model->id . '/' . $image->id . '.jpg',
-                '../../' . $image['Path'],
+                '../../' . $image['path'],
                 ['class' => 'file-preview-image']
             );
         }
@@ -109,9 +109,9 @@ if(isset($images)) {
                             <fieldset>
                                 <legend><?php echo $this->title; ?></legend>
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Active', ['label'=>'Active', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'active', ['label'=>'Active', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Active',
+                                        <?= $form->field($model, 'active',
                                             ['template' => '<div class="col-md-12" style="margin-left: 13px">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->widget(\kartik\switchinput\SwitchInput::className(), [
                                                 'pluginOptions' => [
@@ -125,27 +125,27 @@ if(isset($images)) {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Barcode', ['label'=>'Barcode', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'barcode', ['label'=>'Barcode', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Barcode',
+                                        <?= $form->field($model, 'barcode',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                            ->label(false)->textInput(['placeholder'=>'Enter barcode...']); ?>
+                                            ->label(false)->textInput(['maxlength' => 20, 'placeholder'=>'Enter barcode...']); ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Name', ['label'=>'Product Name', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'name', ['label'=>'Product Name', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Name',
+                                        <?= $form->field($model, 'name',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->label(false)->textInput(['maxlength' => 100, 'placeholder'=>'Enter product name...']); ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'SellPrice', ['label'=>'Price', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'price', ['label'=>'Price', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'SellPrice',
+                                        <?= $form->field($model, 'price',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
                                                 'addon' => [
                                                     'append' => [
@@ -156,9 +156,22 @@ if(isset($images)) {
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Description', ['label'=>'Description', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'old_price', ['label'=>'Old Price', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Description',
+                                        <?= $form->field($model, 'old_price',
+                                            ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
+                                                'addon' => [
+                                                    'append' => [
+                                                        'content' => '<ins>đ</ins>'
+                                                    ]
+                                                ]])->label(false)->textInput(['placeholder'=>'Enter product old price...']); ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <?= Html::activeLabel($model, 'description', ['label'=>'Description', 'class'=>'col-md-2 control-label']); ?>
+                                    <div class="col-md-10">
+                                        <?= $form->field($model, 'description',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->label(false)->widget(Summernote\Summernote::className(), [
                                                 'clientOptions' => [
@@ -173,20 +186,46 @@ if(isset($images)) {
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Total', ['label'=>'Total', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'total', ['label'=>'Total', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Total',
+                                        <?= $form->field($model, 'total',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->label(false)->textInput(['placeholder'=>'Enter total product...']); ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'Sold', ['label'=>'Sold', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'sold', ['label'=>'Sold', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'Sold',
+                                        <?= $form->field($model, 'sold',
                                             ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->label(false)->textInput(['placeholder'=>'Enter sold product...']); ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <?= Html::activeLabel($model, 'tax', ['label'=>'Tax', 'class'=>'col-md-2 control-label']); ?>
+                                    <div class="col-md-10">
+                                        <?= $form->field($model, 'tax',
+                                            ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
+                                                'addon' => [
+                                                    'append' => [
+                                                        'content' => '<ins>đ</ins>'
+                                                    ]
+                                                ]])->label(false)->textInput(['placeholder'=>'Enter product tax...']); ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <?= Html::activeLabel($model, 'fee', ['label'=>'Fee', 'class'=>'col-md-2 control-label']); ?>
+                                    <div class="col-md-10">
+                                        <?= $form->field($model, 'fee',
+                                            ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
+                                                'addon' => [
+                                                    'append' => [
+                                                        'content' => '<ins>đ</ins>'
+                                                    ]
+                                                ]])->label(false)->textInput(['placeholder'=>'Enter product fee...']); ?>
                                     </div>
                                 </div>
 
@@ -245,11 +284,11 @@ if(isset($images)) {
                             <fieldset>
                                 <legend>Select Category</legend>
                                 <div class="form-group">
-                                    <?= Html::activeLabel($model, 'CategoryId', ['label'=>'Category', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($model, 'category_id', ['label'=>'Category', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($model, 'CategoryId', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
+                                        <?= $form->field($model, 'category_id', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->dropDownList(
-                                                ArrayHelper::map(Category::find()->all(), 'Id', 'Name'),
+                                                ArrayHelper::map(Category::find()->all(), 'id', 'name'),
                                                 ['prompt'=>'Select Category']
                                             )->label(false); ?>
                                     </div>
@@ -303,9 +342,9 @@ if(isset($images)) {
                             <fieldset>
                                 <legend>Select Images</legend>
                                 <div class="form-group">
-                                    <?= Html::activeLabel($productImages, 'productImage[]', ['label'=>'Images', 'class'=>'col-md-2 control-label']); ?>
+                                    <?= Html::activeLabel($productImages, 'product_image[]', ['label'=>'Images', 'class'=>'col-md-2 control-label']); ?>
                                     <div class="col-md-10">
-                                        <?= $form->field($productImages, 'productImage[]', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
+                                        <?= $form->field($productImages, 'product_image[]', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
                                             ->widget(\kartik\widgets\FileInput::className(), [
                                                 'options' => [
                                                     'accept' => 'image/*',
@@ -319,7 +358,7 @@ if(isset($images)) {
                                                     'showUpload' => false,
                                                     'maxFileCount' => 10,
                                                     'maxFile' => 10,
-                                                    'initialPreview' => $productImage,
+                                                    'initialPreview' => $product_image,
                                                     'overwriteInitial' => true,
 //                                                'initialPreviewConfig' => $previewConfig,
 //                                                'initialPreviewShowDelete' => true,

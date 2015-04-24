@@ -7,11 +7,11 @@ use Yii;
 /**
  * This is the model class for table "rating".
  *
- * @property integer $Id
- * @property double $Rating
- * @property string $Description
+ * @property integer $id
+ * @property double $rating
+ * @property string $description
  *
- * @property Productrating[] $productratings
+ * @property ProductRating[] $productRatings
  * @property Product[] $products
  */
 class Rating extends \yii\db\ActiveRecord
@@ -30,10 +30,10 @@ class Rating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Rating'], 'number'],
-            [['Description'], 'required'],
-            [['Description'], 'string', 'max' => 100],
-            [['Rating'], 'unique']
+            [['rating'], 'number'],
+            [['description'], 'required'],
+            [['description'], 'string', 'max' => 100],
+            [['rating'], 'unique']
         ];
     }
 
@@ -43,18 +43,18 @@ class Rating extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Rating' => 'Rating',
-            'Description' => 'Description',
+            'id' => 'ID',
+            'rating' => 'Rating',
+            'description' => 'Description',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductratings()
+    public function getProductRatings()
     {
-        return $this->hasMany(Productrating::className(), ['RatingId' => 'Id']);
+        return $this->hasMany(ProductRating::className(), ['rating_id' => 'id']);
     }
 
     /**
@@ -62,6 +62,6 @@ class Rating extends \yii\db\ActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['Id' => 'ProductId'])->viaTable('productrating', ['RatingId' => 'Id']);
+        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_rating', ['rating_id' => 'id']);
     }
 }

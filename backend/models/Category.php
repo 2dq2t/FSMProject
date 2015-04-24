@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "category".
  *
- * @property integer $Id
- * @property string $Name
+ * @property integer $id
+ * @property string $name
  *
  * @property Product[] $products
  */
@@ -28,8 +28,8 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Name'], 'required'],
-            [['Name'], 'string', 'max' => 45]
+            [['name'], 'required'],
+            [['name'], 'string', 'max' => 45]
         ];
     }
 
@@ -39,8 +39,8 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Name' => 'Name',
+            'id' => 'ID',
+            'name' => 'Name',
         ];
     }
 
@@ -49,6 +49,6 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['CategoryId' => 'Id']);
+        return $this->hasMany(Product::className(), ['category_id' => 'id']);
     }
 }

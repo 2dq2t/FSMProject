@@ -15,23 +15,29 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'Id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'Barcode') ?>
+    <?= $form->field($model, 'barcode') ?>
 
-    <?= $form->field($model, 'Name') ?>
+    <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'SellPrice') ?>
+    <?= $form->field($model, 'price') ?>
 
-    <?= $form->field($model, 'Description') ?>
+    <?= $form->field($model, 'old_price') ?>
 
-    <?php // echo $form->field($model, 'Total') ?>
+    <?php // echo $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'Sold') ?>
+    <?php // echo $form->field($model, 'total') ?>
 
-    <?php // echo $form->field($model, 'Active') ?>
+    <?php // echo $form->field($model, 'sold') ?>
 
-    <?php // echo $form->field($model, 'CategoryId') ?>
+    <?php // echo $form->field($model, 'tax') ?>
+
+    <?php // echo $form->field($model, 'fee') ?>
+
+    <?php // echo $form->field($model, 'active') ?>
+
+    <?php // echo $form->field($model, 'category_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

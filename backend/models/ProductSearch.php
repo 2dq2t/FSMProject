@@ -18,9 +18,9 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['Id', 'Total', 'Sold', 'Active', 'CategoryId'], 'integer'],
-            [['Barcode', 'Name', 'Description'], 'safe'],
-            [['SellPrice'], 'number'],
+            [['id', 'total', 'sold', 'active', 'category_id'], 'integer'],
+            [['barcode', 'name', 'description'], 'safe'],
+            [['price', 'old_price', 'tax', 'fee'], 'number'],
         ];
     }
 
@@ -57,17 +57,20 @@ class ProductSearch extends Product
         }
 
         $query->andFilterWhere([
-            'Id' => $this->Id,
-            'SellPrice' => $this->SellPrice,
-            'Total' => $this->Total,
-            'Sold' => $this->Sold,
-            'Active' => $this->Active,
-            'CategoryId' => $this->CategoryId,
+            'id' => $this->id,
+            'price' => $this->price,
+            'old_price' => $this->old_price,
+            'total' => $this->total,
+            'sold' => $this->sold,
+            'tax' => $this->tax,
+            'fee' => $this->fee,
+            'active' => $this->active,
+            'category_id' => $this->category_id,
         ]);
 
-        $query->andFilterWhere(['like', 'Barcode', $this->Barcode])
-            ->andFilterWhere(['like', 'Name', $this->Name])
-            ->andFilterWhere(['like', 'Description', $this->Description]);
+        $query->andFilterWhere(['like', 'barcode', $this->barcode])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }
