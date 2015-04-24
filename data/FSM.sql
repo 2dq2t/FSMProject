@@ -1,5 +1,5 @@
 -- MySQL Workbench Synchronization
--- Generated: 2015-04-13 16:25
+-- Generated: 2015-04-23 10:44
 -- Model: New Model
 -- Version: 1.0
 -- Project: Name of the project
@@ -13,41 +13,39 @@ CREATE SCHEMA IF NOT EXISTS `fsmdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_gene
 
 CREATE TABLE IF NOT EXISTS `UserAccount` (
   `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `PassWord` CHAR(32) NOT NULL,
-  `Status` CHAR(1) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+  `UserName` INT(11) NOT NULL,
+  `Password` VARCHAR(20) NOT NULL,
   `Avatar` VARCHAR(60) NULL DEFAULT NULL,
+  `DOB` DATE NULL DEFAULT NULL,
+  `Gender` ENUM('Male', 'Female', 'Other') NOT NULL,
   `OrderList` VARCHAR(45) NULL DEFAULT NULL,
-  `AuthKey` CHAR(32) NULL DEFAULT NULL,
-  `PasswordResetToken` CHAR(32) NOT NULL,
+  `PasswordResetToken` CHAR(32) NULL DEFAULT NULL,
   `CreatedAt` DATETIME NOT NULL,
   `UpdatedAt` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`Id`))
+  `Status` TINYINT(4) NOT NULL DEFAULT 1,
+  `AddressId` INT(11) NOT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `fk_UserAccount_Address1_idx` (`AddressId` ASC),
+  CONSTRAINT `fk_UserAccount_Address1`
+    FOREIGN KEY (`AddressId`)
+    REFERENCES `Address` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `User` (
   `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `FirstName` VARCHAR(20) NOT NULL,
-  `MidName` VARCHAR(20) NULL DEFAULT NULL,
-  `LastName` VARCHAR(20) NOT NULL,
-  `DOB` DATE NOT NULL,
+  `FullName` VARCHAR(100) NOT NULL,
   `Email` VARCHAR(100) NOT NULL,
-  `Gender` CHAR(1) NOT NULL,
   `PhoneNumber` CHAR(11) NOT NULL,
   `UserAccountId` INT(11) NULL DEFAULT NULL,
-  `AddressId` INT(11) NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_User_UserAccount_idx` (`UserAccountId` ASC),
-  INDEX `fk_User_Address1_idx` (`AddressId` ASC),
   CONSTRAINT `fk_User_UserAccount`
     FOREIGN KEY (`UserAccountId`)
     REFERENCES `UserAccount` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_Address1`
-    FOREIGN KEY (`AddressId`)
-    REFERENCES `Address` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -62,8 +60,8 @@ CREATE TABLE IF NOT EXISTS `Order` (
   `Discount` FLOAT(11) NOT NULL,
   `TaxAmount` FLOAT(11) NOT NULL,
   `NetAmount` FLOAT(11) NOT NULL,
-  `Status` TINYINT(1) NOT NULL,
   `Description` TEXT NOT NULL,
+  `Status` TINYINT(4) NOT NULL DEFAULT 1,
   `UserId` INT(11) NOT NULL,
   `VoucherId` INT(11) NULL DEFAULT NULL,
   `AddressId` INT(11) NOT NULL,
@@ -97,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `Voucher` (
   `Discount` FLOAT(11) NOT NULL,
   `StartDate` DATETIME NOT NULL,
   `EndDate` DATETIME NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -162,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `OrderDetail` (
   `ProductPrice` FLOAT(11) NOT NULL,
   `Quantity` INT(11) NOT NULL,
   `Discount` FLOAT(11) NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 1,
   INDEX `fk_OrderDetail_Order1_idx` (`OrderId` ASC),
   INDEX `fk_OrderDetail_Product1_idx` (`ProductId` ASC),
   CONSTRAINT `fk_OrderDetail_Order1`
@@ -187,17 +185,10 @@ CREATE TABLE IF NOT EXISTS `Product` (
   `Description` TEXT NOT NULL,
   `Total` INT(11) NOT NULL,
   `Sold` INT(11) NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
-  `RatingId` INT(11) NOT NULL,
+  `Active` TINYINT(4) NOT NULL,
   `CategoryId` INT(11) NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Product_Rating1_idx` (`RatingId` ASC),
   INDEX `fk_Product_Category1_idx` (`CategoryId` ASC),
-  CONSTRAINT `fk_Product_Rating1`
-    FOREIGN KEY (`RatingId`)
-    REFERENCES `Rating` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_Product_Category1`
     FOREIGN KEY (`CategoryId`)
     REFERENCES `Category` (`Id`)
@@ -214,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `Offer` (
   `Description` NVARCHAR(100) NOT NULL,
   `StartDate` DATETIME NOT NULL,
   `EndDate` DATETIME NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`),
   INDEX `fk_Offer_Product1_idx` (`ProductId` ASC),
   CONSTRAINT `fk_Offer_Product1`
@@ -232,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `ShoppingCart` (
   `Date` DATETIME NOT NULL,
   `Price` FLOAT(11) NOT NULL,
   `Quantity` INT(11) NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 0,
   `ProductId` INT(11) NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_ShoppingCart_Product1_idx` (`ProductId` ASC),
@@ -247,42 +238,10 @@ COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Rating` (
   `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Rating` INT(11) NOT NULL,
+  `Rating` FLOAT(2,1) NOT NULL DEFAULT 0,
   `Description` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`Id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE TABLE IF NOT EXISTS `ProductAttribute` (
-  `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Active` TINYINT(1) NOT NULL,
-  `ProductId` INT(11) NOT NULL,
-  `AttributeId` INT(11) NULL DEFAULT NULL,
-  INDEX `fk_ProductAttribute_Product1_idx` (`ProductId` ASC),
   PRIMARY KEY (`Id`),
-  INDEX `fk_ProductAttribute_Attribute1_idx` (`AttributeId` ASC),
-  CONSTRAINT `fk_ProductAttribute_Product1`
-    FOREIGN KEY (`ProductId`)
-    REFERENCES `Product` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ProductAttribute_Attribute1`
-    FOREIGN KEY (`AttributeId`)
-    REFERENCES `Attribute` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE TABLE IF NOT EXISTS `Attribute` (
-  `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `Value` VARCHAR(45) NOT NULL,
-  `Description` VARCHAR(100) NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`Id`))
+  UNIQUE INDEX `Rating_UNIQUE` (`Rating` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
@@ -316,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `SlideShow` (
   `Path` VARCHAR(100) NOT NULL,
   `Title` VARCHAR(100) NOT NULL,
   `Description` VARCHAR(150) NOT NULL,
-  `Active` TINYINT(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -326,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `FAQ` (
   `Id` INT(11) NOT NULL AUTO_INCREMENT,
   `Question` VARCHAR(150) NOT NULL,
   `Answer` VARCHAR(200) NOT NULL,
-  `Active` CHAR(1) NOT NULL,
+  `Active` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -345,6 +304,49 @@ CREATE TABLE IF NOT EXISTS `WishList` (
   CONSTRAINT `fk_WishList_UserAccount1`
     FOREIGN KEY (`UserAccount_Id`)
     REFERENCES `UserAccount` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `Staff` (
+  `Id` INT(11) NOT NULL,
+  `FullName` VARCHAR(100) NOT NULL,
+  `Password` VARCHAR(45) NOT NULL,
+  `DOB` DATE NOT NULL,
+  `Gender` VARCHAR(45) NOT NULL,
+  `PhoneNumber` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(45) NULL DEFAULT NULL,
+  `Image` VARCHAR(45) NOT NULL,
+  `StartDate` DATE NOT NULL,
+  `AddressId` INT(11) NOT NULL,
+  `Status` TINYINT(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `fk_Staff_Address1_idx` (`AddressId` ASC),
+  CONSTRAINT `fk_Staff_Address1`
+    FOREIGN KEY (`AddressId`)
+    REFERENCES `Address` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `ProductRating` (
+  `RatingId` INT(11) NOT NULL,
+  `ProductId` INT(11) NOT NULL,
+  PRIMARY KEY (`RatingId`, `ProductId`),
+  INDEX `fk_Rating_has_Product_Product1_idx` (`ProductId` ASC),
+  INDEX `fk_Rating_has_Product_Rating1_idx` (`RatingId` ASC),
+  CONSTRAINT `fk_Rating_has_Product_Rating1`
+    FOREIGN KEY (`RatingId`)
+    REFERENCES `Rating` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Rating_has_Product_Product1`
+    FOREIGN KEY (`ProductId`)
+    REFERENCES `Product` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
