@@ -1,11 +1,10 @@
 <?php
 namespace frontend\controllers;
 
-use Faker\Provider\cs_CZ\DateTime;
 use frontend\models\City;
 use frontend\models\District;
-use frontend\models\User;
-use frontend\models\UserAccount;
+use common\models\User;
+use common\models\UserAccount;
 use frontend\models\Ward;
 use frontend\models\Address;
 use Yii;
@@ -80,14 +79,13 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-//        if (!\Yii::$app->user->isGuest) {
-//            return $this->goHome();
-//        }
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return var_dump($model->username);
-            //return $this->goHome();
+            return $this->goHome();
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -188,17 +186,19 @@ class SiteController extends Controller
         $modelAddress = new Address();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if(UserAccount::find()->where(['UserName' => $_POST['Useraccount']['UserName']])->exists()){
-                Yii::$app->getSession()->setFlash('error','Tên Đăng Nhập đã tồn tại');
+            if(UserAccount::find()->where(['username' => $_POST['UserAccount']['username']])->exists()){
+                Yii::$app->getSession()->setFlash('error', 'Xin lỗi, Tên Đăng Nhập đã tồn tại.');
             }
             else {
                 if ($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()) {
-                    $modelUserAccount->AddressId = $modelAddress->Id;
+                    $modelUserAccount->address_id = $modelAddress->id;
                     if ($modelUserAccount->load(Yii::$app->request->post())) {
                         if ($user = $modelUserAccount->register()) {
-                            $modelUser->UserAccountId = $user->Id;
+                            $modelUser->useraccount_id = $user->id;
                             if ($modelUser->load(Yii::$app->request->post()) && $modelUser->save()) {
-                                return $this->goHome();
+                                if (Yii::$app->getUser()->login($user)) {
+                                    return $this->goHome();
+                                }
                             }
                         }
                     }

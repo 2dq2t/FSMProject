@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "district".
  *
- * @property integer $Id
- * @property string $Name
- * @property integer $City_Id
+ * @property integer $id
+ * @property string $name
+ * @property integer $city_id
  *
  * @property City $city
  * @property Ward[] $wards
@@ -30,9 +30,9 @@ class District extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Name', 'City_Id'], 'required'],
-            [['City_Id'], 'integer'],
-            [['Name'], 'string', 'max' => 45]
+            [['name', 'city_id'], 'required'],
+            [['city_id'], 'integer'],
+            [['name'], 'string', 'max' => 45]
         ];
     }
 
@@ -42,9 +42,9 @@ class District extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Name' => 'Name',
-            'City_Id' => 'City  ID',
+            'id' => 'ID',
+            'name' => 'Name',
+            'city_id' => 'City ID',
         ];
     }
 
@@ -53,7 +53,7 @@ class District extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['Id' => 'City_Id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -61,20 +61,12 @@ class District extends \yii\db\ActiveRecord
      */
     public function getWards()
     {
-        return $this->hasMany(Ward::className(), ['District_Id' => 'Id']);
-    }
-
-    public static function getDistrict($city_id) {
-        $data= City::find()
-            ->where(['City_Id'=>$city_id])
-            ->select(['Id','Name'])->asArray()->all();
-
-        return $data;
+        return $this->hasMany(Ward::className(), ['district_id' => 'id']);
     }
 
     //function get data from District Table
     public static function getOptionsByDistrict($district_id){
-        $data = static::find()->where(['City_Id'=>$district_id])->select(['Id as id','Name as name'])->asArray()->all();
+        $data = static::find()->where(['city_id'=>$district_id])->select(['id','name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;
 
         return $value;

@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "ward".
  *
- * @property integer $Id
- * @property string $Name
- * @property integer $District_Id
+ * @property integer $id
+ * @property string $name
+ * @property integer $district_id
  *
  * @property Address[] $addresses
  * @property District $district
@@ -30,9 +30,9 @@ class Ward extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Name', 'District_Id'], 'required'],
-            [['District_Id'], 'integer'],
-            [['Name'], 'string', 'max' => 45]
+            [['name', 'district_id'], 'required'],
+            [['district_id'], 'integer'],
+            [['name'], 'string', 'max' => 45]
         ];
     }
 
@@ -42,9 +42,9 @@ class Ward extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Name' => 'Name',
-            'District_Id' => 'District  ID',
+            'id' => 'ID',
+            'name' => 'Name',
+            'district_id' => 'District ID',
         ];
     }
 
@@ -53,7 +53,7 @@ class Ward extends \yii\db\ActiveRecord
      */
     public function getAddresses()
     {
-        return $this->hasMany(Address::className(), ['Ward_Id' => 'Id']);
+        return $this->hasMany(Address::className(), ['ward_id' => 'id']);
     }
 
     /**
@@ -61,12 +61,12 @@ class Ward extends \yii\db\ActiveRecord
      */
     public function getDistrict()
     {
-        return $this->hasOne(District::className(), ['Id' => 'District_Id']);
+        return $this->hasOne(District::className(), ['id' => 'district_id']);
     }
 
     //function get data from Ward Table
     public static function getOptionsByWard($ward_id){
-        $data = static::find()->where(['District_Id'=>$ward_id])->select(['Id as id','Name as name'])->asArray()->all();
+        $data = static::find()->where(['district_id'=>$ward_id])->select(['id','name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;
 
         return $value;

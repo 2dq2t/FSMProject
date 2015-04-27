@@ -14,38 +14,6 @@ use kartik\widgets\DepDrop;
  */
 ?>
 
-<script type="text/javascript">
-    var numDays = {
-        '1': 31, '2': 28, '3': 31, '4': 30, '5': 31, '6': 30,
-        '7': 31, '8': 31, '9': 30, '10': 31, '11': 30, '12': 31
-    };
-
-    function setDays(oMonthSel, oDaysSel, oYearSel)
-    {
-        var nDays, oDaysSelLgth, opt, i = 1;
-        nDays = numDays[oMonthSel[oMonthSel.selectedIndex].value];
-        if (nDays == 28 && oYearSel[oYearSel.selectedIndex].value % 4 == 0)
-            ++nDays;
-        oDaysSelLgth = oDaysSel.length;
-        if (nDays != oDaysSelLgth)
-        {
-            if (nDays < oDaysSelLgth)
-                oDaysSel.length = nDays;
-            else for (i; i < nDays - oDaysSelLgth + 1; i++)
-            {
-                opt = new Option(oDaysSelLgth + i, oDaysSelLgth + i);
-                oDaysSel.options[oDaysSel.length] = opt;
-            }
-        }
-        var oForm = oMonthSel.form;
-        var month = oMonthSel.options[oMonthSel.selectedIndex].value;
-        var day = oDaysSel.options[oDaysSel.selectedIndex].value;
-        var year = oYearSel.options[oYearSel.selectedIndex].value;
-        document.getElementById("useraccount-dob").value = year + '-' + month + '-' + day;
-    }
-</script>
-
-<div class="container">
     <div class="row">
         <?php $form = ActiveForm::begin(['id' => 'form-register', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1']]); ?>
             <div class="col-md-6">
@@ -57,7 +25,7 @@ use kartik\widgets\DepDrop;
                             <div class="field-row">
                                 <label>Giới tính</label>
                                 <?=
-                                $form->field($modelUserAccount, 'Gender')
+                                $form->field($modelUserAccount, 'gender')
                                     ->radioList(
                                         [ 'Male' => 'Nam', 'Female' => 'Nữ', 'Other' => 'Khác', ],
                                         [
@@ -75,18 +43,18 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Họ và tên</label>
-                                <?= $form->field($modelUser, 'FullName', [
+                                <?= $form->field($modelUser, 'full_name', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
-                                        'maxlength' => 100,
+                                        'maxlength' => 50,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
 
                             <div class="field-row">
                                 <label>Ngày sinh</label>
-                                <select class="le-select" name="days" id="days" onchange="setDays(months,this,years)">
-                                    <option value="0">Ngày</option>
+                                <select class="le-select" name="days" id="days">
+                                    <option value=" " selected="selected">Ngày</option>
                                     <?php
                                     for ($day = 1; $day <= 31; $day++) {
                                         echo "<option value=\"$day\">$day</option>\n";
@@ -94,8 +62,8 @@ use kartik\widgets\DepDrop;
                                     ?>
                                 </select>
 
-                                <select class="le-select" name="months" id="months" onchange="setDays(this,days,years)">
-                                    <option value="0">Tháng</option>
+                                <select class="le-select" name="months" id="months">
+                                    <option value=" " selected="selected">Tháng</option>
                                     <?php
                                     $months = array (1 => 'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',   'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12');
                                     foreach ($months as $key => $value) {
@@ -104,8 +72,8 @@ use kartik\widgets\DepDrop;
                                     ?>
                                 </select>
 
-                                <select class="le-select" name="years" id="years" onchange="setDays(months,days,this)">
-                                    <option value="0">Năm</option>
+                                <select class="le-select" name="years" id="years">
+                                    <option value=" " selected="selected">Năm</option>
                                     <?php
                                     for ($year = 1930; $year <= 2015; $year++) {
                                         echo "<option value=\"$year\">$year</option>\n";
@@ -113,18 +81,46 @@ use kartik\widgets\DepDrop;
                                     ?>
                                 </select>
 
-
-                                <?= $form->field($modelUserAccount, 'DOB', [
+                                <?= $form->field($modelUserAccount, 'dob', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                     ],
                                 ])->hiddenInput()->label(false); ?>
 
+                                <script type="text/javascript">
+                                    function daysInMonth(month, year) {
+                                        var days = new Date(year, month, 0);
+                                        return days.getDate();
+                                    }
+                                    function setDayDrop(dyear, dmonth, dday) {
+                                        var year = dyear.options[dyear.selectedIndex].value;
+                                        var month = dmonth.options[dmonth.selectedIndex].value;
+                                        var day = dday.options[dday.selectedIndex].value;
+                                        if (day == ' ') {
+                                            var days = (year == ' ' || month == ' ') ? 31 : daysInMonth(month, year);
+                                            dday.options.length = 0;
+                                            dday.options[dday.options.length] = new Option(' ', ' ');
+                                            for (var i = 1; i <= days; i++)
+                                                dday.options[dday.options.length] = new Option(i, i);
+                                        }
+                                    }
+                                    function setDay() {
+                                        var year = document.getElementById('years');
+                                        var month = document.getElementById('months');
+                                        var day = document.getElementById('days');
+                                        setDayDrop(year, month, day);
+                                        document.getElementById("useraccount-dob").value = year.value + '-' + month.value + '-' + day.value;
+                                    }
+                                    document.getElementById('years').onchange = setDay;
+                                    document.getElementById('months').onchange = setDay;
+                                    document.getElementById('days').onchange = setDay;
+                                </script>
+
                             </div><!-- /.field-row -->
 
                             <div class="field-row">
                                 <label>Email</label>
-                                <?= $form->field($modelUser, 'Email', [
+                                <?= $form->field($modelUser, 'email', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 100,
@@ -137,7 +133,7 @@ use kartik\widgets\DepDrop;
                             <legend class="scheduler-border">Mật khẩu của bạn</legend>
                             <div class="field-row">
                                 <label>Tên đăng nhập</label>
-                                <?= $form->field($modelUserAccount, 'UserName', [
+                                <?= $form->field($modelUserAccount, 'username', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 45,
@@ -148,18 +144,20 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Mật khẩu</label>
-                                <?= $form->field($modelUserAccount, 'Password', [
+                                <?= $form->field($modelUserAccount, 'password', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 255,
                                     ],
                                 ])->passwordInput()->label(false); ?>
                             </div><!-- /.field-row -->
 
                             <div class="field-row">
                                 <label>Xác Nhận Mật khẩu</label>
-                                <?= $form->field($modelUserAccount, 'RePassword', [
+                                <?= $form->field($modelUserAccount, 'repassword', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
+                                        'maxlength' => 255,
                                     ],
                                 ])->passwordInput()->label(false); ?>
                             </div><!-- /.field-row -->
@@ -179,17 +177,17 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Số điện thoại</label>
-                                <?= $form->field($modelUser, 'PhoneNumber', [
+                                <?= $form->field($modelUser, 'phone_number', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
-                                        'maxlength' => 11,
+                                        'maxlength' => 15,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
 
                             <div class="field-row">
                                 <label>Số nhà / đường phố, thôn xóm</label>
-                                <?= $form->field($modelAddress, 'Detail', [
+                                <?= $form->field($modelAddress, 'detail', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 100,
@@ -199,7 +197,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Tỉnh / Thành Phố</label>
-                                <?= $form->field($modelCity, 'Name')->dropDownList(City::getCity(),
+                                <?= $form->field($modelCity, 'name')->dropDownList(City::getCity(),
                                     ['id' => 'city-id', 'class'=>'le-select-address', 'prompt' => '- Chọn Tỉnh / Thành phố -'])
                                     ->label(false);
                                 ?>
@@ -207,7 +205,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Quận / Huyện</label>
-                                <?= $form->field($modelDistrict, 'Name')->widget(DepDrop::classname(), [
+                                <?= $form->field($modelDistrict, 'name')->widget(DepDrop::classname(), [
                                     'options'=>['id'=>'district-id', 'class'=>'le-select-address','prompt' => '- Chọn Quận / Huyện -'],
                                     'pluginOptions'=>[
                                         'depends'=>['city-id'],
@@ -219,7 +217,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Xã / Phường</label>
-                                <?= $form->field($modelAddress, 'Ward_Id')->widget(DepDrop::classname(), [
+                                <?= $form->field($modelAddress, 'ward_id')->widget(DepDrop::classname(), [
                                     'options'=>['id'=>'ward-id', 'class'=>'le-select-address','prompt' => '- Chọn Xã / Phường -'],
                                     'pluginOptions'=>[
                                         'depends'=>['city-id','district-id'],
@@ -238,4 +236,3 @@ use kartik\widgets\DepDrop;
             </div><!-- /.col -->
         <?php ActiveForm::end(); ?>
     </div><!-- /.row -->
-</div><!-- /.container -->

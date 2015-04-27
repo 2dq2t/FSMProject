@@ -1,7 +1,6 @@
 <?php
 namespace common\models;
 
-use frontend\models\UserAccount;
 use Yii;
 use yii\base\Model;
 
@@ -44,7 +43,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Mật khẩu không đúng.');
+                $this->addError($attribute, 'Tên Đăng Nhập hoặc Mật Khẩu không đúng');
             }
         }
     }

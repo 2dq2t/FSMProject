@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "address".
  *
- * @property integer $Id
- * @property string $Detail
- * @property integer $Ward_Id
+ * @property integer $id
+ * @property string $detail
+ * @property integer $ward_id
  *
  * @property Ward $ward
  * @property Order[] $orders
@@ -32,9 +32,9 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Detail', 'Ward_Id'], 'required','message'=>'{attribute} không được để trống'],
-            [['Ward_Id'], 'integer'],
-            [['Detail'], 'string', 'max' => 100],
+            [['detail', 'ward_id'], 'required'],
+            [['ward_id'], 'integer'],
+            [['detail'], 'string', 'max' => 100]
         ];
     }
 
@@ -44,9 +44,9 @@ class Address extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Detail' => 'Số nhà / Đường Phố, Thôn xóm',
-            'Ward_Id' => 'Xã / Phường',
+            'id' => 'ID',
+            'detail' => 'Địa chỉ',
+            'ward_id' => 'Xã / Phường',
         ];
     }
 
@@ -55,7 +55,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getWard()
     {
-        return $this->hasOne(Ward::className(), ['Id' => 'Ward_Id']);
+        return $this->hasOne(Ward::className(), ['id' => 'ward_id']);
     }
 
     /**
@@ -63,7 +63,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getOrders()
     {
-        return $this->hasMany(Order::className(), ['AddressId' => 'Id']);
+        return $this->hasMany(Order::className(), ['address_id' => 'id']);
     }
 
     /**
@@ -71,7 +71,7 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getStaff()
     {
-        return $this->hasMany(Staff::className(), ['AddressId' => 'Id']);
+        return $this->hasMany(Staff::className(), ['address_id' => 'id']);
     }
 
     /**
@@ -79,6 +79,6 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getUseraccounts()
     {
-        return $this->hasMany(UserAccount::className(), ['AddressId' => 'Id']);
+        return $this->hasMany(UserAccount::className(), ['address_id' => 'id']);
     }
 }

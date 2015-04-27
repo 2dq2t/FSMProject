@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "city".
  *
- * @property integer $Id
- * @property string $Name
+ * @property integer $id
+ * @property string $name
  *
  * @property District[] $districts
  */
@@ -28,8 +28,8 @@ class City extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Name'], 'required'],
-            [['Name'], 'string', 'max' => 45]
+            [['name'], 'required'],
+            [['name'], 'string', 'max' => 45]
         ];
     }
 
@@ -39,8 +39,8 @@ class City extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
-            'Name' => 'Name',
+            'id' => 'ID',
+            'name' => 'Name',
         ];
     }
 
@@ -49,13 +49,13 @@ class City extends \yii\db\ActiveRecord
      */
     public function getDistricts()
     {
-        return $this->hasMany(District::className(), ['City_Id' => 'Id']);
+        return $this->hasMany(District::className(), ['city_id' => 'id']);
     }
 
     //function get data from City Table
     public static function getCity(){
         $data = static::find()->all();
-        $value = (count($data) == 0)? ['' => '']:\yii\helpers\ArrayHelper::map($data, 'Id', 'Name');
+        $value = (count($data) == 0)? ['' => '']:\yii\helpers\ArrayHelper::map($data, 'id', 'name');
 
         return $value;
     }
