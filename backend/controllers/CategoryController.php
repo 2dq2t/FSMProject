@@ -2,9 +2,10 @@
 
 namespace backend\controllers;
 
+use kartik\alert\Alert;
 use Yii;
-use backend\models\Category;
-use backend\models\CategorySearch;
+use common\models\Category;
+use common\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,26 +58,30 @@ class CategoryController extends Controller
 
             // load model like any single model validation
             if ($model->load($post)) {
-                // can save model or do something before saving model
-                $model->save();
+                if($model->validate()) {
+                    // can save model or do something before saving model
+                    $model->save();
+                    // custom output to return to be displayed as the editable grid cell
+                    // data. Normally this is empty - whereby whatever value is edited by
+                    // in the input by user is updated automatically.
+                    $output = '';
 
-                // custom output to return to be displayed as the editable grid cell
-                // data. Normally this is empty - whereby whatever value is edited by 
-                // in the input by user is updated automatically.
-                $output = '';
+                    // specific use case where you need to validate a specific
+                    // editable column posted when you have more than one
+                    // EditableColumn in the grid view. We evaluate here a
+                    // check to see if buy_amount was posted for the Book model
+                    // if (isset($posted['buy_amount'])) {
+                    //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
+                    // }
 
-                // specific use case where you need to validate a specific
-                // editable column posted when you have more than one 
-                // EditableColumn in the grid view. We evaluate here a 
-                // check to see if buy_amount was posted for the Book model
-                // if (isset($posted['buy_amount'])) {
-                //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
-                // } 
+                    // similarly you can check if the name attribute was posted as well
+                    // if (isset($posted['name'])) {
+                    //   $output =  ''; // process as you need
+                    // }
+                } else {
+                    $output = $model->errors;
+                }
 
-                // similarly you can check if the name attribute was posted as well
-                // if (isset($posted['name'])) {
-                //   $output =  ''; // process as you need
-                // } 
                 $out = Json::encode(['output'=>$output, 'message'=>'']);
             }
             // return ajax json encoded response and exit
@@ -115,7 +120,7 @@ class CategoryController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
+                'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
                 'message' => 'Category Record has been saved.',
@@ -148,7 +153,7 @@ class CategoryController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
+                'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-pencil',
                 'message' => 'Category has been edited.',
@@ -173,7 +178,7 @@ class CategoryController extends Controller
         $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
+            'type' => Alert::TYPE_SUCCESS,
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Category has been deleted.',

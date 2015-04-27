@@ -2,9 +2,10 @@
 
 namespace backend\controllers;
 
+use kartik\alert\Alert;
 use Yii;
-use backend\models\Rating;
-use backend\models\RatingSearch;
+use common\models\Rating;
+use common\models\RatingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -42,43 +43,26 @@ class RatingController extends Controller
             // instantiate your book model for saving
             $rating_id = Yii::$app->request->post('editableKey');
             $model = Rating::findOne($rating_id);
-            // $model = Category::findModel($categoryId);
 
             // store a default json response as desired by editable
             $out = Json::encode(['output'=>'', 'message'=>'']);
 
-            // fetch the first entry in posted data (there should 
-            // only be one entry anyway in this array for an 
-            // editable submission)
-            // - $posted is the posted data for Book without any indexes
-            // - $post is the converted array for single model validation
             $post = [];
             $posted = current($_POST['Rating']);
             $post['Rating'] = $posted;
 
             // load model like any single model validation
             if ($model->load($post)) {
-                // can save model or do something before saving model
-                $model->save();
-
-                // custom output to return to be displayed as the editable grid cell
-                // data. Normally this is empty - whereby whatever value is edited by 
-                // in the input by user is updated automatically.
+                if($model->validate()) {
+                    // can save model or do something before saving model
+                    $model->save();
+                    $message = '';
+                } else {
+                    $message = $model->errors;
+                }
                 $output = '';
 
-                // specific use case where you need to validate a specific
-                // editable column posted when you have more than one 
-                // EditableColumn in the grid view. We evaluate here a 
-                // check to see if buy_amount was posted for the Book model
-                // if (isset($posted['buy_amount'])) {
-                //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
-                // } 
-
-                // similarly you can check if the name attribute was posted as well
-                // if (isset($posted['name'])) {
-                //   $output =  ''; // process as you need
-                // } 
-                $out = Json::encode(['output'=>$output, 'message'=>'']);
+                $out = Json::encode(['output'=>$output, 'message'=>$message]);
             }
             // return ajax json encoded response and exit
             echo $out;
@@ -114,13 +98,11 @@ class RatingController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
+                'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
                 'message' => 'Rating has been saved.',
                 'title' => 'Add Rating',
-                'positonY' => 'top',
-                'positonX' => 'left'
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -149,7 +131,7 @@ class RatingController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
+                'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
                 'message' => 'Rating has been edited.',

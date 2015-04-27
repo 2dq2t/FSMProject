@@ -26,8 +26,9 @@
         "kartik-v/yii2-dynagrid": "*",
         "kartik-v/yii2-editable": "*",
         "vova07/yii2-imperavi-widget": "*",
-        "zelenin/yii2-summernote-widget": "dev-master"
-        "phpoffice/phpexcel": "dev-develop"
+        "zelenin/yii2-summernote-widget": "dev-master",
+        "phpoffice/phpexcel": "dev-develop",
+        "2amigos/yii2-date-picker-widget": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

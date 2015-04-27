@@ -2,10 +2,11 @@
 
 namespace backend\controllers;
 
-use backend\models\Image;
+use common\models\Image;
+use kartik\alert\Alert;
 use Yii;
-use backend\models\Product;
-use backend\models\ProductSearch;
+use common\models\Product;
+use common\models\ProductSearch;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,22 +66,9 @@ class ProductController extends Controller
 
             // load model like any single model validation
             if ($model->load($post)) {
-//                echo $posted['Active'];
-//                return;
-                // can save model or do something before saving model
 
-                // custom output to return to be displayed as the editable grid cell
-                // data. Normally this is empty - whereby whatever value is edited by
-                // in the input by user is updated automatically.
                 $output = '';
-
-                // specific use case where you need to validate a specific
-                // editable column posted when you have more than one
-                // EditableColumn in the grid view. We evaluate here a
-                // check to see if buy_amount was posted for the Book model
-                // if (isset($posted['buy_amount'])) {
-                //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
-                // }
+                $message = '';
 
                 if($model->save() && isset($posted['active'])) {
                     if ($posted['active'] == 1) {
@@ -93,13 +81,11 @@ class ProductController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                } else {
+                    $message = $model->validate();
                 }
 
-                // similarly you can check if the name attribute was posted as well
-                // if (isset($posted['name'])) {
-                //   $output =  ''; // process as you need
-                // }
-                $out = Json::encode(['output'=>$output, 'message'=>'']);
+                $out = Json::encode(['output'=>$output, 'message'=>$message]);
             }
             // return ajax json encoded response and exit
             echo $out;
@@ -162,7 +148,7 @@ class ProductController extends Controller
             }
 
             Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
+                'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
                 'message' => 'Product Record has been saved.',
@@ -231,7 +217,15 @@ class ProductController extends Controller
                 }
             }
 
-            return $this->redirect(['view', 'id' => $model->Id]);
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 5000,
+                'icon' => 'fa fa-pencil',
+                'message' => 'Product Record has been edited.',
+                'title' => 'Add Product',
+            ]);
+
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -260,7 +254,7 @@ class ProductController extends Controller
         $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
+            'type' => Alert::TYPE_SUCCESS,
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Product has been deleted.',

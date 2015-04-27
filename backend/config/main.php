@@ -50,9 +50,9 @@ return [
         'view'=>[
             'theme'=>[
                 'pathMap'=>[
-                    '@app/views'=>'@app/themes/smartadmin/views'
+                    '@app/views'=>'@app/themes/metronic/views'
                 ],
-                'baseUrl'=>'@web/themes/smartadmin',
+                'baseUrl'=>'@web/themes/metronic',
             ]
         ],
     ],
