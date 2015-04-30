@@ -6,12 +6,6 @@ use frontend\models\City;
 use frontend\models\District;
 use frontend\models\Ward;
 use kartik\widgets\DepDrop;
-/**
- * Created by PhpStorm.
- * User: TuDA
- * Date: 4/14/2015
- * Time: 12:47 AM
- */
 ?>
 
     <div class="row">
@@ -25,7 +19,7 @@ use kartik\widgets\DepDrop;
                             <div class="field-row">
                                 <label>Giới tính</label>
                                 <?=
-                                $form->field($modelUserAccount, 'gender')
+                                $form->field($modelCustomer, 'gender')
                                     ->radioList(
                                         [ 'Male' => 'Nam', 'Female' => 'Nữ', 'Other' => 'Khác', ],
                                         [
@@ -43,10 +37,10 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Họ và tên</label>
-                                <?= $form->field($modelUser, 'full_name', [
+                                <?= $form->field($modelGuest, 'full_name', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
-                                        'maxlength' => 50,
+                                        'maxlength' => 255,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -81,11 +75,11 @@ use kartik\widgets\DepDrop;
                                     ?>
                                 </select>
 
-                                <?= $form->field($modelUserAccount, 'dob', [
+                                <?= $form->field($modelCustomer, 'dob', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                     ],
-                                ])->hiddenInput()->label(false); ?>
+                                ])->label(false); ?>
 
                                 <script type="text/javascript">
                                     function daysInMonth(month, year) {
@@ -109,7 +103,7 @@ use kartik\widgets\DepDrop;
                                         var month = document.getElementById('months');
                                         var day = document.getElementById('days');
                                         setDayDrop(year, month, day);
-                                        document.getElementById("useraccount-dob").value = year.value + '-' + month.value + '-' + day.value;
+                                        document.getElementById("customer-dob").value = year.value + '-' + month.value + '-' + day.value;
                                     }
                                     document.getElementById('years').onchange = setDay;
                                     document.getElementById('months').onchange = setDay;
@@ -120,10 +114,10 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Email</label>
-                                <?= $form->field($modelUser, 'email', [
+                                <?= $form->field($modelGuest, 'email', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
-                                        'maxlength' => 100,
+                                        'maxlength' => 255,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -133,10 +127,10 @@ use kartik\widgets\DepDrop;
                             <legend class="scheduler-border">Mật khẩu của bạn</legend>
                             <div class="field-row">
                                 <label>Tên đăng nhập</label>
-                                <?= $form->field($modelUserAccount, 'username', [
+                                <?= $form->field($modelCustomer, 'username', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
-                                        'maxlength' => 45,
+                                        'maxlength' => 255,
                                     ],
                                 ])->label(false); ?>
                             </div><!-- /.field-row -->
@@ -144,7 +138,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Mật khẩu</label>
-                                <?= $form->field($modelUserAccount, 'password', [
+                                <?= $form->field($modelCustomer, 'password', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 255,
@@ -154,7 +148,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Xác Nhận Mật khẩu</label>
-                                <?= $form->field($modelUserAccount, 'repassword', [
+                                <?= $form->field($modelCustomer, 're_password', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 255,
@@ -177,7 +171,7 @@ use kartik\widgets\DepDrop;
 
                             <div class="field-row">
                                 <label>Số điện thoại</label>
-                                <?= $form->field($modelUser, 'phone_number', [
+                                <?= $form->field($modelGuest, 'phone_number', [
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                         'maxlength' => 15,

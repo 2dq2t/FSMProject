@@ -13,7 +13,7 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\UserAccount',
+            'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
         ],
         'log' => [

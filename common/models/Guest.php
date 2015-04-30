@@ -5,25 +5,26 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "guest".
  *
- * @property integer $id
+ * @property string $id
  * @property string $full_name
  * @property string $email
  * @property string $phone_number
- * @property integer $useraccount_id
+ * @property string $customer_id
  *
+ * @property Customer $customer
  * @property Order[] $orders
- * @property Useraccount $useraccount
+ * @property ShoppingCart[] $shoppingCarts
  */
-class User extends \yii\db\ActiveRecord
+class Guest extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'user';
+        return 'guest';
     }
 
     /**
@@ -33,9 +34,9 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['full_name', 'email', 'phone_number'], 'required'],
-            [['email'], 'email'],
-            [['useraccount_id'], 'integer'],
-            [['full_name', 'email'], 'string', 'max' => 100],
+            [['customer_id'], 'integer'],
+            [['email'],'email'],
+            [['full_name', 'email'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 15]
         ];
     }
@@ -50,8 +51,16 @@ class User extends \yii\db\ActiveRecord
             'full_name' => 'Họ và tên',
             'email' => 'Email',
             'phone_number' => 'Số điện thoại',
-            'useraccount_id' => 'Useraccount ID',
+            'customer_id' => 'Customer ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
 
     /**
@@ -65,8 +74,8 @@ class User extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUseraccount()
+    public function getShoppingCarts()
     {
-        return $this->hasOne(Useraccount::className(), ['id' => 'useraccount_id']);
+        return $this->hasMany(ShoppingCart::className(), ['guest_id' => 'id']);
     }
 }

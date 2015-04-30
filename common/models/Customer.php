@@ -1,41 +1,41 @@
 <?php
 
 namespace common\models;
+
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use Yii;
 
 /**
- * This is the model class for table "useraccount".
+ * This is the model class for table "customer".
  *
- * @property integer $id
+ * @property string $id
  * @property string $username
  * @property string $password
  * @property string $avatar
  * @property string $dob
  * @property string $gender
- * @property string $order_list
+ * @property string $auth_key
  * @property string $password_reset_token
- * @property string $authkey
  * @property string $created_at
  * @property string $updated_at
  * @property integer $status
- * @property integer $address_id
+ * @property string $address_id
  *
- * @property User[] $users
  * @property Address $address
+ * @property Guest[] $guests
  * @property WishList[] $wishLists
  */
-class UserAccount extends ActiveRecord implements IdentityInterface
+class Customer extends ActiveRecord implements IdentityInterface
 {
-    public $repassword;
+    public $re_password;
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'useraccount';
+        return 'customer';
     }
 
     /**
@@ -45,16 +45,14 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password', 'gender', 'address_id'], 'required'],
-            [['status', 'address_id'], 'integer'],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string'],
-            [['username'], 'string', 'max' => 50, 'min' => 6, 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
-            [['password'], 'string', 'max' => 255, 'min' => 6, 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
-            [['repassword'], 'string', 'max' => 255, 'min' => 6, 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
-            ['repassword', 'compare', 'compareAttribute' => 'password','message' => '{attribute} không khớp'],
-            [['avatar'], 'string', 'max' => 60],
-            [['order_list'], 'string', 'max' => 45],
-            [['authkey','password_reset_token'], 'string', 'max' => 32]
+            [['status', 'address_id'], 'integer'],
+            [['username', 'avatar'], 'string', 'max' => 255, 'min' => '6', 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
+            [['password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
+            ['re_password', 'compare', 'compareAttribute' => 'password','message' => '{attribute} không khớp'],
+            [['auth_key', 'password_reset_token'], 'string', 'max' => 32],
+            [['username'], 'unique']
         ];
     }
 
@@ -65,26 +63,19 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Tên Đăng Nhập',
+            'username' => 'Tên đăng nhập',
+            'password' => 'Mật khẩu',
+            're_password' => 'Xác nhận Mật khẩu',
+            'avatar' => 'Avatar',
+            'dob' => 'Ngày sinh',
             'gender' => 'Giới tính',
-            'password' => 'Mật Khẩu',
-            'repassword' => 'Mật Khẩu',
-            'order_list' => 'Order List',
+            'auth_key' => 'Auth Key',
             'password_reset_token' => 'Password Reset Token',
             'created_at' => 'Created At',
-            'authkey' => 'Auth Key',
             'updated_at' => 'Updated At',
             'status' => 'Status',
-            'address_id' => 'Xã / Phường',
+            'address_id' => 'Address ID',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        return $this->hasMany(User::className(), ['useraccount_id' => 'id']);
     }
 
     /**
@@ -93,6 +84,14 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     public function getAddress()
     {
         return $this->hasOne(Address::className(), ['id' => 'address_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGuests()
+    {
+        return $this->hasMany(Guest::className(), ['customer_id' => 'id']);
     }
 
     /**
@@ -109,27 +108,22 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     }
 
     public function register(){
-
         if($this->validate()){
-            $userAccount = new UserAccount();
-            $userAccount->username = $this->username;
-            $userAccount->setPassword($this->password);
-            $userAccount->dob = $this->dob;
-            $userAccount->gender = $this->gender;
+            $customer = new Customer();
+            $customer->username = $this->username;
+            $customer->setPassword($this->password);
+            $customer->dob = $this->dob;
+            $customer->gender = $this->gender;
             $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
-            $userAccount->created_at = $time->format('Y-m-d H:i:s');
-            $userAccount->address_id = $this->address_id;
-            if ($userAccount->save()) {
-                return $userAccount;
+            $customer->created_at = $time->format('Y-m-d H:i:s');
+            $customer->address_id = $this->address_id;
+            if ($customer->save()) {
+                return $customer;
             }
         }
         return null;
     }
 
-    public function getUserAccount()
-    {
-        return $this->hasOne(UserAccount::className(), ['Id' => 'UserAccountId']);
-    }
     /**
      * Finds user by username
      *
@@ -140,6 +134,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username, 'Status' => 1]);
     }
+
     /**
      * Validates password
      *
@@ -150,6 +145,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
+
     /**
      * @inheritdoc
      */
@@ -157,6 +153,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
+
     /**
      * Finds user by password reset token
      *
@@ -174,6 +171,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
             'status' => 1,
         ]);
     }
+
     /**
      * Finds out if password reset token is valid
      *
@@ -204,7 +202,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authkey;
+        return $this->auth_key;
     }
 
     /**
@@ -216,7 +214,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
     }
     public function generateAuthKey()
     {
-        $this->authkey = Yii::$app->security->generateRandomString();
+        $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
     /**
@@ -224,7 +222,7 @@ class UserAccount extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        $this->PasswordResetToken = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
@@ -232,8 +230,9 @@ class UserAccount extends ActiveRecord implements IdentityInterface
      */
     public function removePasswordResetToken()
     {
-        $this->PasswordResetToken = null;
+        $this->password_reset_token = null;
     }
+
     /**
      * @inheritdoc
      */

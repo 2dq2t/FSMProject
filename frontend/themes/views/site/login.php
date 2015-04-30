@@ -19,7 +19,7 @@ use yii\bootstrap\ActiveForm;
                     <?= $form->field($model, 'username', [
                         'inputOptions' => [
                             'class' => 'le-input',
-                            'maxlength' => 45,
+                            'maxlength' => 255,
                         ],
                     ])->label(false); ?>
                 </div><!-- /.field-row -->
@@ -29,7 +29,7 @@ use yii\bootstrap\ActiveForm;
                     <?= $form->field($model, 'password', [
                         'inputOptions' => [
                             'class' => 'le-input',
-                            'maxlength' => 100,
+                            'maxlength' => 255,
                         ],
                     ])->passwordInput()->label(false); ?>
                 </div><!-- /.field-row -->

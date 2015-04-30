@@ -1,10 +1,12 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Category;
+use common\models\Product;
 use frontend\models\City;
 use frontend\models\District;
-use common\models\User;
-use common\models\UserAccount;
+use common\models\Guest;
+use common\models\Customer;
 use frontend\models\Ward;
 use frontend\models\Address;
 use Yii;
@@ -14,6 +16,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\base\InvalidParamException;
+use yii\db\Query;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -74,7 +77,16 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        //select category in navbar
+        $query = new Query();
+        $query->select(['category.name as categoryname', 'product.name as productname'])
+               ->from('category')->leftJoin('product', 'category.id = product.category_id');
+        $command = $query->createCommand();
+        $modelCategory = $command->queryAll();
+
+        return $this->render('index',[
+            'modelCategory' => $modelCategory,
+        ]);
     }
 
     public function actionLogin()
@@ -178,25 +190,32 @@ class SiteController extends Controller
 
     public function actionRegister(){
 
-        $modelUserAccount = new UserAccount();
-        $modelUser = new User();
+        $modelCustomer = new Customer();
+        $modelGuest = new Guest();
         $modelCity = new City();
         $modelDistrict = new District();
         $modelWard = new Ward();
         $modelAddress = new Address();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if(UserAccount::find()->where(['username' => $_POST['UserAccount']['username']])->exists()){
+            // Check duplicate username
+            if(Customer::find()->where(['username' => $_POST['Customer']['username']])->exists()){
                 Yii::$app->getSession()->setFlash('error', 'Xin lỗi, Tên Đăng Nhập đã tồn tại.');
             }
             else {
+                // check validate and insert to Address table
                 if ($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()) {
-                    $modelUserAccount->address_id = $modelAddress->id;
-                    if ($modelUserAccount->load(Yii::$app->request->post())) {
-                        if ($user = $modelUserAccount->register()) {
-                            $modelUser->useraccount_id = $user->id;
-                            if ($modelUser->load(Yii::$app->request->post()) && $modelUser->save()) {
+                    // set address_id of Customer equal id just created of Address
+                    $modelCustomer->address_id = $modelAddress->id;
+                    // check validate and insert to Customer table
+                    if ($modelCustomer->load(Yii::$app->request->post())) {
+                        if ($user = $modelCustomer->register()) {
+                            // set customer_id of Guest equal id just created of Customer
+                            $modelGuest->customer_id = $user->id;
+                            // check validate input and insert to Guest table
+                            if ($modelGuest->load(Yii::$app->request->post()) && $modelGuest->save()) {
                                 if (Yii::$app->getUser()->login($user)) {
+                                    // if register successfully return Home Page
                                     return $this->goHome();
                                 }
                             }
@@ -208,12 +227,12 @@ class SiteController extends Controller
 
 
         return $this->render('register', [
-            'modelUserAccount' => $modelUserAccount,
-                'modelUser' => $modelUser,
-                'modelCity' => $modelCity,
-                'modelDistrict' => $modelDistrict,
-                'modelWard' => $modelWard,
-                'modelAddress' => $modelAddress,
+            'modelCustomer' => $modelCustomer,
+            'modelGuest' => $modelGuest,
+            'modelCity' => $modelCity,
+            'modelDistrict' => $modelDistrict,
+            'modelWard' => $modelWard,
+            'modelAddress' => $modelAddress,
         ]);
 
     }
