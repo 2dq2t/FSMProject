@@ -37,6 +37,7 @@ class RatingController extends Controller
     {
         $searchModel = new RatingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setPagination(['pageSize' => 7]);
 
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
@@ -133,7 +134,7 @@ class RatingController extends Controller
             Yii::$app->getSession()->setFlash('success', [
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
-                'icon' => 'fa fa-plus',
+                'icon' => 'fa fa-pencil',
                 'message' => 'Rating has been edited.',
                 'title' => 'Update Rating',
                 'positonY' => 'top',
@@ -156,6 +157,16 @@ class RatingController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 5000,
+            'icon' => 'fa fa-trash-o',
+            'message' => 'Rating has been deleted.',
+            'title' => 'Delete Rating',
+            'positonY' => 'top',
+            'positonX' => 'left'
+        ]);
 
         return $this->redirect(['index']);
     }

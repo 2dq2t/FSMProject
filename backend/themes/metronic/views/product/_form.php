@@ -72,152 +72,95 @@ if(isset($images)) {
 <?php $this->endBlock('submit'); ?>
 
 <div class="row">
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal', 'role' => 'form', 'enctype' => 'multipart/form-data']]); ?>
-    <div class="col-md-6 ">
-        <!-- BEGIN SAMPLE FORM PORTLET-->
-        <div class="portlet light bordered">
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <div class="col-md-12">
+        <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-shopping-cart"></i>Product
                 </div>
                 <div class="tools">
-                    <a href="" class="collapse">
+                    <a href="javascript:;" class="collapse" data-original-title="" title="">
                     </a>
-                    <a href="" class="reload">
+                    <a href="javascript:;" class="reload" data-original-title="" title="">
                     </a>
                 </div>
             </div>
             <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+<!--                <form action="#">-->
                     <div class="form-body">
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'active', ['label'=>'Active', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'active',
-                                    ['template' => '<div class="col-md-12" style="margin-left: 13px;">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->widget(\kartik\switchinput\SwitchInput::className(), [
-                                        'pluginOptions' => [
-                                            'onColor' => 'success',
-                                            'offColor' => 'default',
-                                            'onText'=> 'Active',
-                                            'offText'=> 'Inactive'
-                                        ]
-                                    ])
-                                    ->label(false); ?>
-                            </div>
+                            <?= $form->field($model, 'active')
+                                ->widget(\kartik\switchinput\SwitchInput::className(), [
+                                    'pluginOptions' => [
+                                        'onColor' => 'success',
+                                        'offColor' => 'default',
+                                        'onText'=> 'Active',
+                                        'offText'=> 'Inactive'
+                                    ]
+                                ]) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'barcode', ['label'=>'Barcode', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'barcode',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->label(false)->textInput(['maxlength' => 20, 'placeholder'=>'Enter barcode...']); ?>
-                            </div>
+                            <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => 'Nhập barcode..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'name', ['label'=>'Product Name', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'name',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->label(false)->textInput(['maxlength' => 100, 'placeholder'=>'Enter product name...']); ?>
-                            </div>
+                            <?= $form->field($model, 'name',[
+                                'addon' => [
+                                    'append' => [
+                                        'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
+                                    ],
+                                ]])->textInput(['maxlength' => 255, 'placeholder' => 'Nhập tên sản phẩm..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'price', ['label'=>'Price', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <div class="input-group">
-                                    <?= $form->field($model, 'price',
-                                        ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
-                                            'addon' => [
-                                                'append' => [
-                                                    'content' => '<ins>đ</ins>'
-                                                ]
-                                            ]])->label(false)->textInput(['placeholder'=>'Enter product price...']); ?>
-                                </div>
-                            </div>
+                            <?= $form->field($model, 'price',
+                                ['addon' => [
+                                    'append' => [
+                                        'content' => '<ins>đ</ins>'
+                                    ]
+                                ]])->textInput(['placeholder' => 'Nhập giá sản phẩm..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'old_price', ['label'=>'Old Price', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'old_price',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
-                                        'addon' => [
-                                            'append' => [
-                                                'content' => '<ins>đ</ins>'
-                                            ]
-                                        ]])->label(false)->textInput(['placeholder'=>'Enter product old price...']); ?>
-                            </div>
+                            <?= $form->field($model, 'description')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
+                                'options' => ['row' => 3],
+                            ]) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'description', ['label'=>'Description', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'description',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->label(false)->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
-                                        'clientOptions' => [
-                                            'height' => 180,
-                                            'focus' => false,
-                                            'codemirror' => [
-                                                'themes' => 'paper',
-                                            ]
-                                        ]
-                                    ]) ?>
-                            </div>
+                            <?= $form->field($model, 'quantity')->textInput(['maxlength' => 10, 'placeholder' => 'Nhập số lượng sản phẩm..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'total', ['label'=>'Total', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'total',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->label(false)->textInput(['placeholder'=>'Enter total product...']); ?>
-                            </div>
+                            <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => 'Nhập số lượng đã bán..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'sold', ['label'=>'Sold', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'sold',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->label(false)->textInput(['placeholder'=>'Enter sold product...']); ?>
-                            </div>
+                            <?= $form->field($model, 'tax')->textInput(['placeholder' => 'Nhập thuế sản phẩm..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'tax', ['label'=>'Tax', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'tax',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
-                                        'addon' => [
-                                            'append' => [
-                                                'content' => '<ins>đ</ins>'
-                                            ]
-                                        ]])->label(false)->textInput(['placeholder'=>'Enter product tax...']); ?>
-                            </div>
+                            <?= $form->field($model, 'fee')->textInput(['placeholder' => 'Nhập phí sản phẩm..']) ?>
                         </div>
                         <div class="form-group">
-                            <?= Html::activeLabel($model, 'fee', ['label'=>'Fee', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'fee',
-                                    ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>',
-                                        'addon' => [
-                                            'append' => [
-                                                'content' => '<ins>đ</ins>'
-                                            ]
-                                        ]])->label(false)->textInput(['placeholder'=>'Enter product fee...']); ?>
-                            </div>
+                            <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => 'Nhập tag sản phẩm..']) ?>
+                        </div>
+                        <div class="form-group">
+                            <?= $form->field($model, 'session_id')
+                                ->dropDownList(
+                                    \yii\helpers\ArrayHelper::map(\common\models\Session::find()->where(['active' => 1])->all(), 'id', 'name'),
+                                    ['prompt'=>'Chọn mùa của sản phẩm']
+                                ) ?>
                         </div>
                     </div>
-                    <div class="form-actions right">
-                        <div class="row">
-                            <div class="col-md-offset-3 col-md-9">
-                                <?php echo $this->blocks['submit']; ?>
-                            </div>
+                    <div class="form-actions">
+                        <div class="btn-set pull-right">
+                            <?php echo $this->blocks['submit']; ?>
                         </div>
                     </div>
+<!--                </form>-->
+                <!-- END FORM-->
             </div>
         </div>
-        <!-- END SAMPLE FORM PORTLET-->
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 ">
         <!-- BEGIN SAMPLE FORM PORTLET-->
-        <div class="portlet light bordered">
+        <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-tags"></i>Categories
@@ -230,30 +173,26 @@ if(isset($images)) {
                 </div>
             </div>
             <div class="portlet-body form">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <?= Html::activeLabel($model, 'category_id', ['label'=>'Category', 'class'=>'col-md-3 control-label']); ?>
-                            <div class="col-md-9">
-                                <?= $form->field($model, 'category_id', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                    ->dropDownList(
-                                        \yii\helpers\ArrayHelper::map(\common\models\Category::find()->all(), 'id', 'name'),
-                                        ['prompt'=>'Select Category']
-                                    )->label(false); ?>
-                            </div>
-                        </div>
+                <div class="form-body">
+                    <div class="form-group">
+                        <?= $form->field($model, 'category_id')
+                            ->dropDownList(
+                                \yii\helpers\ArrayHelper::map(\common\models\Category::find()->all(), 'id', 'name'),
+                                ['prompt'=>'Select Category']
+                            ) ?>
                     </div>
-                    <div class="form-actions right">
-                        <div class="row">
-                            <div class="col-md-offset-3 col-md-9">
-                                <?php echo $this->blocks['submit']; ?>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div class="form-actions right">
+                    <?php echo $this->blocks['submit']; ?>
+                </div>
             </div>
         </div>
         <!-- END SAMPLE FORM PORTLET-->
+    </div>
+    <div class="col-md-6">
+
         <!-- BEGIN SAMPLE FORM PORTLET-->
-        <div class="portlet light bordered">
+        <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-image"></i>Images
@@ -268,49 +207,44 @@ if(isset($images)) {
             <div class="portlet-body form">
                 <div class="form-body">
                     <div class="form-group">
-                        <?= Html::activeLabel($productImages, 'product_image[]', ['label'=>'Images', 'class'=>'col-md-3 control-label']); ?>
-                        <div class="col-md-9">
-                            <?= $form->field($productImages, 'product_image[]', ['template' => '<div class="col-md-12">{input}</div><div class="col-md-12">{error}</div>'])
-                                ->widget(\kartik\widgets\FileInput::className(), [
-                                    'options' => [
-                                        'accept' => 'image/*',
-                                        'multiple' => true,
-                                    ],
-                                    'pluginOptions' => [
-                                        'showCaption' => true,
+                        <?= $form->field($productImages, 'product_image[]')
+                            ->widget(\kartik\widgets\FileInput::className(), [
+                                'options' => [
+                                    'accept' => 'image/*',
+                                    'multiple' => true,
+                                ],
+                                'pluginOptions' => [
+                                    'showCaption' => true,
 //                                                'uploadUrl' => \yii\helpers\Url::to(),
 //                                                'uploadAsync' => true,
-                                        'allowedFileExtensions' => ['jpeg', 'jpg', 'gif', 'png'],
-                                        'showUpload' => false,
-                                        'maxFileCount' => 10,
-                                        'maxFile' => 10,
-                                        'initialPreview' => $product_image,
-                                        'overwriteInitial' => true,
+                                    'allowedFileExtensions' => ['jpeg', 'jpg', 'gif', 'png'],
+                                    'showUpload' => false,
+                                    'maxFileCount' => 10,
+                                    'maxFile' => 10,
+                                    'initialPreview' => $product_image,
+                                    'overwriteInitial' => true,
 //                                                'initialPreviewConfig' => $previewConfig,
 //                                                'initialPreviewShowDelete' => true,
 //                                                'append' => true,
-                                        'layoutTemplates' => [
-                                            'footer' => '<div class="file-thumbnail-footer">'.
-                                                '<div class="file-caption-name">{caption}</div>'.
-                                                '<div class="file-actions">'.
-                                                '<div class="file-footer-buttons">'.
-                                                '<button type="button" class="kv-file-remove btn btn-xs btn-default" title="Remove file">'.
-                                                '<i class="glyphicon glyphicon-trash text-danger"></i>'.
-                                                '</button>'.
-                                                '</div>'.
-                                                '</div>'.
-                                                '</div>'
-                                        ]
+                                    'layoutTemplates' => [
+                                        'footer' => '<div class="file-thumbnail-footer">'.
+                                            '<div class="file-caption-name">{caption}</div>'.
+                                            '<div class="file-actions">'.
+                                            '<div class="file-footer-buttons">'.
+                                            '<button type="button" class="kv-file-remove btn btn-xs btn-default" title="Remove file">'.
+                                            '<i class="glyphicon glyphicon-trash text-danger"></i>'.
+                                            '</button>'.
+                                            '</div>'.
+                                            '</div>'.
+                                            '</div>'
                                     ]
-                                ])->label(false); ?>
-                        </div>
+                                ]
+                            ]) ?>
                     </div>
                 </div>
                 <div class="form-actions right">
                     <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-                            <?php echo $this->blocks['submit']; ?>
-                        </div>
+                        <?php echo $this->blocks['submit']; ?>
                     </div>
                 </div>
             </div>

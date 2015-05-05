@@ -7,23 +7,27 @@ use Yii;
 /**
  * This is the model class for table "product".
  *
- * @property integer $id
+ * @property string $id
  * @property string $barcode
  * @property string $name
  * @property double $price
- * @property double $old_price
  * @property string $description
- * @property string $total
+ * @property string $quantity
  * @property string $sold
  * @property double $tax
  * @property double $fee
+ * @property string $tag
  * @property integer $active
- * @property integer $category_id
+ * @property string $category_id
+ * @property string $session_id
+ * @property string $unit_id
  *
  * @property Image[] $images
  * @property Offer[] $offers
  * @property OrderDetail[] $orderDetails
  * @property Category $category
+ * @property Session $session
+ * @property Unit $unit
  * @property ProductRating[] $productRatings
  * @property Rating[] $ratings
  * @property ShoppingCart[] $shoppingCarts
@@ -45,12 +49,13 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['barcode', 'name', 'price', 'description', 'total', 'sold', 'tax', 'active', 'category_id'], 'required'],
-            [['price', 'old_price', 'tax', 'fee'], 'number'],
+            [['barcode', 'name', 'price', 'description', 'quantity', 'sold', 'tax', 'active', 'category_id', 'session_id', 'unit_id'], 'required'],
+            [['price', 'tax', 'fee'], 'number'],
             [['description'], 'string'],
-            [['total', 'sold', 'active', 'category_id'], 'integer'],
+            [['quantity', 'sold', 'active', 'category_id', 'session_id', 'unit_id'], 'integer'],
             [['barcode'], 'string', 'max' => 20],
-            [['name'], 'string', 'max' => 100]
+            [['name'], 'string', 'max' => 255],
+            [['tag'], 'string', 'max' => 100]
         ];
     }
 
@@ -64,14 +69,16 @@ class Product extends \yii\db\ActiveRecord
             'barcode' => 'Barcode',
             'name' => 'Name',
             'price' => 'Price',
-            'old_price' => 'Old Price',
             'description' => 'Description',
-            'total' => 'Total',
+            'quantity' => 'Quantity',
             'sold' => 'Sold',
             'tax' => 'Tax',
             'fee' => 'Fee',
+            'tag' => 'Tag',
             'active' => 'Active',
             'category_id' => 'Category ID',
+            'session_id' => 'Session ID',
+            'unit_id' => 'Unit ID',
         ];
     }
 
@@ -96,7 +103,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getOrderDetails()
     {
-        return $this->hasMany(OrderDetail::className(), ['product_d' => 'id']);
+        return $this->hasMany(OrderDetail::className(), ['product_id' => 'id']);
     }
 
     /**
@@ -105,6 +112,22 @@ class Product extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSession()
+    {
+        return $this->hasOne(Session::className(), ['id' => 'session_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUnit()
+    {
+        return $this->hasOne(Unit::className(), ['id' => 'unit_id']);
     }
 
     /**

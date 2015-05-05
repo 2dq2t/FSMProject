@@ -121,7 +121,7 @@ class CategoryController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
                 'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
+                'duration' => 3000,
                 'icon' => 'fa fa-plus',
                 'message' => 'Category Record has been saved.',
                 'title' => 'Add Category'
@@ -154,7 +154,7 @@ class CategoryController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', [
                 'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
+                'duration' => 3000,
                 'icon' => 'fa fa-pencil',
                 'message' => 'Category has been edited.',
                 'title' => 'Update Category'
@@ -179,7 +179,7 @@ class CategoryController extends Controller
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => Alert::TYPE_SUCCESS,
-            'duration' => 5000,
+            'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Category has been deleted.',
             'title' => 'Delete Category'
