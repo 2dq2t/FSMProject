@@ -17,7 +17,7 @@ use kartik\alert\Alert;
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
         'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
         'showSeparator' => true,
-        'delay' => 300000, //This delay is how long before the message shows
+        'delay' => 3000, //This delay is how long before the message shows
 //            'pluginOptions' => [
 //                'delay' => (!empty($message['duration'])) ? $message['duration'] : 3000, //This delay is how long the message shows for
 //                'placement' => [

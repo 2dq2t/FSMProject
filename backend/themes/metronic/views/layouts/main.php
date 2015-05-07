@@ -478,8 +478,14 @@ AppAsset::register($this);
                 'category',
                 'product',
                 'rating',
+                'unit',
+                'session',
+                'customers',
+                'guest',
             ],
-            'users' => []
+            'users' => [
+                'customer'
+            ]
         ];
 
         $controller = Yii::$app->controller->id;
@@ -548,45 +554,22 @@ AppAsset::register($this);
                         <li class="<?= active('ecommerce', 'product') ? 'active' : '' ?>">
                             <?= HtmL::a('<i class="icon-handbag"></i> Products', ['product/index']) ?>
                         </li>
-                        <li>
-                            <a href="ecommerce_products_edit.html">
-                                <i class="icon-pencil"></i>
-                                Product Edit</a>
+                        <li class="<?= active('ecommerce', 'unit') ? 'active' : '' ?>">
+                            <?= HtmL::a('<i class="icon-list"></i> Unit', ['unit/index']) ?>
+                        </li>
+                        <li class="<?= active('ecommerce', 'session') ? 'active' : '' ?>">
+                            <?= HtmL::a('<i class="icon-grid"></i> Session', ['session/index']) ?>
+                        </li>
+                        <li class="<?= active('ecommerce', 'guest') ? 'active' : '' ?>">
+                            <?= HtmL::a('<i class="icon-user"></i> Customers', ['guest/index']) ?>
                         </li>
                     </ul>
                 </li>
-                <li class="<?= active('users', '') ? 'active open' : '' ?>">
-                    <a href="javascript:;">
-                        <i class="icon-rocket"></i>
-                        <span class="title">Page Layouts</span>
-                        <span class="arrow <?= active('users', '') ? 'open' : '' ?>"></span>
+                <li class="<?= active('users', 'customer') ? 'active' : '' ?>">
+                    <a href="index.php?r=customer%2Findex">
+                        <i class="icon-users"></i>
+                        <span class="title">Users</span>
                     </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="layout_sidebar_reversed.html">
-                                <span class="badge badge-warning">new</span>Right Sidebar Page</a>
-                        </li>
-                        <li>
-                            <a href="layout_sidebar_fixed.html">
-                                Sidebar Fixed Page</a>
-                        </li>
-                        <li>
-                            <a href="layout_sidebar_closed.html">
-                                Sidebar Closed Page</a>
-                        </li>
-                        <li>
-                            <a href="layout_blank_page.html">
-                                Blank Page</a>
-                        </li>
-                        <li>
-                            <a href="layout_boxed_page.html">
-                                Boxed Page</a>
-                        </li>
-                        <li>
-                            <a href="layout_language_bar.html">
-                                Language Switch Bar</a>
-                        </li>
-                    </ul>
                 </li>
                 <li>
                     <a href="javascript:;">
@@ -1206,7 +1189,7 @@ AppAsset::register($this);
 <!--<script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
 <script src="metronic/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<!--<script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
+<script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <script src="metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
 <script src="metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
