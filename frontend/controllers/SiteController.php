@@ -1,20 +1,19 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Category;
-use common\models\Product;
-use frontend\models\City;
-use frontend\models\District;
+use common\models\City;
+use common\models\District;
 use common\models\Guest;
 use common\models\Customer;
-use frontend\models\Ward;
-use frontend\models\Address;
+use common\models\Ward;
+use common\models\Address;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\base\Exception;
 use yii\base\InvalidParamException;
 use yii\db\Query;
 use yii\web\BadRequestHttpException;
@@ -197,43 +196,58 @@ class SiteController extends Controller
         $modelWard = new Ward();
         $modelAddress = new Address();
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Check duplicate username
-            if(Customer::find()->where(['username' => $_POST['Customer']['username']])->exists()){
-                Yii::$app->getSession()->setFlash('error', 'Xin lỗi, Tên Đăng Nhập đã tồn tại.');
-            }
-            else {
-                // check validate and insert to Address table
-                if ($modelAddress->load(Yii::$app->request->post()) && $modelAddress->save()) {
-                    // set address_id of Customer equal id just created of Address
+        if($modelCustomer->load(Yii::$app->request->post())
+            && $modelGuest->load(Yii::$app->request->post())
+            && $modelAddress->load(Yii::$app->request->post())){
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                if ($modelAddress->save()) {
                     $modelCustomer->address_id = $modelAddress->id;
-                    // check validate and insert to Customer table
-                    if ($modelCustomer->load(Yii::$app->request->post())) {
-                        if ($user = $modelCustomer->register()) {
-                            // set customer_id of Guest equal id just created of Customer
-                            $modelGuest->customer_id = $user->id;
-                            // check validate input and insert to Guest table
-                            if ($modelGuest->load(Yii::$app->request->post()) && $modelGuest->save()) {
-                                if (Yii::$app->getUser()->login($user)) {
-                                    // if register successfully return Home Page
-                                    return $this->goHome();
-                                }
-                            }
+
+                    if ($user = $modelCustomer->register()) {
+                        $modelGuest->customer_id = $user->id;
+                        $modelGuest->save();
+
+                        $transaction->commit();
+
+                        if (Yii::$app->getUser()->login($user)) {
+                            return $this->goHome();
                         }
+                    }else{
+                        return $this->render('register', [
+                            'modelCustomer' => $modelCustomer,
+                            'modelGuest' => $modelGuest,
+                            'modelCity' => $modelCity,
+                            'modelDistrict' => $modelDistrict,
+                            'modelWard' => $modelWard,
+                            'modelAddress' => $modelAddress,
+                        ]);
                     }
+                }else{
+                    return $this->render('register', [
+                        'modelCustomer' => $modelCustomer,
+                        'modelGuest' => $modelGuest,
+                        'modelCity' => $modelCity,
+                        'modelDistrict' => $modelDistrict,
+                        'modelWard' => $modelWard,
+                        'modelAddress' => $modelAddress,
+                    ]);
                 }
+            }catch (Exception $e){
+                $transaction->rollBack();
             }
+        }else{
+            return $this->render('register',[
+                'modelCustomer' => $modelCustomer,
+                'modelGuest' => $modelGuest,
+                'modelCity' => $modelCity,
+                'modelDistrict' => $modelDistrict,
+                'modelWard' => $modelWard,
+                'modelAddress' => $modelAddress,
+            ]);
         }
-
-
-        return $this->render('register', [
-            'modelCustomer' => $modelCustomer,
-            'modelGuest' => $modelGuest,
-            'modelCity' => $modelCity,
-            'modelDistrict' => $modelDistrict,
-            'modelWard' => $modelWard,
-            'modelAddress' => $modelAddress,
-        ]);
 
     }
 

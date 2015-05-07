@@ -837,7 +837,7 @@ header .top-search-holder .search-area .categories-filter {
 header .top-search-holder .search-area .search-field {
   border-radius: 5px 0 0 5px;
   border: none;
-  width: 65%;
+  width: 75%;
   padding: 13px;
 }
 header .top-search-holder .search-area .search-button {
@@ -1140,7 +1140,7 @@ header .top-cart-row .top-cart-holder .total-price-basket {
   top: 0;
   left: 100%;
   margin: 0;
-  min-width: 365%;
+  min-width: 200%;
 }
 .megamenu-horizontal .nav > li {
   position: relative;

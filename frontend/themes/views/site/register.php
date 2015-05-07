@@ -1,13 +1,10 @@
 <?php
-use yii\helpers\Html;
+
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
-use frontend\models\City;
-use frontend\models\District;
-use frontend\models\Ward;
+use common\models\City;
 use kartik\widgets\DepDrop;
 ?>
-
+<div class="container">
     <div class="row">
         <?php $form = ActiveForm::begin(['id' => 'form-register', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1']]); ?>
             <div class="col-md-6">
@@ -79,7 +76,7 @@ use kartik\widgets\DepDrop;
                                     'inputOptions' => [
                                         'class' => 'le-input',
                                     ],
-                                ])->label(false); ?>
+                                ])->hiddenInput()->label(false); ?>
 
                                 <script type="text/javascript">
                                     function daysInMonth(month, year) {
@@ -230,3 +227,4 @@ use kartik\widgets\DepDrop;
             </div><!-- /.col -->
         <?php ActiveForm::end(); ?>
     </div><!-- /.row -->
+</div>
