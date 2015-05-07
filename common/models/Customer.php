@@ -44,7 +44,8 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'gender', 'address_id'], 'required'],
+            [['username', 'gender', 'address_id'], 'required'],
+            ['password', 'required', 'on' => ['signup', 'adminSignup', 'changePassword']],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string'],
             [['status', 'address_id'], 'integer'],
@@ -52,7 +53,8 @@ class Customer extends ActiveRecord implements IdentityInterface
             [['password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
             ['re_password', 'compare', 'compareAttribute' => 'password','message' => '{attribute} không khớp'],
             [['auth_key', 'password_reset_token'], 'string', 'max' => 32],
-            [['username'], 'unique']
+            [['username'], 'unique'],
+            [['avatar'], 'file', 'extensions' => 'jpeg, jpg, png, gif']
         ];
     }
 

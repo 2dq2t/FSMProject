@@ -60,17 +60,17 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255]) ?>
+                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => 'Eneter customer fullname']) ?>
                     </div>
                 </div>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'email')->textInput(['maxlength' => 255]) ?>
+                        <?= $form->field($model, 'email')->input('email', ['maxlength' => 255, 'placeholder' => 'Enter customer email']) ?>
                     </div>
                 </div>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15]) ?>
+                        <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15 , 'placeholder' => 'Enter customer phone number']) ?>
                     </div>
                 </div>
                 <div class="form-body">

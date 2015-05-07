@@ -58,7 +58,7 @@ class CustomerSearch extends Customer
         $query->andFilterWhere([
             'id' => $this->id,
             'dob' => $this->dob,
-            'created_at' => $this->created_at,
+//            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'status' => $this->status,
             'address_id' => $this->address_id,
@@ -67,6 +67,7 @@ class CustomerSearch extends Customer
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'avatar', $this->avatar])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'gender', $this->gender])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token]);
