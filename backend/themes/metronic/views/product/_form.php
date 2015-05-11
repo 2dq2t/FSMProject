@@ -92,14 +92,7 @@ if(isset($images)) {
                     <div class="form-body">
                         <div class="form-group">
                             <?= $form->field($model, 'active')
-                                ->widget(\kartik\switchinput\SwitchInput::className(), [
-                                    'pluginOptions' => [
-                                        'onColor' => 'success',
-                                        'offColor' => 'default',
-                                        'onText'=> 'Active',
-                                        'offText'=> 'Inactive'
-                                    ]
-                                ]) ?>
+                                ->checkbox() ?>
                         </div>
                         <div class="form-group">
                             <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => 'Nhập barcode..']) ?>

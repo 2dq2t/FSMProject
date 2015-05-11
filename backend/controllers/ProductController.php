@@ -55,10 +55,10 @@ class ProductController extends Controller
                 return;
             }
 
-            // fetch the first entry in posted data (there should
+            // fetch the first entry in posted file (there should
             // only be one entry anyway in this array for an
             // editable submission)
-            // - $posted is the posted data for Book without any indexes
+            // - $posted is the posted file for Book without any indexes
             // - $post is the converted array for single model validation
             $post = [];
             $posted = current($_POST['Product']);

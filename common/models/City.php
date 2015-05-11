@@ -52,7 +52,7 @@ class City extends \yii\db\ActiveRecord
         return $this->hasMany(District::className(), ['city_id' => 'id']);
     }
 
-    //function get data from City Table
+    //function get file from City Table
     public static function getCity(){
         $data = static::find()->all();
         $value = (count($data) == 0)? ['' => '']:\yii\helpers\ArrayHelper::map($data, 'id', 'name');

@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
             '{toggleData}',
             '{export}',
         ],
-//        'pjax' => true,
+        'pjax' => true,
         'pjaxSettings'=>[
             'neverTimeout'=>true,
         ],

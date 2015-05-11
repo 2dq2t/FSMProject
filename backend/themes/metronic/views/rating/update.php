@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Rating */
 
-$this->title = 'Update Rating: ' . ' ' . $model->id;
+$this->title = 'Update Rating: ' . ' ' . $model->rating;
 $this->params['breadcrumbs'][] = ['label' => 'Ratings', 'url' => ['index']];
 // $this->params['breadcrumbs'][] = ['label' => $model->Id, 'url' => ['view', 'id' => $model->Id]];
 $this->params['breadcrumbs'][] = 'Update';

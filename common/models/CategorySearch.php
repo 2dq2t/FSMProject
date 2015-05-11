@@ -33,7 +33,7 @@ class CategorySearch extends Category
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates file provider instance with search query applied
      *
      * @param array $params
      *

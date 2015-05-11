@@ -117,17 +117,17 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Customer();
+        $model = new Customer(['scenario' => 'admincreate']);
         $guest = new Guest();
         $address = new Address();
         $district = new District();
         $ward = new Ward();
         $city = new City();
 
-        // Load all data from post to model
+        // Load all file from post to model
         if ($model->load(Yii::$app->request->post())
-                && $guest->load(Yii::$app->request->post())
-                && $address->load(Yii::$app->request->post())) {
+            && $guest->load(Yii::$app->request->post())
+            && $address->load(Yii::$app->request->post())) {
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
             try{
@@ -144,6 +144,11 @@ class CustomerController extends Controller
 //                        $model->setPassword($model->password);
 //                        $model->re_password = $model->password;
 //                    }
+
+                    if ($model->password) {
+                        $model->setPassword($model->password);
+                    }
+
                     $avatar = UploadedFile::getInstance($model, 'avatar');
 
                     if($avatar) {
@@ -165,7 +170,9 @@ class CustomerController extends Controller
                         FileHelper::createDirectory($dir);
                         // path to save database
 //                        $path = 'uploads/users/avatar/' . $model->id . '/';
-                        $avatar->saveAs($dir . $model->avatar);
+                        if ($avatar) {
+                            $avatar->saveAs($dir . '/' . $model->avatar);
+                        }
 
                         $guest->customer_id = $model->id;
                         $guest->save();
@@ -256,6 +263,7 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = 'adminedit';
         $model->password = null;
         $guest = Guest::find()->where(['customer_id' => $id])->one();
         $address = Address::find()->where(['id' => $model->address_id])->one();
@@ -263,7 +271,7 @@ class CustomerController extends Controller
         $district = District::find()->where(['id' => $ward->district_id])->one();
         $city = City::find()->where(['id'=>$district->city_id])->one();
 
-        // Load all data from post to model
+        // Load all file from post to model
         if ($model->load(Yii::$app->request->post())
             && $guest->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
@@ -284,6 +292,10 @@ class CustomerController extends Controller
 //                        $model->setPassword($model->password);
 //                        $model->re_password = $model->password;
 //                    }
+                    if ($model->password) {
+                        $model->setPassword($model->password);
+                    }
+
                     $avatar = UploadedFile::getInstance($model,'avatar');
 
                     if($avatar) {
@@ -307,7 +319,9 @@ class CustomerController extends Controller
                         FileHelper::createDirectory($dir);
                         // path to save database
 //                        $path = 'frontend/uploads/users/avatar/' . $model->id . '/';
-                        $avatar->saveAs($dir . $model->avatar);
+                        if ($avatar) {
+                            $avatar->saveAs($dir . '/' . $model->avatar);
+                        }
 
                         $guest->customer_id = $model->id;
                         $guest->save();
@@ -322,12 +336,7 @@ class CustomerController extends Controller
                             'title' => 'Edit User',
                         ]);
 
-                        switch (Yii::$app->request->post('action', 'save')) {
-                            case 'next':
-                                return $this->redirect(['create']);
-                            default:
-                                return $this->redirect(['index']);
-                        }
+                        return $this->redirect(['index']);
                     } else {
                         // if save to user error return update page
 //                        $model->password = $password_return;

@@ -64,7 +64,7 @@ class District extends \yii\db\ActiveRecord
         return $this->hasMany(Ward::className(), ['district_id' => 'id']);
     }
 
-    //function get data from District Table
+    //function get file from District Table
     public static function getOptionsByDistrict($district_id){
         $data = static::find()->where(['city_id'=>$district_id])->select(['id','name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;

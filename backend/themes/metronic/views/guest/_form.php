@@ -77,7 +77,7 @@ use kartik\alert\Alert;
                     <div class="form-group">
                         <?= $form->field($model, 'customer_id')
                             ->dropDownList(
-                                \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->all(), 'id', 'name'),
+                                \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->all(), 'id', 'username'),
                                 ['prompt'=>'Chọn user']
                             ) ?>
                     </div>

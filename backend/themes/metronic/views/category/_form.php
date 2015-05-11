@@ -17,23 +17,14 @@ use kartik\alert\Alert;
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
         'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
         'showSeparator' => true,
-        'delay' => 3000, //This delay is how long before the message shows
-//            'pluginOptions' => [
-//                'delay' => (!empty($message['duration'])) ? $message['duration'] : 3000, //This delay is how long the message shows for
-//                'placement' => [
-//                    'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-//                    'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
-//                ]
-//            ]
+        'delay' => 3000
     ]);
     ?>
 <?php endforeach; ?>
 
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
-    <?php if (!$model->isNewRecord): ?>
-        <?= Html::a('Preview', ['category/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
-    <?php endif; ?>
+
     <?= Html::a('Back', ['category/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
@@ -65,18 +56,18 @@ use kartik\alert\Alert;
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
                 <?php $form = ActiveForm::begin(); ?>
-                    <div class="form-body">
-                        <div class="form-group">
-<!--                            <label class="control-label">Text</label>-->
-<!--                            <input type="text" class="form-control" placeholder="Enter text">-->
-                            <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => 'Enter category name']) ?>
-                        </div>
+                <div class="form-body">
+                    <div class="form-group">
+                        <!--                            <label class="control-label">Text</label>-->
+                        <!--                            <input type="text" class="form-control" placeholder="Enter text">-->
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => 'Enter category name']) ?>
                     </div>
-                    <div class="form-actions">
-                        <div class="btn-set pull-right">
-                            <?php echo $this->blocks['submit']; ?>
-                        </div>
+                </div>
+                <div class="form-actions">
+                    <div class="btn-set pull-right">
+                        <?php echo $this->blocks['submit']; ?>
                     </div>
+                </div>
                 <?php ActiveForm::end(); ?>
                 <!-- END FORM-->
             </div>

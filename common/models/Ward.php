@@ -64,7 +64,7 @@ class Ward extends \yii\db\ActiveRecord
         return $this->hasOne(District::className(), ['id' => 'district_id']);
     }
 
-    //function get data from Ward Table
+    //function get file from Ward Table
     public static function getOptionsByWard($ward_id){
         $data = static::find()->where(['district_id'=>$ward_id])->select(['id','name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;

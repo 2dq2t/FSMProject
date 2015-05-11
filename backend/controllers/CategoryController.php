@@ -47,10 +47,10 @@ class CategoryController extends Controller
             // store a default json response as desired by editable
             $out = Json::encode(['output'=>'', 'message'=>'']);
 
-            // fetch the first entry in posted data (there should 
+            // fetch the first entry in posted file (there should
             // only be one entry anyway in this array for an 
             // editable submission)
-            // - $posted is the posted data for Book without any indexes
+            // - $posted is the posted file for Book without any indexes
             // - $post is the converted array for single model validation
             $post = [];
             $posted = current($_POST['Category']);
@@ -62,7 +62,7 @@ class CategoryController extends Controller
                     // can save model or do something before saving model
                     $model->save();
                     // custom output to return to be displayed as the editable grid cell
-                    // data. Normally this is empty - whereby whatever value is edited by
+                    // file. Normally this is empty - whereby whatever value is edited by
                     // in the input by user is updated automatically.
                     $output = '';
 

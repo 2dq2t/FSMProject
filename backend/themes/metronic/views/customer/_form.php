@@ -13,8 +13,10 @@ use kartik\alert\Alert;
 
 $user_avatar = '';
 
-if(isset($model->avatar)) {
-    $user_avatar = Html::img('../../frontend/web/uploads/users/avatar/'. $model->id . $model->avatar, ['class' => 'file-preview-image']);
+if($model->avatar) {
+    if(file_exists('../../frontend/web/uploads/users/avatar/'. $model->id . '/' . $model->avatar)) {
+        $user_avatar = Html::img('../../frontend/web/uploads/users/avatar/' . $model->id . '/' . $model->avatar, ['class' => 'file-preview-image']);
+    }
 }
 
 ?>
@@ -125,14 +127,7 @@ if(isset($model->avatar)) {
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'status')
-                            ->widget(\kartik\switchinput\SwitchInput::className(), [
-                                'pluginOptions' => [
-                                    'onColor' => 'success',
-                                    'offColor' => 'default',
-                                    'onText'=> 'Active',
-                                    'offText'=> 'Inactive'
-                                ]
-                            ]) ?>
+                            ->checkbox() ?>
                     </div>
                 </div>
                 <div class="form-actions right">
@@ -210,9 +205,9 @@ if(isset($model->avatar)) {
                                     [
                                         'prompt'=>'- Chọn Tỉnh / Thành phố -',
                                         'onchange'=>'
-                                            $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( data ) {
+                                            $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( file ) {
                                                 $( "select#district-id" ).length = 0;
-                                                $( "select#district-id" ).html( data );
+                                                $( "select#district-id" ).html( file );
                                             });'
                                     ]);
                         } else {
@@ -234,14 +229,14 @@ if(isset($model->avatar)) {
                                     \common\models\District::find()
                                         ->where(['city_id' => $city->id])
                                         ->all(), 'id', 'name'),
-                                    [
-                                        'prompt'=>'- Chọn Quận / Huyện -',
-                                        'onchange'=>'
-                                            $.post( "index.php?r=customer/getward&id="+$(this).val(), function( data ) {
+                                [
+                                    'prompt'=>'- Chọn Quận / Huyện -',
+                                    'onchange'=>'
+                                            $.post( "index.php?r=customer/getward&id="+$(this).val(), function( file ) {
                                                 $( "select#address-ward_id" ).length = 0;
-                                                $( "select#address-ward_id" ).html( data );
+                                                $( "select#address-ward_id" ).html( file );
                                             });'
-                                    ]
+                                ]
                             );
                         } else {
                             echo $form->field($district, 'name')->widget(\kartik\widgets\DepDrop::classname(), [
