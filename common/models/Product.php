@@ -65,20 +65,20 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'barcode' => 'Barcode',
-            'name' => 'Name',
-            'price' => 'Price',
-            'description' => 'Description',
-            'quantity' => 'Quantity',
-            'sold' => 'Sold',
-            'tax' => 'Tax',
-            'fee' => 'Fee',
-            'tag' => 'Tag',
-            'active' => 'Active',
-            'category_id' => 'Category ID',
-            'session_id' => 'Session ID',
-            'unit_id' => 'Unit ID',
+            'id' => Yii::t('app', 'ID'),
+            'barcode' => Yii::t('app', 'Barcode'),
+            'name' => Yii::t('app', 'Name'),
+            'price' => Yii::t('app', 'Price'),
+            'description' => Yii::t('app', 'Description'),
+            'quantity' => Yii::t('app', 'Quantity'),
+            'sold' => Yii::t('app', 'Sold'),
+            'tax' => Yii::t('app', 'Tax'),
+            'fee' => Yii::t('app', 'Fee'),
+            'tag' => Yii::t('app', 'Tag'),
+            'active' => Yii::t('app', 'Active'),
+            'category_id' => Yii::t('app', 'Category ID'),
+            'session_id' => Yii::t('app', 'Session ID'),
+            'unit_id' => Yii::t('app', 'Unit ID'),
         ];
     }
 

@@ -45,12 +45,11 @@ class SlideShow extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-//            'path' => 'Path',
-            'image' => 'Image',
-            'title' => 'Title',
-            'description' => 'Description',
-            'active' => 'Active',
+            'id' => Yii::t('app', 'ID'),
+//            'path' => Yii::t('app', 'Path'),
+            'title' => Yii::t('app', 'Title'),
+            'description' => Yii::t('app', 'Description'),
+            'active' => Yii::t('app', 'Active'),
         ];
     }
 }

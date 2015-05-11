@@ -25,9 +25,9 @@ if($model->avatar) {
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
         'showSeparator' => true,
         'delay' => 3000
     ]);
@@ -36,16 +36,13 @@ if($model->avatar) {
 
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
-    <?php if (!$model->isNewRecord): ?>
-        <?= Html::a('Preview', ['customer/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
-    <?php endif; ?>
-    <?= Html::a('Back', ['customer/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['customer/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -73,10 +70,10 @@ if($model->avatar) {
             <div class="portlet-body form">
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'username')->textInput(['maxlength' => 255, 'placeholder' => 'Enter username']) ?>
+                        <?= $form->field($model, 'username')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter username')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'placeholder'=> 'Enter password']) ?>
+                        <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'placeholder'=> Yii::t('app', 'Enter password')]) ?>
                     </div>
                     <div class="form-group">
                         <?php //$form->field($model, 're_password')->passwordInput(['maxlength' => 255, 'placeholder'=> 'Enter password']) ?>
@@ -109,7 +106,7 @@ if($model->avatar) {
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'dob')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => 'Enter birth date ...'],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter birth date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                             'language' => 'vi',
@@ -158,13 +155,13 @@ if($model->avatar) {
             <div class="portlet-body form">
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($guest, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => 'Eneter customer fullname']) ?>
+                        <?= $form->field($guest, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer fullname')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($guest, 'email')->input('email', ['maxlength' => 255, 'placeholder' => 'Enter customer email']) ?>
+                        <?= $form->field($guest, 'email')->input('email', ['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter customer email')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($guest, 'phone_number')->input('number', ['maxlength' => 15 , 'placeholder' => 'Enter customer phone number']) ?>
+                        <?= $form->field($guest, 'phone_number')->input('number', ['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                     </div>
                 </div>
                 <div class="form-actions right">
@@ -203,18 +200,20 @@ if($model->avatar) {
                                 ->dropDownList(
                                     \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
                                     [
-                                        'prompt'=>'- Chọn Tỉnh / Thành phố -',
+                                        'prompt'=> Yii::t('app', 'Select City'),
                                         'onchange'=>'
                                             $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( file ) {
                                                 $( "select#district-id" ).length = 0;
                                                 $( "select#district-id" ).html( file );
+                                                var event = new Event("change");
+                                                document.getElementById("district-id").dispatchEvent(event);
                                             });'
                                     ]);
                         } else {
                             echo $form->field($city, 'id')
                                 ->dropDownList(
                                     \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                    ['prompt'=>'- Chọn Tỉnh / Thành phố -']);
+                                    ['prompt'=>Yii::t('app', 'Select City')]);
                         }
 
                         ?>
@@ -230,20 +229,22 @@ if($model->avatar) {
                                         ->where(['city_id' => $city->id])
                                         ->all(), 'id', 'name'),
                                 [
-                                    'prompt'=>'- Chọn Quận / Huyện -',
+                                    'prompt'=>Yii::t('app', 'Select District'),
                                     'onchange'=>'
                                             $.post( "index.php?r=customer/getward&id="+$(this).val(), function( file ) {
                                                 $( "select#address-ward_id" ).length = 0;
                                                 $( "select#address-ward_id" ).html( file );
+                                                var event = new Event("change");
+                                                document.getElementById("address-ward_id").dispatchEvent(event);
                                             });'
                                 ]
                             );
                         } else {
                             echo $form->field($district, 'name')->widget(\kartik\widgets\DepDrop::classname(), [
-                                'options'=>['prompt' => '- Chọn Quận / Huyện -'],
+                                'options'=>['prompt' => Yii::t('app', 'Select District')],
                                 'pluginOptions'=>[
                                     'depends'=>[Html::getInputId($city, 'id')],
-                                    'placeholder'=>'- Chọn Quận / Huyện -',
+                                    'placeholder'=>Yii::t('app', 'Select District'),
                                     'url'=>\yii\helpers\Url::to(['/customer/getdistrict'])
                                 ]
                             ]);
@@ -261,17 +262,17 @@ if($model->avatar) {
                                     \common\models\Ward::find()
                                         ->where(['district_id' => $district->id])
                                         ->all(), 'id', 'name'),
-                                ['prompt'=>'- Chọn Xã / Phường -',]
+                                ['prompt'=>Yii::t('app', 'Select Ward')]
                             );
                         } else {
                             echo $form->field($address, 'ward_id')->widget(\kartik\widgets\DepDrop::classname(), [
-                                'options'=>['prompt' => '- Chọn Xã / Phường -'],
+                                'options'=>['prompt' => Yii::t('app', 'Select Ward')],
                                 'pluginOptions'=>[
                                     'depends'=>[
                                         Html::getInputId($city, 'id'),
                                         Html::getInputId($district, 'name')
                                     ],
-                                    'placeholder'=>'- Chọn Xã / Phường -',
+                                    'placeholder'=>Yii::t('app', 'Select Ward'),
                                     'url'=>\yii\helpers\Url::to(['/customer/getward'])
                                 ]
                             ]);

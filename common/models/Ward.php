@@ -42,9 +42,9 @@ class Ward extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'district_id' => 'District ID',
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'district_id' => Yii::t('app', 'District ID'),
         ];
     }
 

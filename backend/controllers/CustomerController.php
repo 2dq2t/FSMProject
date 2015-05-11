@@ -55,7 +55,7 @@ class CustomerController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The User do not exist.';
+                $message = Yii::t('app', 'The User do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -117,7 +117,8 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Customer(['scenario' => 'admincreate']);
+        $model = new Customer();
+        $model->scenario = 'adminCreate';
         $guest = new Guest();
         $address = new Address();
         $district = new District();
@@ -183,8 +184,8 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => 'User Record has been saved.',
-                            'title' => 'Add User',
+                            'message' => Yii::t('app', 'User Record has been saved.'),
+                            'title' => Yii::t('app', 'Add User'),
                         ]);
 
                         switch (Yii::$app->request->post('action', 'save')) {
@@ -205,9 +206,11 @@ class CustomerController extends Controller
                                 'duration' => 3000,
                                 'icon' => 'fa fa-plus',
                                 'message' => $error[0],
-                                'title' => 'Add User',
+                                'title' => Yii::t('app', 'Add User'),
                             ]);
                         }
+
+                        $model->password = null;
 
                         return $this->render('create', [
                             'model' => $model,
@@ -226,9 +229,11 @@ class CustomerController extends Controller
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => $error[0],
-                            'title' => 'Add User',
+                            'title' => Yii::t('app', 'Add User'),
                         ]);
                     }
+
+                    $model->password = null;
 
                     return $this->render('create', [
                         'model' => $model,
@@ -241,6 +246,27 @@ class CustomerController extends Controller
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
+                $errors = $address->getErrors();
+                foreach($errors as $error) {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => $error[0],
+                        'title' => Yii::t('app', 'Add User'),
+                    ]);
+                }
+
+                $model->password = null;
+
+                return $this->render('create', [
+                    'model' => $model,
+                    'guest' => $guest,
+                    'address' => $address,
+                    'ward' => $ward,
+                    'district' => $district,
+                    'city' => $city,
+                ]);
             }
         } else {
             return $this->render('create', [
@@ -263,7 +289,7 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = 'adminedit';
+        $model->scenario = 'adminEdit';
         $model->password = null;
         $guest = Guest::find()->where(['customer_id' => $id])->one();
         $address = Address::find()->where(['id' => $model->address_id])->one();
@@ -275,6 +301,20 @@ class CustomerController extends Controller
         if ($model->load(Yii::$app->request->post())
             && $guest->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
+
+            if (Yii::$app->request->post('Customer')['status'] === '1') {
+                $model->status = 1;
+            } else {
+                $model->status = 0;
+            }
+
+            if(Yii::$app->request->post('Customer')['password'] === '') {
+                $model->password = $model->oldAttributes['password'];
+            }
+
+//            if(!UploadedFile::getInstance($model, 'image')) {
+//                $model->image = $model->oldAttributes['image'];
+//            }
 
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
@@ -313,13 +353,11 @@ class CustomerController extends Controller
                     $model->address_id = $address->id;
                     if ($model->save()) {
 
-                        // directory to save image in local
-                        $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $model->id);
-                        FileHelper::removeDirectory($dir);
-                        FileHelper::createDirectory($dir);
-                        // path to save database
-//                        $path = 'frontend/uploads/users/avatar/' . $model->id . '/';
                         if ($avatar) {
+                            // directory to save image in local
+                            $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $model->id);
+                            FileHelper::removeDirectory($dir);
+                            FileHelper::createDirectory($dir);
                             $avatar->saveAs($dir . '/' . $model->avatar);
                         }
 
@@ -332,8 +370,8 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
-                            'message' => 'User Record has been edited.',
-                            'title' => 'Edit User',
+                            'message' => Yii::t('app', 'User Record has been edited.'),
+                            'title' => Yii::t('app', 'Edit User'),
                         ]);
 
                         return $this->redirect(['index']);
@@ -349,7 +387,7 @@ class CustomerController extends Controller
                                 'duration' => 3000,
                                 'icon' => 'fa fa-pencil',
                                 'message' => $error[0],
-                                'title' => 'Edit User',
+                                'title' => Yii::t('app', 'Edit User'),
                             ]);
                         }
 
@@ -370,7 +408,7 @@ class CustomerController extends Controller
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
                             'message' => $error[0],
-                            'title' => 'Edit User',
+                            'title' => Yii::t('app', 'Edit User'),
                         ]);
                     }
 

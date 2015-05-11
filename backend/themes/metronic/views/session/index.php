@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\SessionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sessions';
+$this->title = Yii::t('app', 'Sessions');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>

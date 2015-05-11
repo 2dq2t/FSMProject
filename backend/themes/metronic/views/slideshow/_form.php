@@ -37,13 +37,13 @@ if($model->path) {
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('Back', ['slideshow/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['slideshow/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -99,7 +99,7 @@ if($model->path) {
                         ]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'title')->textInput(['maxlength' => 100]) ?>
+                        <?= $form->field($model, 'title')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'description')->textarea(['maxlength' => 150]) ?>

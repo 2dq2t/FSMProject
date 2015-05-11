@@ -40,6 +40,7 @@ return array(
     'kartik\\file\\' => array($vendorDir . '/kartik-v/yii2-widget-fileinput'),
     'kartik\\editable\\' => array($vendorDir . '/kartik-v/yii2-editable'),
     'kartik\\dynagrid\\' => array($vendorDir . '/kartik-v/yii2-dynagrid'),
+    'kartik\\detail\\' => array($vendorDir . '/kartik-v/yii2-detail-view'),
     'kartik\\depdrop\\' => array($vendorDir . '/kartik-v/yii2-widget-depdrop'),
     'kartik\\datetime\\' => array($vendorDir . '/kartik-v/yii2-widget-datetimepicker'),
     'kartik\\date\\' => array($vendorDir . '/kartik-v/yii2-widget-datepicker'),

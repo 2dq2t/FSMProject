@@ -13,9 +13,9 @@ use kartik\alert\Alert;
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
         'showSeparator' => true,
         'delay' => 3000
     ]);
@@ -24,16 +24,14 @@ use kartik\alert\Alert;
 
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
-    <?php if (!$model->isNewRecord): ?>
-        <?= Html::a('Preview', ['guest/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
-    <?php endif; ?>
-    <?= Html::a('Back', ['guest/index'], ['class' => 'btn default']) ?>
+
+    <?= Html::a(Yii::t('app', 'Back'), ['guest/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -60,17 +58,17 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => 'Eneter customer fullname']) ?>
+                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer fullname')]) ?>
                     </div>
                 </div>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'email')->input('email', ['maxlength' => 255, 'placeholder' => 'Enter customer email']) ?>
+                        <?= $form->field($model, 'email')->input('email', ['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter customer email')]) ?>
                     </div>
                 </div>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15 , 'placeholder' => 'Enter customer phone number']) ?>
+                        <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                     </div>
                 </div>
                 <div class="form-body">
@@ -78,7 +76,7 @@ use kartik\alert\Alert;
                         <?= $form->field($model, 'customer_id')
                             ->dropDownList(
                                 \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->all(), 'id', 'username'),
-                                ['prompt'=>'Chọn user']
+                                ['prompt'=>Yii::t('app', 'Select user')]
                             ) ?>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ use kartik\editable\Editable;
 /* @var $searchModel backend\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Categories';
+$this->title = Yii::t('app','Categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

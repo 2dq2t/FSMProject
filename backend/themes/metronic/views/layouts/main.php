@@ -491,6 +491,9 @@ AppAsset::register($this);
             'users' => [
                 'customer'
             ],
+            'staffs' => [
+                'staff'
+            ],
             'marketing' => [
                 'product_offer',
                 'voucher',
@@ -583,6 +586,12 @@ AppAsset::register($this);
                         <a href="index.php?r=customer%2Findex">
                             <i class="icon-users"></i>
                             <span class="title">Users</span>
+                        </a>
+                    </li>
+                    <li class="<?= active('staffs', 'staff') ? 'active' : '' ?>">
+                        <a href="index.php?r=staff%2Findex">
+                            <i class="icon-book-open"></i>
+                            <span class="title">Staff</span>
                         </a>
                     </li>
                     <li class="<?= active('slideshow', 'slideshow') ? 'active' : '' ?>">

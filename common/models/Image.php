@@ -45,10 +45,10 @@ class Image extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'path' => 'Path',
-            'product_id' => 'Product ID',
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'path' => Yii::t('app', 'Path'),
+            'product_id' => Yii::t('app', 'Product ID'),
         ];
     }
 

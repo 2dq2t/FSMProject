@@ -50,7 +50,7 @@ class ProductController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The Product do not exist.';
+                $message = Yii::t('app', 'The Product do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -130,7 +130,7 @@ class ProductController extends Controller
                     $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
                     FileHelper::createDirectory($dir);
                     // path to save database
-                    $path = 'frontend/web/uploads/products/images/' . $model->id . '/';
+                    $path = 'uploads/products/images/' . $model->id . '/';
 
                     $productImages = new Image();
                     $productImages->product_id = $model->id;
@@ -151,8 +151,8 @@ class ProductController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Product Record has been saved.',
-                'title' => 'Add Product',
+                'message' => Yii::t('app', 'Product Record has been saved.'),
+                'title' => Yii::t('app', 'Add Product'),
             ]);
 
             switch (Yii::$app->request->post('action', 'save')) {
@@ -200,7 +200,7 @@ class ProductController extends Controller
                 foreach ($file as $image) {
                     FileHelper::createDirectory($dir);
                     // path to save database
-                    $path = 'frontend/web/uploads/products/images/' . $model->id . '/';
+                    $path = 'uploads/products/images/' . $model->id . '/';
 
                     $productImages = new Image();
                     $productImages->product_id = $model->id;
@@ -221,8 +221,8 @@ class ProductController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Product Record has been edited.',
-                'title' => 'Add Product',
+                'message' => Yii::t('app', 'Product Record has been edited.'),
+                'title' => Yii::t('app', 'Add Product'),
             ]);
 
             return $this->redirect(['index']);
@@ -257,8 +257,8 @@ class ProductController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Product has been deleted.',
-            'title' => 'Delete Product',
+            'message' => Yii::t('app', 'Product has been deleted.'),
+            'title' => Yii::t('app', 'Delete Product'),
         ]);
 
         return $this->redirect(['index']);

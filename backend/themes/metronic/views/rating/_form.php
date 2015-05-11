@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Rating */
+/* @var $model common\models\Rating */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -13,9 +13,9 @@ use kartik\alert\Alert;
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
         'showSeparator' => true,
         'delay' => 3000,
     ]);
@@ -25,13 +25,13 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('Back', ['rating/index'], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['rating/index'], ['class' => 'btn btn-danger']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>

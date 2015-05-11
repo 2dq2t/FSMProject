@@ -69,8 +69,8 @@ class VoucherTypeController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Voucher Type has been saved.',
-                'title' => 'Add Voucher'
+                'message' => Yii::t('app', 'Voucher Type has been saved.'),
+                'title' => Yii::t('app', 'Add Voucher')
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -100,8 +100,8 @@ class VoucherTypeController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Voucher Type has been edited.',
-                'title' => 'Update Voucher'
+                'message' => Yii::t('app', 'Voucher Type has been edited.'),
+                'title' => Yii::t('app', 'Update Voucher')
             ]);
             return $this->redirect(['index']);
         } else {
@@ -125,8 +125,8 @@ class VoucherTypeController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Voucher Type has been deleted.',
-            'title' => 'Delete Voucher Type'
+            'message' => Yii::t('app', 'Voucher Type has been deleted.'),
+            'title' => Yii::t('app', 'Delete Voucher Type')
         ]);
 
         return $this->redirect(['index']);

@@ -53,14 +53,14 @@ class Voucher extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'code' => 'Code',
-            'discount' => 'Discount',
-            'start_date' => 'Start Date',
-            'end_date' => 'End Date',
-            'active' => 'Active',
-            'voucher_type_id' => 'Voucher Type ID',
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'code' => Yii::t('app', 'Code'),
+            'discount' => Yii::t('app', 'Discount'),
+            'start_date' => Yii::t('app', 'Start Date'),
+            'end_date' => Yii::t('app', 'End Date'),
+            'active' => Yii::t('app', 'Active'),
+            'voucher_type_id' => Yii::t('app', 'Voucher Type ID'),
         ];
     }
 

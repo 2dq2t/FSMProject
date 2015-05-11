@@ -13,9 +13,9 @@ use kartik\alert\Alert;
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
         'showSeparator' => true,
         'delay' => 3000
     ]);
@@ -25,13 +25,13 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('Back', ['voucher/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['voucher/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -59,10 +59,10 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45]) ?>
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter name of voucher')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'code')->textInput(['maxlength' => 32]) ?>
+                        <?= $form->field($model, 'code')->textInput(['maxlength' => 32, 'placeholder' => Yii::t('app', 'Enter code of voucher')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'discount',[
@@ -70,11 +70,11 @@ use kartik\alert\Alert;
                                 'append' => [
                                     'content' => Html::activeDropDownList($model, 'voucher_type_id', \yii\helpers\ArrayHelper::map(\backend\models\VoucherType::find()->all(), 'id', 'amount')),
                                 ],
-                            ]])->textInput() ?>
+                            ]])->textInput(['placeholder' => Yii::t('app', 'Enter voucher discount')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => 'Enter start date ...'],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter start date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                             'language' => 'vi',
@@ -87,7 +87,7 @@ use kartik\alert\Alert;
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'end_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => 'Enter end date ...'],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter end date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                             'language' => 'vi',

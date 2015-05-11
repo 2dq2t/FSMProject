@@ -49,7 +49,7 @@ class SlideShowController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The Slideshow do not exist.';
+                $message = Yii::t('app', 'The Slideshow do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -134,8 +134,8 @@ class SlideShowController extends Controller
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => 'Slide show has been saved.',
-                    'title' => 'Add Slide show',
+                    'message' => Yii::t('app', 'Slide show has been saved.'),
+                    'title' => Yii::t('app', 'Add Slide show'),
                 ]);
 
                 switch (Yii::$app->request->post('action', 'save')) {
@@ -152,7 +152,7 @@ class SlideShowController extends Controller
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
                         'message' => $error[0],
-                        'title' => 'Add Slide show',
+                        'title' => Yii::t('app', 'Add Slide show'),
                     ]);
                 }
 
@@ -199,8 +199,8 @@ class SlideShowController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Slide show has been edited.',
-                'title' => 'Edit Slide show',
+                'message' => Yii::t('app', 'Slide show has been edited.'),
+                'title' => Yii::t('app', 'Edit Slide show'),
             ]);
 
             return $this->redirect(['index']);

@@ -43,9 +43,9 @@ class Rating extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'rating' => 'Rating',
-            'description' => 'Description',
+            'id' => Yii::t('app', 'ID'),
+            'rating' => Yii::t('app', 'Rating'),
+            'description' => Yii::t('app', 'Description'),
         ];
     }
 

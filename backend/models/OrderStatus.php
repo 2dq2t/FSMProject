@@ -41,9 +41,9 @@ class OrderStatus extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'comment' => 'Comment',
+            'id' => Yii::t('app', 'ID'),
+            'title' => Yii::t('app', 'Title'),
+            'comment' => Yii::t('app', 'Comment'),
         ];
     }
 

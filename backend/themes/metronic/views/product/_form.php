@@ -35,18 +35,11 @@ if(isset($images)) {
         <?php
         echo Alert::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
             'showSeparator' => true,
-            'delay' => 3000, //This delay is how long before the message shows
-//            'pluginOptions' => [
-//                'delay' => (!empty($message['duration'])) ? $message['duration'] : 3000, //This delay is how long the message shows for
-//                // 'placement' => [
-//                //     'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-//                //     'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
-//                // ]
-//            ]
+            'delay' => 3000
         ]);
     }
     ?>
@@ -57,15 +50,16 @@ if(isset($images)) {
     <div class="row">
         <div class="col-md-12">
             <?php if (!$model->isNewRecord): ?>
-                <?= Html::a('Preview', ['product/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
+                <?= Html::a(Yii::t('app', 'Preview'), ['product/index'], ['class' => 'btn btn-info', 'target' => '_blank']) ?>
             <?php endif; ?>
-            <?= Html::a('Back', ['product/index'], ['class' => 'btn default']) ?>
+            <?= Html::a(Yii::t('app', 'Back'), ['product/index'], ['class' => 'btn default']) ?>
 
             <?php if ($model->isNewRecord): ?>
-                <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
             <?php endif; ?>
 
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+
         </div>
     </div>
 </div>
@@ -95,7 +89,7 @@ if(isset($images)) {
                                 ->checkbox() ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => 'Nhập barcode..']) ?>
+                            <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
                         </div>
                         <div class="form-group">
                             <?= $form->field($model, 'name',[
@@ -103,7 +97,7 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
                                     ],
-                                ]])->textInput(['maxlength' => 255, 'placeholder' => 'Nhập tên sản phẩm..']) ?>
+                                ]])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
                         </div>
                         <div class="form-group">
                             <?= $form->field($model, 'price',
@@ -111,7 +105,7 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => '<ins>đ</ins>'
                                     ]
-                                ]])->textInput(['placeholder' => 'Nhập giá sản phẩm..']) ?>
+                                ]])->textInput(['placeholder' => Yii::t('app', 'Enter product price..')]) ?>
                         </div>
                         <div class="form-group">
                             <?= $form->field($model, 'description')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
@@ -119,25 +113,25 @@ if(isset($images)) {
                             ]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'quantity')->textInput(['maxlength' => 10, 'placeholder' => 'Nhập số lượng sản phẩm..']) ?>
+                            <?= $form->field($model, 'quantity')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => 'Nhập số lượng đã bán..']) ?>
+                            <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'tax')->textInput(['placeholder' => 'Nhập thuế sản phẩm..']) ?>
+                            <?= $form->field($model, 'tax')->textInput(['placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'fee')->textInput(['placeholder' => 'Nhập phí sản phẩm..']) ?>
+                            <?= $form->field($model, 'fee')->textInput(['placeholder' => Yii::t('app', 'Enter product fee..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => 'Nhập tag sản phẩm..']) ?>
+                            <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter product tags..')]) ?>
                         </div>
                         <div class="form-group">
                             <?= $form->field($model, 'session_id')
                                 ->dropDownList(
                                     \yii\helpers\ArrayHelper::map(\common\models\Session::find()->where(['active' => 1])->all(), 'id', 'name'),
-                                    ['prompt'=>'Chọn mùa của sản phẩm']
+                                    ['prompt'=>Yii::t('app', 'Select session of product')]
                                 ) ?>
                         </div>
                     </div>
@@ -171,7 +165,7 @@ if(isset($images)) {
                         <?= $form->field($model, 'category_id')
                             ->dropDownList(
                                 \yii\helpers\ArrayHelper::map(\common\models\Category::find()->all(), 'id', 'name'),
-                                ['prompt'=>'Select Category']
+                                ['prompt'=>Yii::t('app', 'Select Category')]
                             ) ?>
                     </div>
                 </div>

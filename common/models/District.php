@@ -42,9 +42,9 @@ class District extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'city_id' => 'City ID',
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'city_id' => Yii::t('app', 'City ID'),
         ];
     }
 

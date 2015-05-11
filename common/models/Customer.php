@@ -45,7 +45,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password', 'gender', 'created_at', 'address_id'], 'required'],
-            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'admincreate'],
+            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string'],
@@ -62,7 +62,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['adminedit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
+        $scenarios['adminEdit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
         return $scenarios;
     }
 
@@ -72,19 +72,19 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'username' => 'Tên đăng nhập',
-            'password' => 'Mật khẩu',
-            're_password' => 'Xác nhận Mật khẩu',
-            'avatar' => 'Avatar',
-            'dob' => 'Ngày sinh',
-            'gender' => 'Giới tính',
-            'auth_key' => 'Auth Key',
-            'password_reset_token' => 'Password Reset Token',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'status' => 'Status',
-            'address_id' => 'Address ID',
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
+            'password' => Yii::t('app', 'Password'),
+            're_password' => Yii::t('app', 'Xác nhận Mật khẩu'),
+            'avatar' => Yii::t('app', 'Avatar'),
+            'dob' => Yii::t('app', 'Dob'),
+            'gender' => Yii::t('app', 'Gender'),
+            'auth_key' => Yii::t('app', 'Auth Key'),
+            'password_reset_token' => Yii::t('app', 'Password Reset Token'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'status' => Yii::t('app', 'Status'),
+            'address_id' => Yii::t('app', 'Address ID'),
         ];
     }
 

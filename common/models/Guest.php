@@ -47,11 +47,11 @@ class Guest extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'full_name' => 'Họ và tên',
-            'email' => 'Email',
-            'phone_number' => 'Số điện thoại',
-            'customer_id' => 'Customer ID',
+            'id' => Yii::t('app', 'ID'),
+            'full_name' => Yii::t('app', 'Full Name'),
+            'email' => Yii::t('app', 'Email'),
+            'phone_number' => Yii::t('app', 'Phone Number'),
+            'customer_id' => Yii::t('app', 'Customer ID'),
         ];
     }
 

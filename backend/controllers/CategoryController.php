@@ -123,8 +123,8 @@ class CategoryController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Category Record has been saved.',
-                'title' => 'Add Category'
+                'message' => Yii::t('app', 'Category Record has been saved.'),
+                'title' => Yii::t('app', 'Add Category')
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -156,8 +156,8 @@ class CategoryController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Category has been edited.',
-                'title' => 'Update Category'
+                'message' => Yii::t('app', 'Category has been edited.'),
+                'title' => Yii::t('app', 'Update Category')
             ]);
             return $this->redirect(['index']);
         } else {
@@ -181,8 +181,8 @@ class CategoryController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Category has been deleted.',
-            'title' => 'Delete Category'
+            'message' => Yii::t('app', 'Category has been deleted.'),
+            'title' => Yii::t('app', 'Delete Category')
         ]);
 
         return $this->redirect(['index']);

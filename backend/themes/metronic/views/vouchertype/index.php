@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel backend\models\VoucherTypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Voucher Types';
+$this->title = Yii::t('app', 'Voucher Types');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

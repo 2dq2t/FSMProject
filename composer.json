@@ -29,7 +29,8 @@
         "zelenin/yii2-summernote-widget": "dev-master",
         "phpoffice/phpexcel": "dev-develop",
         "2amigos/yii2-date-picker-widget": "~1.0",
-        "2amigos/yii2-ckeditor-widget": "~1.0"
+        "2amigos/yii2-ckeditor-widget": "~1.0",
+        "kartik-v/yii2-detail-view": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

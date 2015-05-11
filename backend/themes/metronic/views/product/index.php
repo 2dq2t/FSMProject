@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Products';
+$this->title = Yii::t('app', 'Products');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return GridView::ROW_COLLAPSED;
             },
             'detail'=>function ($model, $key, $index, $column) {
-                return Yii::$app->controller->renderPartial('details', ['model'=>$model]);
+                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
             },
             'headerOptions'=>['class'=>'kartik-sheet-style']
             //'disabled'=>true,
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>'Any product'],
+            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'Any product')],
             'format'=>'raw'
         ],
         [
@@ -91,6 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'session_id',
+            'label' => Yii::t('app', 'Session'),
             'value' => 'session.name',
             'filter' => \yii\helpers\ArrayHelper::map(\common\models\Session::find()->all(), 'id', 'name'),
             'width' => '15%',

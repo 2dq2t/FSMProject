@@ -47,7 +47,7 @@ class UnitController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The Unit do not exist.';
+                $message = Yii::t('app', 'The Unit do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -121,8 +121,8 @@ class UnitController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Unit Record has been saved.',
-                'title' => 'Add Unit'
+                'message' => Yii::t('app', 'Unit Record has been saved.'),
+                'title' => Yii::t('app', 'Add Unit')
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -153,8 +153,8 @@ class UnitController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Unit Record has been updated.',
-                'title' => 'Update Unit'
+                'message' => Yii::t('app', 'Unit Record has been updated.'),
+                'title' => Yii::t('app', 'Update Unit')
             ]);
             return $this->redirect(['index']);
         } else {
@@ -178,8 +178,8 @@ class UnitController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Unit Record has been deleted.',
-            'title' => 'Delete Unit'
+            'message' => Yii::t('app', 'Unit Record has been deleted.'),
+            'title' => Yii::t('app', 'Delete Unit')
         ]);
 
         return $this->redirect(['index']);

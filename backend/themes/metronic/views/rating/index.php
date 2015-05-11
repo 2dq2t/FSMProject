@@ -5,10 +5,10 @@ use kartik\grid\GridView;
 use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\RatingSearch */
+/* @var $searchModel common\models\RatingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ratings';
+$this->title = Yii::t('app', 'Ratings');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         echo Alert::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
             'showSeparator' => true,
             'delay' => 3000, //This delay is how long before the message shows
 //            'pluginOptions' => [

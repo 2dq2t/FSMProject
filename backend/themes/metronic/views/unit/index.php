@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\UnitSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Units';
+$this->title = Yii::t('app', 'Units');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>

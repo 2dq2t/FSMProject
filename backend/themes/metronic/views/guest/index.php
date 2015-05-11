@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\GuestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Customers';
+$this->title = Yii::t('app', 'Customers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

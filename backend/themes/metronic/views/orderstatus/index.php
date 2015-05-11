@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel backend\models\OrderStatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Order Statuses';
+$this->title = Yii::t('app', 'Order Statuses');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>

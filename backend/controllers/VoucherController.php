@@ -47,7 +47,7 @@ class VoucherController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The Product do not exist.';
+                $message = Yii::t('app', 'The Product do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -121,8 +121,8 @@ class VoucherController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Voucher has been saved.',
-                'title' => 'Add Voucher'
+                'message' => Yii::t('app', 'Voucher has been saved.'),
+                'title' => Yii::t('app', 'Add Voucher')
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -152,8 +152,8 @@ class VoucherController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Voucher has been edited.',
-                'title' => 'Update Voucher'
+                'message' => Yii::t('app', 'Voucher has been edited.'),
+                'title' => Yii::t('app', 'Update Voucher')
             ]);
             return $this->redirect(['index']);
         } else {
@@ -177,8 +177,8 @@ class VoucherController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Voucher has been deleted.',
-            'title' => 'Delete Voucher'
+            'message' => Yii::t('app', 'Voucher has been deleted.'),
+            'title' => Yii::t('app', 'Delete Voucher')
         ]);
 
         return $this->redirect(['index']);

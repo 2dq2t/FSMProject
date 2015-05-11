@@ -44,9 +44,9 @@ class Address extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'detail' => 'Địa chỉ',
-            'ward_id' => 'Xã / Phường',
+            'id' => Yii::t('app', 'ID'),
+            'detail' => Yii::t('app', 'Detail'),
+            'ward_id' => Yii::t('app', 'Ward ID'),
         ];
     }
 

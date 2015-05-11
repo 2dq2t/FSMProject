@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\SlideShowSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Slide Shows';
+$this->title = Yii::t('app', 'Slide Shows');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

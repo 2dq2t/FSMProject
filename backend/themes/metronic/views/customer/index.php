@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\CustomerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Customers';
+$this->title = Yii::t('app','Customers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>'customer username'],
+            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer username')],
             'format'=>'raw'
         ],
         [

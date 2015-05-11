@@ -40,9 +40,9 @@ class VoucherType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'type' => 'Type',
-            'amount' => 'Amount',
+            'id' => Yii::t('app', 'ID'),
+            'type' => Yii::t('app', 'Type'),
+            'amount' => Yii::t('app', 'Amount'),
         ];
     }
 

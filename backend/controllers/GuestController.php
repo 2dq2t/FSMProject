@@ -69,8 +69,8 @@ class GuestController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Customer Record has been saved.',
-                'title' => 'Add Customer'
+                'message' => Yii::t('app', 'Customer Record has been saved.'),
+                'title' => Yii::t('app', 'Add Customer')
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -101,8 +101,8 @@ class GuestController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Customer has been edited.',
-                'title' => 'Update Customer'
+                'message' => Yii::t('app', 'Customer has been edited.'),
+                'title' => Yii::t('app', 'Update Customer')
             ]);
 
             return $this->redirect(['index']);
@@ -127,8 +127,8 @@ class GuestController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Customer has been deleted.',
-            'title' => 'Delete Customer'
+            'message' => Yii::t('app', 'Customer has been deleted.'),
+            'title' => Yii::t('app', 'Delete Customer')
         ]);
 
         return $this->redirect(['index']);

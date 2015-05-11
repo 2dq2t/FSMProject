@@ -102,8 +102,8 @@ class RatingController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-plus',
-                'message' => 'Rating has been saved.',
-                'title' => 'Add Rating',
+                'message' => Yii::t('app', 'Rating has been saved.'),
+                'title' => Yii::t('app', 'Add Rating'),
             ]);
             switch (Yii::$app->request->post('action', 'save')) {
                 case 'next':
@@ -112,7 +112,6 @@ class RatingController extends Controller
                     return $this->redirect(['index']);
             }
 
-            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -135,10 +134,8 @@ class RatingController extends Controller
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
                 'icon' => 'fa fa-pencil',
-                'message' => 'Rating has been edited.',
-                'title' => 'Update Rating',
-                'positonY' => 'top',
-                'positonX' => 'left'
+                'message' => Yii::t('app', 'Rating has been edited.'),
+                'title' => Yii::t('app', 'Update Rating'),
             ]);
             return $this->redirect(['index']);
         } else {
@@ -162,10 +159,8 @@ class RatingController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Rating has been deleted.',
-            'title' => 'Delete Rating',
-            'positonY' => 'top',
-            'positonX' => 'left'
+            'message' => Yii::t('app', 'Rating has been deleted.'),
+            'title' => Yii::t('app', 'Delete Rating'),
         ]);
 
         return $this->redirect(['index']);

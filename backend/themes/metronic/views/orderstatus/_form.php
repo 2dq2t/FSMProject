@@ -14,11 +14,11 @@ use kartik\alert\Alert;
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
         'showSeparator' => true,
-        'delay' => 3000,
+        'delay' => 3000
     ]);
     ?>
 <?php endforeach; ?>
@@ -26,7 +26,7 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('Back', ['orderstatus/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['orderstatus/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton('Save & Go next', ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
@@ -61,7 +61,7 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
+                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
