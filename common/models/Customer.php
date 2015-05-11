@@ -30,6 +30,8 @@ use Yii;
 class Customer extends ActiveRecord implements IdentityInterface
 {
     public $re_password;
+    public $new_password;
+    public $re_new_password;
     /**
      * @inheritdoc
      */
@@ -44,15 +46,18 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required'],
-            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
+            [['username', 'password', 'gender', 'address_id'], 'required'],
+            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'admincreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
+            [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['gender'], 'string'],
             [['status', 'address_id'], 'integer'],
             [['username', 'avatar'], 'string', 'max' => 255, 'min' => '6', 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
             [['password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
+            [['new_password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
             ['re_password', 'compare', 'compareAttribute' => 'password','message' => '{attribute} không khớp'],
+            ['re_new_password', 'compare', 'compareAttribute' => 'new_password','message' => '{attribute} không khớp'],
             [['auth_key', 'password_reset_token'], 'string', 'max' => 32],
             [['username'], 'unique'],
             [['avatar'], 'file', 'extensions' => 'jpeg, jpg, png, gif']
@@ -62,8 +67,15 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['adminEdit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
+        $scenarios['adminedit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
         return $scenarios;
+    }
+
+    public function scenariosChangepass()
+    {
+        $scenarios1 = parent::scenarios();
+        $scenarios1['changepass'] = ['new_password', 're_new_password'];//Scenario Values Only Accepted
+        return $scenarios1;
     }
 
     /**
@@ -75,7 +87,9 @@ class Customer extends ActiveRecord implements IdentityInterface
             'id' => Yii::t('app', 'ID'),
             'username' => Yii::t('app', 'Username'),
             'password' => Yii::t('app', 'Password'),
+            'new_password' => Yii::t('app', 'Mật khẩu mới'),
             're_password' => Yii::t('app', 'Xác nhận Mật khẩu'),
+            're_new_password' => Yii::t('app', 'Xác nhận Mật khẩu mới'),
             'avatar' => Yii::t('app', 'Avatar'),
             'dob' => Yii::t('app', 'Dob'),
             'gender' => Yii::t('app', 'Gender'),
@@ -128,6 +142,36 @@ class Customer extends ActiveRecord implements IdentityInterface
             $customer->created_at = $time->format('Y-m-d H:i:s');
             $customer->address_id = $this->address_id;
             if ($customer->save()) {
+                return $customer;
+            }
+        }
+        return null;
+    }
+
+    public function UpdateCustomer($customerId){
+        if($this->validate()){
+            $customer = Customer::findOne($customerId);
+            $customer->username = $this->username;
+            $customer->dob = $this->dob;
+            $customer->gender = $this->gender;
+            $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
+            $customer->updated_at = $time->format('Y-m-d H:i:s');
+            $customer->address_id = $this->address_id;
+            $customer->avatar = $this->avatar;
+
+            if ($customer->save()) {
+                return $customer;
+            }
+        }
+        return null;
+    }
+
+    public function ChangePassword($customerId){
+        if($this->validate()){
+            $customer = Customer::findOne($customerId);
+            $customer->setPassword($this->new_password);
+
+            if($customer->save()){
                 return $customer;
             }
         }

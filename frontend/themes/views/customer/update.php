@@ -10,7 +10,7 @@ use yii\helpers\Html;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'modelCustomer' => $modelCustomer,
         'modelGuest' => $modelGuest,
         'modelAddress' => $modelAddress,
         'modelWard' => $modelWard,
