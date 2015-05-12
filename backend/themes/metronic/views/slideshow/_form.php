@@ -99,10 +99,10 @@ if($model->path) {
                         ]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'title')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
+                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'description')->textarea(['maxlength' => 150]) ?>
+                        <?= $form->field($model, 'description')->textarea(['maxlength' => 255]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'active')->checkbox() ?>

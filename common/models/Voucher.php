@@ -41,7 +41,7 @@ class Voucher extends \yii\db\ActiveRecord
             [['name', 'code', 'discount', 'start_date', 'end_date', 'voucher_type_id'], 'required'],
             [['discount', 'active', 'voucher_type_id'], 'integer'],
             [['start_date', 'end_date'], 'safe'],
-            [['name'], 'string', 'max' => 45],
+            [['name'], 'string', 'max' => 255],
             [['code'], 'string', 'max' => 32],
             ['end_date', 'dateCompare']
         ];

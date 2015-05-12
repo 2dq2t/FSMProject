@@ -230,9 +230,7 @@ if(isset($images)) {
                     </div>
                 </div>
                 <div class="form-actions right">
-                    <div class="row">
-                        <?php echo $this->blocks['submit']; ?>
-                    </div>
+                    <?php echo $this->blocks['submit']; ?>
                 </div>
             </div>
         </div>

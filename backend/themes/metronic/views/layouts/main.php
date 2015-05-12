@@ -494,10 +494,14 @@ AppAsset::register($this);
             'staffs' => [
                 'staff'
             ],
+            'faqs' => [
+                'faq'
+            ],
             'marketing' => [
                 'product_offer',
                 'voucher',
                 'vouchertype',
+                'offer',
                 'mail',
             ],
             'settings' => [
@@ -600,6 +604,12 @@ AppAsset::register($this);
                             <span class="title">Slide Show</span>
                         </a>
                     </li>
+                    <li class="<?= active('faqs', 'faq') ? 'active' : '' ?>">
+                        <a href="index.php?r=faq%2Findex">
+                            <i class="icon-support"></i>
+                            <span class="title">FAQs</span>
+                        </a>
+                    </li>
                     <li class="<?= active('marketing', '') ? 'active open' : '' ?>">
                         <a href="javascript:;">
                             <i class="icon-basket"></i>
@@ -612,6 +622,9 @@ AppAsset::register($this);
                             </li>
                             <li class="<?= active('marketing', 'vouchertype') ? 'active' : '' ?>">
                                 <?= HtmL::a('<i class="icon-puzzle"></i> Voucher Type', ['vouchertype/index']) ?>
+                            </li>
+                            <li class="<?= active('marketing', 'offer') ? 'active' : '' ?>">
+                                <?= HtmL::a('<i class="icon-share-alt"></i> Product Offer', ['offer/index']) ?>
                             </li>
                             <li class="<?= active('marketing', 'mail') ? 'active' : '' ?>">
                                 <?= HtmL::a('<i class="icon-envelope-open"></i> Mail', ['mail/index']) ?>

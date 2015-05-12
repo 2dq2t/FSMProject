@@ -43,7 +43,7 @@ class Staff extends \yii\db\ActiveRecord
             [['dob', 'start_date'], 'date', 'format' => 'yyyy-mm-dd', 'message' => Yii::t('app', '{attribute}: is not a date!')],
             [['gender'], 'string'],
             [['address_id', 'status'], 'integer'],
-            [['full_name'], 'string', 'max' => 100],
+            [['full_name'], 'string', 'max' => 255],
             [['password', 'email'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 15],
             [['image'], 'string', 'max' => 255],

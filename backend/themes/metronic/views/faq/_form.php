@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Session */
+/* @var $model common\models\Faq */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -25,7 +25,7 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a(Yii::t('app', 'Back'), ['session/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['faq/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
@@ -35,13 +35,12 @@ use kartik\alert\Alert;
 
 </div>
 <?php $this->endBlock('submit'); ?>
-
 <div class="row">
     <div class="col-md-12">
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-list"></i><?= $this->title ?>
+                    <i class="fa fa-support"></i><?= $this->title ?>
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="collapse">
@@ -58,13 +57,15 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter session name..')]) ?>
+                        <?= $form->field($model, 'question')->textarea(['rows' => 3]) ?>
                     </div>
-                </div>
-                <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'active')
-                            ->checkbox() ?>
+                        <?= $form->field($model, 'answer')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
+                            'options' => ['row' => 3],
+                        ]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'active')->checkbox() ?>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -78,4 +79,3 @@ use kartik\alert\Alert;
         </div>
     </div>
 </div>
-

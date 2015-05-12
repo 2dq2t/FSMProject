@@ -59,7 +59,7 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter name of voucher')]) ?>
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter name of voucher')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'code')->textInput(['maxlength' => 32, 'placeholder' => Yii::t('app', 'Enter code of voucher')]) ?>

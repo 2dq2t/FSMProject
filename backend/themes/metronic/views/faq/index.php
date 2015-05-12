@@ -3,13 +3,12 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\alert\Alert;
-use kartik\editable\Editable;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CategorySearch */
+/* @var $searchModel common\models\FaqSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app','Categories');
+$this->title = Yii::t('app', 'Faqs');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -22,31 +21,58 @@ $this->params['breadcrumbs'][] = $this->title;
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
             'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
             'showSeparator' => true,
-            'delay' => 3000, //This delay is how long before the message shows
-//            'pluginOptions' => [
-//                'delay' => (!empty($message['duration'])) ? $message['duration'] : 3000, //This delay is how long the message shows for
-//                'placement' => [
-//                    'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-//                    'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
-//                ]
-//            ]
+            'delay' => 3000
         ]);
     }
     ?>
 <?php endforeach; ?>
 
-<div class="category-index">
+<div class="faq-index">
 
     <?php
 
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
         [
-            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'name',
+            'attribute' => 'question',
+        ],
+        [
+            'attribute' => 'answer',
+        ],
+        [
+            'class' => \kartik\grid\EditableColumn::className(),
+            'attribute' => 'active',
+            'width' => '11%',
             'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-            ]
+                'data' => [
+                    0 =>  Yii::t('app', 'Inactive'),
+                    1 =>  Yii::t('app', 'Active'),
+                ],
+                'inputType' => 'dropDownList',
+                'placement' => 'left'
+            ],
+            'filter' => [
+                0 =>  Yii::t('app', 'Inactive'),
+                1 =>  Yii::t('app', 'Active'),
+            ],
+            'format' => 'raw',
+            'value' => function (\common\models\Faq $model) {
+                if ($model === null || $model->active === null) {
+                    return null;
+                }
+                if ($model->active === 1) {
+                    $label_class = 'label-success';
+                    $value = 'Active';
+                } else {
+                    $value = 'Inactive';
+                    $label_class = 'label-default';
+                }
+                return \yii\helpers\Html::tag(
+                    'span',
+                    Yii::t('app', $value),
+                    ['class' => "label $label_class"]
+                );
+            },
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
@@ -58,10 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
         ],
-//        [
-//            'class'=>'kartik\grid\CheckboxColumn',
-//            'headerOptions'=>['class'=>'kartik-sheet-style'],
-//        ],
     ];
 
     ?>
@@ -73,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'containerOptions' => ['style'=>'overflow: auto'],
         'toolbar' =>  [
             ['content'=>
-                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['category/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
+                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['faq/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
             ],
             '{toggleData}',
             '{export}',
@@ -91,9 +113,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Category'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create FAQs'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
-
 
 </div>

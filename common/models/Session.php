@@ -31,7 +31,7 @@ class Session extends \yii\db\ActiveRecord
         return [
             [['name', 'active'], 'required'],
             [['active'], 'integer'],
-            [['name'], 'string', 'max' => 45]
+            [['name'], 'string', 'max' => 255]
         ];
     }
 

@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Session */
+/* @var $model common\models\Offer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -25,7 +25,7 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a(Yii::t('app', 'Back'), ['session/index'], ['class' => 'btn default']) ?>
+    <?= Html::a(Yii::t('app', 'Back'), ['offer/index'], ['class' => 'btn default']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
@@ -41,7 +41,7 @@ use kartik\alert\Alert;
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-list"></i><?= $this->title ?>
+                    <i class="fa fa-tags"></i><?= $this->title ?>
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="collapse">
@@ -58,10 +58,44 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter session name..')]) ?>
+                        <?= $form->field($model, 'product_id')
+                            ->dropDownList(
+                                \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => 1])->all(), 'id', 'name'),
+                                ['prompt'=>Yii::t('app', 'Select Product')]
+                            ) ?>
                     </div>
-                </div>
-                <div class="form-body">
+                    <div class="form-group">
+                        <?= $form->field($model, 'price')->textInput(['placeholder' => Yii::t('app', 'Enter offer price..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'description')->textarea(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter offer price..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
+                            'options' => ['placeholder' => Yii::t('app', 'Enter start date ...')],
+                            'removeButton' => false,
+                            'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                            'language' => 'vi',
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'todayHighlight' => true,
+                                'format' => 'yyyy-mm-dd',
+                            ]
+                        ]); ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'end_date')->widget(\kartik\date\DatePicker::classname(), [
+                            'options' => ['placeholder' => Yii::t('app', 'Enter end date ...')],
+                            'removeButton' => false,
+                            'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                            'language' => 'vi',
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'todayHighlight' => true,
+                                'format' => 'yyyy-mm-dd',
+                            ],
+                        ]); ?>
+                    </div>
                     <div class="form-group">
                         <?= $form->field($model, 'active')
                             ->checkbox() ?>
@@ -78,4 +112,3 @@ use kartik\alert\Alert;
         </div>
     </div>
 </div>
-

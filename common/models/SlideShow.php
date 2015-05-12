@@ -32,8 +32,8 @@ class SlideShow extends \yii\db\ActiveRecord
         return [
             [['path', 'title', 'description'], 'required'],
             [['active'], 'integer'],
-            [['path', 'title'], 'string', 'max' => 100],
-            [['description'], 'string', 'max' => 150],
+            [['path', 'title'], 'string', 'max' => 255],
+            [['description'], 'string', 'max' => 255],
             [['image'], 'file', 'extensions' => 'jpeg, jpg, png, gif'],
             [['image'], 'required', 'on' => 'adminCreate']
         ];
