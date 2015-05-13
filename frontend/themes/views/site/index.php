@@ -726,7 +726,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 <!-- ========================================= BEST SELLERS ========================================= -->
 <section id="bestsellers" class="color-bg wow fadeInUp">
     <div class="container">
-        <h1 class="section-title">Best Sellers</h1>
+        <h1 class="section-title">Sản phẩm theo mùa</h1>
 
         <div class="product-grid-holder medium">
             <div class="col-xs-12 col-md-7 no-margin">
@@ -1498,4 +1498,3 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- /.container -->
     </div>
     <!-- /.sub-form-row -->
-</footer><!-- /#footer -->

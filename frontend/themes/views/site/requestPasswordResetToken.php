@@ -30,3 +30,4 @@ use yii\bootstrap\ActiveForm;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+<footer id="footer" class="color-bg">

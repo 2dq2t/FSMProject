@@ -81,7 +81,7 @@ $baseUrl = Yii::$app->request->baseUrl;
     <?php $this->endBody() ?>
 
     <!-- ========================================= TOP BRANDS : END ========================================= -->		<!-- ============================================================= FOOTER ============================================================= -->
-    <footer id="footer" class="color-bg">
+
 
         <div class="link-list-row">
             <div class="container no-padding">
@@ -118,9 +118,9 @@ $baseUrl = Yii::$app->request->baseUrl;
                         </p>
 
                         <div class="social-icons">
-                            <h3>Kết nối cùng</h3>
+                            <h3>Kết nối cùng Fresh Garden</h3>
                             <ul>
-                                <li><a href="http://facebook.com/transvelo" class="fa fa-facebook"></a></li>
+                                <li><a href="https://www.facebook.com/freshgarden2015" class="fa fa-facebook"></a></li>
                                 <li><a href="#" class="fa fa-twitter"></a></li>
                             </ul>
                         </div><!-- /.social-icons -->

@@ -38,10 +38,12 @@ use yii\bootstrap\ActiveForm;
                 </div>
                 <!-- /.field-row -->
 
-                <?= $form->field($model, 'rememberMe')->checkbox()->label(Html::tag('span','Remember Me',['class' => 'content-color bold'])) ?>
+                <?= $form->field($model, 'rememberMe')->checkbox()->label(Html::tag('span', 'Remember Me', ['class' => 'content-color bold'])) ?>
                 <div class="form-group">
                     <div style="color:#999;margin:1em 0">
-                        <span class="content-color bold">Quên mật khẩu?</span> <?= Html::a('click để lấy lại', ['site/request-password-reset']) ?>.
+                        <span
+                            class="content-color bold">Quên mật khẩu?</span> <?= Html::a('click để lấy lại', ['site/request-password-reset']) ?>
+                        .
                     </div>
                     <div class="buttons-holder text-center">
                         <button type="submit" class="le-button huge" name="submit">Đăng nhập</button>
@@ -53,4 +55,4 @@ use yii\bootstrap\ActiveForm;
     </div>
     <?php ActiveForm::end(); ?>
 </div>
-
+<footer id="footer" class="color-bg">
