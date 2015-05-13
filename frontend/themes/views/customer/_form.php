@@ -18,16 +18,17 @@ if(isset($modelCustomer->avatar)) {
 
 ?>
 
-<?php if(Yii::$app->session->hasFlash('successful')): ?>
-    <div id="w0-success-message" class="alert-success alert fade in">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <?= Yii::$app->session->getFlash('successful') ?>
-    </div>
-<?php endif; ?>
+
 
 <div class="row">
     <div id="top-banner-and-menu">
         <div class="container">
+            <?php if(Yii::$app->session->hasFlash('successful')): ?>
+                <div id="w0-success-message" class="alert-success alert fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <?= Yii::$app->session->getFlash('successful') ?>
+                </div>
+            <?php endif; ?>
             <!--BEGIN NAVBAR-->
             <div class="col-xs-12 col-sm-4 col-md-3 sidemenu-holder">
                 <div class="side-menu animate-dropdown">
@@ -58,7 +59,7 @@ if(isset($modelCustomer->avatar)) {
             </div><!--END NAVBAR-->
 
             <!--BEGIN CONTENT-->
-            <div class="col-md-9">
+            <div class="col-xs-12 col-sm-8 col-md-9 homebanner-holder">
                 <fieldset class="scheduler-border">
                     <?php $form = ActiveForm::begin(['id' => 'form-manage-acc', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1', 'enctype'=>'multipart/form-data']]); ?>
 

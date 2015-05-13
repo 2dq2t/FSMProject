@@ -5,23 +5,27 @@ use yii\bootstrap\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\ResetPasswordForm */
-
-$this->title = 'Reset password';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-reset-password">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please choose your new password:</p>
-
+<div class="container">
     <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'reset-password-form']); ?>
-                <?= $form->field($model, 'password')->passwordInput() ?>
-                <div class="form-group">
-                    <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-                </div>
-            <?php ActiveForm::end(); ?>
-        </div>
+        <?php $form = ActiveForm::begin(['id' => 'form-request-reset', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1']]); ?>
+            <div class="col-md-6">
+                <section class="section register inner-right-xs">
+                    <p>Bạn hãy điền mật khẩu mới</p>
+                    <div class="field-row">
+                        <label>Mật khẩu</label>
+                        <?= $form->field($model, 'password', [
+                            'inputOptions' => [
+                                'class' => 'le-input',
+                                'maxlength' => 255,
+                            ],
+                        ])->passwordInput()->label(false); ?>
+                    </div><!-- /.field-row -->
+                    <div class="buttons-holder">
+                        <button type="submit" class="le-button huge" name="submit">Lưu thay đổi</button>
+                    </div><!-- /.buttons-holder -->
+                 </section>
+            </div>
+        <?php ActiveForm::end(); ?>
     </div>
 </div>

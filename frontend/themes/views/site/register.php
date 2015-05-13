@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use common\models\City;
 use kartik\widgets\DepDrop;
 ?>
-
+<div class="container">
 <div class="row">
     <?php $form = ActiveForm::begin(['id' => 'form-register', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1']]); ?>
     <div class="col-md-6">
@@ -227,3 +227,4 @@ use kartik\widgets\DepDrop;
     </div><!-- /.col -->
     <?php ActiveForm::end(); ?>
 </div><!-- /.row -->
+</div>

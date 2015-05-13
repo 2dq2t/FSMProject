@@ -13,7 +13,7 @@ use yii\bootstrap\ActiveForm;
     <div class="col-md-6 col-md-offset-3">
         <section class="section register inner-right-xs">
             <fieldset class="scheduler-border">
-                <legend class="scheduler-border">Đăng Nhập</legend
+                <legend class="scheduler-border">ĐĂNG NHẬP</legend
                 <p>Xin chào, Chào mừng bạn đến với Fresh Garden</p>
 
                 <div class="field-row">
@@ -38,10 +38,10 @@ use yii\bootstrap\ActiveForm;
                 </div>
                 <!-- /.field-row -->
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                <?= $form->field($model, 'rememberMe')->checkbox()->label(Html::tag('span','Remember Me',['class' => 'content-color bold'])) ?>
                 <div class="form-group">
                     <div style="color:#999;margin:1em 0">
-                        Quên mật khẩu? <?= Html::a('click để lấy lại', ['site/request-password-reset']) ?>.
+                        <span class="content-color bold">Quên mật khẩu?</span> <?= Html::a('click để lấy lại', ['site/request-password-reset']) ?>.
                     </div>
                     <div class="buttons-holder text-center">
                         <button type="submit" class="le-button huge" name="submit">Đăng nhập</button>
