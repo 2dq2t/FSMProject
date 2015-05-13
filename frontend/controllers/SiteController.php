@@ -5,16 +5,17 @@ use common\models\City;
 use common\models\District;
 use common\models\Guest;
 use common\models\Customer;
+use common\models\Product;
 use common\models\Ward;
 use common\models\Address;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\base\Exception;
 use yii\base\InvalidParamException;
+use yii\data\SqlDataProvider;
 use yii\db\Query;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -82,12 +83,31 @@ class SiteController extends Controller
                ->from('category')->leftJoin('product', 'category.id = product.category_id');
         $command = $query->createCommand();
         $modelCategory = $command->queryAll();
-
+        $provider = new SqlDataProvider([
+            'sql' => 'SELECT product.id,product.name,product.price,image.path FROM product,image WHERE product.active=:active AND product.id=image.product_id ORDER BY product.id DESC ',
+            'params' => [':active' => 1],
+            'pagination' => [
+                'pageSize' => 5,
+            ],
+        ]);
+        $product = $provider->getModels();
+        $slideShow = \common\models\SlideShow::find()->all();
+        /*echo '<pre>';
+        print_r($product) ;
+        echo '</pre>';*/
         return $this->render('index',[
-            'modelCategory' => $modelCategory,
+            'modelCategory' => $modelCategory,'product'=> $product,'slideShow'=>$slideShow
         ]);
     }
 
+    public function actionViewDetail()
+    {
+        if(Yii::$app->request->isGet){
+            $product  = $_GET['parram'];
+            echo $product;
+           return $this->render('viewDetail',[]);
+        }
+    }
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -132,22 +152,6 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
     }
 
     public function actionRequestPasswordReset()

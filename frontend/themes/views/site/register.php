@@ -10,7 +10,7 @@ use kartik\widgets\DepDrop;
     <div class="col-md-6">
         <section class="section register inner-right-xs">
             <h2 class="bordered">Tạo tài khoản mới</h2>
-            <p>Hãy đăng kí để trở thành khách hàng của FSM</p>
+            <p>Hãy đăng kí để trở thành khách hàng của Fresh Garden</p>
             <fieldset class="scheduler-border">
                 <legend class="scheduler-border">Thông tin cá nhân</legend>
                 <div class="field-row">

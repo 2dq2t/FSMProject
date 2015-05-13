@@ -25,8 +25,9 @@ class AppAsset extends AssetBundle
 	    'mediacenter/assets/css/owl.carousel.css',
 		'mediacenter/assets/css/owl.transitions.css',
 		'mediacenter/assets/css/animate.min.css',
-		'http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800',
+		'mediacenter/assets/css/google.font.family.css',
 		'mediacenter/assets/css/font-awesome.min.css',
+        'mediacenter/assets/css/prettyPhoto.css',
 		'mediacenter/assets/images/favicon.ico',
     ];
     public $js = [
@@ -45,7 +46,7 @@ class AppAsset extends AssetBundle
 		'mediacenter/assets/js/jquery.customSelect.min.js',
 		'mediacenter/assets/js/wow.min.js',
 		'mediacenter/assets/js/scripts.js',
-		'http://w.sharethis.com/button/buttons.js',
+		'mediacenter/assets/js/buttons.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
