@@ -103,7 +103,10 @@ class SiteController extends Controller
     public function actionViewDetail()
     {
         if(Yii::$app->request->isGet){
-            $productName  = $_GET['parram'];
+
+            if(empty($_GET['product']))
+                return $this->goHome();
+            $productName  = $_GET['product'];
             $productDetail = \common\models\Product::find()->where(['name'=>$productName])->all();
             $productImage = \common\models\Image::find()->where(['product_id'=>$productDetail['0']['id']])->all();
             return $this->render('viewDetail',['productDetail'=>$productDetail,'productImage'=>$productImage]);

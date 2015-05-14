@@ -30,7 +30,7 @@ include '_search.php';
                                             <div class="col-md-4">
                                                 <ul class="list-unstyled">
                                                     <?php foreach ($result[$categories] as $key) { ?>
-                                                        <li><a href="/FSMProject/frontend/web/index.php?r=site/view-detail&parram=<?php echo $key;?>"><?= $key ?></a></li>
+                                                        <li><a href="/FSMProject/frontend/web/index.php?r=site/view-detail&product=<?php echo $key;?>"><?= $key ?></a></li>
                                                     <?php }; ?>
                                                 </ul>
                                             </div>
