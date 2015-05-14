@@ -103,9 +103,10 @@ class SiteController extends Controller
     public function actionViewDetail()
     {
         if(Yii::$app->request->isGet){
-            $product  = $_GET['parram'];
-            echo $product;
-           return $this->render('viewDetail',[]);
+            $productName  = $_GET['parram'];
+            $productDetail = \common\models\Product::find()->where(['name'=>$productName])->all();
+            $productImage = \common\models\Image::find()->where(['product_id'=>$productDetail['0']['id']])->all();
+            return $this->render('viewDetail',['productDetail'=>$productDetail,'productImage'=>$productImage]);
         }
     }
     public function actionLogin()

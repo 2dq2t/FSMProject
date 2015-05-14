@@ -44,9 +44,10 @@ class AppAsset extends AssetBundle
 		'mediacenter/assets/js/jquery.raty.min.js',
 		'mediacenter/assets/js/jquery.prettyPhoto.min.js',
 		'mediacenter/assets/js/jquery.customSelect.min.js',
+        'mediacenter/assets/js/respond.min.js',
 		'mediacenter/assets/js/wow.min.js',
 		'mediacenter/assets/js/scripts.js',
-		'mediacenter/assets/js/buttons.js',
+		'http://w.sharethis.com/button/buttons.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
