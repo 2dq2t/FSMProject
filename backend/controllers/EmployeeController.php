@@ -143,6 +143,9 @@ class EmployeeController extends Controller
                         $model->image = Yii::$app->security->generateRandomString().".{$ext}";
                     }
 
+                    $model->dob = strtotime($model->dob);
+                    $model->start_date = strtotime($model->start_date);
+
                     $model->address_id = $address->id;
                     if ($model->save()) {
                         // directory to save image in local
@@ -173,6 +176,13 @@ class EmployeeController extends Controller
                         // if save to user error return create page
 //                        $model->password = $password_return;
 //                        $model->re_password = $re_password_return;
+                        if ($model->dob != '') {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        }
+
+                        if($model->start_date != '') {
+                            $model->start_date = date('m/d/Y', $model->start_date);
+                        }
                         // get errors
                         $errors = $model->getErrors();
                         foreach($errors as $error) {
@@ -196,6 +206,13 @@ class EmployeeController extends Controller
                         ]);
                     }
                 } else {
+                    if ($model->dob != '') {
+                        $model->dob = date('m/d/Y', $model->dob);
+                    }
+
+                    if($model->start_date != '') {
+                        $model->start_date = date('m/d/Y', $model->start_date);
+                    }
                     $errors = $address->getErrors();
                     foreach($errors as $error) {
                         Yii::$app->getSession()->setFlash('success', [
@@ -219,9 +236,16 @@ class EmployeeController extends Controller
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
+                if ($model->dob != '') {
+                    $model->dob = date('m/d/Y', $model->dob);
+                }
+
+                if($model->start_date != '') {
+                    $model->start_date = date('m/d/Y', $model->start_date);
+                }
                 $errors = $address->getErrors();
                 foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('success', [
+                    Yii::$app->getSession()->setFlash('error', [
                         'type' => Alert::TYPE_DANGER,
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',

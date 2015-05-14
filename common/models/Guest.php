@@ -34,10 +34,11 @@ class Guest extends \yii\db\ActiveRecord
     {
         return [
             [['full_name', 'email', 'phone_number'], 'required'],
+            [['phone_number'], 'integer'],
             [['customer_id'], 'integer'],
             [['email'],'email'],
             [['full_name', 'email'], 'string', 'max' => 255],
-            [['phone_number'], 'integer', 'max' => 15]
+            [['phone_number'], 'string', 'max' => 15, 'min' => 11],
         ];
     }
 

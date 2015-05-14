@@ -161,7 +161,7 @@ if($model->avatar) {
                         <?= $form->field($guest, 'email')->input('email', ['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter customer email')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($guest, 'phone_number')->input('number', ['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
+                        <?= $form->field($guest, 'phone_number')->textInput(['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                     </div>
                 </div>
                 <div class="form-actions right">

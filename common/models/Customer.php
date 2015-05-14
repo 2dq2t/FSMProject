@@ -47,7 +47,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password', 'gender', 'address_id'], 'required'],
-            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'admincreate'],
+            [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
             [['dob', 'created_at', 'updated_at'], 'safe'],
@@ -67,7 +67,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['adminedit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
+        $scenarios['adminEdit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
         return $scenarios;
     }
 
