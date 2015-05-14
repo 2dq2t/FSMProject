@@ -30,7 +30,8 @@ class VoucherType extends \yii\db\ActiveRecord
     {
         return [
             [['type', 'amount'], 'required'],
-            [['type', 'amount'], 'string', 'max' => 100]
+            [['type', 'amount'], 'string', 'max' => 255],
+            [['type'], 'unique']
         ];
     }
 

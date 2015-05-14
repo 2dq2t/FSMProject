@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use kartik\alert\Alert;
 use Yii;
 use backend\models\OrderStatus;
 use backend\models\OrderStatusSearch;
@@ -64,7 +65,19 @@ class OrderStatusController extends Controller
         $model = new OrderStatus();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'Order Status has been saved.'),
+                'title' => Yii::t('app', 'Add Order Status')
+            ]);
+            switch (Yii::$app->request->post('action', 'save')) {
+                case 'next':
+                    return $this->redirect(['create']);
+                default:
+                    return $this->redirect(['index']);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -83,6 +96,13 @@ class OrderStatusController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'Order Status has been edited.'),
+                'title' => Yii::t('app', 'Update Order Status')
+            ]);
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -100,6 +120,14 @@ class OrderStatusController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-plus',
+            'message' => Yii::t('app', 'Order Status has been deleted.'),
+            'title' => Yii::t('app', 'Delete Order Status')
+        ]);
 
         return $this->redirect(['index']);
     }

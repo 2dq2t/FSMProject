@@ -64,13 +64,14 @@ class ProductController extends Controller
             $posted = current($_POST['Product']);
             $post['Product'] = $posted;
 
+            $quantity = $model->quantity;
             // load model like any single model validation
             if ($model->load($post)) {
 
                 $output = '';
                 $message = '';
 
-                if($model->save() && isset($posted['active'])) {
+                if(isset($posted['active']) && $model->validate() && $model->save()) {
                     if ($posted['active'] == 1) {
                         $label_class = 'label-success';
                         $value = 'Active';
@@ -81,8 +82,14 @@ class ProductController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                } else if (isset($posted['quantity']) && $model->validate()) {
+                    if ($quantity > $posted['quantity']) {
+                        $message = Yii::t('app', 'Quantity must be greater than ' . $quantity);
+                    } else {
+                        $model->save();
+                    }
                 } else {
-                    $message = $model->validate();
+                    $message = $model->errors;
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -122,44 +129,67 @@ class ProductController extends Controller
 
         $file = UploadedFile::getInstances($productImages, 'product_image');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if($file) {
-                $images = '';
-                foreach($file as $image) {
-                    // directory to save image in local
-                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
-                    FileHelper::createDirectory($dir);
-                    // path to save database
-                    $path = 'uploads/products/images/' . $model->id . '/';
+        if ($model->load(Yii::$app->request->post())) {
 
-                    $productImages = new Image();
-                    $productImages->product_id = $model->id;
-                    $productImages->name = $image->name;
-                    // generate random name for image save
-                    $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
-                    $productImages->path = $path . $imageName;
-                    $images .= $imageName . $image->extension.'###';
+            $model->create_date = strtotime('today');
+//            if ($model->sold === '') {
+//                $model->sold = 0;
+//            }
 
-                    $productImages->product_image = $images;
-                    $productImages->save();
+            if($model->save()) {
+                if ($file) {
+                    $images = '';
+                    foreach ($file as $image) {
+                        // directory to save image in local
+                        $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
+                        FileHelper::createDirectory($dir);
+                        // path to save database
+                        $path = 'uploads/products/images/' . $model->id . '/';
 
-                    $image->saveAs($dir . '/' . $imageName);
+                        $productImages = new Image();
+                        $productImages->product_id = $model->id;
+                        $productImages->name = $image->name;
+                        // generate random name for image save
+                        $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
+                        $productImages->path = $path . $imageName;
+                        $images .= $imageName . $image->extension . '###';
+
+                        $productImages->product_image = $images;
+                        $productImages->save();
+
+                        $image->saveAs($dir . '/' . $imageName);
+                    }
                 }
-            }
 
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Product Record has been saved.'),
-                'title' => Yii::t('app', 'Add Product'),
-            ]);
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 5000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Product Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Product'),
+                ]);
 
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                $errors = $model->getErrors();
+                foreach($errors as $error) {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => $error[0],
+                        'title' => Yii::t('app', 'Add Product'),
+                    ]);
+                }
+                return $this->render('create', [
+                    'model' => $model,
+                    'productImages' => $productImages,
+                ]);
             }
 
         } else {

@@ -66,12 +66,12 @@ class LoginForm extends Model
     /**
      * Finds staff by [[email]]
      *
-     * @return Staff|null
+     * @return Employee|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Staff::findByUsername($this->email);
+            $this->_user = Employee::findByUsername($this->email);
         }
 
         return $this->_user;

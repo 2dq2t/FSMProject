@@ -42,31 +42,38 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn'],
 
         [
-            'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'rating',
-            // 'value' => function($model, $key, $index, $widget) {
-            //     if($model->Rating == 1.5) {
-            //         return '<i class="fa fa-fw fa-folder-open"></i>';
-            //     }
-            // },
-            'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_RATING,
-                'header' => 'User Rating',
-                'type'=>'success',
-                'size'=>'md',
-                'displayValueConfig'=>[
-                    0=> 'Not Rated',
-                    1=>'One Star',
-                    1.5 => 'One & Half Star',
-                    2=>'Two Stars',
-                    2.5 => 'Two & Half Star',
-                    3=>'Three Stars',
-                    3.5 => 'Three & Half Star',
-                    4=>'Four Stars',
-                    4.5 => 'Four & Half Star',
-                    5=>'Five Stars',
-                ],
-            ]
+            'format' => 'raw',
+            'value' => function (\common\models\Rating $model) {
+                if ($model === null || $model->rating === null) {
+                    return null;
+                }
+                if ($model->rating === '1') {
+                    $value = 'One Star';
+                } else if ($model->rating === '1.5') {
+                    $value = 'One & Half Star';
+                } else if ($model->rating === '2') {
+                    $value = 'Two Stars';
+                } else if ($model->rating === '2.5') {
+                    $value = 'Two & Half Star';
+                } else if ($model->rating === '3') {
+                    $value = 'Three Stars';
+                } else if ($model->rating === '3.5') {
+                    $value = 'Four Stars';
+                } else if ($model->rating === '4') {
+                    $value = 'Four & Half Star';
+                } else if ($model->rating === '4.5') {
+                    $value = 'Four & Half Star';
+                } else if ($model->rating === '5') {
+                    $value = 'Five Stars';
+                } else {
+                    $value = 'Not Rated';
+                }
+                return \yii\helpers\Html::tag(
+                    'span',
+                    Yii::t('app', $value)
+                );
+            },
         ],
 
         [

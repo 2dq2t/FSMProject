@@ -41,11 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn'],
 
         [
-            'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'name',
-            'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT
-            ]
         ],
         [
             'class' => \kartik\grid\EditableColumn::className(),

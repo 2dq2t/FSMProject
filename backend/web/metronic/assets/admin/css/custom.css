@@ -17,3 +17,11 @@ Rounded Portlets
 	border-radius: 0px 0px 4px 4px !important;
 }
 */
+table#datatable_reviews {
+    counter-reset: section;
+}
+
+.count:before {
+    counter-increment: section;
+    content: counter(section);
+}

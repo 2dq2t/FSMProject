@@ -113,6 +113,11 @@ if(isset($images)) {
                             ]) ?>
                         </div>
                         <div class="form-group">
+                            <?= $form->field($model, 'intro')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
+                                'options' => ['row' => 3],
+                            ]) ?>
+                        </div>
+                        <div class="form-group">
                             <?= $form->field($model, 'quantity')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
                         </div>
                         <div class="form-group">
@@ -122,22 +127,19 @@ if(isset($images)) {
                             <?= $form->field($model, 'tax')->textInput(['placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'fee')->textInput(['placeholder' => Yii::t('app', 'Enter product fee..')]) ?>
-                        </div>
-                        <div class="form-group">
                             <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter product tags..')]) ?>
                         </div>
                         <div class="form-group">
-                            <?= $form->field($model, 'session_id')
+                            <?= $form->field($model, 'season_id')
                                 ->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(\common\models\Session::find()->where(['active' => 1])->all(), 'id', 'name'),
+                                    \yii\helpers\ArrayHelper::map(\common\models\Season::find()->where(['active' => 1])->all(), 'id', 'name'),
                                     ['prompt'=>Yii::t('app', 'Select session of product')]
                                 ) ?>
                         </div>
                     </div>
                     <div class="form-actions">
                         <div class="btn-set pull-right">
-                            <?php echo $this->blocks['submit']; ?>
+                            <?php //echo $this->blocks['submit']; ?>
                         </div>
                     </div>
 <!--                </form>-->

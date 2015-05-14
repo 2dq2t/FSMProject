@@ -14,6 +14,7 @@ return array(
     'yii\\codeception\\' => array($vendorDir . '/yiisoft/yii2-codeception'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform'),
     'vova07\\imperavi\\' => array($vendorDir . '/vova07/yii2-imperavi-widget/src'),
     'sintret\\chat\\' => array($vendorDir . '/sintret/yii2-chat-adminlte'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),

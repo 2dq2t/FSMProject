@@ -37,7 +37,7 @@ class Guest extends \yii\db\ActiveRecord
             [['customer_id'], 'integer'],
             [['email'],'email'],
             [['full_name', 'email'], 'string', 'max' => 255],
-            [['phone_number'], 'string', 'max' => 15]
+            [['phone_number'], 'integer', 'max' => 15]
         ];
     }
 

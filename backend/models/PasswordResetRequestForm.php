@@ -20,8 +20,8 @@ class PasswordResetRequestForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'exist',
-                'targetClass' => '\backend\models\Staff',
-                'filter' => ['status' => Staff::STATUS_ACTIVE],
+                'targetClass' => '\backend\models\Employee',
+                'filter' => ['status' => Employee::STATUS_ACTIVE],
                 'message' => \Yii::t('app', 'There is no user with such email.')
             ],
         ];
@@ -34,14 +34,14 @@ class PasswordResetRequestForm extends Model
      */
     public function sendEmail()
     {
-        /* @var $user Staff */
-        $user = Staff::findOne([
-            'status' => Staff::STATUS_ACTIVE,
+        /* @var $user Employee */
+        $user = Employee::findOne([
+            'status' => Employee::STATUS_ACTIVE,
             'email' => $this->email,
         ]);
 
         if ($user) {
-            if (!Staff::isPasswordResetTokenValid($user->password_reset_token)) {
+            if (!Employee::isPasswordResetTokenValid($user->password_reset_token)) {
                 $user->generatePasswordResetToken();
             }
 

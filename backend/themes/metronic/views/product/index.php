@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product-index">
 
     <?php
+    $min = 1;
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
 
@@ -65,12 +66,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ]
 //        ],
         [
-            'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'name',
+            'value'=>function ($model, $key, $index, $widget) {
+                return Html::a($model->name,
+                    '#',
+                    ['title'=>'View product detail', 'onclick'=>'alert("This will open the product page!")']);
+            },
             'pageSummary'=>'Total',
-            'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-            ],
             'filterType'=>GridView::FILTER_SELECT2,
             'filter'=>\yii\helpers\ArrayHelper::map(\common\models\Product::find()->orderBy('name')->asArray()->all(), 'name', 'name'),
             'filterWidgetOptions'=>[
@@ -89,27 +91,31 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ],
         [
-            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'session_id',
-            'label' => Yii::t('app', 'Session'),
-            'value' => 'session.name',
-            'filter' => \yii\helpers\ArrayHelper::map(\common\models\Session::find()->all(), 'id', 'name'),
+            'attribute' => 'season_id',
+            'label' => Yii::t('app', 'Season'),
+            'value' => 'season.name',
+            'filter' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
             'width' => '15%',
             'pageSummary' => true,
-            'editableOptions' => [
-                'data' => \yii\helpers\ArrayHelper::map(common\models\Session::find()->all(), 'id', 'name'),
-                'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
-                'placement' => 'left',
-            ]
         ],
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'quantity',
             'width' => '15%',
             'pageSummary' => true,
-            'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-            ]
+            'editableOptions'=>
+                function ($model, $key, $index) {
+                    return [
+                        'header' => '&nbsp;',
+                        'size' => 'md',
+                        'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                        'pluginEvents' => [ ],
+                    ];
+                }
+//                [
+
+//                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+//            ]
         ],
         [
             'class' => \kartik\grid\EditableColumn::className(),

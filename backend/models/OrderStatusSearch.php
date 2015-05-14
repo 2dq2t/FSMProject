@@ -19,7 +19,7 @@ class OrderStatusSearch extends OrderStatus
     {
         return [
             [['id'], 'integer'],
-            [['title', 'comment'], 'safe'],
+            [['name', 'comment'], 'safe'],
         ];
     }
 
@@ -59,7 +59,7 @@ class OrderStatusSearch extends OrderStatus
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
+        $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'comment', $this->comment]);
 
         return $dataProvider;

@@ -18,9 +18,9 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'quantity', 'sold', 'active', 'category_id', 'session_id', 'unit_id'], 'integer'],
-            [['barcode', 'name', 'description', 'tag'], 'safe'],
-            [['price', 'tax', 'fee'], 'number'],
+            [['id', 'barcode', 'quantity', 'sold', 'tax', 'create_date', 'active', 'season_id', 'category_id', 'unit_id'], 'integer'],
+            [['name', 'description', 'intro', 'tag'], 'safe'],
+            [['price'], 'number'],
         ];
     }
 
@@ -34,7 +34,7 @@ class ProductSearch extends Product
     }
 
     /**
-     * Creates file provider instance with search query applied
+     * Creates data provider instance with search query applied
      *
      * @param array $params
      *
@@ -58,20 +58,21 @@ class ProductSearch extends Product
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'barcode' => $this->barcode,
             'price' => $this->price,
             'quantity' => $this->quantity,
             'sold' => $this->sold,
             'tax' => $this->tax,
-            'fee' => $this->fee,
+            'create_date' => $this->create_date,
             'active' => $this->active,
+            'season_id' => $this->season_id,
             'category_id' => $this->category_id,
-            'session_id' => $this->session_id,
             'unit_id' => $this->unit_id,
         ]);
 
-        $query->andFilterWhere(['like', 'barcode', $this->barcode])
-            ->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'intro', $this->intro])
             ->andFilterWhere(['like', 'tag', $this->tag]);
 
         return $dataProvider;

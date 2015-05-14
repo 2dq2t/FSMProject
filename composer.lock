@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6840980b8caa5c1d880a3b906b9aa529",
+    "hash": "c738612d7ee2009978ebc1951cce95b3",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2440,6 +2440,114 @@
             "time": "2015-03-14 06:06:39"
         },
         {
+            "name": "symfony/css-selector",
+            "version": "v2.6.7",
+            "target-dir": "Symfony/Component/CssSelector",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/CssSelector.git",
+                "reference": "189cf0f7f56d7c4be3b778df15a7f16a29f3680d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/189cf0f7f56d7c4be3b778df15a7f16a29f3680d",
+                "reference": "189cf0f7f56d7c4be3b778df15a7f16a29f3680d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\CssSelector\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jean-François Simon",
+                    "email": "jeanfrancois.simon@sensiolabs.com"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony CssSelector Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-05-02 15:18:45"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v2.6.7",
+            "target-dir": "Symfony/Component/DomCrawler",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/DomCrawler.git",
+                "reference": "adef13fb8d305d95e1fb8324d6b5895c8e79d332"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/adef13fb8d305d95e1fb8324d6b5895c8e79d332",
+                "reference": "adef13fb8d305d95e1fb8324d6b5895c8e79d332",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/css-selector": "~2.3",
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-05-02 15:18:45"
+        },
+        {
             "name": "vova07/yii2-imperavi-widget",
             "version": "1.2.2",
             "source": {
@@ -2500,6 +2608,52 @@
                 "yii2"
             ],
             "time": "2015-04-03 08:07:30"
+        },
+        {
+            "name": "wbraganca/yii2-dynamicform",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wbraganca/yii2-dynamicform.git",
+                "reference": "9b761d708aa6c06c1219e1c2ed321f7cb205b09f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wbraganca/yii2-dynamicform/zipball/9b761d708aa6c06c1219e1c2ed321f7cb205b09f",
+                "reference": "9b761d708aa6c06c1219e1c2ed321f7cb205b09f",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/css-selector": "*",
+                "symfony/dom-crawler": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "wbraganca\\dynamicform\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Wanderson Bragança",
+                    "email": "wanderson.wbc@gmail.com"
+                }
+            ],
+            "description": "It is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.",
+            "keywords": [
+                "copy DOM element",
+                "extension",
+                "widget",
+                "yii2",
+                "yii2 dynamic form",
+                "yii2-dynamicform"
+            ],
+            "time": "2015-02-25 15:31:24"
         },
         {
             "name": "yiisoft/yii2",

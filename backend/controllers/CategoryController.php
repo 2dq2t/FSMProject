@@ -58,6 +58,7 @@ class CategoryController extends Controller
 
             // load model like any single model validation
             if ($model->load($post)) {
+                $message = '';
                 if($model->validate()) {
                     // can save model or do something before saving model
                     $model->save();
@@ -79,10 +80,10 @@ class CategoryController extends Controller
                     //   $output =  ''; // process as you need
                     // }
                 } else {
-                    $output = $model->errors;
+                    $message = $model->errors;
                 }
 
-                $out = Json::encode(['output'=>$output, 'message'=>'']);
+                $out = Json::encode(['output'=>'', 'message'=>$message['name']]);
             }
             // return ajax json encoded response and exit
             echo $out;

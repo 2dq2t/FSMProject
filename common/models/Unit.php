@@ -29,9 +29,10 @@ class Unit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'active'], 'required'],
+            [['name'], 'required'],
             [['active'], 'integer'],
-            [['name'], 'string', 'max' => 45]
+            [['name'], 'string', 'max' => 60],
+            [['name'], 'unique']
         ];
     }
 

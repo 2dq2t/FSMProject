@@ -61,7 +61,7 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>

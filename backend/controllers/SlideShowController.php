@@ -76,7 +76,7 @@ class SlideShowController extends Controller
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
                 } else {
-                    $message = $model->validate();
+                    $message = $model->errors;
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);

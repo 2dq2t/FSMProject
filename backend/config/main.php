@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+	'language' => 'En',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -32,7 +33,7 @@ return [
 	],
     'components' => [
         'user' => [
-            'identityClass' => 'backend\models\Staff',
+            'identityClass' => 'backend\models\Employee',
             'enableAutoLogin' => true,
         ],
         'log' => [
@@ -54,6 +55,10 @@ return [
                 ],
                 'baseUrl'=>'@web/themes/metronic',
             ]
+        ],
+		'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+			'defaultRoles' => ['guest']
         ],
     ],
     'params' => $params,

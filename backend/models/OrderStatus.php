@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "order_status".
  *
- * @property string $id
- * @property string $title
+ * @property integer $id
+ * @property string $name
  * @property string $comment
  *
  * @property Order[] $orders
@@ -29,9 +29,10 @@ class OrderStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['name'], 'required'],
             [['comment'], 'string'],
-            [['title'], 'string', 'max' => 255]
+            [['name'], 'string', 'max' => 255],
+            [['name'], 'unique']
         ];
     }
 
@@ -42,7 +43,7 @@ class OrderStatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
+            'name' => Yii::t('app', 'Name'),
             'comment' => Yii::t('app', 'Comment'),
         ];
     }

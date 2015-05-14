@@ -83,7 +83,7 @@ AppAsset::register($this);
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 						<span class="username username-hide-on-mobile">
 						<?= Yii::$app->user->identity->full_name ?> </span>
-                                    <?= Html::img('uploads/staffs/image/' . Yii::$app->user->identity->id . '/' . Yii::$app->user->identity->image, ['class' => 'img-circle'])?>
+                                    <?= Html::img('uploads/employees/image/' . Yii::$app->user->identity->id . '/' . Yii::$app->user->identity->image, ['class' => 'img-circle'])?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
@@ -115,7 +115,7 @@ AppAsset::register($this);
                     'product',
                     'rating',
                     'unit',
-                    'session',
+                    'season',
                     'customers',
                     'guest',
                     'order',
@@ -127,8 +127,8 @@ AppAsset::register($this);
                 'users' => [
                     'customer'
                 ],
-                'staffs' => [
-                    'staff'
+                'employees' => [
+                    'employee'
                 ],
                 'faqs' => [
                     'faq'
@@ -211,8 +211,8 @@ AppAsset::register($this);
                                 <li class="<?= active('ecommerce', 'unit') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-list"></i> Unit', ['unit/index']) ?>
                                 </li>
-                                <li class="<?= active('ecommerce', 'session') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-grid"></i> Session', ['session/index']) ?>
+                                <li class="<?= active('ecommerce', 'season') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-grid"></i> Season', ['season/index']) ?>
                                 </li>
                                 <li class="<?= active('ecommerce', 'guest') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-user"></i> Customers', ['guest/index']) ?>
@@ -225,10 +225,10 @@ AppAsset::register($this);
                                 <span class="title">Users</span>
                             </a>
                         </li>
-                        <li class="<?= active('staffs', 'staff') ? 'active' : '' ?>">
-                            <a href="index.php?r=staff%2Findex">
+                        <li class="<?= active('employees', 'employee') ? 'active' : '' ?>">
+                            <a href="index.php?r=employee%2Findex">
                                 <i class="icon-book-open"></i>
-                                <span class="title">Staff</span>
+                                <span class="title">Employee</span>
                             </a>
                         </li>
                         <li class="<?= active('slideshow', 'slideshow') ? 'active' : '' ?>">
@@ -394,10 +394,10 @@ AppAsset::register($this);
     <!-- BEGIN PAGE LEVEL PLUGINS -->
     <script src="metronic/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
-    <!--<script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+<!--    <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
     <script src="metronic/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
     <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-    <!--<script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
+<!--    <script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
     <script src="metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
@@ -405,6 +405,7 @@ AppAsset::register($this);
     <script src="metronic/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="metronic/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
     <!-- END CORE PLUGINS -->
     <script src="metronic/assets/global/scripts/metronic.js" type="text/javascript"></script>
     <script src="metronic/assets/admin/scripts/layout.js" type="text/javascript"></script>
@@ -415,6 +416,7 @@ AppAsset::register($this);
             Metronic.init(); // init metronic core components
             Layout.init(); // init current layout
             Login.init();
+            $("input[name='quantity']").TouchSpin();
         });
     </script>
     <!-- END JAVASCRIPTS -->

@@ -53,10 +53,16 @@ $attributes = [
         'value'=>$model->sold,
         'displayOnly'=>true
     ],
-    [
-        'attribute'=>'fee',
+	[
+        'attribute'=>'tax',
         'format'=>'raw',
-        'value'=>$model->fee,
+        'value'=>$model->tax,
+        'displayOnly'=>true
+    ],
+    [
+        'attribute'=>'create_date',
+        'format'=>'raw',
+        'value'=>date('m/d/Y', $model->create_date),
         'displayOnly'=>true
     ],
     [
@@ -71,6 +77,13 @@ $attributes = [
         'value'=>'<span class="text-justify"><em>' . $model->description . '</em></span>',
         'type'=>DetailView::INPUT_TEXTAREA,
         'options'=>['rows'=>4]
+    ],
+    [
+        'attribute'=>'intro',
+        'format'=>'raw',
+        'value'=>'<span class="text-justify"><em>' . $model->intro . '</em></span>',
+        'type'=>DetailView::INPUT_TEXTAREA,
+        'displayOnly'=>true
     ],
     [
         'attribute'=>'active',
