@@ -71,15 +71,6 @@ use kartik\alert\Alert;
                         <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                     </div>
                 </div>
-                <div class="form-body">
-                    <div class="form-group">
-                        <?= $form->field($model, 'customer_id')
-                            ->dropDownList(
-                                \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->all(), 'id', 'username'),
-                                ['prompt'=>Yii::t('app', 'Select user')]
-                            ) ?>
-                    </div>
-                </div>
                 <div class="form-actions">
                     <div class="btn-set pull-right">
                         <?php echo $this->blocks['submit']; ?>

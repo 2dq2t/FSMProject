@@ -14,18 +14,20 @@ use Yii;
  * @property string $username
  * @property string $password
  * @property string $avatar
- * @property string $dob
+ * @property integer $dob
  * @property string $gender
  * @property string $auth_key
  * @property string $password_reset_token
- * @property string $created_at
- * @property string $updated_at
+ * @property integer $created_at
+ * @property integer $updated_at
  * @property integer $status
+ * @property string $guest_id
  * @property string $address_id
  *
  * @property Address $address
- * @property Guest[] $guests
+ * @property Guest $guest
  * @property WishList[] $wishLists
+ * @property Product[] $products
  */
 class Customer extends ActiveRecord implements IdentityInterface
 {
@@ -46,13 +48,12 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'gender', 'address_id'], 'required'],
+            [['username', 'password', 'gender', 'guest_id', 'created_at', 'address_id'], 'required'],
             [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
-            [['dob', 'created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'status', 'guest_id', 'address_id'], 'integer'],
             [['gender'], 'string'],
-            [['status', 'address_id'], 'integer'],
             [['username', 'avatar'], 'string', 'max' => 255, 'min' => '6', 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
             [['password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
             [['new_password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
@@ -67,7 +68,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['adminEdit'] = ['username', 'gender', 'created_at', 'address_id'];//Scenario Values Only Accepted
+        $scenarios['adminEdit'] = ['username', 'gender', 'update_at', 'address_id'];//Scenario Values Only Accepted
         return $scenarios;
     }
 
@@ -98,6 +99,7 @@ class Customer extends ActiveRecord implements IdentityInterface
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'status' => Yii::t('app', 'Status'),
+            'guest_id' => Yii::t('app', 'Guest ID'),
             'address_id' => Yii::t('app', 'Address ID'),
         ];
     }
@@ -113,9 +115,9 @@ class Customer extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGuests()
+    public function getGuest()
     {
-        return $this->hasMany(Guest::className(), ['customer_id' => 'id']);
+        return $this->hasOne(Guest::className(), ['id' => 'guest_id']);
     }
 
     /**
@@ -123,7 +125,15 @@ class Customer extends ActiveRecord implements IdentityInterface
      */
     public function getWishLists()
     {
-        return $this->hasMany(WishList::className(), ['useraccount_id' => 'id']);
+        return $this->hasMany(WishList::className(), ['customer_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('wish_list', ['customer_id' => 'id']);
     }
 
     public function setPassword($password)

@@ -446,7 +446,18 @@ class EmployeeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+
+        if ($this->findModel($id)->email !== Yii::$app->user->identity->email) {
+            $this->findModel($id)->delete();
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => Alert::TYPE_DANGER,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'You can\'t delete yourself.'),
+                'title' => Yii::t('app', 'Delete Employee'),
+            ]);
+        }
 
         return $this->redirect(['index']);
     }

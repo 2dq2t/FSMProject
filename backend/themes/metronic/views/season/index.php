@@ -81,6 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(
                         '<span class="glyphicon glyphicon-pencil"></span>', $url, ['id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
                 },
+                'delete' => function ($url, $model) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>', $url, ['id' => 'modalLink', 'onclick' => 'javascript:void(0)', 'value' => $url]);
+                }
             ],
         ],
 
@@ -121,4 +125,21 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delelte
+            </div>
+            <div class="modal-body">
+                adsadas
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+    </div>
 </div>

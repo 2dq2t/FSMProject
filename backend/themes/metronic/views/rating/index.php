@@ -48,7 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 if ($model === null || $model->rating === null) {
                     return null;
                 }
-                if ($model->rating === '1') {
+                if ($model->rating === '0.5') {
+                    $value = 'Half Star';
+                } else if ($model->rating === '1') {
                     $value = 'One Star';
                 } else if ($model->rating === '1.5') {
                     $value = 'One & Half Star';

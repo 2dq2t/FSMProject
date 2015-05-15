@@ -43,9 +43,12 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
+//        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setPagination(['pageSize' => 7]);
+//        var_dump($dataProvider);
+//        return;
+//        $dataProvider->setPagination(['pageSize' => 7]);
 
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
@@ -82,7 +85,7 @@ class CustomerController extends Controller
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
                 } else {
-                    $message = $model->validate();
+                    $message = $model->errors;
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -133,18 +136,7 @@ class CustomerController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
             try{
                 // Save address info to database
-                if($address->save()) {
-                    $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
-
-                    // Set password and re_password to return create user page for error save user
-//                    $password_return = $model->password;
-//                    $re_password_return = $model->re_password;
-
-                    // check password equal re_password and hash password
-//                    if ($model->password === $model->re_password) {
-//                        $model->setPassword($model->password);
-//                        $model->re_password = $model->password;
-//                    }
+                if($address->save() && $guest->save()) {
 
                     if ($model->password) {
                         $model->setPassword($model->password);
@@ -163,8 +155,15 @@ class CustomerController extends Controller
 //                        $path = Yii::$app->params['uploadPath'] . $model->avatar;
                     }
 
-                    $model->created_at = $time->format('Y-m-d H:i:s');
+                    $model->created_at = time();
+
+                    if($model->dob) {
+                        $model->dob = strtotime($model->dob);
+                    } else {
+                        $model->dob = NULL;
+                    }
                     $model->address_id = $address->id;
+                    $model->guest_id = $guest->id;
                     if ($model->save()) {
                         // directory to save image in local
                         $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $model->id);
@@ -174,9 +173,6 @@ class CustomerController extends Controller
                         if ($avatar) {
                             $avatar->saveAs($dir . '/' . $model->avatar);
                         }
-
-                        $guest->customer_id = $model->id;
-                        $guest->save();
 
                         $transaction->commit();
 
@@ -198,6 +194,13 @@ class CustomerController extends Controller
                         // if save to user error return create page
 //                        $model->password = $password_return;
 //                        $model->re_password = $re_password_return;
+                        if ($model->dob != '') {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        }
+
+                        if($model->created_at != '') {
+                            $model->created_at = date('m/d/Y', $model->created_at);
+                        }
                         // get errors
                         $errors = $model->getErrors();
                         foreach($errors as $error) {
@@ -222,6 +225,15 @@ class CustomerController extends Controller
                         ]);
                     }
                 } else {
+                    if ($model->dob != '') {
+                        $model->dob = date('m/d/Y', $model->dob);
+                    }
+
+                    if($model->created_at != '') {
+                        $model->created_at = date('m/d/Y', $model->created_at);
+                    }
+
+                    // get errors
                     $errors = $address->getErrors();
                     foreach($errors as $error) {
                         Yii::$app->getSession()->setFlash('success', [
@@ -246,6 +258,15 @@ class CustomerController extends Controller
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
+
+                if ($model->dob != '') {
+                    $model->dob = date('m/d/Y', $model->dob);
+                }
+
+                if($model->created_at != '') {
+                    $model->created_at = date('m/d/Y', $model->created_at);
+                }
+
                 $errors = $address->getErrors();
                 foreach($errors as $error) {
                     Yii::$app->getSession()->setFlash('success', [
@@ -291,7 +312,7 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
         $model->scenario = 'adminEdit';
         $model->password = null;
-        $guest = Guest::find()->where(['customer_id' => $id])->one();
+        $guest = Guest::find()->where(['id' => $model->guest_id])->one();
         $address = Address::find()->where(['id' => $model->address_id])->one();
         $ward = Ward::find()->where(['id' => $address->ward_id])->one();
         $district = District::find()->where(['id' => $ward->district_id])->one();
@@ -302,39 +323,22 @@ class CustomerController extends Controller
             && $guest->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
 
-            if (Yii::$app->request->post('Customer')['status'] === '1') {
-                $model->status = 1;
-            } else {
-                $model->status = 0;
-            }
-
-            if(Yii::$app->request->post('Customer')['password'] === '') {
-                $model->password = $model->oldAttributes['password'];
-            }
-
-//            if(!UploadedFile::getInstance($model, 'image')) {
-//                $model->image = $model->oldAttributes['image'];
-//            }
-
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
             try{
                 // Save address info to database
-                if($address->save()) {
-                    $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
+                if($address->save() && $guest->save()) {
 
-                    // Set password and re_password to return update user page for error save user
-//                    $password_return = $model->password;
-//                    $re_password_return = $model->re_password;
-//
-//                     check password equal re_password and hash password
-//                    if ($model->password === $model->re_password) {
-//                        $model->setPassword($model->password);
-//                        $model->re_password = $model->password;
-//                    }
                     if ($model->password) {
                         $model->setPassword($model->password);
                     }
+
+//                    if ($model->dob) {
+//                        $model->dob = Yii::$app->request->post('Customer')['dob'];
+                    $model->dob = strtotime($model->dob);
+//                    } else {
+//                        $model->dob = NULL;
+//                    }
 
                     $avatar = UploadedFile::getInstance($model,'avatar');
 
@@ -343,14 +347,28 @@ class CustomerController extends Controller
 
                         // generate a unique file name
                         $model->avatar = Yii::$app->security->generateRandomString().".{$ext}";
-
-                        // the path to save file, you can set an uploadPath
-                        // in Yii::$app->params (as used in example below)
-//                        $path = Yii::$app->params['uploadPath'] . $model->avatar;
+                    } else {
+                        $model->avatar = $model->oldAttributes['avatar'];
                     }
 
-                    $model->updated_at = $time->format('Y-m-d H:i:s');
-                    $model->address_id = $address->id;
+                    if (Yii::$app->request->post('Customer')['status'] === '1') {
+                        $model->status = 1;
+                    } else {
+                        $model->status = 0;
+                    }
+
+                    if (Yii::$app->request->post('Customer')['dob']) {
+                        $model->dob = strtotime(Yii::$app->request->post('Customer')['dob']);
+                    } else {
+                        $model->dob = $model->oldAttributes['dob'];
+                    }
+
+                    if (Yii::$app->request->post('Customer')['password'] === '') {
+                        $model->password = $model->oldAttributes['password'];
+                    }
+
+                    $model->updated_at = time();
+
                     if ($model->save()) {
 
                         if ($avatar) {
@@ -360,9 +378,6 @@ class CustomerController extends Controller
                             FileHelper::createDirectory($dir);
                             $avatar->saveAs($dir . '/' . $model->avatar);
                         }
-
-                        $guest->customer_id = $model->id;
-                        $guest->save();
 
                         $transaction->commit();
 
@@ -376,9 +391,14 @@ class CustomerController extends Controller
 
                         return $this->redirect(['index']);
                     } else {
-                        // if save to user error return update page
-//                        $model->password = $password_return;
-//                        $model->re_password = $re_password_return;
+                        if ($model->dob) {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        } else {
+                            $model->dob = NULL;
+                        }
+
+                        $model->password = NULL;
+
                         // get errors
                         $errors = $model->getErrors();
                         foreach($errors as $error) {
@@ -401,6 +421,14 @@ class CustomerController extends Controller
                         ]);
                     }
                 } else {
+                    if ($model->dob) {
+                        $model->dob = date('m/d/Y', $model->dob);
+                    } else {
+                        $model->dob = NULL;
+                    }
+
+                    $model->password = NULL;
+
                     $errors = $address->getErrors();
                     foreach($errors as $error) {
                         Yii::$app->getSession()->setFlash('success', [
@@ -425,6 +453,11 @@ class CustomerController extends Controller
                 $transaction->rollBack();
             }
         } else {
+            if ($model->dob) {
+                $model->dob = date('m/d/Y', $model->dob);
+            } else {
+                $model->dob = NULL;
+            }
             return $this->render('update', [
                 'model' => $model,
                 'guest' => $guest,

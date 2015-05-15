@@ -18,7 +18,7 @@ class GuestSearch extends Guest
     public function rules()
     {
         return [
-            [['id', 'customer_id'], 'integer'],
+            [['id'], 'integer'],
             [['full_name', 'email', 'phone_number'], 'safe'],
         ];
     }
@@ -33,7 +33,7 @@ class GuestSearch extends Guest
     }
 
     /**
-     * Creates file provider instance with search query applied
+     * Creates data provider instance with search query applied
      *
      * @param array $params
      *
@@ -57,7 +57,6 @@ class GuestSearch extends Guest
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'customer_id' => $this->customer_id,
         ]);
 
         $query->andFilterWhere(['like', 'full_name', $this->full_name])

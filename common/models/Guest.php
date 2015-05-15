@@ -11,9 +11,8 @@ use Yii;
  * @property string $full_name
  * @property string $email
  * @property string $phone_number
- * @property string $customer_id
  *
- * @property Customer $customer
+ * @property Customer[] $customers
  * @property Order[] $orders
  * @property ShoppingCart[] $shoppingCarts
  */
@@ -35,9 +34,9 @@ class Guest extends \yii\db\ActiveRecord
         return [
             [['full_name', 'email', 'phone_number'], 'required'],
             [['phone_number'], 'integer'],
-            [['customer_id'], 'integer'],
-            [['email'],'email'],
             [['full_name', 'email'], 'string', 'max' => 255],
+            [['email'],'email'],
+            [['email'], 'unique'],
             [['phone_number'], 'string', 'max' => 15, 'min' => 11],
         ];
     }
@@ -52,16 +51,15 @@ class Guest extends \yii\db\ActiveRecord
             'full_name' => Yii::t('app', 'Full Name'),
             'email' => Yii::t('app', 'Email'),
             'phone_number' => Yii::t('app', 'Phone Number'),
-            'customer_id' => Yii::t('app', 'Customer ID'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCustomer()
+    public function getCustomers()
     {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
+        return $this->hasMany(Customer::className(), ['guest_id' => 'id']);
     }
 
     /**
@@ -69,7 +67,7 @@ class Guest extends \yii\db\ActiveRecord
      */
     public function getOrders()
     {
-        return $this->hasMany(Order::className(), ['user_id' => 'id']);
+        return $this->hasMany(Order::className(), ['guest_id' => 'id']);
     }
 
     /**

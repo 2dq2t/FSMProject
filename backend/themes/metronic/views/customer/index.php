@@ -32,6 +32,17 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
         [
+            'class'=>'kartik\grid\ExpandRowColumn',
+            'width'=>'50px',
+            'value'=>function ($model, $key, $index, $column) {
+                return GridView::ROW_COLLAPSED;
+            },
+            'detail'=>function ($model, $key, $index, $column) {
+                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
+            },
+            'headerOptions'=>['class'=>'kartik-sheet-style']
+        ],
+        [
             'attribute' => 'username',
             'width' => '20%',
             'filterType'=>GridView::FILTER_SELECT2,
@@ -44,6 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'attribute' => 'dob',
+            'value' => function ($model) {
+                return date('m/d/Y', $model->dob);
+            },
             'width' => '20%',
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
@@ -52,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pluginOptions' => [
                     'allowClear' => true,
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd'
+                    'endDate' => '+0d',
                 ],
             ],
         ],
@@ -85,6 +99,9 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'created_at',
             'width' => '23%',
+            'value' => function ($model) {
+                return date('m/d/Y', $model->created_at);
+            },
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
                 'removeButton' => false,
@@ -93,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'allowClear' => true,
                     'autoclose' => true,
                     'endDate' => '+0d',
-                    'format'=>'yyyy-mm-dd',
+//                    'format'=>'yyyy-mm-dd',
                 ],
             ],
         ],
@@ -139,6 +156,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ];
 
+//    echo "<pre>";
+//    var_dump($dataProvider);
+//    echo "</pre>";
+//    return;
+
     ?>
 
     <?= GridView::widget([
@@ -153,7 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
             '{toggleData}',
             '{export}',
         ],
-        'pjax' => true,
+//        'pjax' => true,
         'pjaxSettings'=>[
             'neverTimeout'=>true,
         ],

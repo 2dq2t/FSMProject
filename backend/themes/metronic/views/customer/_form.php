@@ -109,12 +109,9 @@ if($model->avatar) {
                             'options' => ['placeholder' => Yii::t('app', 'Enter birth date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                            'language' => 'vi',
                             'pluginOptions' => [
                                 'autoclose'=>true,
                                 'endDate' => '+0d',
-                                'setDate' => date('yyyy-mm-dd'),
-                                'format' => 'yyyy-mm-dd',
                                 'todayHighlight' => true
                             ]
                         ]); ?>
