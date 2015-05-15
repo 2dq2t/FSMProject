@@ -37,7 +37,7 @@ class PasswordResetRequestForm extends Model
     public function sendEmail()
     {
         /* @var $user Customer */
-        $user = Customer::find()->select(['*'])->join('inner join','guest','customer.id=guest.customer_id')->where('customer.status=1 and guest.email="'.$this->email.'"')->one();
+        $user = Customer::find()->select(['*'])->join('inner join','guest','customer.guest_id = guest.id')->where('customer.status = 1 and guest.email="'.$this->email.'"')->one();
 
         //return var_dump($user->username);
         if ($user) {

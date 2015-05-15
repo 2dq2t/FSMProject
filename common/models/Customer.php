@@ -48,10 +48,11 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'gender', 'guest_id', 'created_at', 'address_id'], 'required'],
+            [['username', 'password', 'gender'], 'required'],
             [['username', 'password', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
+            [['dob', 'created_at', 'updated_at'], 'safe'],
             [['created_at', 'updated_at', 'status', 'guest_id', 'address_id'], 'integer'],
             [['gender'], 'string'],
             [['username', 'avatar'], 'string', 'max' => 255, 'min' => '6', 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
@@ -146,10 +147,10 @@ class Customer extends ActiveRecord implements IdentityInterface
             $customer = new Customer();
             $customer->username = $this->username;
             $customer->setPassword($this->password);
-            $customer->dob = $this->dob;
+            $customer->dob = strtotime($this->dob);
             $customer->gender = $this->gender;
-            $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
-            $customer->created_at = $time->format('Y-m-d H:i:s');
+            $customer->created_at = time();
+            $customer->guest_id = $this->guest_id;
             $customer->address_id = $this->address_id;
             if ($customer->save()) {
                 return $customer;

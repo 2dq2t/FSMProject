@@ -110,7 +110,7 @@ class CustomerController extends Controller
         }
 
         $modelCustomer = $this->findModel($id);
-        $modelGuest = Guest::find()->where(['customer_id' => $id])->one();
+        $modelGuest = Guest::find()->where(['id' => $modelCustomer->guest_id])->one();
         $modelAddress = Address::find()->where(['id' => $modelCustomer->address_id])->one();
         $modelWard = Ward::find()->where(['id' => $modelAddress->ward_id])->one();
         $modelDistrict = District::find()->where(['id' => $modelWard->district_id])->one();

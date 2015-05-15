@@ -208,22 +208,22 @@ class SiteController extends Controller
             && $modelGuest->load(Yii::$app->request->post())
             && $modelAddress->load(Yii::$app->request->post())){
 
+            //Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
-
             try {
-                if ($modelAddress->save()) {
+                //save to address and guest to database
+                if ($modelAddress->save() && $modelGuest->save()) {
+
+                    $modelCustomer->guest_id = $modelGuest->id;
                     $modelCustomer->address_id = $modelAddress->id;
 
-                    if ($user = $modelCustomer->register()) {
-                        $modelGuest->customer_id = $user->id;
-                        $modelGuest->save();
-
+                    if($user = $modelCustomer->register()){
                         $transaction->commit();
-
-                        if (Yii::$app->getUser()->login($user)) {
-                            return $this->goHome();
+                        if(Yii::$app->getUser()->login($user)){
+                            $this->goHome();
                         }
-                    }else{
+                    }
+                    else{
                         return $this->render('register', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,

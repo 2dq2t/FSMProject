@@ -103,7 +103,7 @@ use kartik\widgets\DepDrop;
                                 var month = document.getElementById('months');
                                 var day = document.getElementById('days');
                                 setDayDrop(year, month, day);
-                                document.getElementById("customer-dob").value = year.value + '-' + month.value + '-' + day.value;
+                                document.getElementById("customer-dob").value = month.value + '/' + day.value + '/' + year.value;
                             }
                             document.getElementById('years').onchange = setDay;
                             document.getElementById('months').onchange = setDay;
