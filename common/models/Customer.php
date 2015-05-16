@@ -163,13 +163,12 @@ class Customer extends ActiveRecord implements IdentityInterface
         if($this->validate()){
             $customer = Customer::findOne($customerId);
             $customer->username = $this->username;
-            $customer->dob = $this->dob;
+            $customer->dob = strtotime($this->dob);
             $customer->gender = $this->gender;
-            $time = new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh'));
-            $customer->updated_at = $time->format('Y-m-d H:i:s');
+            $customer->updated_at = time();
+            $customer->guest_id = $this->guest_id;
             $customer->address_id = $this->address_id;
             $customer->avatar = $this->avatar;
-
             if ($customer->save()) {
                 return $customer;
             }

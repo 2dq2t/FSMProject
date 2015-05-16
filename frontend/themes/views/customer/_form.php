@@ -18,17 +18,21 @@ if(isset($modelCustomer->avatar)) {
 
 ?>
 
-
-
 <div class="row">
     <div id="top-banner-and-menu">
         <div class="container">
-            <?php if(Yii::$app->session->hasFlash('successful')): ?>
-                <div id="w0-success-message" class="alert-success alert fade in">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <?= Yii::$app->session->getFlash('successful') ?>
-                </div>
-            <?php endif; ?>
+            <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+                <?php
+                echo Alert::widget([
+                    'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+                    'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+                    'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+                    'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+                    'showSeparator' => true,
+                    'delay' => 3000
+                ]);
+                ?>
+            <?php endforeach; ?>
             <!--BEGIN NAVBAR-->
             <div class="col-xs-12 col-sm-4 col-md-3 sidemenu-holder">
                 <div class="side-menu animate-dropdown">
@@ -144,12 +148,9 @@ if(isset($modelCustomer->avatar)) {
                             [
                                 'removeButton' => false,
                                 'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                                'language' => 'vi',
                                 'pluginOptions' => [
                                     'autoclose'=>true,
                                     'endDate' => '+0d',
-                                    'setDate' => date('yyyy-mm-dd'),
-                                    'format' => 'yyyy-mm-dd',
                                     'todayHighlight' => true
                                 ],
                                 'options' => ['class' => 'le-input'],

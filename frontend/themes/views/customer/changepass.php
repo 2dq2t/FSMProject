@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\alert\Alert;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CustomerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -9,10 +10,19 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="row">
     <div id="top-banner-and-menu">
-        <?php
-        Yii::$app->session->getFlash('success');
-        ?>
         <div class="container">
+            <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+                <?php
+                echo Alert::widget([
+                    'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+                    'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+                    'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+                    'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+                    'showSeparator' => true,
+                    'delay' => 3000
+                ]);
+                ?>
+            <?php endforeach; ?>
             <!--BEGIN NAVBAR-->
             <div class="col-xs-12 col-sm-4 col-md-3 sidemenu-holder">
                 <div class="side-menu animate-dropdown">
@@ -43,7 +53,7 @@ use yii\widgets\ActiveForm;
             </div><!--END NAVBAR-->
 
             <!--BEGIN CONTENT-->
-            <div class="col-md-9">
+            <div class="col-xs-12 col-sm-8 col-md-9 homebanner-holder">
                 <fieldset class="scheduler-border">
                     <?php $form = ActiveForm::begin(['id' => 'form-manage-acc', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1', 'enctype'=>'multipart/form-data']]); ?>
 

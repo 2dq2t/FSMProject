@@ -38,7 +38,9 @@ use yii\bootstrap\ActiveForm;
                 </div>
                 <!-- /.field-row -->
 
-                <?= $form->field($model, 'rememberMe')->checkbox()->label(Html::tag('span', 'Remember Me', ['class' => 'content-color bold'])) ?>
+                <div style="margin-left: -20px;">
+                    <?= $form->field($model, 'rememberMe')->checkbox()->label(Html::tag('span', 'Remember Me', ['class' => 'content-color bold'])) ?>
+                </div
                 <div class="form-group">
                     <div style="color:#999;margin:1em 0">
                         <span

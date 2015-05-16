@@ -1,4 +1,6 @@
 <?php
+use kartik\alert\Alert;
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 $this->title = 'My Yii Application';
 $baseUrl = Yii::$app->request->baseUrl;
@@ -8,6 +10,18 @@ include '_search.php';
 ?>
 <div id="top-banner-and-menu">
     <div class="container">
+        <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+            <?php
+            echo Alert::widget([
+                'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+                'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+                'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+                'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+                'showSeparator' => true,
+                'delay' => 3000
+            ]);
+            ?>
+        <?php endforeach; ?>
         <div class="col-xs-12 col-sm-4 col-md-3 sidemenu-holder">
             <!-- ================================== TOP NAVIGATION ================================== -->
             <div class="side-menu animate-dropdown">

@@ -18,6 +18,7 @@ use yii\helpers\JSon;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use yii\base\Exception;
+use kartik\alert\Alert;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -122,47 +123,55 @@ class CustomerController extends Controller
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($modelAddress->save()) {
+                if ($modelAddress->save() && $modelGuest->save()) {
 
                     $avatar = UploadedFile::getInstance($modelCustomer,'avatar');
 
                     if($avatar) {
                         $ext = $avatar->extension;
-
                         // generate a unique file name
                         $modelCustomer->avatar = Yii::$app->security->generateRandomString().".{$ext}";
-
-                        // the path to save file, you can set an uploadPath
-                        // in Yii::$app->params (as used in example below)
-//                        $path = Yii::$app->params['uploadPath'] . $model->avatar;
                     }else{
                         $modelCustomer->avatar = null;
                     }
 
-                    //return var_dump($modelCustomer->avatar);
-
                     $modelCustomer->address_id = $modelAddress->id;
+                    $modelCustomer->guest_id = $modelGuest->id;
                     if ($modelCustomer->UpdateCustomer($id)) {
 
                         // directory to save image in local
                         $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
                         FileHelper::removeDirectory($dir);
                         FileHelper::createDirectory($dir);
-                        // path to save database
-//                        $path = 'frontend/uploads/users/avatar/' . $model->id . '/';
                         if($avatar){
                             $avatar->saveAs($dir . '/' . $modelCustomer->avatar);
                         }
-                        $modelGuest->customer_id = $modelCustomer->id;
-                        $modelGuest->save();
 
                         $transaction->commit();
 
-                        Yii::$app->getSession()->setFlash('successful', 'User Record has been edited.');
+                        Yii::$app->getSession()->setFlash('successful', [
+                            'type' => Alert::TYPE_SUCCESS,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => Yii::t('app', 'Your Profile has been saved.'),
+                            'title' => Yii::t('app', 'Update Profile'),
+                        ]);
 
-                        return $this->redirect('index.php?r=customer/update&id='.Yii::$app->user->id.'');
+                        return $this->redirect(['update', 'id' => $modelCustomer->id]);
 
                     } else {
+
+                        $errors = $modelCustomer->getErrors();
+                        foreach($errors as $error) {
+                            Yii::$app->getSession()->setFlash('success', [
+                                'type' => Alert::TYPE_DANGER,
+                                'duration' => 3000,
+                                'icon' => 'fa fa-plus',
+                                'message' => $error[0],
+                                'title' => Yii::t('app', 'Update Profile'),
+                            ]);
+                        }
+
                         return $this->render('update', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
@@ -173,6 +182,18 @@ class CustomerController extends Controller
                         ]);
                     }
                 } else {
+
+                    $errors = $modelCustomer->getErrors();
+                    foreach($errors as $error) {
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => $error[0],
+                            'title' => Yii::t('app', 'Update Profile'),
+                        ]);
+                    }
+
                     return $this->render('update', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
@@ -184,8 +205,25 @@ class CustomerController extends Controller
                 }
             }catch (Exception $e){
                 $transaction->rollBack();
+
+                $errors = $modelCustomer->getErrors();
+                foreach($errors as $error) {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => $error[0],
+                        'title' => Yii::t('app', 'Update Profile'),
+                    ]);
+                }
             }
         }else{
+
+            if ($modelCustomer->dob) {
+                $modelCustomer->dob = date('m/d/Y', $modelCustomer->dob);
+            } else {
+                $modelCustomer->dob = NULL;
+            }
             return $this->render('update', [
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
@@ -206,15 +244,44 @@ class CustomerController extends Controller
                 if($modelCustomer->ChangePassword($id)){
                     $transaction->commit();
 
-                    Yii::$app->getSession()->setFlash('successful', 'Your password has been edited.');
+                    Yii::$app->getSession()->setFlash('successful', [
+                        'type' => Alert::TYPE_SUCCESS,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => Yii::t('app', 'Your password has been saved.'),
+                        'title' => Yii::t('app', 'Update Profile'),
+                    ]);
 
-                    return $this->redirect('index.php?r=customer/update&id='.Yii::$app->user->id.'');
+                    return $this->redirect(['update', 'id' => $modelCustomer->id]);
                 }else{
+
+                    $errors = $modelCustomer->getErrors();
+                    foreach($errors as $error) {
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => $error[0],
+                            'title' => Yii::t('app', 'Add User'),
+                        ]);
+                    }
+
                     return $this->render('changepass',[
                         'modelCustomer' => $modelCustomer,
                     ]);
                 }
             }catch (Exception $e){
+                $errors = $modelCustomer->getErrors();
+                foreach($errors as $error) {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => $error[0],
+                        'title' => Yii::t('app', 'Add User'),
+                    ]);
+                }
+
                 $transaction->rollBack();
             }
         }

@@ -22,6 +22,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\JSon;
+use kartik\alert\Alert;
 
 /**
  * Site controller
@@ -163,11 +164,23 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->getSession()->setFlash('successful', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Check your email for further instructions.'),
+                    'title' => Yii::t('app', 'Request password reset'),
+                ]);
 
                 return $this->goHome();
             } else {
-                Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                Yii::$app->getSession()->setFlash('successful', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Sorry, we are unable to reset password for email provided.'),
+                    'title' => Yii::t('app', 'Request password reset'),
+                ]);
             }
         }
 
@@ -185,7 +198,13 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
+            Yii::$app->getSession()->setFlash('successful', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'New password was saved.'),
+                'title' => Yii::t('app', 'Password reset'),
+            ]);
 
             return $this->goHome();
         }
