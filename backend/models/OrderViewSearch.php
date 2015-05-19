@@ -1,16 +1,16 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Order;
+use backend\models\OrderView;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * OrderViewSearch represents the model behind the search form about `backend\models\OrderView`.
  */
-class OrderSearch extends Order
+class OrderViewSearch extends OrderView
 {
     /**
      * @inheritdoc
@@ -18,9 +18,9 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'order_date', 'receiving_date', 'tax_amount', 'guest_id', 'order_status_id', 'address_id'], 'integer'],
+            [['id', 'order_date', 'receiving_date', 'tax_amount'], 'integer'],
+            [['customer_name', 'customer_phone_number', 'description', 'order_status'], 'safe'],
             [['shipping_fee', 'net_amount'], 'number'],
-            [['description'], 'safe'],
         ];
     }
 
@@ -42,7 +42,7 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::find();
+        $query = OrderView::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -63,12 +63,12 @@ class OrderSearch extends Order
             'shipping_fee' => $this->shipping_fee,
             'tax_amount' => $this->tax_amount,
             'net_amount' => $this->net_amount,
-            'guest_id' => $this->guest_id,
-            'order_status_id' => $this->order_status_id,
-            'address_id' => $this->address_id,
         ]);
 
-        $query->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
+            ->andFilterWhere(['like', 'customer_phone_number', $this->customer_phone_number])
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'order_status', $this->order_status]);
 
         return $dataProvider;
     }

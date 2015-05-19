@@ -21,6 +21,24 @@ $attributes = [
         'format' => 'raw',
     ],
     [
+        'attribute'=>'guest_id',
+        'label' => Yii::t('app', 'Full Name'),
+        'value'=>common\models\Guest::find()->where(['id' => $model->guest_id])->one()['full_name'],
+        'displayOnly'=>true
+    ],
+    [
+        'attribute'=>'guest_id',
+        'label' => Yii::t('app', 'Email'),
+        'value'=>common\models\Guest::find()->where(['id' => $model->guest_id])->one()['email'],
+        'displayOnly'=>true
+    ],
+    [
+        'attribute'=>'guest_id',
+        'label' => Yii::t('app', 'Phone Number'),
+        'value'=>common\models\Guest::find()->where(['id' => $model->guest_id])->one()['phone_number'],
+        'displayOnly'=>true
+    ],
+    [
         'attribute'=>'dob',
         'format'=>'raw',
         'value'=>date('m/d/Y', $model->dob),

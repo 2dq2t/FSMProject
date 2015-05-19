@@ -42,9 +42,9 @@ $attributes = [
         'displayOnly'=>true
     ],
     [
-        'attribute'=>'quantity',
+        'attribute'=>'quantity_in_stock',
         'format'=>'raw',
-        'value'=>$model->quantity,
+        'value'=>$model->quantity_in_stock,
         'displayOnly'=>true
     ],
     [
@@ -53,7 +53,7 @@ $attributes = [
         'value'=>$model->sold,
         'displayOnly'=>true
     ],
-	[
+    [
         'attribute'=>'tax',
         'format'=>'raw',
         'value'=>$model->tax,

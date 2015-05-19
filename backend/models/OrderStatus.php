@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Order;
 use Yii;
 
 /**
@@ -11,7 +12,7 @@ use Yii;
  * @property string $name
  * @property string $comment
  *
- * @property Order[] $orders
+ * @property \common\models\Order[] $orders
  */
 class OrderStatus extends \yii\db\ActiveRecord
 {

@@ -5,7 +5,6 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\OrderStatus;
 
 /**
  * OrderStatusSearch represents the model behind the search form about `backend\models\OrderStatus`.

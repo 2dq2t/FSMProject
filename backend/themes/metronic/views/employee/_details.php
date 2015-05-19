@@ -57,6 +57,13 @@ $attributes = [
         'displayOnly'=>true
     ],
     [
+        'attribute'=>'note',
+        'format'=>'raw',
+        'value'=>'<span class="text-justify"><em>' . $model->note . '</em></span>',
+        'type'=>DetailView::INPUT_TEXTAREA,
+        'options'=>['rows'=>4]
+    ],
+    [
         'attribute'=>'status',
         'format'=>'raw',
         'value'=>$model->status ?

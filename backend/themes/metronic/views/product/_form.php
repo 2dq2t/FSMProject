@@ -82,71 +82,75 @@ if(isset($images)) {
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-<!--                <form action="#">-->
-                    <div class="form-body">
-                        <div class="form-group">
-                            <?= $form->field($model, 'active')
-                                ->checkbox() ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'name',[
-                                'addon' => [
-                                    'append' => [
-                                        'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
-                                    ],
-                                ]])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'price',
-                                ['addon' => [
-                                    'append' => [
-                                        'content' => '<ins>đ</ins>'
-                                    ]
-                                ]])->textInput(['placeholder' => Yii::t('app', 'Enter product price..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'description')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
-                                'options' => ['row' => 3],
-                            ]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'intro')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
-                                'options' => ['row' => 3],
-                            ]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'quantity')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'tax')->textInput(['placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter product tags..')]) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'season_id')
-                                ->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(\common\models\Season::find()->where(['active' => 1])->all(), 'id', 'name'),
-                                    ['prompt'=>Yii::t('app', 'Select session of product')]
-                                ) ?>
-                        </div>
+                <!--                <form action="#">-->
+                <div class="form-body">
+                    <div class="form-group">
+                        <?= $form->field($model, 'barcode')->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
                     </div>
-                    <div class="form-actions">
-                        <div class="btn-set pull-right">
-                            <?php //echo $this->blocks['submit']; ?>
-                        </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'name',[
+                            'addon' => [
+                                'append' => [
+                                    'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
+                                ],
+                            ]])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
                     </div>
-<!--                </form>-->
+                    <div class="form-group">
+                        <?= $form->field($model, 'price',
+                            ['addon' => [
+                                'append' => [
+                                    'content' => '<ins>đ</ins>'
+                                ]
+                            ]])->textInput(['placeholder' => Yii::t('app', 'Enter product price..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'description')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
+                            'options' => ['row' => 3],
+                        ]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'intro')->widget(Zelenin\yii\widgets\Summernote\Summernote::className(), [
+                            'options' => ['row' => 3],
+                        ]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'quantity_in_stock')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'tax')->textInput(['placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter product tags..')]) ?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'product_seasons')->widget(\kartik\select2\Select2::className(), [
+                            'data' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
+                            'options' => [
+                                'placeholder' => 'Select season ...',
+                                'multiple' => true,
+                                'allowClear' => true
+                            ],
+                        ])?>
+                    </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'active')
+                            ->checkbox() ?>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="btn-set pull-right">
+                        <?php //echo $this->blocks['submit']; ?>
+                    </div>
+                </div>
+                <!--                </form>-->
                 <!-- END FORM-->
             </div>
         </div>
     </div>
+
     <div class="col-md-6 ">
         <!-- BEGIN SAMPLE FORM PORTLET-->
         <div class="portlet box green">

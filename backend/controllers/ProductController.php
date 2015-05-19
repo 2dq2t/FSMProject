@@ -3,10 +3,15 @@
 namespace backend\controllers;
 
 use common\models\Image;
+use common\models\Offer;
+use common\models\OrderDetails;
+use common\models\ProductSeason;
+use common\models\WishList;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
+use yii\base\Exception;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -27,6 +32,7 @@ class ProductController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'delete-all' => ['post']
                 ],
             ],
         ];
@@ -64,7 +70,7 @@ class ProductController extends Controller
             $posted = current($_POST['Product']);
             $post['Product'] = $posted;
 
-            $quantity = $model->quantity;
+            $quantity = $model->quantity_in_stock;
             // load model like any single model validation
             if ($model->load($post)) {
 
@@ -82,8 +88,8 @@ class ProductController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
-                } else if (isset($posted['quantity']) && $model->validate()) {
-                    if ($quantity > $posted['quantity']) {
+                } else if (isset($posted['quantity_in_stock']) && $model->validate()) {
+                    if ($quantity > $posted['quantity_in_stock']) {
                         $message = Yii::t('app', 'Quantity must be greater than ' . $quantity);
                     } else {
                         $model->save();
@@ -126,15 +132,13 @@ class ProductController extends Controller
     {
         $model = new Product();
         $productImages = new Image();
+        $product_seasons = new ProductSeason();
 
         $file = UploadedFile::getInstances($productImages, 'product_image');
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $product_seasons->load(Yii::$app->request->post())) {
 
             $model->create_date = strtotime('today');
-//            if ($model->sold === '') {
-//                $model->sold = 0;
-//            }
 
             if($model->save()) {
                 if ($file) {
@@ -161,6 +165,13 @@ class ProductController extends Controller
                     }
                 }
 
+                foreach($product_seasons->season_id as $product_season) {
+                    $product_seasons->product_id = $model->id;
+                    $product_seasons->season_id = $product_season;
+
+                    $product_seasons->save();
+                }
+
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 5000,
@@ -178,7 +189,7 @@ class ProductController extends Controller
             } else {
                 $errors = $model->getErrors();
                 foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('success', [
+                    Yii::$app->getSession()->setFlash('danger', [
                         'type' => Alert::TYPE_DANGER,
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
@@ -196,6 +207,7 @@ class ProductController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'productImages' => $productImages,
+                'product_seasons' => $product_seasons
             ]);
         }
     }
@@ -210,10 +222,13 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
         $productImages = new Image();
+        $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
+
+        foreach($product_seasons as $product_season) {
+            $model->product_seasons[] = $product_season->season_id;
+        }
 
         $images = Image::find()->where(['product_id' => $id])->all();
-
-//        $productImages->productImage = $images;
 
         $file = UploadedFile::getInstances($productImages, 'product_image');
 
@@ -247,6 +262,18 @@ class ProductController extends Controller
                 }
             }
 
+            foreach ($model->product_seasons as $product_season) {
+                $productseason = ProductSeason::find()->where(['season_id' => $product_season])->andWhere(['product_id' => $model->id])->one();
+                $productseason->delete();
+            }
+
+            foreach($product_seasons = Yii::$app->request->post('Product')['product_seasons'] as $season) {
+                $product_season = new ProductSeason();
+                $product_season->season_id = $season;
+                $product_season->product_id = $model->id;
+                $product_season->save();
+            }
+
             Yii::$app->getSession()->setFlash('success', [
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 5000,
@@ -261,6 +288,7 @@ class ProductController extends Controller
                 'model' => $model,
                 'productImages' => $productImages,
                 'images' => $images,
+                'product_seasons' => $product_seasons
             ]);
         }
     }
@@ -273,23 +301,80 @@ class ProductController extends Controller
      */
     public function actionDelete($id)
     {
-        $images = Image::find()->where(['product_id' => $id])->all();
-        foreach ($images as $image) {
-            $image->delete();
+        if (Product::find()->where(['category_id' => $id])->all()) {
+            Yii::$app->getSession()->setFlash('warning', [
+                'type' => Alert::TYPE_WARNING,
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => Html::encode('Product has one or more in order') . '</br>'
+                    . Html::encode('Do you wish to delete anywhere?')
+                    . Html::a(Yii::t('app','Delete all'), ['delete-all', 'id' => $id]  , ['class' => 'btn btn-primary alert-link']),
+                'title' => 'Delete Product'
+            ]);
+        } else {
+            $images = Image::find()->where(['product_id' => $id])->all();
+            foreach ($images as $image) {
+                $image->delete();
+            }
+
+            $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
+            FileHelper::removeDirectory($dir);
+
+            $this->findModel($id)->delete();
+
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => 'Product Record has been deleted.',
+                'title' => 'Delete Product'
+            ]);
         }
 
-        $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
-        FileHelper::removeDirectory($dir);
+        return $this->redirect(['index']);
+    }
 
-        $this->findModel($id)->delete();
+    public function actionDeleteAll($id) {
 
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
-            'duration' => 5000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Product has been deleted.'),
-            'title' => Yii::t('app', 'Delete Product'),
-        ]);
+        try {
+            $transaction = \Yii::$app->db->beginTransaction();
+            // delete all offer where product_id = product.id
+            Offer::deleteAll('product_id = :product_id', [':product_id' => $id]);
+
+            // delete all image of product
+            Image::deleteAll('product_id = :product_id', [':product_id' => $id]);
+
+            // delelte images folder
+            $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
+            FileHelper::removeDirectory($dir);
+
+            // delete wishlist
+            WishList::deleteAll('product_id = :product_id', [':product_id' => $id]);
+
+            // delete product in order details
+            OrderDetails::deleteAll('product_id = :product_id', ['product_id' => $id]);
+
+            // delete product season
+            ProductSeason::deleteAll('product_id = :product_id', ['product_id' => $id]);
+
+            // delete product
+            $this->findModel($id)->delete();
+
+            $transaction->commit();
+
+            $this->findModel($id)->delete();
+
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => 'Product Record has been deleted.',
+                'title' => 'Delete Product'
+            ]);
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw new Exception($e->getMessage());
+        }
 
         return $this->redirect(['index']);
     }

@@ -156,10 +156,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ];
 
-//    echo "<pre>";
-//    var_dump($dataProvider);
-//    echo "</pre>";
-//    return;
+    //    echo "<pre>";
+    //    var_dump($dataProvider);
+    //    echo "</pre>";
+    //    return;
 
     ?>
 
@@ -175,7 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
             '{toggleData}',
             '{export}',
         ],
-//        'pjax' => true,
+        'pjax' => true,
         'pjaxSettings'=>[
             'neverTimeout'=>true,
         ],

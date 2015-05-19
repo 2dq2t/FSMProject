@@ -14,7 +14,6 @@ use Yii;
  *
  * @property Customer[] $customers
  * @property Order[] $orders
- * @property ShoppingCart[] $shoppingCarts
  */
 class Guest extends \yii\db\ActiveRecord
 {
@@ -36,7 +35,6 @@ class Guest extends \yii\db\ActiveRecord
             [['phone_number'], 'integer'],
             [['full_name', 'email'], 'string', 'max' => 255],
             [['email'],'email'],
-            [['email'], 'unique'],
             [['phone_number'], 'string', 'max' => 15, 'min' => 11],
         ];
     }
@@ -68,13 +66,5 @@ class Guest extends \yii\db\ActiveRecord
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['guest_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getShoppingCarts()
-    {
-        return $this->hasMany(ShoppingCart::className(), ['guest_id' => 'id']);
     }
 }

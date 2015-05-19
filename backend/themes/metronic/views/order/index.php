@@ -19,9 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+            'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
             'showSeparator' => true,
-            'delay' => 3000
+            'options' => ['format' => 'raw']
         ]);
     }
     ?>
@@ -33,28 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
         [
-            'attribute' => 'user_id',
-            'value' => 'user.fullname',
-            'label' => 'Customer',
-//            'width' => '20%',
+            'attribute' => 'customer_name',
             'filterType'=>GridView::FILTER_SELECT2,
             'filter'=>\yii\helpers\ArrayHelper::map(\common\models\Guest::find()->orderBy('full_name')->asArray()->all(), 'full_name', 'full_name'),
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer username')],
+            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer name')],
             'format'=>'raw'
-        ],
-        [
-            'attribute' => 'order_status_id',
-            'filter'=>\yii\helpers\ArrayHelper::map(\backend\models\OrderStatus::find()->orderBy('title')->asArray()->all(), 'title', 'title'),
-            'filterWidgetOptions'=>[
-                'pluginOptions'=>['allowClear'=>true],
-            ],
         ],
         [
             'attribute' => 'order_date',
             'width' => '23%',
+            'value' => function ($model) {
+                return date('m/d/Y', $model->order_date);
+            },
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
                 'removeButton' => false,
@@ -62,14 +56,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pluginOptions' => [
                     'allowClear' => true,
                     'autoclose' => true,
-                    'endDate' => '+0d',
-                    'format'=>'yyyy-mm-dd',
                 ],
             ],
         ],
         [
             'attribute' => 'receiving_date',
             'width' => '23%',
+            'value' => function ($model) {
+                return date('m/d/Y', $model->receiving_date);
+            },
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
                 'removeButton' => false,
@@ -77,10 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pluginOptions' => [
                     'allowClear' => true,
                     'autoclose' => true,
-                    'endDate' => '+0d',
-                    'format'=>'yyyy-mm-dd',
                 ],
             ],
+        ],
+        [
+            'attribute' => 'order_status',
+            'filter' => \yii\helpers\ArrayHelper::map(\backend\models\OrderStatus::find()->all(), 'name', 'name'),
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
@@ -117,24 +114,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => $this->title,
             'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']),
         ],
-//            [
-//            ['class' => 'yii\grid\SerialColumn'],
-//
-//            'id',
-//            'order_date',
-//            'receiving_date',
-//            'shipping_fee',
-//            'discount',
-//            // 'tax_amount',
-//            // 'net_amount',
-//            // 'description:ntext',
-//            // 'user_id',
-//            // 'voucher_id',
-//            // 'address_id',
-//            // 'order_status_id',
-//
-//            ['class' => 'yii\grid\ActionColumn'],
-//        ],
     ]); ?>
 
 </div>

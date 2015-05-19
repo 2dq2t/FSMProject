@@ -16,13 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
+
         echo Alert::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+            'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
             'showSeparator' => true,
-            'delay' => 3000,
+            'options' => ['format' => 'raw']
         ]);
     }
     ?>
@@ -81,17 +83,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(
                         '<span class="glyphicon glyphicon-pencil"></span>', $url, ['id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
                 },
-                'delete' => function ($url, $model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>', $url, ['id' => 'modalLink', 'onclick' => 'javascript:void(0)', 'value' => $url]);
-                }
             ],
         ],
-
-//        [
-//            'class'=>'kartik\grid\CheckboxColumn',
-//            'headerOptions'=>['class'=>'kartik-sheet-style'],
-//        ],
     ];
 
     ?>
@@ -125,21 +118,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-</div>
-
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delelte
-            </div>
-            <div class="modal-body">
-                adsadas
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
-            </div>
-        </div>
-    </div>
 </div>

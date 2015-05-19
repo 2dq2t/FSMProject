@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use backend\models\OrderStatus;
 
 /**
  * This is the model class for table "order".
@@ -11,20 +13,19 @@ use Yii;
  * @property string $order_date
  * @property string $receiving_date
  * @property double $shipping_fee
- * @property double $discount
- * @property double $tax_amount
+ * @property string $tax_amount
  * @property double $net_amount
  * @property string $description
- * @property string $user_id
- * @property string $voucher_id
+ * @property string $guest_id
+ * @property integer $order_status_id
  * @property string $address_id
- * @property string $order_status_id
  *
  * @property Address $address
- * @property Guest $user
- * @property Voucher $voucher
- * @property OrderStatus $orderStatus
- * @property OrderDetail[] $orderDetails
+ * @property Guest $guest
+ * @property \backend\models\OrderStatus $orderStatus
+ * @property OrderDetails[] $orderDetails
+ * @property Product[] $products
+ * @property Voucher[] $vouchers
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -42,11 +43,11 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_date', 'receiving_date', 'shipping_fee', 'discount', 'tax_amount', 'net_amount', 'description', 'user_id', 'address_id', 'order_status_id'], 'required'],
+            [['order_date', 'receiving_date', 'shipping_fee', 'tax_amount', 'net_amount', 'description', 'guest_id', 'order_status_id', 'address_id'], 'required'],
+            [['tax_amount', 'guest_id', 'order_status_id', 'address_id'], 'integer'],
             [['order_date', 'receiving_date'], 'safe'],
-            [['shipping_fee', 'discount', 'tax_amount', 'net_amount'], 'number'],
-            [['description'], 'string'],
-            [['user_id', 'voucher_id', 'address_id', 'order_status_id'], 'integer']
+            [['shipping_fee', 'net_amount'], 'number'],
+            [['description'], 'string', 'max' => 255]
         ];
     }
 
@@ -60,14 +61,12 @@ class Order extends \yii\db\ActiveRecord
             'order_date' => Yii::t('app', 'Order Date'),
             'receiving_date' => Yii::t('app', 'Receiving Date'),
             'shipping_fee' => Yii::t('app', 'Shipping Fee'),
-            'discount' => Yii::t('app', 'Discount'),
             'tax_amount' => Yii::t('app', 'Tax Amount'),
             'net_amount' => Yii::t('app', 'Net Amount'),
             'description' => Yii::t('app', 'Description'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'voucher_id' => Yii::t('app', 'Voucher ID'),
-            'address_id' => Yii::t('app', 'Address ID'),
+            'guest_id' => Yii::t('app', 'Guest ID'),
             'order_status_id' => Yii::t('app', 'Order Status ID'),
+            'address_id' => Yii::t('app', 'Address ID'),
         ];
     }
 
@@ -82,17 +81,9 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getGuest()
     {
-        return $this->hasOne(Guest::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVoucher()
-    {
-        return $this->hasOne(Voucher::className(), ['id' => 'voucher_id']);
+        return $this->hasOne(Guest::className(), ['id' => 'guest_id']);
     }
 
     /**
@@ -108,6 +99,22 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getOrderDetails()
     {
-        return $this->hasMany(OrderDetail::className(), ['order_id' => 'id']);
+        return $this->hasMany(OrderDetails::className(), ['order_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('order_details', ['order_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVouchers()
+    {
+        return $this->hasMany(Voucher::className(), ['order_id' => 'id']);
     }
 }

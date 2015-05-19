@@ -21,6 +21,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

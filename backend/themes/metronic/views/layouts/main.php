@@ -44,6 +44,7 @@ AppAsset::register($this);
         <link id="style_color" href="metronic/assets/admin/css/themes/light.css" rel="stylesheet" type="text/css"/>
         <link href="metronic/assets/admin/css/custom.css" rel="stylesheet" type="text/css"/>
         <!-- END THEME STYLES -->
+        <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <link rel="shortcut icon" href="favicon.ico"/>
     </head>
     <!-- END HEAD -->
@@ -394,10 +395,10 @@ AppAsset::register($this);
     <!-- BEGIN PAGE LEVEL PLUGINS -->
     <script src="metronic/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
-<!--    <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
+    <!--    <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>-->
     <script src="metronic/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
     <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<!--    <script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
+    <!--    <script src="metronic/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
     <script src="metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
@@ -410,7 +411,6 @@ AppAsset::register($this);
     <script src="metronic/assets/global/scripts/metronic.js" type="text/javascript"></script>
     <script src="metronic/assets/admin/scripts/layout.js" type="text/javascript"></script>
     <script src="metronic/assets/pages/scripts/login.js" type="text/javascript"></script>
-    <script src="metronic/assets/pages/scripts/bootbox.min.js" type="text/javascript"></script>
     <!--<script src="metronic/assets/admin/scripts/demo.js" type="text/javascript"></script>-->
     <script>
         jQuery(document).ready(function() {
@@ -418,15 +418,6 @@ AppAsset::register($this);
             Layout.init(); // init current layout
             Login.init();
             $("input[name='quantity']").TouchSpin();
-            $('#confirm-delete').on('show.bs.modal', function(e) {
-                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-            });
-
-//            $('#deleteAction').on('click', function () {
-//                bootbox.confirm("dsadsa", function(e) {
-//                    $(this).find('#deleteAction').attr('href', $(e.relatedTarget).data('href'));
-//                })
-//            })
         });
     </script>
     <!-- END JAVASCRIPTS -->

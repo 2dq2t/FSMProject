@@ -124,6 +124,9 @@ if($model->image) {
                         <?= $form->field($model, 'email')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter email')]) ?>
                     </div>
                     <div class="form-group">
+                        <?= $form->field($model, 'note')->textarea(['rows' => 6, 'placeholder' => Yii::t('app', 'Enter note')]) ?>
+                    </div>
+                    <div class="form-group">
                         <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
                             'options' => ['placeholder' => Yii::t('app', 'Enter start date work..')],
                             'removeButton' => false,
@@ -260,7 +263,7 @@ if($model->image) {
                     </div>
                 </div>
                 <div class="form-actions right">
-<!--                    --><?php //echo $this->blocks['submit']; ?>
+                    <!--                    --><?php //echo $this->blocks['submit']; ?>
                 </div>
             </div>
         </div>

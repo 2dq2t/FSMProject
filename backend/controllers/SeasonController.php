@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\ProductSeason;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Season;
@@ -170,6 +171,7 @@ class SeasonController extends Controller
      */
     public function actionDelete($id)
     {
+        ProductSeason::deleteAll('season_id = :season_id', ['season_id' => $id]);
         $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [

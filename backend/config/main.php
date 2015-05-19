@@ -8,19 +8,19 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
-	'language' => 'En',
+    'language' => 'En',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-		'gridview' =>  [
-			'class' => '\kartik\grid\Module',
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
             'i18n' => [
                 'class' => 'yii\i18n\PhpMessageSource',
                 'basePath' => '@kvgrid/messages',
                 'forceTranslation' => true
             ]
-		],
+        ],
         'markdown' => [
             'class' => 'kartik\markdown\Module',
             // array the the internalization configuration for this module
@@ -30,7 +30,7 @@ return [
                 'forceTranslation' => true
             ]
         ]
-	],
+    ],
     'components' => [
         'user' => [
             'identityClass' => 'backend\models\Employee',
@@ -53,13 +53,20 @@ return [
                 'pathMap'=>[
                     '@app/views'=>'@app/themes/metronic/views'
                 ],
-                'baseUrl'=>'@web/themes/metronic',
+                'baseUrl'=>'@backend/themes/metronic',
             ]
         ],
-		'authManager' => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager',
-			'defaultRoles' => ['guest']
+            'defaultRoles' => ['guest']
         ],
+//        'assetManager' => [
+//            'bundles' => [
+//                'yii\bootstrap\BootstrapPluginAsset' => [
+//                    'js'=>[]
+//                ],
+//            ],
+//        ],
     ],
     'params' => $params,
 ];

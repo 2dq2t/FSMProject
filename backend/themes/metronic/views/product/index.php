@@ -90,17 +90,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'inputType' => \kartik\editable\Editable::INPUT_TEXT,
             ]
         ],
-        [
-            'attribute' => 'season_id',
-            'label' => Yii::t('app', 'Season'),
-            'value' => 'season.name',
-            'filter' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
-            'width' => '15%',
-            'pageSummary' => true,
-        ],
+//        [
+//            'attribute' => 'season_id',
+//            'label' => Yii::t('app', 'Season'),
+//            'value' => 'season.name',
+//            'filter' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
+//            'width' => '15%',
+//            'pageSummary' => true,
+//        ],
         [
             'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'quantity',
+            'attribute' => 'quantity_in_stock',
             'width' => '15%',
             'pageSummary' => true,
             'editableOptions'=>
@@ -156,22 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'kartik\grid\ActionColumn',
             'width' => '11%',
             'template' => '{update}&nbsp;&nbsp;&nbsp;&nbsp;{delete}',
-//            'buttons' => [
-//                'update' => function ($url,$model) {
-//                    return Html::a(
-//                        '<span class="fa fa-pencil btn btn-primary"></span>', $url, ['title' => Yii::t('yii', 'Edit'),'id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
-//                },
-//                'delete' => function ($url,$model) {
-//                    return Html::a(
-//                        '<span class="fa fa-trash btn btn-danger"></span>', $url, ['title' => Yii::t('yii', 'Delete'), 'id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
-//                }
-//            ],
         ],
-
-//        [
-//            'class'=>'kartik\grid\CheckboxColumn',
-//            'headerOptions'=>['class'=>'kartik-sheet-style'],
-//        ],
     ];
 
     ?>
