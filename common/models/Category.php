@@ -9,11 +9,14 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property integer $active
  *
  * @property Product[] $products
  */
 class Category extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     /**
      * @inheritdoc
      */
@@ -29,6 +32,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['active'], 'integer'],
             [['name'], 'string', 'max' => 150],
             [['name'], 'unique']
         ];
@@ -42,6 +46,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
+            'active' => Yii::t('app', 'Active'),
         ];
     }
 

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\Image;
 use common\models\Offer;
 use common\models\OrderDetails;
+use common\models\ProductRating;
 use common\models\ProductSeason;
 use common\models\WishList;
 use kartik\alert\Alert;
@@ -301,80 +302,17 @@ class ProductController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Product::find()->where(['category_id' => $id])->all()) {
-            Yii::$app->getSession()->setFlash('warning', [
-                'type' => Alert::TYPE_WARNING,
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => Html::encode('Product has one or more in order') . '</br>'
-                    . Html::encode('Do you wish to delete anywhere?')
-                    . Html::a(Yii::t('app','Delete all'), ['delete-all', 'id' => $id]  , ['class' => 'btn btn-primary alert-link']),
-                'title' => 'Delete Product'
-            ]);
-        } else {
-            $images = Image::find()->where(['product_id' => $id])->all();
-            foreach ($images as $image) {
-                $image->delete();
-            }
+        $product = $this->findModel($id);
+        $product->active = Product::STATUS_INACTIVE;
+        $product->save();
 
-            $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
-            FileHelper::removeDirectory($dir);
-
-            $this->findModel($id)->delete();
-
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => 'Product Record has been deleted.',
-                'title' => 'Delete Product'
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
-
-    public function actionDeleteAll($id) {
-
-        try {
-            $transaction = \Yii::$app->db->beginTransaction();
-            // delete all offer where product_id = product.id
-            Offer::deleteAll('product_id = :product_id', [':product_id' => $id]);
-
-            // delete all image of product
-            Image::deleteAll('product_id = :product_id', [':product_id' => $id]);
-
-            // delelte images folder
-            $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
-            FileHelper::removeDirectory($dir);
-
-            // delete wishlist
-            WishList::deleteAll('product_id = :product_id', [':product_id' => $id]);
-
-            // delete product in order details
-            OrderDetails::deleteAll('product_id = :product_id', ['product_id' => $id]);
-
-            // delete product season
-            ProductSeason::deleteAll('product_id = :product_id', ['product_id' => $id]);
-
-            // delete product
-            $this->findModel($id)->delete();
-
-            $transaction->commit();
-
-            $this->findModel($id)->delete();
-
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => 'Product Record has been deleted.',
-                'title' => 'Delete Product'
-            ]);
-        } catch (Exception $e) {
-            $transaction->rollBack();
-            throw new Exception($e->getMessage());
-        }
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-trash-o',
+            'message' => 'Product Record has been deleted.',
+            'title' => 'Delete Product'
+        ]);
 
         return $this->redirect(['index']);
     }

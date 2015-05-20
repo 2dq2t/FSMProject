@@ -9,12 +9,12 @@ use Yii;
  *
  * @property string $id
  * @property string $detail
- * @property string $ward_id
+ * @property string $district_id
  *
- * @property Ward $ward
+ * @property District $district
  * @property Customer[] $customers
+ * @property \backend\models\Employee[] $employees
  * @property Order[] $orders
- * @property Staff[] $staff
  */
 class Address extends \yii\db\ActiveRecord
 {
@@ -32,9 +32,9 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['detail', 'ward_id'], 'required'],
-            [['ward_id'], 'integer'],
-            [['detail'], 'string', 'max' => 100]
+            [['detail', 'district_id'], 'required'],
+            [['district_id'], 'integer'],
+            [['detail'], 'string', 'max' => 255]
         ];
     }
 
@@ -46,16 +46,16 @@ class Address extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'detail' => Yii::t('app', 'Detail'),
-            'ward_id' => Yii::t('app', 'Ward ID'),
+            'district_id' => Yii::t('app', 'District ID'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWard()
+    public function getDistrict()
     {
-        return $this->hasOne(Ward::className(), ['id' => 'ward_id']);
+        return $this->hasOne(District::className(), ['id' => 'district_id']);
     }
 
     /**
@@ -69,16 +69,16 @@ class Address extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrders()
+    public function getEmployees()
     {
-        return $this->hasMany(Order::className(), ['address_id' => 'id']);
+        return $this->hasMany(Employee::className(), ['address_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStaff()
+    public function getOrders()
     {
-        return $this->hasMany(Staff::className(), ['address_id' => 'id']);
+        return $this->hasMany(Order::className(), ['address_id' => 'id']);
     }
 }

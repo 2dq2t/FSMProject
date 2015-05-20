@@ -36,11 +36,42 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
         [
-            'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'name',
+        ],
+        [
+            'class' => \kartik\grid\EditableColumn::className(),
+            'attribute' => 'active',
+            'width' => '11%',
             'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-            ]
+                'data' => [
+                    0 =>  Yii::t('app', 'Inactive'),
+                    1 =>  Yii::t('app', 'Active'),
+                ],
+                'inputType' => 'dropDownList',
+                'placement' => 'left'
+            ],
+            'filter' => [
+                0 =>  Yii::t('app', 'Inactive'),
+                1 =>  Yii::t('app', 'Active'),
+            ],
+            'format' => 'raw',
+            'value' => function (\common\models\Category $model) {
+                if ($model === null || $model->active === null) {
+                    return null;
+                }
+                if ($model->active === 1) {
+                    $label_class = 'label-success';
+                    $value = 'Active';
+                } else {
+                    $value = 'Inactive';
+                    $label_class = 'label-default';
+                }
+                return \yii\helpers\Html::tag(
+                    'span',
+                    Yii::t('app', $value),
+                    ['class' => "label $label_class"]
+                );
+            },
         ],
         [
             'class' => 'kartik\grid\ActionColumn',

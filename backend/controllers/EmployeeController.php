@@ -119,7 +119,6 @@ class EmployeeController extends Controller
         $model = new Employee();
         $address = new Address();
         $district = new District();
-        $ward = new Ward();
         $city = new City();
         $model->scenario = 'adminCreate';
 
@@ -147,6 +146,7 @@ class EmployeeController extends Controller
                     $model->start_date = strtotime($model->start_date);
 
                     $model->address_id = $address->id;
+
                     if ($model->save()) {
                         // directory to save image in local
                         $dir = Yii::getAlias('@backend/web/uploads/employees/image/' . $model->id);
@@ -200,8 +200,6 @@ class EmployeeController extends Controller
                         return $this->render('create', [
                             'model' => $model,
                             'address' => $address,
-                            'ward' => $ward,
-                            'district' => $district,
                             'city' => $city,
                         ]);
                     }
@@ -229,8 +227,6 @@ class EmployeeController extends Controller
                     return $this->render('create', [
                         'model' => $model,
                         'address' => $address,
-                        'ward' => $ward,
-                        'district' => $district,
                         'city' => $city,
                     ]);
                 }
@@ -259,8 +255,6 @@ class EmployeeController extends Controller
                 return $this->render('create', [
                     'model' => $model,
                     'address' => $address,
-                    'ward' => $ward,
-                    'district' => $district,
                     'city' => $city,
                 ]);
             }
@@ -268,8 +262,6 @@ class EmployeeController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'address' => $address,
-                'ward' => $ward,
-                'district' => $district,
                 'city' => $city,
             ]);
         }
@@ -285,8 +277,7 @@ class EmployeeController extends Controller
     {
         $model = $this->findModel($id);
         $address = Address::find()->where(['id' => $model->address_id])->one();
-        $ward = Ward::find()->where(['id' => $address->ward_id])->one();
-        $district = District::find()->where(['id' => $ward->district_id])->one();
+        $district = District::find()->where(['id' => $address->district_id])->one();
         $city = City::find()->where(['id'=>$district->city_id])->one();
         $model->scenario = 'adminEdit';
 
@@ -377,8 +368,6 @@ class EmployeeController extends Controller
                         return $this->render('update', [
                             'model' => $model,
                             'address' => $address,
-                            'ward' => $ward,
-                            'district' => $district,
                             'city' => $city,
                         ]);
                     }
@@ -399,8 +388,6 @@ class EmployeeController extends Controller
                     return $this->render('update', [
                         'model' => $model,
                         'address' => $address,
-                        'ward' => $ward,
-                        'district' => $district,
                         'city' => $city,
                     ]);
                 }
@@ -422,8 +409,6 @@ class EmployeeController extends Controller
                 return $this->render('update', [
                     'model' => $model,
                     'address' => $address,
-                    'ward' => $ward,
-                    'district' => $district,
                     'city' => $city,
                 ]);
             }
@@ -431,8 +416,6 @@ class EmployeeController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'address' => $address,
-                'ward' => $ward,
-                'district' => $district,
                 'city' => $city,
             ]);
         }
@@ -448,7 +431,17 @@ class EmployeeController extends Controller
     {
 
         if ($this->findModel($id)->email !== Yii::$app->user->identity->email) {
-            $this->findModel($id)->delete();
+            $employee = $this->findModel($id);
+            $employee->status = Employee::STATUS_INACTIVE;
+            $employee->save();
+
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'Employee has been deleted.'),
+                'title' => Yii::t('app', 'Delete Employee'),
+            ]);
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => Alert::TYPE_DANGER,
@@ -503,39 +496,6 @@ class EmployeeController extends Controller
                     $city_id = $parents[0];
                     $out = District::getOptionsByDistrict($city_id);
                     echo Json::encode(['output' => $out, 'selected' => '']);
-                    return;
-                }
-            }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
-        }
-    }
-
-    public function actionGetward($id = null) {
-        if (isset($id)) {
-            $countWard= Ward::find()
-                ->where(['district_id' => $id])
-                ->count();
-
-            $wards = Ward::find()
-                ->where(['district_id' => $id])
-                ->all();
-
-            if($countWard>0){
-                foreach($wards as $ward){
-                    echo "<option value='".$ward->id."'>".$ward->name."</option>";
-                }
-            }
-            else{
-                echo "<option>-</option>";
-            }
-        } else {
-            if (isset($_POST['depdrop_parents'])) {
-                $ids = $_POST['depdrop_parents'];
-                $cat_id = empty($ids[0]) ? null : $ids[0];
-                $subcat_id = empty($ids[1]) ? null : $ids[1];
-                if ($cat_id != null && $subcat_id != null) {
-                    $data = Ward::getOptionsByWard($subcat_id);
-                    echo Json::encode(['output'=>$data, 'selected'=>'']);
                     return;
                 }
             }

@@ -194,8 +194,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                             $.post( "index.php?r=order/getdistrict&id="+$(this).val(), function( file ) {
                                                                 $( "select#district-id" ).length = 0;
                                                                 $( "select#district-id" ).html( file );
-                                                                var event = new Event("change");
-                                                                document.getElementById("district-id").dispatchEvent(event);
                                                         });'
                                     ]);
                             } else {
@@ -211,7 +209,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <div class="col-md-6">
                             <?php
                             if ($city->id) {
-                                echo $form->field($district, 'id', [
+                                echo $form->field($address, 'district_id', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])->dropDownList(
                                     \yii\helpers\ArrayHelper::map(
@@ -220,17 +218,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                             ->all(), 'id', 'name'),
                                     [
                                         'prompt'=>Yii::t('app', 'Select District'),
-                                        'onchange'=>'
-                                                    $.post( "index.php?r=order/getward&id="+$(this).val(), function( file ) {
-                                                        $( "select#address-ward_id" ).length = 0;
-                                                        $( "select#address-ward_id" ).html( file );
-                                                        var event = new Event("change");
-                                                        document.getElementById("address-ward_id").dispatchEvent(event);
-                                                    });'
                                     ]
                                 );
                             } else {
-                                echo $form->field($district, 'name', [
+                                echo $form->field($address, 'district_id', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])->widget(\kartik\widgets\DepDrop::classname(), [
                                     'options'=>['prompt' => Yii::t('app', 'Select District')],
@@ -244,36 +235,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             ?>
                         </div>
                         <div class="col-md-6">
-
-                            <?php
-
-                            if ($district->id) {
-                                echo $form->field($address, 'ward_id', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-4'>{input}{error}</div>"
-                                ])->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(
-                                        \common\models\Ward::find()
-                                            ->where(['district_id' => $district->id])
-                                            ->all(), 'id', 'name'),
-                                    ['prompt'=>Yii::t('app', 'Select Ward')]
-                                );
-                            } else {
-                                echo $form->field($address, 'ward_id', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->widget(\kartik\widgets\DepDrop::classname(), [
-                                    'options'=>['prompt' => Yii::t('app', 'Select Ward')],
-                                    'pluginOptions'=>[
-                                        'depends'=>[
-                                            Html::getInputId($city, 'id'),
-                                            Html::getInputId($district, 'name')
-                                        ],
-                                        'placeholder'=>Yii::t('app', 'Select Ward'),
-                                        'url'=>\yii\helpers\Url::to(['/order/getward'])
-                                    ]
-                                ]);
-                            }
-
-                            ?>
                         </div>
                     </div>
                     <h3 class="form-section">Product</h3>

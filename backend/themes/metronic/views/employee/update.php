@@ -17,8 +17,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <?= $this->render('_form', [
         'model' => $model,
         'address' => $address,
-        'ward' => $ward,
-        'district' => $district,
         'city' => $city,
     ]) ?>
 

@@ -18,7 +18,7 @@ class CategorySearch extends Category
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'active'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -33,7 +33,7 @@ class CategorySearch extends Category
     }
 
     /**
-     * Creates file provider instance with search query applied
+     * Creates data provider instance with search query applied
      *
      * @param array $params
      *
@@ -57,6 +57,7 @@ class CategorySearch extends Category
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'active' => $this->active,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

@@ -2,10 +2,7 @@
 
 namespace common\models;
 
-use nepstor\validators\DateTimeCompareValidator;
 use Yii;
-use yii\i18n\Formatter;
-use yii\validators\DateValidator;
 
 /**
  * This is the model class for table "voucher".
@@ -13,17 +10,18 @@ use yii\validators\DateValidator;
  * @property string $id
  * @property string $name
  * @property string $code
- * @property integer $discount
- * @property string $start_date
- * @property string $end_date
+ * @property string $discount
+ * @property integer $start_date
+ * @property integer $end_date
  * @property integer $active
- * @property string $voucher_type_id
+ * @property string $order_id
  *
- * @property Order[] $orders
- * @property VoucherType $voucherType
+ * @property Order $order
  */
 class Voucher extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     /**
      * @inheritdoc
      */
@@ -38,12 +36,10 @@ class Voucher extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'code', 'discount', 'start_date', 'end_date', 'voucher_type_id'], 'required'],
-            [['discount', 'active', 'voucher_type_id'], 'integer'],
-            [['start_date', 'end_date'], 'safe'],
+            [['name', 'code', 'discount', 'start_date', 'end_date', 'order_id'], 'required'],
+            [['discount', 'start_date', 'end_date', 'active', 'order_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['code'], 'string', 'max' => 32],
-            ['end_date', 'dateCompare']
+            [['code'], 'string', 'max' => 45]
         ];
     }
 
@@ -60,32 +56,15 @@ class Voucher extends \yii\db\ActiveRecord
             'start_date' => Yii::t('app', 'Start Date'),
             'end_date' => Yii::t('app', 'End Date'),
             'active' => Yii::t('app', 'Active'),
-            'voucher_type_id' => Yii::t('app', 'Voucher Type ID'),
+            'order_id' => Yii::t('app', 'Order ID'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrders()
+    public function getOrder()
     {
-        return $this->hasMany(Order::className(), ['voucher_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVoucherType()
-    {
-        return $this->hasOne(VoucherType::className(), ['id' => 'voucher_type_id']);
-    }
-
-    public function dateCompare($attribute, $params) {
-        $start_date = date($this->start_date);
-        $end_date = date($this->$attribute);
-
-        if ($end_date < $start_date) {
-            $this->addError('end_date', 'End date must be greater or equal than start date.');
-        }
+        return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 }

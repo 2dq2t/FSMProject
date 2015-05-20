@@ -137,7 +137,6 @@ AppAsset::register($this);
                 'marketing' => [
                     'product_offer',
                     'voucher',
-                    'vouchertype',
                     'offer',
                     'mail',
                 ],
@@ -253,9 +252,6 @@ AppAsset::register($this);
                             <ul class="sub-menu">
                                 <li class="<?= active('marketing', 'voucher') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-wallet"></i> Voucher', ['voucher/index']) ?>
-                                </li>
-                                <li class="<?= active('marketing', 'vouchertype') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-puzzle"></i> Voucher Type', ['vouchertype/index']) ?>
                                 </li>
                                 <li class="<?= active('marketing', 'offer') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-share-alt"></i> Product Offer', ['offer/index']) ?>

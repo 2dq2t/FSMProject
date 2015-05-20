@@ -82,7 +82,6 @@ class OrderController extends Controller
         $guest = new Guest();
         $address = new Address();
         $city = new City();
-        $district = new District();
         $order_details = [new OrderDetails()];
 
 //        $model->order_date = date('m/d/Y', $model->order_date);
@@ -183,7 +182,6 @@ class OrderController extends Controller
                     'guest' => $guest,
                     'address' => $address,
                     'city' => $city,
-                    'district' => $district,
                     'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
                 ]);
             }
@@ -193,7 +191,6 @@ class OrderController extends Controller
                 'guest' => $guest,
                 'address' => $address,
                 'city' => $city,
-                'district' => $district,
                 'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
             ]);
         }
@@ -210,8 +207,7 @@ class OrderController extends Controller
         $model = $this->findModel($id);
         $guest = Guest::find()->where(['id' => $model->guest_id])->one();
         $address = Address::find()->where(['id' => $model->address_id])->one();
-        $ward = Ward::find()->where(['id' => $address->ward_id])->one();
-        $district = District::find()->where(['id' => $ward->district_id])->one();
+        $district = District::find()->where(['id' => $address->district_id])->one();
         $city = City::find()->where(['id'=>$district->city_id])->one();
         $order_details = $model->orderDetails;
 
@@ -335,7 +331,6 @@ class OrderController extends Controller
                     'guest' => $guest,
                     'address' => $address,
                     'city' => $city,
-                    'district' => $district,
                     'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
                 ]);
             }
@@ -348,7 +343,6 @@ class OrderController extends Controller
                 'guest' => $guest,
                 'address' => $address,
                 'city' => $city,
-                'district' => $district,
                 'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
             ]);
         }
@@ -370,7 +364,7 @@ class OrderController extends Controller
                 'message' => Html::encode('Order has one or more order details') . '</br>'
                     . Html::encode('Do you wish to delete all?')
                     . Html::a(Yii::t('app',' Delete all'), ['delete-all', 'id' => $id]  , ['class' => 'btn btn-primary alert-link']),
-                'title' => 'Delete Season'
+                'title' => 'Delete Order'
             ]);
         } else {
 
@@ -396,6 +390,7 @@ class OrderController extends Controller
      */
     public function actionDeleteAll($id) {
         try {
+            $transaction = Yii::$app->db->beginTransaction();
             // delete all order_details where order_detail.order_id = $id
             OrderDetails::deleteAll('order_id = :order_id', [':order_id' => $id]);
 
@@ -403,6 +398,8 @@ class OrderController extends Controller
             Voucher::deleteAll('order_id = :order_id', [':order_id' => $id]);
 
             $this->findModel($id)->delete();
+
+            $transaction->commit();
 
             Yii::$app->getSession()->setFlash('success', [
                 'type' => Alert::TYPE_SUCCESS,
@@ -414,7 +411,14 @@ class OrderController extends Controller
 
             return $this->redirect(['index']);
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            $transaction->rollBack();
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => Alert::TYPE_DANGER,
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => 'Order delete errors. Errors: ' . $e->getMessage(),
+                'title' => 'Delete Order'
+            ]);
         }
     }
 
@@ -459,39 +463,6 @@ class OrderController extends Controller
                     $city_id = $parents[0];
                     $out = District::getOptionsByDistrict($city_id);
                     echo Json::encode(['output' => $out, 'selected' => '']);
-                    return;
-                }
-            }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
-        }
-    }
-
-    public function actionGetward($id = null) {
-        if (isset($id)) {
-            $countWard= Ward::find()
-                ->where(['district_id' => $id])
-                ->count();
-
-            $wards = Ward::find()
-                ->where(['district_id' => $id])
-                ->all();
-
-            if($countWard>0){
-                foreach($wards as $ward){
-                    echo "<option value='".$ward->id."'>".$ward->name."</option>";
-                }
-            }
-            else{
-                echo "<option>-</option>";
-            }
-        } else {
-            if (isset($_POST['depdrop_parents'])) {
-                $ids = $_POST['depdrop_parents'];
-                $cat_id = empty($ids[0]) ? null : $ids[0];
-                $subcat_id = empty($ids[1]) ? null : $ids[1];
-                if ($cat_id != null && $subcat_id != null) {
-                    $data = Ward::getOptionsByWard($subcat_id);
-                    echo Json::encode(['output'=>$data, 'selected'=>'']);
                     return;
                 }
             }

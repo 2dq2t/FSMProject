@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         'guest' => $guest,
         'address' => $address,
         'city' => $city,
-        'district' => $district,
         'order_details' => $order_details,
     ]) ?>
 

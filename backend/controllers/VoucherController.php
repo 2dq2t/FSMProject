@@ -171,7 +171,9 @@ class VoucherController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $voucher = $this->findModel($id);
+        $voucher->active = Voucher::STATUS_INACTIVE;
+        $voucher->save();
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => Alert::TYPE_SUCCESS,

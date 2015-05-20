@@ -68,7 +68,7 @@ use kartik\alert\Alert;
                         <?= $form->field($model, 'discount',[
                             'addon' => [
                                 'append' => [
-                                    'content' => Html::activeDropDownList($model, 'voucher_type_id', \yii\helpers\ArrayHelper::map(\backend\models\VoucherType::find()->all(), 'id', 'amount')),
+                                    'content' => '%',
                                 ],
                             ]])->textInput(['placeholder' => Yii::t('app', 'Enter voucher discount')]) ?>
                     </div>

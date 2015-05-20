@@ -9,12 +9,15 @@ use Yii;
  *
  * @property string $product_id
  * @property string $season_id
+ * @property integer $active
  *
  * @property Product $product
  * @property Season $season
  */
 class ProductSeason extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     /**
      * @inheritdoc
      */
@@ -30,7 +33,7 @@ class ProductSeason extends \yii\db\ActiveRecord
     {
         return [
             [['product_id', 'season_id'], 'required'],
-            [['product_id', 'season_id'], 'integer']
+            [['product_id', 'season_id', 'active'], 'integer']
         ];
     }
 
@@ -42,6 +45,7 @@ class ProductSeason extends \yii\db\ActiveRecord
         return [
             'product_id' => Yii::t('app', 'Product ID'),
             'season_id' => Yii::t('app', 'Season ID'),
+            'active' => Yii::t('app', 'Active'),
         ];
     }
 

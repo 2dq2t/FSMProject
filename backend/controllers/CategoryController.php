@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Customer;
 use common\models\Image;
 use common\models\Offer;
 use common\models\OrderDetails;
@@ -67,32 +68,25 @@ class CategoryController extends Controller
 
             // load model like any single model validation
             if ($model->load($post)) {
+                $output = '';
                 $message = '';
-                if($model->validate()) {
-                    // can save model or do something before saving model
-                    $model->save();
-                    // custom output to return to be displayed as the editable grid cell
-                    // file. Normally this is empty - whereby whatever value is edited by
-                    // in the input by user is updated automatically.
-                    $output = '';
 
-                    // specific use case where you need to validate a specific
-                    // editable column posted when you have more than one
-                    // EditableColumn in the grid view. We evaluate here a
-                    // check to see if buy_amount was posted for the Book model
-                    // if (isset($posted['buy_amount'])) {
-                    //    $output =  Yii::$app->formatter->asDecimal($model->buy_amount, 2);
-                    // }
-
-                    // similarly you can check if the name attribute was posted as well
-                    // if (isset($posted['name'])) {
-                    //   $output =  ''; // process as you need
-                    // }
+                if(isset($posted['active']) && $model->validate() && $model->save()) {
+                    if ($posted['active'] == 1) {
+                        $label_class = 'label-success';
+                        $value = 'Active';
+                    } else {
+                        $value = 'Inactive';
+                        $label_class = 'label-default';
+                    }
+                    $output = Html::tag(
+                        'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
+                    );
                 } else {
                     $message = $model->errors;
                 }
 
-                $out = Json::encode(['output'=>'', 'message'=>$message['name']]);
+                $out = Json::encode(['output'=>$output, 'message'=>$message]);
             }
             // return ajax json encoded response and exit
             echo $out;
@@ -185,76 +179,17 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Product::find()->where(['category_id' => $id])->all()) {
-            Yii::$app->getSession()->setFlash('warning', [
-                'type' => Alert::TYPE_WARNING,
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => Html::encode('Category has one or more product') . '</br>'
-                    . Html::encode('Do you wish to delete all?')
-                    . Html::a(Yii::t('app','Delete all'), ['delete-all', 'id' => $id]  , ['class' => 'btn btn-primary alert-link']),
-                'title' => 'Delete Category'
-            ]);
-        } else {
-            $this->findModel($id)->delete();
+        $category = $this->findModel($id);
+        $category->active = Category::STATUS_INACTIVE;
+        $category->save();
 
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => 'Category Record has been deleted.',
-                'title' => 'Delete Category'
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
-
-    public function actionDeleteAll($id) {
-
-        try {
-            $transaction = \Yii::$app->db->beginTransaction();
-            if ( $products = Product::find()->where(['category_id' => $id])->all()){
-                foreach ($products as $product) {
-                    // delete all offer where product_id = product.id
-                    Offer::deleteAll('product_id = :product_id', [':product_id' => $product->id]);
-
-                    // delete all image of product
-                    Image::deleteAll('product_id = :product_id', [':product_id' => $product->id]);
-
-                    // delelte images folder
-                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $product->id);
-                    FileHelper::removeDirectory($dir);
-
-                    // delete wishlist
-                    WishList::deleteAll('product_id = :product_id', [':product_id' => $product->id]);
-
-                    // delete product in order details
-                    OrderDetails::deleteAll('product_id = :product_id', ['product_id' => $product->id]);
-
-                    // delete product season
-                    ProductSeason::deleteAll('product_id = :product_id', ['product_id' => $product->id]);
-
-                    // delete product
-                    $product->delete();
-                }
-            }
-
-            $transaction->commit();
-
-            $this->findModel($id)->delete();
-
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => 'Season Record has been deleted.',
-                'title' => 'Delete Season'
-            ]);
-        } catch (Exception $e) {
-            $transaction->rollBack();
-            throw new Exception($e->getMessage());
-        }
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-trash-o',
+            'message' => 'Category Record has been deleted.',
+            'title' => 'Delete Category'
+        ]);
 
         return $this->redirect(['index']);
     }

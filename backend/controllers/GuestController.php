@@ -2,10 +2,17 @@
 
 namespace backend\controllers;
 
+use common\models\Customer;
+use common\models\Order;
+use common\models\OrderDetails;
+use common\models\Voucher;
+use common\models\WishList;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Guest;
 use common\models\GuestSearch;
+use yii\base\Exception;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,6 +29,7 @@ class GuestController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'delete-all' => ['post']
                 ],
             ],
         ];
@@ -121,7 +129,7 @@ class GuestController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+//        $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => Alert::TYPE_SUCCESS,

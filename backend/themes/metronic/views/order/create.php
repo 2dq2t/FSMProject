@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'guest' => $guest,
         'address' => $address,
         'city' => $city,
-        'district' => $district,
         'order_details' => $order_details,
     ]) ?>
 

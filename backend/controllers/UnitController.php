@@ -2,11 +2,19 @@
 
 namespace backend\controllers;
 
+use common\models\Image;
+use common\models\Offer;
+use common\models\OrderDetails;
+use common\models\Product;
+use common\models\ProductSeason;
+use common\models\WishList;
 use kartik\alert\Alert;
 use kartik\helpers\Html;
 use Yii;
 use common\models\Unit;
 use common\models\UnitSearch;
+use yii\base\Exception;
+use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -24,6 +32,7 @@ class UnitController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'delete-all' => ['post']
                 ],
             ],
         ];
@@ -172,7 +181,9 @@ class UnitController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $unit = $this->findModel($id);
+        $unit->active = Unit::STATUS_INACTIVE;
+        $unit->save();
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => Alert::TYPE_SUCCESS,

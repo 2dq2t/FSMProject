@@ -124,8 +124,6 @@ class CustomerController extends Controller
         $model->scenario = 'adminCreate';
         $guest = new Guest();
         $address = new Address();
-        $district = new District();
-        $ward = new Ward();
         $city = new City();
 
         // Load all file from post to model
@@ -219,8 +217,6 @@ class CustomerController extends Controller
                             'model' => $model,
                             'guest' => $guest,
                             'address' => $address,
-                            'ward' => $ward,
-                            'district' => $district,
                             'city' => $city,
                         ]);
                     }
@@ -251,8 +247,6 @@ class CustomerController extends Controller
                         'model' => $model,
                         'guest' => $guest,
                         'address' => $address,
-                        'ward' => $ward,
-                        'district' => $district,
                         'city' => $city,
                     ]);
                 }
@@ -284,8 +278,6 @@ class CustomerController extends Controller
                     'model' => $model,
                     'guest' => $guest,
                     'address' => $address,
-                    'ward' => $ward,
-                    'district' => $district,
                     'city' => $city,
                 ]);
             }
@@ -294,8 +286,6 @@ class CustomerController extends Controller
                 'model' => $model,
                 'guest' => $guest,
                 'address' => $address,
-                'ward' => $ward,
-                'district' => $district,
                 'city' => $city,
             ]);
         }
@@ -314,8 +304,7 @@ class CustomerController extends Controller
         $model->password = null;
         $guest = Guest::find()->where(['id' => $model->guest_id])->one();
         $address = Address::find()->where(['id' => $model->address_id])->one();
-        $ward = Ward::find()->where(['id' => $address->ward_id])->one();
-        $district = District::find()->where(['id' => $ward->district_id])->one();
+        $district = District::find()->where(['id' => $address->district_id])->one();
         $city = City::find()->where(['id'=>$district->city_id])->one();
 
         // Load all file from post to model
@@ -415,8 +404,6 @@ class CustomerController extends Controller
                             'model' => $model,
                             'guest' => $guest,
                             'address' => $address,
-                            'ward' => $ward,
-                            'district' => $district,
                             'city' => $city,
                         ]);
                     }
@@ -444,8 +431,6 @@ class CustomerController extends Controller
                         'model' => $model,
                         'guest' => $guest,
                         'address' => $address,
-                        'ward' => $ward,
-                        'district' => $district,
                         'city' => $city,
                     ]);
                 }
@@ -462,8 +447,6 @@ class CustomerController extends Controller
                 'model' => $model,
                 'guest' => $guest,
                 'address' => $address,
-                'ward' => $ward,
-                'district' => $district,
                 'city' => $city,
             ]);
         }
@@ -477,16 +460,18 @@ class CustomerController extends Controller
      */
     public function actionDelete($id)
     {
-        $guest = Guest::find()->where(['customer_id' => $id])->one();
-        $guest->delete();
         $customer = $this->findModel($id);
-        $customer->delete();
+        $customer->status = Customer::STATUS_INACTIVE;
+        $customer->save();
 
-        $address = Address::find()->where(['id' => $customer->address_id])->one();
-        $address->delete();
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-trash-o',
+            'message' => 'Customer has been deleted.',
+            'title' => Yii::t('app', 'Delete User'),
+        ]);
 
-        $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $id);
-        FileHelper::removeDirectory($dir);
 
         return $this->redirect(['index']);
     }
@@ -532,39 +517,6 @@ class CustomerController extends Controller
                     $city_id = $parents[0];
                     $out = District::getOptionsByDistrict($city_id);
                     echo Json::encode(['output' => $out, 'selected' => '']);
-                    return;
-                }
-            }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
-        }
-    }
-
-    public function actionGetward($id = null) {
-        if (isset($id)) {
-            $countWard= Ward::find()
-                ->where(['district_id' => $id])
-                ->count();
-
-            $wards = Ward::find()
-                ->where(['district_id' => $id])
-                ->all();
-
-            if($countWard>0){
-                foreach($wards as $ward){
-                    echo "<option value='".$ward->id."'>".$ward->name."</option>";
-                }
-            }
-            else{
-                echo "<option>-</option>";
-            }
-        } else {
-            if (isset($_POST['depdrop_parents'])) {
-                $ids = $_POST['depdrop_parents'];
-                $cat_id = empty($ids[0]) ? null : $ids[0];
-                $subcat_id = empty($ids[1]) ? null : $ids[1];
-                if ($cat_id != null && $subcat_id != null) {
-                    $data = Ward::getOptionsByWard($subcat_id);
-                    echo Json::encode(['output'=>$data, 'selected'=>'']);
                     return;
                 }
             }

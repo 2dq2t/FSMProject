@@ -11,8 +11,8 @@ use Yii;
  * @property string $name
  * @property string $city_id
  *
+ * @property Address[] $addresses
  * @property City $city
- * @property Ward[] $wards
  */
 class District extends \yii\db\ActiveRecord
 {
@@ -32,7 +32,7 @@ class District extends \yii\db\ActiveRecord
         return [
             [['name', 'city_id'], 'required'],
             [['city_id'], 'integer'],
-            [['name'], 'string', 'max' => 45]
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
@@ -51,17 +51,17 @@ class District extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCity()
+    public function getAddresses()
     {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
+        return $this->hasMany(Address::className(), ['district_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWards()
+    public function getCity()
     {
-        return $this->hasMany(Ward::className(), ['district_id' => 'id']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     //function get file from District Table
