@@ -12,10 +12,6 @@ use yii\helpers\Html;
     <?= $this->render('_form', [
         'modelCustomer' => $modelCustomer,
         'modelGuest' => $modelGuest,
-        'modelAddress' => $modelAddress,
-        'modelWard' => $modelWard,
-        'modelDistrict' => $modelDistrict,
-        'modelCity' => $modelCity,
     ]) ?>
 
 </div>

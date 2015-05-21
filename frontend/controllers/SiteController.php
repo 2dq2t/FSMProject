@@ -249,23 +249,16 @@ JS;
 
         $modelCustomer = new Customer();
         $modelGuest = new Guest();
-        $modelCity = new City();
-        $modelDistrict = new District();
-        $modelWard = new Ward();
-        $modelAddress = new Address();
 
         if($modelCustomer->load(Yii::$app->request->post())
-            && $modelGuest->load(Yii::$app->request->post())
-            && $modelAddress->load(Yii::$app->request->post())){
+            && $modelGuest->load(Yii::$app->request->post())){
 
             //Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                //save to address and guest to database
-                if ($modelAddress->save() && $modelGuest->save()) {
-
+                //save guest to database
+                if ($modelGuest->save()) {
                     $modelCustomer->guest_id = $modelGuest->id;
-                    $modelCustomer->address_id = $modelAddress->id;
 
                     if($user = $modelCustomer->register()){
                         $transaction->commit();
@@ -277,20 +270,12 @@ JS;
                         return $this->render('register', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
-                            'modelCity' => $modelCity,
-                            'modelDistrict' => $modelDistrict,
-                            'modelWard' => $modelWard,
-                            'modelAddress' => $modelAddress,
                         ]);
                     }
                 }else{
                     return $this->render('register', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
-                        'modelCity' => $modelCity,
-                        'modelDistrict' => $modelDistrict,
-                        'modelWard' => $modelWard,
-                        'modelAddress' => $modelAddress,
                     ]);
                 }
             }catch (Exception $e){
@@ -300,41 +285,8 @@ JS;
             return $this->render('register',[
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
-                'modelCity' => $modelCity,
-                'modelDistrict' => $modelDistrict,
-                'modelWard' => $modelWard,
-                'modelAddress' => $modelAddress,
             ]);
         }
 
-    }
-
-    public function actionSubcat() {
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $city_id = $parents[0];
-                $out = District::getOptionsByDistrict($city_id);
-                echo Json::encode(['output' => $out, 'selected' => '']);
-                return;
-            }
-        }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
-    }
-
-    public function actionProd() {
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-            $ids = $_POST['depdrop_parents'];
-            $cat_id = empty($ids[0]) ? null : $ids[0];
-            $subcat_id = empty($ids[1]) ? null : $ids[1];
-            if ($cat_id != null && $subcat_id != null) {
-                $data = Ward::getOptionsByWard($subcat_id);
-                echo Json::encode(['output'=>$data, 'selected'=>'']);
-                return;
-            }
-        }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 }

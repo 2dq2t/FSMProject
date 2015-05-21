@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use kartik\alert\Alert;
+use kartik\widgets\DepDrop;
+use common\models\City;
 /* @var $this yii\web\View */
 /* @var $model common\models\Customer */
 /* @var $form yii\widgets\ActiveForm */
@@ -155,69 +157,6 @@ if(isset($modelCustomer->avatar)) {
                                 ],
                                 'options' => ['class' => 'le-input'],
                             ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Số nhà / đường phố, thôn xóm</label>
-                        <?= $form->field($modelAddress, 'detail', [
-                            'inputOptions' => [
-                                'class' => 'le-input',
-                                'maxlength' => 100,
-                            ],
-                        ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-
-                    <div class="field-row">
-                        <label>Tỉnh / Thành Phố</label>
-                        <?php
-                        echo $form->field($modelCity, 'id')
-                            ->dropDownList(
-                                \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                [
-                                    'prompt'=>'- Chọn Tỉnh / Thành phố -',
-                                    'class'=>'le-select-address',
-                                    'onchange'=>'
-                                                    $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( data ) {
-                                                        $( "select#district-id" ).length = 0;
-                                                        $( "select#district-id" ).html( data );
-                                                    });'
-                                ])->label(false);
-                        ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Quận / Huyện</label>
-                        <?php
-                        echo $form->field($modelDistrict, 'id')->dropDownList(
-                            \yii\helpers\ArrayHelper::map(
-                                \common\models\District::find()
-                                    ->where(['city_id' => $modelCity->id])
-                                    ->all(), 'id', 'name'),
-                            [
-                                'prompt'=>'- Chọn Quận / Huyện -',
-                                'class'=>'le-select-address',
-                                'onchange'=>'
-                                                    $.post( "index.php?r=customer/getward&id="+$(this).val(), function( data ) {
-                                                        $( "select#address-ward_id" ).length = 0;
-                                                        $( "select#address-ward_id" ).html( data );
-                                                    });'
-                            ]
-                        )->label(false);
-                        ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Xã / Phường</label>
-                        <?php
-                        echo $form->field($modelAddress, 'ward_id')->dropDownList(
-                            \yii\helpers\ArrayHelper::map(
-                                \common\models\Ward::find()
-                                    ->where(['district_id' => $modelDistrict->id])
-                                    ->all(), 'id', 'name'),
-                            ['class'=>'le-select-address','prompt'=>'- Chọn Xã / Phường -']
-                        )->label(false);
-                        ?>
                     </div><!-- /.field-row -->
 
                     <div class="buttons-holder">

@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Customer;
 use common\models\Address;
-use common\models\Ward;
 use common\models\District;
 use common\models\City;
 use common\models\Guest;
@@ -112,18 +111,13 @@ class CustomerController extends Controller
 
         $modelCustomer = $this->findModel($id);
         $modelGuest = Guest::find()->where(['id' => $modelCustomer->guest_id])->one();
-        $modelAddress = Address::find()->where(['id' => $modelCustomer->address_id])->one();
-        $modelWard = Ward::find()->where(['id' => $modelAddress->ward_id])->one();
-        $modelDistrict = District::find()->where(['id' => $modelWard->district_id])->one();
-        $modelCity = City::find()->where(['id'=>$modelDistrict->city_id])->one();
 
-        if($modelAddress->load(Yii::$app->request->post())
-            && $modelCustomer->load(Yii::$app->request->post())
+        if($modelCustomer->load(Yii::$app->request->post())
             && $modelGuest->load(Yii::$app->request->post())){
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($modelAddress->save() && $modelGuest->save()) {
+                if ($modelGuest->save()) {
 
                     $avatar = UploadedFile::getInstance($modelCustomer,'avatar');
 
@@ -132,19 +126,17 @@ class CustomerController extends Controller
                         // generate a unique file name
                         $modelCustomer->avatar = Yii::$app->security->generateRandomString().".{$ext}";
                     }else{
-                        $modelCustomer->avatar = null;
+                        $modelCustomer->avatar = $modelCustomer->oldAttributes['avatar'];
                     }
 
-                    $modelCustomer->address_id = $modelAddress->id;
                     $modelCustomer->guest_id = $modelGuest->id;
                     if ($modelCustomer->UpdateCustomer($id)) {
-
-                        // directory to save image in local
-                        $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
-                        FileHelper::removeDirectory($dir);
-                        FileHelper::createDirectory($dir);
                         if($avatar){
-                            $avatar->saveAs($dir . '/' . $modelCustomer->avatar);
+                            // directory to save image in local
+                            $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
+                            FileHelper::removeDirectory($dir);
+                            FileHelper::createDirectory($dir);
+                                $avatar->saveAs($dir . '/' . $modelCustomer->avatar);
                         }
 
                         $transaction->commit();
@@ -175,10 +167,6 @@ class CustomerController extends Controller
                         return $this->render('update', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
-                            'modelAddress' => $modelAddress,
-                            'modelWard' => $modelWard,
-                            'modelDistrict' => $modelDistrict,
-                            'modelCity' => $modelCity,
                         ]);
                     }
                 } else {
@@ -197,10 +185,6 @@ class CustomerController extends Controller
                     return $this->render('update', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
-                        'modelAddress' => $modelAddress,
-                        'modelWard' => $modelWard,
-                        'modelDistrict' => $modelDistrict,
-                        'modelCity' => $modelCity,
                     ]);
                 }
             }catch (Exception $e){
@@ -227,10 +211,6 @@ class CustomerController extends Controller
             return $this->render('update', [
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
-                'modelAddress' => $modelAddress,
-                'modelWard' => $modelWard,
-                'modelDistrict' => $modelDistrict,
-                'modelCity' => $modelCity,
             ]);
         }
     }
@@ -291,69 +271,18 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function actionGetdistrict($id = null) {
-        if (isset($id)) {
-            $countDistrict= District::find()
-                ->where(['city_id' => $id])
-                ->count();
-
-            $districts = District::find()
-                ->where(['city_id' => $id])
-                ->all();
-
-            if($countDistrict>0){
-                foreach($districts as $district){
-                    echo "<option value='".$district->id."'>".$district->name."</option>";
-                }
+    public function actionSubcat() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out = District::getOptionsByDistrict($city_id);
+                echo Json::encode(['output' => $out, 'selected' => '']);
+                return;
             }
-            else{
-                echo "<option>-</option>";
-            }
-        } else {
-            if (isset($_POST['depdrop_parents'])) {
-                $parents = $_POST['depdrop_parents'];
-                if ($parents != null) {
-                    $city_id = $parents[0];
-                    $out = District::getOptionsByDistrict($city_id);
-                    echo Json::encode(['output' => $out, 'selected' => '']);
-                    return;
-                }
-            }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
         }
-    }
-
-    public function actionGetward($id = null) {
-        if (isset($id)) {
-            $countWard= Ward::find()
-                ->where(['district_id' => $id])
-                ->count();
-
-            $wards = Ward::find()
-                ->where(['district_id' => $id])
-                ->all();
-
-            if($countWard>0){
-                foreach($wards as $ward){
-                    echo "<option value='".$ward->id."'>".$ward->name."</option>";
-                }
-            }
-            else{
-                echo "<option>-</option>";
-            }
-        } else {
-            if (isset($_POST['depdrop_parents'])) {
-                $ids = $_POST['depdrop_parents'];
-                $cat_id = empty($ids[0]) ? null : $ids[0];
-                $subcat_id = empty($ids[1]) ? null : $ids[1];
-                if ($cat_id != null && $subcat_id != null) {
-                    $data = Ward::getOptionsByWard($subcat_id);
-                    echo Json::encode(['output'=>$data, 'selected'=>'']);
-                    return;
-                }
-            }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
-        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 
     /**

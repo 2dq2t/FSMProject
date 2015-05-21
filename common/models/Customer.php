@@ -51,7 +51,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'address_id'], 'required'],
+            [['username', 'password'], 'required'],
             [['username', 'password', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
 //            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
@@ -150,11 +150,8 @@ class Customer extends ActiveRecord implements IdentityInterface
             $customer = new Customer();
             $customer->username = $this->username;
             $customer->setPassword($this->password);
-            $customer->dob = strtotime($this->dob);
-            $customer->gender = $this->gender;
             $customer->created_at = time();
             $customer->guest_id = $this->guest_id;
-            $customer->address_id = $this->address_id;
             if ($customer->save()) {
                 return $customer;
             }
@@ -170,7 +167,6 @@ class Customer extends ActiveRecord implements IdentityInterface
             $customer->gender = $this->gender;
             $customer->updated_at = time();
             $customer->guest_id = $this->guest_id;
-            $customer->address_id = $this->address_id;
             $customer->avatar = $this->avatar;
             if ($customer->save()) {
                 return $customer;
