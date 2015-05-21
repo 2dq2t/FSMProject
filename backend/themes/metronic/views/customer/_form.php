@@ -23,26 +23,27 @@ if($model->avatar) {
 
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php
-    echo Alert::widget([
-        'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+    echo \kartik\alert\Alert::widget([
+        'type' => (!empty($message['type'])) ? $message['type'] : \kartik\alert\Alert::TYPE_DANGER,
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+        'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+        'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
         'showSeparator' => true,
-        'delay' => 3000
+        'options' => ['format' => 'raw']
     ]);
     ?>
 <?php endforeach; ?>
 
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
-    <?= Html::a(Yii::t('app', 'Back'), ['customer/index'], ['class' => 'btn default']) ?>
+    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['customer/index'], ['class' => 'btn btn-default btn-circle']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton('<i class="fa fa-check-circle"></i> ' . Yii::t('app', 'Save &amp; Continue'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-check"></i> ' . Yii::t('app', 'Create') : '<i class="fa fa-check"></i> ' . Yii::t('app', 'Update'), ['class' => 'btn green-haze btn-circle', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -220,24 +221,17 @@ if($model->avatar) {
                         <?php
 
                         if ($city->id) {
-                            echo $form->field($district, 'id')->dropDownList(
+                            echo $form->field($address, 'district_id')->dropDownList(
                                 \yii\helpers\ArrayHelper::map(
                                     \common\models\District::find()
                                         ->where(['city_id' => $city->id])
                                         ->all(), 'id', 'name'),
                                 [
                                     'prompt'=>Yii::t('app', 'Select District'),
-                                    'onchange'=>'
-                                            $.post( "index.php?r=customer/getward&id="+$(this).val(), function( file ) {
-                                                $( "select#address-ward_id" ).length = 0;
-                                                $( "select#address-ward_id" ).html( file );
-                                                var event = new Event("change");
-                                                document.getElementById("address-ward_id").dispatchEvent(event);
-                                            });'
                                 ]
                             );
                         } else {
-                            echo $form->field($district, 'name')->widget(\kartik\widgets\DepDrop::classname(), [
+                            echo $form->field($address, 'district_id')->widget(\kartik\widgets\DepDrop::classname(), [
                                 'options'=>['prompt' => Yii::t('app', 'Select District')],
                                 'pluginOptions'=>[
                                     'depends'=>[Html::getInputId($city, 'id')],
@@ -250,32 +244,6 @@ if($model->avatar) {
                         ?>
                     </div>
                     <div class="form-group">
-
-                        <?php
-
-                        if ($district->id) {
-                            echo $form->field($address, 'ward_id')->dropDownList(
-                                \yii\helpers\ArrayHelper::map(
-                                    \common\models\Ward::find()
-                                        ->where(['district_id' => $district->id])
-                                        ->all(), 'id', 'name'),
-                                ['prompt'=>Yii::t('app', 'Select Ward')]
-                            );
-                        } else {
-                            echo $form->field($address, 'ward_id')->widget(\kartik\widgets\DepDrop::classname(), [
-                                'options'=>['prompt' => Yii::t('app', 'Select Ward')],
-                                'pluginOptions'=>[
-                                    'depends'=>[
-                                        Html::getInputId($city, 'id'),
-                                        Html::getInputId($district, 'name')
-                                    ],
-                                    'placeholder'=>Yii::t('app', 'Select Ward'),
-                                    'url'=>\yii\helpers\Url::to(['/customer/getward'])
-                                ]
-                            ]);
-                        }
-
-                        ?>
 
                     </div>
                 </div>

@@ -14,13 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
-        echo Alert::widget([
-            'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+        echo \kartik\alert\Alert::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : \kartik\alert\Alert::TYPE_DANGER,
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
             'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!',
+            'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
             'showSeparator' => true,
-            'delay' => 3000
+            'options' => ['format' => 'raw']
         ]);
     }
     ?>

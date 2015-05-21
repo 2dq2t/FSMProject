@@ -118,7 +118,6 @@ class EmployeeController extends Controller
     {
         $model = new Employee();
         $address = new Address();
-        $district = new District();
         $city = new City();
         $model->scenario = 'adminCreate';
 
@@ -347,62 +346,18 @@ class EmployeeController extends Controller
                             default:
                                 return $this->redirect(['index']);
                         }
-                    } else {
-                        // if save to user error return create page
-//                        $model->password = $password_return;
-//                        $model->re_password = $re_password_return;
-                        // get errors
-                        $errors = $model->getErrors();
-                        foreach($errors as $error) {
-                            Yii::$app->getSession()->setFlash('success', [
-                                'type' => Alert::TYPE_DANGER,
-                                'duration' => 3000,
-                                'icon' => 'fa fa-plus',
-                                'message' => $error[0],
-                                'title' => Yii::t('app', 'Edit Employee'),
-                            ]);
-                        }
-
-                        $model->password = null;
-
-                        return $this->render('update', [
-                            'model' => $model,
-                            'address' => $address,
-                            'city' => $city,
-                        ]);
                     }
-                } else {
-                    $errors = $address->getErrors();
-                    foreach($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
-                            'icon' => 'fa fa-plus',
-                            'message' => $error[0],
-                            'title' => Yii::t('app', 'Edit Employee'),
-                        ]);
-                    }
-
-                    $model->password = null;
-
-                    return $this->render('update', [
-                        'model' => $model,
-                        'address' => $address,
-                        'city' => $city,
-                    ]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
-                $errors = $address->getErrors();
-                foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('error', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => $error[0],
-                        'title' => Yii::t('app', 'Edit Employee'),
-                    ]);
-                }
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => $e->getMessage(),
+                    'title' => Yii::t('app', 'Edit Employee'),
+                ]);
 
                 $model->password = null;
 

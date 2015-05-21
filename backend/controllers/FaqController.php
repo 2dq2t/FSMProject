@@ -171,7 +171,10 @@ class FaqController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $faq = $this->findModel($id);
+        $faq->active = Faq::STATUS_INACTIVE;
+        $faq->save();
+
         Yii::$app->getSession()->setFlash('success', [
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,

@@ -77,12 +77,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+            'template' => '{update}&nbsp;{delete}&nbsp;{view-products}',
             'buttons' => [
                 'update' => function ($url,$model) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-pencil"></span>', $url, ['id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
                 },
+                'view-products' => function($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                        'title' => Yii::t('app', 'View all product in season'),
+                    ]);
+                }
             ],
         ],
     ];

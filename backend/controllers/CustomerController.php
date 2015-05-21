@@ -188,67 +188,7 @@ class CustomerController extends Controller
                             default:
                                 return $this->redirect(['index']);
                         }
-                    } else {
-                        // if save to user error return create page
-//                        $model->password = $password_return;
-//                        $model->re_password = $re_password_return;
-                        if ($model->dob != '') {
-                            $model->dob = date('m/d/Y', $model->dob);
-                        }
-
-                        if($model->created_at != '') {
-                            $model->created_at = date('m/d/Y', $model->created_at);
-                        }
-                        // get errors
-                        $errors = $model->getErrors();
-                        foreach($errors as $error) {
-                            Yii::$app->getSession()->setFlash('success', [
-                                'type' => Alert::TYPE_DANGER,
-                                'duration' => 3000,
-                                'icon' => 'fa fa-plus',
-                                'message' => $error[0],
-                                'title' => Yii::t('app', 'Add User'),
-                            ]);
-                        }
-
-                        $model->password = null;
-
-                        return $this->render('create', [
-                            'model' => $model,
-                            'guest' => $guest,
-                            'address' => $address,
-                            'city' => $city,
-                        ]);
                     }
-                } else {
-                    if ($model->dob != '') {
-                        $model->dob = date('m/d/Y', $model->dob);
-                    }
-
-                    if($model->created_at != '') {
-                        $model->created_at = date('m/d/Y', $model->created_at);
-                    }
-
-                    // get errors
-                    $errors = $address->getErrors();
-                    foreach($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
-                            'icon' => 'fa fa-plus',
-                            'message' => $error[0],
-                            'title' => Yii::t('app', 'Add User'),
-                        ]);
-                    }
-
-                    $model->password = null;
-
-                    return $this->render('create', [
-                        'model' => $model,
-                        'guest' => $guest,
-                        'address' => $address,
-                        'city' => $city,
-                    ]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -261,16 +201,13 @@ class CustomerController extends Controller
                     $model->created_at = date('m/d/Y', $model->created_at);
                 }
 
-                $errors = $address->getErrors();
-                foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => $error[0],
-                        'title' => Yii::t('app', 'Add User'),
-                    ]);
-                }
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => $e->getMessage(),
+                    'title' => Yii::t('app', 'Add User'),
+                ]);
 
                 $model->password = null;
 
@@ -379,63 +316,33 @@ class CustomerController extends Controller
                         ]);
 
                         return $this->redirect(['index']);
-                    } else {
-                        if ($model->dob) {
-                            $model->dob = date('m/d/Y', $model->dob);
-                        } else {
-                            $model->dob = NULL;
-                        }
-
-                        $model->password = NULL;
-
-                        // get errors
-                        $errors = $model->getErrors();
-                        foreach($errors as $error) {
-                            Yii::$app->getSession()->setFlash('success', [
-                                'type' => Alert::TYPE_DANGER,
-                                'duration' => 3000,
-                                'icon' => 'fa fa-pencil',
-                                'message' => $error[0],
-                                'title' => Yii::t('app', 'Edit User'),
-                            ]);
-                        }
-
-                        return $this->render('update', [
-                            'model' => $model,
-                            'guest' => $guest,
-                            'address' => $address,
-                            'city' => $city,
-                        ]);
                     }
-                } else {
-                    if ($model->dob) {
-                        $model->dob = date('m/d/Y', $model->dob);
-                    } else {
-                        $model->dob = NULL;
-                    }
-
-                    $model->password = NULL;
-
-                    $errors = $address->getErrors();
-                    foreach($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
-                            'icon' => 'fa fa-pencil',
-                            'message' => $error[0],
-                            'title' => Yii::t('app', 'Edit User'),
-                        ]);
-                    }
-
-                    return $this->render('update', [
-                        'model' => $model,
-                        'guest' => $guest,
-                        'address' => $address,
-                        'city' => $city,
-                    ]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
+
+                if ($model->dob) {
+                    $model->dob = date('m/d/Y', $model->dob);
+                } else {
+                    $model->dob = NULL;
+                }
+
+                $model->password = NULL;
+
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => $e->getMessage(),
+                    'title' => Yii::t('app', 'Edit User'),
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                    'guest' => $guest,
+                    'address' => $address,
+                    'city' => $city,
+                ]);
             }
         } else {
             if ($model->dob) {

@@ -131,6 +131,9 @@ AppAsset::register($this);
                 'employees' => [
                     'employee'
                 ],
+                'authitems' => [
+                    'authitem'
+                ],
                 'faqs' => [
                     'faq'
                 ],
@@ -229,6 +232,12 @@ AppAsset::register($this);
                             <a href="index.php?r=employee%2Findex">
                                 <i class="icon-book-open"></i>
                                 <span class="title">Employee</span>
+                            </a>
+                        </li>
+                        <li class="<?= active('authitems', 'authitem') ? 'active' : '' ?>">
+                            <a href="index.php?r=authitem%2Findex">
+                                <i class="icon-energy"></i>
+                                <span class="title">Permissions</span>
                             </a>
                         </li>
                         <li class="<?= active('slideshow', 'slideshow') ? 'active' : '' ?>">

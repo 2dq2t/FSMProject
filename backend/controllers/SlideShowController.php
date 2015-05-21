@@ -219,11 +219,17 @@ class SlideShowController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        $dir = Yii::getAlias('@frontend/web/uploads/slideshow/' . $id);
-        if (file_exists($dir)) {
-            FileHelper::removeDirectory($dir);
-        }
+        $slideshow = $this->findModel($id);
+        $slideshow->active = SlideShow::STATUS_INACTIVE;
+        $slideshow->save();
+
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-pencil',
+            'message' => Yii::t('app', 'Slide show has been deleted.'),
+            'title' => Yii::t('app', 'Delete Slide show'),
+        ]);
 
         return $this->redirect(['index']);
     }

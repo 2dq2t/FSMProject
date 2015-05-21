@@ -13,11 +13,12 @@ use kartik\alert\Alert;
     <?php
     echo Alert::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
         'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+        'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+        'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
         'showSeparator' => true,
-        'delay' => 3000
+        'options' => ['format' => 'raw']
     ]);
     ?>
 <?php endforeach; ?>
@@ -25,13 +26,13 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a(Yii::t('app', 'Back'), ['offer/index'], ['class' => 'btn default']) ?>
+    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['offer/index'], ['class' => 'btn btn-default btn-circle']) ?>
 
     <?php if ($model->isNewRecord): ?>
-        <?= Html::submitButton(Yii::t('app', 'Save & Go next'), ['class' => 'btn btn-success', 'name' => 'action', 'value' => 'next']) ?>
+        <?= Html::submitButton('<i class="fa fa-check-circle"></i> ' . Yii::t('app', 'Save &amp; Continue'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'next']) ?>
     <?php endif; ?>
 
-    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'action' , 'value' => 'save']) ?>
+    <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-check"></i> ' . Yii::t('app', 'Create') : '<i class="fa fa-check"></i> ' . Yii::t('app', 'Update'), ['class' => 'btn green-haze btn-circle', 'name' => 'action' , 'value' => 'save']) ?>
 
 </div>
 <?php $this->endBlock('submit'); ?>
@@ -75,11 +76,11 @@ use kartik\alert\Alert;
                             'options' => ['placeholder' => Yii::t('app', 'Enter start date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                            'language' => 'vi',
+//                            'language' => 'vi',
                             'pluginOptions' => [
                                 'autoclose'=>true,
                                 'todayHighlight' => true,
-                                'format' => 'yyyy-mm-dd',
+//                                'format' => 'yyyy-mm-dd',
                             ]
                         ]); ?>
                     </div>
@@ -88,17 +89,13 @@ use kartik\alert\Alert;
                             'options' => ['placeholder' => Yii::t('app', 'Enter end date ...')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                            'language' => 'vi',
+//                            'language' => 'vi',
                             'pluginOptions' => [
                                 'autoclose'=>true,
                                 'todayHighlight' => true,
-                                'format' => 'yyyy-mm-dd',
+//                                'format' => 'yyyy-mm-dd',
                             ],
                         ]); ?>
-                    </div>
-                    <div class="form-group">
-                        <?= $form->field($model, 'active')
-                            ->checkbox() ?>
                     </div>
                 </div>
                 <div class="form-actions">

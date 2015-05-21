@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use kartik\alert\Alert;
 use Yii;
 use common\models\Offer;
 use common\models\OfferSearch;
@@ -115,8 +116,42 @@ class OfferController extends Controller
     {
         $model = new Offer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->start_date = strtotime($model->start_date);
+            $model->end_date = strtotime($model->end_date);
+
+            if ($$model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Offer has been add.'),
+                    'title' => Yii::t('app', 'Add Offer')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                if ($model->start_date != '') {
+                    $model->start_date = date('m/d/Y', $model->start_date);
+                }
+
+                if($model->end_date != '') {
+                    $model->end_date = date('m/d/Y', $model->end_date);
+                }
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => 'Create Offer error. ' . $model->errors,
+                    'title' => Yii::t('app', 'Add Offer')
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -134,8 +169,44 @@ class OfferController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        $model->start_date = date('m/d/Y', $model->start_date);
+        $model->end_date = date('m/d/Y', $model->end_date);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->start_date = strtotime($model->start_date);
+            $model->end_date = strtotime($model->end_date);
+
+            if ( $model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Offer has been edited.'),
+                    'title' => Yii::t('app', 'Update Offer')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                if($model->start_date != '') {
+                    $model->start_date = date('m/d/Y', $model->start_date);
+                }
+
+                if($model->end_date != '') {
+                    $model->end_date = date('m/d/Y', $model->end_date);
+                }
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => 'Update Offer error. ' . $model->errors,
+                    'title' => Yii::t('app', 'Update Offer')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -151,7 +222,17 @@ class OfferController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $offer = $this->findModel($id);
+        $offer->active = Offer::STATUS_INACTIVE;
+        $offer->save();
+
+        Yii::$app->getSession()->setFlash('success', [
+            'type' => Alert::TYPE_SUCCESS,
+            'duration' => 3000,
+            'icon' => 'fa fa-plus',
+            'message' => Yii::t('app', 'Offer has been deleted.'),
+            'title' => Yii::t('app', 'Delete Offer')
+        ]);
 
         return $this->redirect(['index']);
     }

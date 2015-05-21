@@ -147,15 +147,46 @@ class VoucherController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Voucher has been edited.'),
-                'title' => Yii::t('app', 'Update Voucher')
-            ]);
-            return $this->redirect(['index']);
+        $model->start_date = date('m/d/Y', $model->start_date);
+        $model->end_date = date('m/d/Y', $model->end_date);
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->start_date = strtotime($model->start_date);
+            $model->end_date = strtotime($model->end_date);
+
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Voucher has been edited.'),
+                    'title' => Yii::t('app', 'Update Voucher')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                if ($model->start_date != '') {
+                    $model->start_date = date('m/d/Y', $model->start_date);
+                }
+
+                if($model->end_date != '') {
+                    $model->end_date = date('m/d/Y', $model->end_date);
+                }
+
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Update Voucher errors. ') . $model->errors,
+                    'title' => Yii::t('app', 'Update Voucher')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+
+
         } else {
             return $this->render('update', [
                 'model' => $model,
