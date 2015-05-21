@@ -78,7 +78,6 @@ $baseUrl = Yii::$app->request->baseUrl;
         <?= Alert::widget() ?>
         <?= $content ?>
 
-    <?php $this->endBody() ?>
 
     <!-- ========================================= TOP BRANDS : END ========================================= -->		<!-- ============================================================= FOOTER ============================================================= -->
 
@@ -188,5 +187,14 @@ $baseUrl = Yii::$app->request->baseUrl;
 <!-- For demo purposes – can be removed on production : End -->
 
 </body>
+<?php $this->endBody() ?>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=634388566665365";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 </html>
 <?php $this->endPage() ?>

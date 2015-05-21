@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
 		'mediacenter/assets/css/google.font.family.css',
 		'mediacenter/assets/css/font-awesome.min.css',
         'mediacenter/assets/css/prettyPhoto.css',
+        'mediacenter/assets/css/jquery.raty.css',
 		'mediacenter/assets/images/favicon.ico',
     ];
     public $js = [
@@ -41,7 +42,7 @@ class AppAsset extends AssetBundle
 		'mediacenter/assets/js/echo.min.js',
 		'mediacenter/assets/js/jquery.easing-1.3.min.js',
 		'mediacenter/assets/js/bootstrap-slider.min.js',
-		'mediacenter/assets/js/jquery.raty.min.js',
+		'mediacenter/assets/js/jquery.raty.js',
 		'mediacenter/assets/js/jquery.prettyPhoto.min.js',
 		'mediacenter/assets/js/jquery.customSelect.min.js',
         'mediacenter/assets/js/respond.min.js',

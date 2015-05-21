@@ -6,6 +6,7 @@ use common\models\District;
 use common\models\Guest;
 use common\models\Customer;
 use common\models\Product;
+use common\models\Season;
 use common\models\Ward;
 use common\models\Address;
 use Yii;
@@ -92,27 +93,57 @@ class SiteController extends Controller
             ],
         ]);
         $product = $provider->getModels();
+        $newProduct = Product::find()->where(['active'=>'1'])->orderBy(['id'=>SORT_DESC])->limit(5)->all();
+        $season = Season::find(['from','to'])->all();
         $slideShow = \common\models\SlideShow::find()->all();
-        /*echo '<pre>';
-        print_r($product) ;
-        echo '</pre>';*/
+        echo '<pre>';
+        print_r($newProduct) ;
+        echo '</pre>';
         return $this->render('index',[
-            'modelCategory' => $modelCategory,'product'=> $product,'slideShow'=>$slideShow
+            'modelCategory' => $modelCategory,'product'=> $product,'slideShow'=>$slideShow,
         ]);
     }
 
     public function actionViewDetail()
     {
-        if(Yii::$app->request->isGet){
+        if (Yii::$app->request->isGet) {
 
-            if(empty($_GET['product']))
+            if (empty($_GET['product']))
                 return $this->goHome();
-            $productName  = $_GET['product'];
-            $productDetail = \common\models\Product::find()->where(['name'=>$productName])->all();
-            $productImage = \common\models\Image::find()->where(['product_id'=>$productDetail['0']['id']])->all();
-            return $this->render('viewDetail',['productDetail'=>$productDetail,'productImage'=>$productImage]);
+            $productName = $_GET['product'];
+            $productDetail = \common\models\Product::find()->where(['name' => $productName])->all();
+            $productImage = \common\models\Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
+            $starRating = new \common\models\Rating();
+            $script = <<< JS
+            $('#wishlist').click (function() {
+                jQuery.ajax({
+                   url: '/FSMProject/frontend/web/index.php?r=site/wish-list',
+                   type: 'POST',
+                   data: {id: '1'},
+                   dataType: 'json',
+                   success: function(data) {
+                       // process data
+                      alert(data);
+                   }
+                });
+            });
+JS;
+            $this->getView()->registerJs($script);
+            return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'starRating' => $starRating]);
         }
     }
+
+    public function actionWishList()
+    {
+        if(Yii::$app->request->isAjax){
+            $data = Yii::$app->request->post();
+            $productId = $data[''];
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['productId'=>$productId];
+        }
+
+    }
+
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
