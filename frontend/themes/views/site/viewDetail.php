@@ -91,7 +91,21 @@ include '_search.php';
             </div>
 
             <div class="buttons-holder">
-                <a class="btn-add-to-wishlist" id="wishlist" href="">Thêm vào danh mục yêu thích</a>
+
+                <script>
+                    function addWishList(id){
+                        $.ajax({
+                            url: '/FSMProject/frontend/web/index.php?r=site/wish-list',
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function(data) {
+                                // process data
+                                alert(data);
+                            }
+                        });
+                    }
+                </script>
+                <a class="btn-add-to-wishlist" id="<?= $productDetail[0]['id']?>" onclick="addWishList(<?= $productDetail[0]['id']?>)" href="#">Thêm vào danh mục yêu thích</a>
             </div>
 
             <div class="excerpt">

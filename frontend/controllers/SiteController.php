@@ -5,10 +5,14 @@ use common\models\City;
 use common\models\District;
 use common\models\Guest;
 use common\models\Customer;
+use common\models\Image;
 use common\models\Product;
+use common\models\Rating;
 use common\models\Season;
+use common\models\SlideShow;
 use common\models\Ward;
 use common\models\Address;
+use common\models\WishList;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -33,6 +37,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
@@ -85,22 +90,27 @@ class SiteController extends Controller
                ->from('category')->leftJoin('product', 'category.id = product.category_id');
         $command = $query->createCommand();
         $modelCategory = $command->queryAll();
-        $provider = new SqlDataProvider([
+        /*$provider = new SqlDataProvider([
             'sql' => 'SELECT product.id,product.name,product.price,image.path FROM product,image WHERE product.active=:active AND product.id=image.product_id ORDER BY product.id DESC ',
             'params' => [':active' => 1],
             'pagination' => [
                 'pageSize' => 5,
             ],
         ]);
-        $product = $provider->getModels();
+        $product = $provider->getModels();*/
         $newProduct = Product::find()->where(['active'=>'1'])->orderBy(['id'=>SORT_DESC])->limit(5)->all();
+        foreach($newProduct as $item){
+            $imagePath = Image::find()->where(['product_id'=>$item['id']])->one();
+            print_r($imagePath);
+        }
         $season = Season::find(['from','to'])->all();
-        $slideShow = \common\models\SlideShow::find()->all();
+        $slideShow = SlideShow::find()->all();
         echo '<pre>';
-        print_r($newProduct) ;
+        //print_r($newProduct) ;
+        //print_r($season);
         echo '</pre>';
         return $this->render('index',[
-            'modelCategory' => $modelCategory,'product'=> $product,'slideShow'=>$slideShow,
+            'modelCategory' => $modelCategory,'slideShow'=>$slideShow,
         ]);
     }
 
@@ -111,24 +121,9 @@ class SiteController extends Controller
             if (empty($_GET['product']))
                 return $this->goHome();
             $productName = $_GET['product'];
-            $productDetail = \common\models\Product::find()->where(['name' => $productName])->all();
-            $productImage = \common\models\Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
-            $starRating = new \common\models\Rating();
-            $script = <<< JS
-            $('#wishlist').click (function() {
-                jQuery.ajax({
-                   url: '/FSMProject/frontend/web/index.php?r=site/wish-list',
-                   type: 'POST',
-                   data: {id: '1'},
-                   dataType: 'json',
-                   success: function(data) {
-                       // process data
-                      alert(data);
-                   }
-                });
-            });
-JS;
-            $this->getView()->registerJs($script);
+            $productDetail = Product::find()->where(['name' => $productName])->all();
+            $productImage = Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
+            $starRating = new Rating();
             return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'starRating' => $starRating]);
         }
     }
@@ -137,7 +132,11 @@ JS;
     {
         if(Yii::$app->request->isAjax){
             $data = Yii::$app->request->post();
-            $productId = $data[''];
+            $productId = json_decode($data['id']);
+            $wishList = new WishList();
+            $wishList->product_id = $productId;
+            $wishList->customer_id = \Yii::$app->user->identity->getId();
+            $wishList->save();
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return ['productId'=>$productId];
         }
