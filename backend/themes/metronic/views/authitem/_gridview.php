@@ -19,24 +19,24 @@ $gridColumns = [
     [
         'attribute' => 'description',
     ],
+//    [
+//        'attribute' => 'ruleName',
+//    ],
     [
-        'attribute' => 'rule_name',
-    ],
-    [
-        'attribute' => 'created_at',
-        'value' => function ($model) {
-            return date('m/d/Y', $model->created_at);
+        'attribute' => 'createdAt',
+        'value' => function ($data) {
+            return date('m/d/Y', $data->createdAt);
         },
     ],
     [
-        'attribute' => 'updated_at',
-        'value' => function ($model) {
-            return date('m/d/Y', $model->updated_at);
+        'attribute' => 'updatedAt',
+        'value' => function ($data) {
+            return date('m/d/Y', $data->updatedAt);
         },
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
-//        'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+        'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
         'buttons' => [
             [
                 'url' => 'update',
@@ -89,7 +89,7 @@ $gridColumns = [
     'resizableColumns' => true,
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
-        'heading' => $this->title,
-        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Permission'), ['create'], ['class' => 'btn btn-success']),
+        'heading' => $label,
+        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create ' . $label), ['create'], ['class' => 'btn btn-success']),
     ],
 ]); ?>

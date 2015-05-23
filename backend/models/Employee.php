@@ -35,6 +35,8 @@ class Employee extends ActiveRecord implements IdentityInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+
+    public $assignments = [];
     /**
      * @inheritdoc
      */
@@ -58,6 +60,7 @@ class Employee extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['email'], 'email'],
             [['phone_number'], 'string', 'max' => 15, 'min' => 10],
+            [['assignments'], 'safe']
         ];
     }
 

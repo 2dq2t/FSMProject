@@ -30,6 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="auth-item-index">
 
-
+    <?= \yii\bootstrap\Tabs::widget([
+        'items' => [
+            [
+                'label' => Yii::t('app', 'Permissions'),
+                'content' => $this->render('_gridview', ['data' => $permissions, 'id' => 'operations', 'label' => Yii::t('app', 'Permissions')]),
+                'active' => true,
+            ],
+            [
+                'label' => Yii::t('app', 'Roles'),
+                'content' => $this->render('_gridview', ['data' => $roles,'id' => 'roles', 'label' => 'Roles']),
+            ],
+        ],
+    ]); ?>
 
 </div>

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
 use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
@@ -257,7 +257,28 @@ if($model->image) {
                             <!--/span-->
                         </div>
                         <!--/row-->
+                        <h3 class="form-section"><?= Yii::t('app', 'Permission')?></h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $form->field($model, 'assignments', [
+                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                                ])->multiselect(
+                                    \yii\helpers\ArrayHelper::map(
+                                    \Yii::$app->getAuthManager()->getRoles(),
+                                    'name',
+                                    function ($item) {
+                                        return $item->name . (strlen($item->description) > 0
+                                            ? ' [' . $item->description . ']'
+                                            : '');
+                                    }), [
+                                    'height' => '100%',
+                                    'container' => ['class' => 'bg-white']
+                                ])?>
+                            </div>
+                            <div class="col-md-6"></div>
+                        </div>
                     </div>
+
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-6">

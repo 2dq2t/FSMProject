@@ -91,8 +91,6 @@ class OrderController extends Controller
             $guest->load(Yii::$app->request->post()) &&
             $address->load(Yii::$app->request->post())) {
 
-            $errors = [];
-
             // create multiple OrderDetails model for $order_details
             $order_details = Model::createMultiple(OrderDetails::classname());
             // load data to each OrderDetails model
@@ -156,10 +154,44 @@ class OrderController extends Controller
                             }
                         }
                     } else {
-                        $errors[] = $model->errors[0];
+                        $model->order_date = date('m/d/Y', $model->order_date);
+                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+
+                        Yii::$app->getSession()->setFlash('danger', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => current($model->getFirstErrors()),
+                            'title' => Yii::t('app', 'Add Order'),
+                        ]);
+
+                        return $this->render('create', [
+                            'model' => $model,
+                            'guest' => $guest,
+                            'address' => $address,
+                            'city' => $city,
+                            'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
+                        ]);
                     }
                 } else {
-                    $errors[] = $address->errors[0] . '<br/>' . $guest->errors[0];
+                    $model->order_date = date('m/d/Y', $model->order_date);
+                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+
+                    Yii::$app->getSession()->setFlash('danger', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => $address->getFirstErrors() ? $address->getFirstErrors() : $guest->getFirstErrors() || 'Could not be save the address or guest.',
+                        'title' => Yii::t('app', 'Add Order'),
+                    ]);
+
+                    return $this->render('create', [
+                        'model' => $model,
+                        'guest' => $guest,
+                        'address' => $address,
+                        'city' => $city,
+                        'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
+                    ]);
                 }
             } catch(Exception $e) {
                 $transaction->rollBack();
@@ -167,15 +199,13 @@ class OrderController extends Controller
                 $model->order_date = date('m/d/Y', $model->order_date);
                 $model->receiving_date = date('m/d/Y', $model->receiving_date);
 
-                if (!empty($errors)) {
-                    Yii::$app->getSession()->setFlash('danger', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => $errors[0],
-                        'title' => Yii::t('app', 'Add Order'),
-                    ]);
-                }
+                Yii::$app->getSession()->setFlash('danger', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => $e->getMessage(),
+                    'title' => Yii::t('app', 'Add Order'),
+                ]);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -304,10 +334,44 @@ class OrderController extends Controller
                             }
                         }
                     } else {
-                        $errors[] = $model->errors[0];
+                        $model->order_date = date('m/d/Y', $model->order_date);
+                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+
+                        Yii::$app->getSession()->setFlash('danger', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-pencil',
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the order',
+                            'title' => Yii::t('app', 'Edit Order'),
+                        ]);
+
+                        return $this->render('update', [
+                            'model' => $model,
+                            'guest' => $guest,
+                            'address' => $address,
+                            'city' => $city,
+                            'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
+                        ]);
                     }
                 } else {
-                    $errors[] = $address->errors[0] . "<br/>" . $guest->errors[0];
+                    $model->order_date = date('m/d/Y', $model->order_date);
+                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+
+                    Yii::$app->getSession()->setFlash('danger', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-pencil',
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : $guest->getFirstErrors() || 'Could not be save the address/',
+                        'title' => Yii::t('app', 'Edit Order'),
+                    ]);
+
+                    return $this->render('update', [
+                        'model' => $model,
+                        'guest' => $guest,
+                        'address' => $address,
+                        'city' => $city,
+                        'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
+                    ]);
                 }
 
             } catch(Exception $e) {
@@ -316,15 +380,13 @@ class OrderController extends Controller
                 $model->order_date = date('m/d/Y', $model->order_date);
                 $model->receiving_date = date('m/d/Y', $model->receiving_date);
 
-                if (!empty($errors)) {
-                    Yii::$app->getSession()->setFlash('danger', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-pencil',
-                        'message' => $errors[0],
-                        'title' => Yii::t('app', 'Edit Order'),
-                    ]);
-                }
+                Yii::$app->getSession()->setFlash('danger', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => $e->getMessage(),
+                    'title' => Yii::t('app', 'Edit Order'),
+                ]);
 
                 return $this->render('update', [
                     'model' => $model,

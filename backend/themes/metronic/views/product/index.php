@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ProductSearch */
@@ -31,33 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product-index">
 
     <?php
-    $min = 1;
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
-
-        // [
-        //     'class' => 'kartik\grid\DataColumn',
-        //     'attribute' => 'Id'
-        // ],
-        [
-            'class'=>'kartik\grid\ExpandRowColumn',
-            'width'=>'50px',
-            'value'=>function ($model, $key, $index, $column) {
-                return GridView::ROW_COLLAPSED;
-            },
-            'detail'=>function ($model, $key, $index, $column) {
-                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
-            },
-            'headerOptions'=>['class'=>'kartik-sheet-style']
-            //'disabled'=>true,
-            //'detailUrl'=>Url::to(['/site/test-expand'])
-        ],
 //        [
-//            'class' => 'kartik\grid\EditableColumn',
-//            'attribute' => 'barcode',
-//            'editableOptions' => [
-//                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-//            ]
+//            'class'=>'kartik\grid\ExpandRowColumn',
+//            'width'=>'50px',
+//            'value'=>function ($model, $key, $index, $column) {
+//                return GridView::ROW_COLLAPSED;
+//            },
+//            'detail'=>function ($model, $key, $index, $column) {
+//                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
+//            },
+//            'headerOptions'=>['class'=>'kartik-sheet-style']
 //        ],
         [
             'attribute' => 'name',
@@ -76,22 +60,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'format'=>'raw'
         ],
         [
-            'class' => 'kartik\grid\EditableColumn',
+//            'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'price',
             'width' => '15%',
             'pageSummary' => true,
-            'editableOptions' => [
-                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-            ]
+//            'editableOptions' => [
+//                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+//            ]
         ],
-//        [
-//            'attribute' => 'season_id',
-//            'label' => Yii::t('app', 'Season'),
-//            'value' => 'season.name',
-//            'filter' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
-//            'width' => '15%',
-//            'pageSummary' => true,
-//        ],
         [
             'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'quantity_in_stock',
@@ -106,10 +82,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'pluginEvents' => [ ],
                     ];
                 }
-//                [
-
-//                'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-//            ]
         ],
         [
             'class' => \kartik\grid\EditableColumn::className(),

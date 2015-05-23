@@ -3,23 +3,20 @@
 namespace backend\controllers;
 
 use common\models\Image;
-use common\models\Offer;
-use common\models\OrderDetails;
-use common\models\ProductRating;
 use common\models\ProductSeason;
-use common\models\WishList;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use yii\helpers\Html;
-use yii\helpers\Json;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -33,7 +30,6 @@ class ProductController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'delete-all' => ['post']
                 ],
             ],
         ];
@@ -114,7 +110,7 @@ class ProductController extends Controller
 
     /**
      * Displays a single Product model.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -135,11 +131,11 @@ class ProductController extends Controller
         $productImages = new Image();
         $product_seasons = new ProductSeason();
 
-        $file = UploadedFile::getInstances($productImages, 'product_image');
-
-        if ($model->load(Yii::$app->request->post()) && $product_seasons->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
             $model->create_date = strtotime('today');
+
+            $file = UploadedFile::getInstances($productImages, 'product_image');
 
             try {
                 if ($model->save()) {
@@ -167,7 +163,11 @@ class ProductController extends Controller
                         }
                     }
 
-                    foreach ($product_seasons->season_id as $product_season) {
+                    if (empty($model->product_seasons)) {
+                        $model->product_seasons = [];
+                    }
+
+                    foreach ($model->product_seasons as $product_season) {
                         $product_seasons->product_id = $model->id;
                         $product_seasons->season_id = $product_season;
 
@@ -188,6 +188,20 @@ class ProductController extends Controller
                         default:
                             return $this->redirect(['index']);
                     }
+                } else {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 0,
+                        'icon' => 'fa fa-plus',
+                        'message' => current($model->getFirstErrors()),
+                        'title' => Yii::t('app', 'Add Product'),
+                    ]);
+
+                    return $this->render('create', [
+                        'model' => $model,
+                        'productImages' => $productImages,
+                        'product_seasons' => $product_seasons
+                    ]);
                 }
             } catch (Exception $e) {
                 Yii::$app->getSession()->setFlash('danger', [
@@ -201,6 +215,7 @@ class ProductController extends Controller
                 return $this->render('create', [
                     'model' => $model,
                     'productImages' => $productImages,
+                    'product_seasons' => $product_seasons
                 ]);
             }
 
@@ -216,7 +231,7 @@ class ProductController extends Controller
     /**
      * Updates an existing Product model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -225,72 +240,96 @@ class ProductController extends Controller
         $productImages = new Image();
         $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
 
-        foreach($product_seasons as $product_season) {
-            $model->product_seasons[] = $product_season->season_id;
-        }
-
+        $model->product_seasons = ArrayHelper::map($product_seasons, 'season_id', 'season_id');
         $images = Image::find()->where(['product_id' => $id])->all();
 
-        $file = UploadedFile::getInstances($productImages, 'product_image');
-
         if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstances($productImages, 'product_image');
             try {
-                if ($model->save() && $file) {
-                    foreach ($images as $image) {
-                        $image->delete();
+                if ($model->save()) {
+
+                    if ($file) {
+                        foreach ($images as $image) {
+                            $image->delete();
+                        }
+
+                        $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
+                        FileHelper::removeDirectory($dir);
+
+                        $images = '';
+                        foreach ($file as $image) {
+                            FileHelper::createDirectory($dir);
+                            // path to save database
+                            $path = 'uploads/products/images/' . $model->id . '/';
+
+                            $productImages = new Image();
+                            $productImages->product_id = $model->id;
+                            $productImages->name = $image->name;
+                            // generate random name for image save
+                            $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
+                            $productImages->path = $path . $imageName;
+                            $images .= $imageName . $image->extension . '###';
+
+                            $productImages->product_image = $images;
+                            $productImages->save();
+
+                            $image->saveAs($dir . '/' . $imageName);
+                        }
                     }
 
-                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
-                    FileHelper::removeDirectory($dir);
-
-                    $images = '';
-                    foreach ($file as $image) {
-                        FileHelper::createDirectory($dir);
-                        // path to save database
-                        $path = 'uploads/products/images/' . $model->id . '/';
-
-                        $productImages = new Image();
-                        $productImages->product_id = $model->id;
-                        $productImages->name = $image->name;
-                        // generate random name for image save
-                        $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
-                        $productImages->path = $path . $imageName;
-                        $images .= $imageName . $image->extension . '###';
-
-                        $productImages->product_image = $images;
-                        $productImages->save();
-
-                        $image->saveAs($dir . '/' . $imageName);
+                    if (empty($model->product_seasons)) {
+                        $model->product_seasons = [];
                     }
+
+                    foreach ($product_seasons as $product_season) {
+                        $key = array_search($product_season->season_id, $model->product_seasons);
+                        if ($key === false) {
+                            ProductSeason::find()->where(['season_id' => $product_season->season_id])->andWhere(['product_id' => $id])->one()->delete();
+                        } else {
+                            unset($model->product_seasons[$key]);
+                        }
+                    }
+
+                    foreach ($model->product_seasons as $season) {
+                        $product_season = new ProductSeason();
+                        $product_season->season_id = $season;
+                        $product_season->product_id = $model->id;
+                        $product_season->save();
+                    }
+
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_SUCCESS,
+                        'duration' => 5000,
+                        'icon' => 'fa fa-pencil',
+                        'message' => Yii::t('app', 'Product Record has been edited.'),
+                        'title' => Yii::t('app', 'Edit Product'),
+                    ]);
+
+                    return $this->redirect(['index']);
+                } else {
+
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 0,
+                        'icon' => 'fa fa-plus',
+                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a product',
+                        'title' => Yii::t('app', 'Edit Product'),
+                    ]);
+
+                    return $this->render('create', [
+                        'model' => $model,
+                        'productImages' => $productImages,
+                        'images' => $images,
+                        'product_seasons' => $product_seasons
+                    ]);
                 }
-
-                foreach ($model->product_seasons as $product_season) {
-                    $productseason = ProductSeason::find()->where(['season_id' => $product_season])->andWhere(['product_id' => $model->id])->one();
-                    $productseason->delete();
-                }
-
-                foreach ($product_seasons = Yii::$app->request->post('Product')['product_seasons'] as $season) {
-                    $product_season = new ProductSeason();
-                    $product_season->season_id = $season;
-                    $product_season->product_id = $model->id;
-                    $product_season->save();
-                }
-
-                Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
-                    'duration' => 5000,
-                    'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Product Record has been edited.'),
-                    'title' => Yii::t('app', 'Edit Product'),
-                ]);
-
-                return $this->redirect(['index']);
             } catch (Exception $e) {
+
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a product.',
                     'title' => Yii::t('app', 'Edit Product'),
                 ]);
 
@@ -314,7 +353,7 @@ class ProductController extends Controller
     /**
      * Deletes an existing Product model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -337,7 +376,7 @@ class ProductController extends Controller
     /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param string $id
      * @return Product the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

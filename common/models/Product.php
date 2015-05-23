@@ -58,11 +58,12 @@ class Product extends \yii\db\ActiveRecord
             [['barcode', 'name', 'price', 'description', 'intro', 'quantity_in_stock', 'tag', 'create_date', 'category_id', 'unit_id'], 'required'],
             [['barcode', 'quantity_in_stock', 'sold', 'tax', 'create_date', 'active', 'category_id', 'unit_id'], 'integer'],
             [['price'], 'number'],
+            [['description', 'intro'], 'string'],
+            [['name', 'tag'], 'string', 'max' => 255],
             [['sold'], 'default','value'=>'0'],
             [['tax'], 'default','value'=>'0'],
             [['quantity_in_stock', 'tax', 'price', 'sold'], 'number','min' => 0],
-            [['description', 'intro'], 'string'],
-            [['name', 'tag'], 'string', 'max' => 255],
+            [['product_seasons'], 'safe']
         ];
     }
 

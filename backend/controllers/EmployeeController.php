@@ -11,9 +11,11 @@ use Yii;
 use backend\models\Employee;
 use backend\models\EmployeeSearch;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\rbac\Item;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -145,7 +147,7 @@ class EmployeeController extends Controller
                     $model->start_date = strtotime($model->start_date);
 
                     $model->address_id = $address->id;
-
+                    $errors = [];
                     if ($model->save()) {
                         // directory to save image in local
                         $dir = Yii::getAlias('@backend/web/uploads/employees/image/' . $model->id);
@@ -155,13 +157,27 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
+
+
+                        if($model->assignments == '') {
+                            $model->assignments = [];
+                        }
+
+                        foreach ($model->assignments as $assignment) {
+                            try {
+                                \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
+                            } catch (\Exception $e) {
+                                $errors[] = 'Cannot assign "'.$assignment.'" to user';
+                            }
+                        }
+
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Employee Record has been saved.'),
+                            'message' => Yii::t('app', 'Employee has been saved.'),
                             'title' => Yii::t('app', 'Add Employee'),
                         ]);
 
@@ -182,17 +198,15 @@ class EmployeeController extends Controller
                         if($model->start_date != '') {
                             $model->start_date = date('m/d/Y', $model->start_date);
                         }
+
                         // get errors
-                        $errors = $model->getErrors();
-                        foreach($errors as $error) {
-                            Yii::$app->getSession()->setFlash('success', [
-                                'type' => Alert::TYPE_DANGER,
-                                'duration' => 3000,
-                                'icon' => 'fa fa-plus',
-                                'message' => $error[0],
-                                'title' => Yii::t('app', 'Add Employee'),
-                            ]);
-                        }
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 0,
+                            'icon' => 'fa fa-plus',
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || 'Could not save a employee.',
+                            'title' => Yii::t('app', 'Add Employee'),
+                        ]);
 
                         $model->password = null;
 
@@ -202,32 +216,6 @@ class EmployeeController extends Controller
                             'city' => $city,
                         ]);
                     }
-                } else {
-                    if ($model->dob != '') {
-                        $model->dob = date('m/d/Y', $model->dob);
-                    }
-
-                    if($model->start_date != '') {
-                        $model->start_date = date('m/d/Y', $model->start_date);
-                    }
-                    $errors = $address->getErrors();
-                    foreach($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
-                            'icon' => 'fa fa-plus',
-                            'message' => $error[0],
-                            'title' => Yii::t('app', 'Add Employee'),
-                        ]);
-                    }
-
-                    $model->password = null;
-
-                    return $this->render('create', [
-                        'model' => $model,
-                        'address' => $address,
-                        'city' => $city,
-                    ]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -238,16 +226,13 @@ class EmployeeController extends Controller
                 if($model->start_date != '') {
                     $model->start_date = date('m/d/Y', $model->start_date);
                 }
-                $errors = $address->getErrors();
-                foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('error', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => $error[0],
-                        'title' => Yii::t('app', 'Add Employee'),
-                    ]);
-                }
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a employee.',
+                    'title' => Yii::t('app', 'Add Employee'),
+                ]);
 
                 $model->password = null;
 
@@ -284,14 +269,11 @@ class EmployeeController extends Controller
         $model->dob = date('m/d/Y', $model->dob);
         $model->start_date = date('m/d/Y', $model->start_date);
 
+        $prePostAssignments = Yii::$app->getAuthManager()->getAssignments($id);
+        $model->assignments = ArrayHelper::map($prePostAssignments, 'roleName', 'roleName');
+
         if ($model->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
-
-            if (Yii::$app->request->post('Employee')['status'] === '1') {
-                $model->status = 1;
-            } else {
-                $model->status = 0;
-            }
 
             if(Yii::$app->request->post('Employee')['password'] === '') {
                 $model->password = $model->oldAttributes['password'];
@@ -330,13 +312,36 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
+                        $errors = [];
+
+                        if($model->assignments == '') {
+                            $model->assignments = [];
+                        }
+
+                        foreach ($prePostAssignments as $assignment) {
+                            $key = array_search($assignment->roleName, $model->assignments);
+                            if ($key === false) {
+                                \Yii::$app->authManager->revoke(new Item(['name' => $assignment->roleName]), $model->id);
+                            } else {
+                                unset($model->assignments[$key]);
+                            }
+                        }
+
+                        foreach ($model->assignments as $assignment) {
+                            try {
+                                \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
+                            } catch (\Exception $e) {
+                                $errors[] = 'Cannot assign "'.$assignment.'" to user';
+                            }
+                        }
+
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Employee Record has been saved.'),
+                            'message' => Yii::t('app', 'Employee has been saved.'),
                             'title' => Yii::t('app', 'Edit Employee'),
                         ]);
 
@@ -346,7 +351,60 @@ class EmployeeController extends Controller
                             default:
                                 return $this->redirect(['index']);
                         }
+                    } else {
+                        // if save to user error return create page
+//                        $model->password = $password_return;
+//                        $model->re_password = $re_password_return;
+                        if ($model->dob != '') {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        }
+
+                        if($model->start_date != '') {
+                            $model->start_date = date('m/d/Y', $model->start_date);
+                        }
+
+                        // get errors
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 0,
+                            'icon' => 'fa fa-plus',
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || 'Could not be save a employee',
+                            'title' => Yii::t('app', 'Add Employee'),
+                        ]);
+
+                        $model->password = null;
+
+                        return $this->render('create', [
+                            'model' => $model,
+                            'address' => $address,
+                            'city' => $city,
+                        ]);
                     }
+                } else {
+                    if ($model->dob != '') {
+                        $model->dob = date('m/d/Y', $model->dob);
+                    }
+
+                    if($model->start_date != '') {
+                        $model->start_date = date('m/d/Y', $model->start_date);
+                    }
+
+                    // get errors
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 0,
+                        'icon' => 'fa fa-plus',
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : 'Could not be save a employee',
+                        'title' => Yii::t('app', 'Add Employee'),
+                    ]);
+
+                    $model->password = null;
+
+                    return $this->render('create', [
+                        'model' => $model,
+                        'address' => $address,
+                        'city' => $city,
+                    ]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -355,7 +413,7 @@ class EmployeeController extends Controller
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage(),
+                    'message' => !empty($errors) != '' ? $errors : $e->getMessage(),
                     'title' => Yii::t('app', 'Edit Employee'),
                 ]);
 

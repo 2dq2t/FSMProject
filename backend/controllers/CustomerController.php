@@ -178,7 +178,7 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'User Record has been saved.'),
+                            'message' => Yii::t('app', 'User has been saved.'),
                             'title' => Yii::t('app', 'Add User'),
                         ]);
 
@@ -188,6 +188,33 @@ class CustomerController extends Controller
                             default:
                                 return $this->redirect(['index']);
                         }
+                    } else {
+                        $transaction->rollBack();
+
+                        if ($model->dob != '') {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        }
+
+                        if($model->created_at != '') {
+                            $model->created_at = date('m/d/Y', $model->created_at);
+                        }
+
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a user',
+                            'title' => Yii::t('app', 'Add User'),
+                        ]);
+
+                        $model->password = null;
+
+                        return $this->render('create', [
+                            'model' => $model,
+                            'guest' => $guest,
+                            'address' => $address,
+                            'city' => $city,
+                        ]);
                     }
                 }
             } catch (Exception $e) {
@@ -205,7 +232,7 @@ class CustomerController extends Controller
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a user',
                     'title' => Yii::t('app', 'Add User'),
                 ]);
 
@@ -311,11 +338,36 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
-                            'message' => Yii::t('app', 'User Record has been edited.'),
+                            'message' => Yii::t('app', 'User has been edited.'),
                             'title' => Yii::t('app', 'Edit User'),
                         ]);
 
                         return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollBack();
+
+                        if ($model->dob) {
+                            $model->dob = date('m/d/Y', $model->dob);
+                        } else {
+                            $model->dob = NULL;
+                        }
+
+                        $model->password = NULL;
+
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-pencil',
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a user',
+                            'title' => Yii::t('app', 'Edit User'),
+                        ]);
+
+                        return $this->render('update', [
+                            'model' => $model,
+                            'guest' => $guest,
+                            'address' => $address,
+                            'city' => $city,
+                        ]);
                     }
                 }
             } catch (Exception $e) {
@@ -329,11 +381,11 @@ class CustomerController extends Controller
 
                 $model->password = NULL;
 
-                Yii::$app->getSession()->setFlash('success', [
+                Yii::$app->getSession()->setFlash('error', [
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a user.',
                     'title' => Yii::t('app', 'Edit User'),
                 ]);
 
@@ -375,7 +427,7 @@ class CustomerController extends Controller
             'type' => Alert::TYPE_SUCCESS,
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Customer has been deleted.',
+            'message' => 'User has been deleted.',
             'title' => Yii::t('app', 'Delete User'),
         ]);
 
