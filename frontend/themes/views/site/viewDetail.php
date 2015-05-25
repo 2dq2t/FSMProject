@@ -95,9 +95,10 @@ include '_search.php';
                 <script>
                     function addWishList(id){
                         $.ajax({
-                            url: '/FSMProject/frontend/web/index.php?r=site/wish-list',
-                            type: 'POST',
-                            dataType: 'json',
+                            url: '<?php echo Yii::$app->request->baseUrl. '/index.php?r=site/wish-list' ?>',
+                            type: 'post',
+                            data: {id: id},
+                            dataType:'json',
                             success: function(data) {
                                 // process data
                                 alert(data);

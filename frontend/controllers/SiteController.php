@@ -34,10 +34,10 @@ use kartik\alert\Alert;
  */
 class SiteController extends Controller
 {
+    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
-    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
@@ -105,10 +105,10 @@ class SiteController extends Controller
         }
         $season = Season::find(['from','to'])->all();
         $slideShow = SlideShow::find()->all();
-        echo '<pre>';
+        /*echo '<pre>';
         //print_r($newProduct) ;
         //print_r($season);
-        echo '</pre>';
+        echo '</pre>';*/
         return $this->render('index',[
             'modelCategory' => $modelCategory,'slideShow'=>$slideShow,
         ]);
@@ -134,11 +134,11 @@ class SiteController extends Controller
             $data = Yii::$app->request->post();
             $productId = json_decode($data['id']);
             $wishList = new WishList();
-            $wishList->product_id = $productId;
             $wishList->customer_id = \Yii::$app->user->identity->getId();
+            $wishList->product_id = $productId;
             $wishList->save();
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ['productId'=>$productId];
+            return [$productId];
         }
 
     }
