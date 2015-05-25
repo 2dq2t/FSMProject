@@ -244,7 +244,7 @@ var voucher = {
 var wishlist = {
 	'add': function(product_id) {
 		$.ajax({
-			url: 'index.php?route=account/wishlist/add',
+			url: 'fsmproject/frontend/web/index.php?r=site/wish-list',
 			type: 'post',
 			data: 'product_id=' + product_id,
 			dataType: 'json',

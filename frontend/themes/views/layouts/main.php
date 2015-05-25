@@ -26,8 +26,8 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <script src="/fsmproject - copy/frontend/web/js/jquery/jquery-2.1.1.min.js"></script>
-    <script src="/fsmproject - copy/frontend/web/js/jquery/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/fsmproject/frontend/web/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="/fsmproject/frontend/web/js/jquery/owl-carousel/owl.carousel.min.js"></script>
 </head>
 <body class="common-home layout-2 left-col">
 <?php $this->beginBody() ?>
@@ -332,15 +332,14 @@ $baseUrl = Yii::$app->request->baseUrl;
         <div class="copy-right">Powered By <a href="http://www.opencart.com">OpenCart</a> Your Store &copy; 2015</div>
     </div>
 </footer>
-</body>
 <?php $this->endBody() ?>
-<div id="fb-root"></div>
-<script>(function (d, s, id) {
+</body>
+<<div id="fb-root"></div>
+<script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=634388566665365";
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=369040309965950";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 </html>

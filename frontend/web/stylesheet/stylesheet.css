@@ -1056,7 +1056,7 @@ white-space: nowrap;
     color: #c3c3c3;
     font-size: 13px;
 }
-rating .fa-star, .fa-stack-1x, .fa-stack-2x{
+.rating .fa-star, .fa-stack-1x, .fa-stack-2x{
 	font-size: 13px;	color: #8ac42f;
 }
 
@@ -1916,7 +1916,7 @@ background: url("../images/megnor/sprite.png") no-repeat scroll 1px -229px trans
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url("../images/megnor/ajax-loader.gif") 50% 50% no-repeat #fff;
+	background: url("../images/megnor/loading.gif") 50% 50% no-repeat #fff;
 }
 .main-slider {
     position: relative;    margin-top:0px;    width: 706px; float:left;
