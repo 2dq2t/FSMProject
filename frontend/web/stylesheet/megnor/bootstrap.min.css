@@ -3117,17 +3117,22 @@ input[type=submit].btn-block,input[type=reset].btn-block,input[type=button].btn-
 .dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     z-index: 1000;
     display: none;
     float: left;
     min-width: 160px;
-    padding: 5px 10px;
-    margin:0;
+    padding: 5px 0;
+    margin: 2px 0 0;
     list-style: none;
     font-size: 14px;
     background-color: #fff;
-    border: 1px solid #ededed;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    background-clip: padding-box
 }
 
 .dropdown-menu.pull-right {

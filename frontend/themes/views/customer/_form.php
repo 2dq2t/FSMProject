@@ -21,19 +21,27 @@ if(isset($modelCustomer->avatar)) {
 ?>
 
 <div class="container content-inner">
-
+    <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+        <?php
+        echo Alert::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+            'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+            'showSeparator' => true,
+            'delay' => 3000
+        ]);
+        ?>
+    <?php endforeach; ?>
     <div class="row content-subinner">
-        <ul class="breadcrumb">
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i class="fa fa-home"></i></a></li>
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Account</a></li>
-        </ul>
+
         <column id="column-left" class="col-sm-3 hidden-xs">
             <div class="box">
                 <div class="box-heading">Account</div>
                 <div class="list-group">
                     <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">My Account</a>
                     <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Edit Account</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/password" class="list-group-item">Password</a>
+                    <a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Password</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/address" class="list-group-item">Address Books</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist" class="list-group-item">Wish List</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order" class="list-group-item">Order History</a>
@@ -47,10 +55,16 @@ if(isset($modelCustomer->avatar)) {
                 </div>
             </div>
         </column>
+        <ul class="breadcrumb">
+            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i class="fa fa-home"></i></a></li>
+            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Account</a></li>
+            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/edit">Edit Information</a></li>
+        </ul>
         <div id="content" class="col-sm-9">      <h1 class="page-title">My Account Information</h1>
             <?php $form = ActiveForm::begin([
                 'type'=>ActiveForm::TYPE_HORIZONTAL,
                 'formConfig'=>['labelSpan'=>3, 'deviceSize'=>ActiveForm::SIZE_SMALL],
+                'options' => ['enctype' => 'multipart/form-data']
             ]);
             ?>
                 <fieldset>
@@ -134,7 +148,7 @@ if(isset($modelCustomer->avatar)) {
                     </div>
                 </fieldset>
                 <div class="buttons clearfix">
-                    <div class="pull-left"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account" class="btn btn-default">Back</a></div>
+                    <div class="pull-left"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account" class="btn btn-default">Quay lại</a></div>
                     <div class="pull-right">
                         <input type="submit" value="Lưu" class="btn btn-primary" />
                     </div>

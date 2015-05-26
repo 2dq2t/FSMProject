@@ -17,7 +17,7 @@ $this->title = 'Tài khoản của tôi';
                 <div class="list-group">
                     <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">My Account</a>
                     <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Edit Account</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/password" class="list-group-item">Password</a>
+                    <a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Password</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/address" class="list-group-item">Address Books</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist" class="list-group-item">Wish List</a>
                     <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order" class="list-group-item">Order History</a>
@@ -35,7 +35,7 @@ $this->title = 'Tài khoản của tôi';
             <h2 class="h2-account" style="margin-bottom: 5px;">My Account</h2>
             <ul class="list-unstyled-account">
                 <li><a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>">Edit your account information</a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/password">Change your password</a></li>
+                <li><a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>">Change your password</a></li>
                 <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/address">Modify your address book entries</a></li>
                 <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist">Modify your wish list</a></li>
             </ul>
