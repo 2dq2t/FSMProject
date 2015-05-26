@@ -119,59 +119,16 @@ $this->title =$productDetail[0]['name'];
                 </div>
                 <div class="col-sm-12 product-description">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
-                        <li><a href="#tab-review" data-toggle="tab">Reviews (1)</a></li>
+                        <li class="active"><a href="#tab-description" data-toggle="tab">Miêu tả</a></li>
+                        <li><a href="#tab-review" data-toggle="tab">Nhận xét</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-description"><p><?php echo $productDetail[0]['description'] ?></p></div>
 
                         <div class="tab-pane" id="tab-review">
-                            <form class="form-horizontal">
-                                <div id="review"></div>
-                                <h2>Write a review</h2>
-                                <div class="form-group required">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="input-name">Your Name</label>
-                                        <input type="text" name="name" value="" id="input-name" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group required">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="input-review">Your Review</label>
-                                        <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
-                                        <div class="help-block"><span class="text-danger">Note:</span> HTML is not translated!</div>
-                                    </div>
-                                </div>
-                                <div class="form-group required">
-                                    <div class="col-sm-12">
-                                        <label class="control-label">Rating</label>
-                                        &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                                        <input type="radio" name="rating" value="1" />
-                                        &nbsp;
-                                        <input type="radio" name="rating" value="2" />
-                                        &nbsp;
-                                        <input type="radio" name="rating" value="3" />
-                                        &nbsp;
-                                        <input type="radio" name="rating" value="4" />
-                                        &nbsp;
-                                        <input type="radio" name="rating" value="5" />
-                                        &nbsp;Good</div>
-                                </div>
-                                <div class="form-group required">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="input-captcha">Enter the code in the box below</label>
-                                        <input type="text" name="captcha" value="" id="input-captcha" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12"> <img src="" alt="" id="captcha" /> </div>
-                                </div>
-                                <div class="buttons">
-                                    <div class="pull-right">
-                                        <button type="button" id="button-review" data-loading-text="Loading..." class="btn btn-primary">Continue</button>
-                                    </div>
-                                </div>
-                            </form>
+                            <div class="fb-comments" data-href="<?php echo "localhost/".Yii::$app->request->getUrl(); ?>"
+                                 data-numposts="5" data-colorscheme="light"></div>
+                            <!-- /.comments -->
                         </div>
                     </div>
                 </div>
