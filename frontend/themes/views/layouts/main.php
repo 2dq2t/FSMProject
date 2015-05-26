@@ -202,19 +202,41 @@ $baseUrl = Yii::$app->request->baseUrl;
                 <div class="container">
                     <div id="top-links" class="nav">
                         <ul class="list-inline">
-                            <li class="dropdown myaccount"><a
-                                    href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
-                                    title="My Account" class="dropdown-toggle"
-                                    data-toggle="dropdown"><span>My Account</span> <span class="caret"></span></a>
-                                <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
-                                    <li>
-                                        <a href="index.php?r=site/register">Register</a>
-                                    </li>
-                                    <li>
-                                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/login">Login</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            <?php if(Yii::$app->user->isGuest): ?>
+                                <li class="dropdown myaccount"><a
+                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
+                                        title="My Account" class="dropdown-toggle"
+                                        data-toggle="dropdown"><span>My Account</span> <span class="caret"></span></a>
+                                    <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
+                                        <li>
+                                            <a href="index.php?r=site/register">Register</a>
+                                        </li>
+                                        <li>
+                                            <a href="index.php?r=site/login">Login</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            <?php else: ?>
+                                <li class="dropdown myaccount"><a
+                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
+                                        title="My Account" class="dropdown-toggle"
+                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span> <span class="caret"></span></a>
+                                    <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
+                                        <li>
+                                            <a href="index.php?r=site/register">Tài khoản của tôi</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Đơn hàng của tôi</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Sản phẩm yêu thích</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $baseUrl."/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            <?php endif; ?>
                             <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist"
                                    id="wishlist-total" title="Wish List (0)"> <span>Wish List (0)</span></a></li>
                             <li class="checkout"><a

@@ -509,7 +509,7 @@ div.required .control-label:before {
 	width: 980px;
 	
 }
-.common-home .row.content-subinner{padding-top:0;}
+
 #banner1{
 	clear: none;
     float: right;
@@ -2045,7 +2045,10 @@ font-size:18px;
 .account-account #content .list-unstyled,.affiliate-account #content .list-unstyled{ background: none repeat scroll 0 0 #f8f8f8; border: 1px solid #eeeeee;   margin-bottom: 10px; overflow: auto; padding: 10px;}
 .account-account #content .list-unstyled li a,.affiliate-account #content .list-unstyled li a{  background: url("../images/megnor/footerbullet1.png") no-repeat scroll left center transparent; padding-left: 12px;}
 .account-account #content .list-unstyled li a:hover,.affiliate-account #content .list-unstyled li a:hover{   background: url("../images/megnor/footerbullet2.png") no-repeat scroll left center transparent;}
-.account-account #content .list-unstyled li,.affiliate-account #content .list-unstyled li{padding:4px 0;}	
+.account-account #content .list-unstyled li,.affiliate-account #content .list-unstyled li{padding:4px 0;}
+.common-home fieldset ,.account-edit fieldset ,.account-password fieldset ,.account-address-edit fieldset ,.account-wishlist p ,.returnform fieldset ,.account-download p  ,.account-return p ,.account-newsletter fieldset,.account-recurring p ,.affiliate-register fieldset ,.affiliate-forgotten fieldset ,.affiliate-edit fieldset ,.affiliate-password fieldset ,.affiliate-payment fieldset ,.information-contact fieldset ,.product-search fieldset ,.account-forgotten fieldset,.account-address .table-bordered ,.account-address-delete .table-bordered{    margin-bottom: 12px; background: none repeat scroll 0 0 #f8f8f8;border: 1px solid #eeeeee;  padding: 10px;}
+.common-home p,.returnform p,.account-transaction p,.affiliate-login p ,.account-voucher p{margin-bottom:20px;}
+.common-home h2 {margin-bottom:15px;}
 .form-horizontal .control-label {width:25%;}
 .form-horizontal .col-sm-10{width:75%;}
 .account-address .table-hover > tbody > tr > td {vertical-align: middle;}

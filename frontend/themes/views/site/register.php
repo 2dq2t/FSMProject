@@ -1,6 +1,6 @@
 <?php
 
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
 $this->title = 'Đăng kí';
 
 ?>
@@ -52,102 +52,69 @@ $this->title = 'Đăng kí';
 
             <p>If you already have an account with us, please login at the <a
                     href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/login">login page</a>.</p>
-            <?php $form = ActiveForm::begin(['id' => 'form-register', 'method' => 'post', 'options' => ['class' => 'form-horizontal']]); ?>
-
-            <fieldset>
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="full_name">Họ và tên</label>
-
+            <?php $form = ActiveForm::begin([
+                'type'=>ActiveForm::TYPE_HORIZONTAL,
+                'formConfig'=>['labelSpan'=>3, 'deviceSize'=>ActiveForm::SIZE_SMALL],
+            ]);
+            ?>
+            <fieldset id="information">
+                <legend>Thông tin cá nhân</legend>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Họ và tên</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelGuest, 'full_name', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 255,
-                                'id' => 'full_name',
-                                'placeholder' => 'Họ và tên',
-                            ],
-                        ])->label(false); ?>
+                        <?= $form->field($modelGuest, 'full_name',[
+                            'showLabels'=>false
+                        ])->textInput(['placeholder'=>'Họ và tên']); ?>
                     </div>
                 </div>
-                <!-- /.field-row -->
-
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="username">Tên đăng nhập</label>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Email</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelCustomer, 'username', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 255,
-                                'id'=>'username',
-                                'placeholder' => 'Tên đăng nhập',
-                            ],
-                        ])->label(false); ?>
+                        <?= $form->field($modelGuest, 'email',[
+                            'showLabels'=>false
+                        ])->textInput(['placeholder'=>'Email']); ?>
                     </div>
                 </div>
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="password">Mật khẩu</label>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Số điện thoại</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelCustomer, 'password', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 255,
-                                'id'=>'password',
-                                'placeholder' => 'Mật khẩu',
-                            ],
-                        ])->passwordInput()->label(false); ?>
+                        <?= $form->field($modelGuest, 'phone_number',[
+                            'showLabels'=>false
+                        ])->textInput(['placeholder'=>'Số điện thoại']); ?>
                     </div>
                 </div>
-                <!-- /.field-row -->
-
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="re_password">Xác Nhận Mật khẩu</label>
+            </fieldset>
+            <fieldset id="password">
+                <legend>Mật khẩu của bạn</legend>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Tên Đăng Nhập</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelCustomer, 're_password', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 255,
-                                'id'=>'re_password',
-                                'placeholder' => 'Nhập lại mật khẩu',
-                            ],
-                        ])->passwordInput()->label(false); ?>
+                        <?= $form->field($modelCustomer, 'username',[
+                            'showLabels'=>false
+                        ])->textInput(['placeholder'=>'Tên Đăng Nhập']); ?>
                     </div>
                 </div>
-                <!-- /.field-row -->
-
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="email">Email</label>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Mật Khẩu</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelGuest, 'email', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 255,
-                                'id'=>'email',
-                                'placeholder' => 'Email',
-                            ],
-                        ])->label(false); ?>
+                        <?= $form->field($modelCustomer, 'password',[
+                            'showLabels'=>false
+                        ])->passwordInput(['placeholder'=>'Mật Khẩu']); ?>
                     </div>
                 </div>
-                <!-- /.field-row -->
-
-                <div class="form-group required">
-                    <label class="col-sm-2 control-label" for="phone_number">Số điện thoại</label>
+                <div class="form-group required" style="margin-bottom: 0px;">
+                    <label class="col-sm-2 control-label" for="input-fullname">Xác Nhận Mật Khẩu</label>
                     <div class="col-sm-10">
-                        <?= $form->field($modelGuest, 'phone_number', [
-                            'inputOptions' => [
-                                'class' => 'form-control',
-                                'maxlength' => 15,
-                                'id'=>'phone_number',
-                                'placeholder' => 'Tên đăng nhập',
-                            ],
-                        ])->label(false); ?>
+                        <?= $form->field($modelCustomer, 're_password',[
+                            'showLabels'=>false
+                        ])->passwordInput(['placeholder'=>'Xác Nhận Mật Khẩu']); ?>
                     </div>
                 </div>
-                <!-- /.field-row -->
             </fieldset>
             <div class="buttons">
                 <div class="pull-right">I have read and agree to the <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information/agree&amp;information_id=3" class="agree"><b>Privacy Policy</b></a>                        <input type="checkbox" name="agree" value="1" />
                     &nbsp;
-                    <button type="submit" class="btn btn-primary" name="submit">Đăng ký</button>
+                    <input type="submit" value="Đăng ký" class="btn btn-primary" />
                 </div>
             </div>
             <?php ActiveForm::end(); ?>
