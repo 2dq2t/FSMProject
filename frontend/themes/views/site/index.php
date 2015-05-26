@@ -6,7 +6,20 @@ use yii\helpers\Html;
 $this->title = 'Fresh Garden';
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
+
 <div class="container content-inner">
+    <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+        <?php
+        echo Alert::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
+            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+            'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+            'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
+            'showSeparator' => true,
+            'delay' => 3000
+        ]);
+        ?>
+    <?php endforeach; ?>
     <div class="row content-subinner">
         <div class="content-top">
             <div id="content">

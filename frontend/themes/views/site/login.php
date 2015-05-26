@@ -76,7 +76,7 @@ $this->title = 'Đăng nhập';
                                     'maxlength' => 255,
                                 ]
                             ])->label(false)->passwordInput(['placeholder'=>'Mật Khẩu']); ?>
-                            <div class="forget-password"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/forgotten">Forgotten Password</a></div>
+                            <div class="forget-password"><a href="index.php?r=site/request-password-reset">Forgotten Password</a></div>
                         </div>
                         <input type="submit" value="Đăng Nhập" class="btn btn-primary" />
                         <?php ActiveForm::end(); ?>

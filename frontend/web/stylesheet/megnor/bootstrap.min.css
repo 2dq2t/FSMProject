@@ -4670,7 +4670,7 @@ a.list-group-item.active>.badge,.nav-pills>.active>a>.badge {
 .alert .fa-check-circle{display:none;}
 
 .alert-success ,.alert-info {
-    background: url("../../images/megnor/success.png") no-repeat scroll 10px center #efefef;
+    background: url("../../images/megnor/success.png") no-repeat scroll 10px center #3EE874;
     border: 1px solid #dbdee1;
     border-radius: 5px;
 }
