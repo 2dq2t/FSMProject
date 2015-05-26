@@ -15,6 +15,7 @@
                 foreach ($modelCategory as $item) {
                     $cat_name = $item['categoryname'];
                     $product_name = $item['productname'];
+                    $product_id =$item['productId'];
                     $result[$cat_name][] = $product_name;
                 }
                 ?>

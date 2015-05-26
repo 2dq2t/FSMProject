@@ -39,8 +39,9 @@ $this->title =$productDetail[0]['name'];
                         <ul class="left product-image thumbnails">
 
                             <!-- Megnor Cloud-Zoom Image Effect Start -->
-                            <li class="image"><a class="thumbnail" href="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-500x500.jpg" title="Nullam molli dolor "><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-320x340.jpg" title="Nullam molli dolor " alt="Nullam molli dolor " /></a></li>
-
+                            <?php
+                                echo "<li class='image'><a class='thumbnail' href='".$productImage[0]['path']."' title='".$productDetail[0]['name']."'><img src='".$productImage[0]['path']."' title='".$productDetail[0]['name']."' alt='".$productDetail[0]['name']."' /></a></li>";
+                            ?>
 
                             <div class="additional-carousel">
                                 <div class="customNavigation">
@@ -49,15 +50,6 @@ $this->title =$productDetail[0]['name'];
                                 </div>
 
                                 <div id="additional-carousel" class="image-additional product-carousel">
-
-                                    <!--<div class="slider-item">
-                                        <div class="product-block">
-                                            <li>
-                                                <a href="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-500x500.jpg" title="Nullam molli dolor " class="thumbnail" data-image="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-320x340.jpg"><img  src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-320x340.jpg" width="74" title="Nullam molli dolor " alt="Nullam molli dolor " /></a>
-
-                                            </li>
-                                        </div>
-                                    </div>-->
                                     <?php
                                     foreach ($productImage as $item) {
 
@@ -83,10 +75,9 @@ $this->title =$productDetail[0]['name'];
                     <ul class="list-unstyled">
                         <li><span>Mã số sản phẩm:</span><?php echo $productDetail[0]['barcode'] ?></li>
                         <li><span>Số lượng: </span><?php if ($productDetail[0]['quantity_in_stock'] - $productDetail[0]['sold'] > 0) echo $productDetail[0]['quantity_in_stock'] - $productDetail[0]['sold']; else echo "Trong kho"; ?></li>
-                        <li><p><span>Tiêu chuẩn:</span><span class="inline"
-                                                                                      style="margin-left: 3px"><a
-                                            href="http://vietgap.gov.vn/Content.aspx?mode=uc&page=About&Option=7" target="_blank"
-                                            rel="nofollow">Chứng nhận rau an toàn VIETGAP</a></span></p>
+                        <li><p><span>Tiêu chuẩn:</span><span class="inline" style="margin-left: 3px"><a  href="http://vietgap.gov.vn/Content.aspx?mode=uc&page=About&Option=7" target="_blank"
+                                            rel="nofollow">Chứng nhận rau an toàn VIETGAP</a></span></p></li>
+                        <li><p><?php echo $productDetail[0]['intro'] ?> </p></li>
                     </ul>
 
 
@@ -95,7 +86,7 @@ $this->title =$productDetail[0]['name'];
                         <li class="price-normal">
                             <h2 ><?php echo $productDetail[0]['price'] ?> VND</h2>
                         </li>
-                        <li class="tax price-tax">Ex Tax:<span class="price-tax">$500.00</span></li>
+                        <li class="tax price-tax">Thuế:<span class="price-tax"><?php echo $productDetail[0]['tax'] ?> VND</span></li>
                         <br/>
                     </ul>
                     <div id="product">
@@ -109,7 +100,7 @@ $this->title =$productDetail[0]['name'];
                             <button type="button" id="button-cart" data-loading-text="Loading..." title="Add to Cart" class="addtocart" ><span>Add to Cart</span></button> <span>&nbsp;&nbsp;- OR -&nbsp;&nbsp;</span>
 
                             <div class="btn-group">
-                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add('43');">Add to Wish List</button>
+                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add(<?php echo $productDetail[0]['id'] ?> );">Add to Wish List</button>
                                 <button type="button"  class="compare" title="Add to Compare" onclick="compare.add('43');">Add to Compare</button>
                             </div>
                         </div>
@@ -118,12 +109,7 @@ $this->title =$productDetail[0]['name'];
 
 
                     <div class="rating-wrapper">
-                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa fa-star off fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa fa-star off fa-stack-1x"></i></span>
-                        <a class="review-count" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">1 reviews</a><a class="write-review" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;"><i class="fa fa-pencil"></i> Write a review</a>
+                        <div id="star" class="star" data-score="4"></div>
                     </div>
 
                     <!-- Like Facebook Button -->
@@ -134,37 +120,11 @@ $this->title =$productDetail[0]['name'];
                 <div class="col-sm-12 product-description">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
-                        <li><a href="#tab-specification" data-toggle="tab">Specification</a></li>
                         <li><a href="#tab-review" data-toggle="tab">Reviews (1)</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-description"><p><?php echo $productDetail[0]['description'] ?></p></div>
-                        <div class="tab-pane" id="tab-specification">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <td colspan="2"><strong>Memory</strong></td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>test 1</td>
-                                    <td>8gb</td>
-                                </tr>
-                                </tbody>
-                                <thead>
-                                <tr>
-                                    <td colspan="2"><strong>Processor</strong></td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>No. of Cores</td>
-                                    <td>1</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
                         <div class="tab-pane" id="tab-review">
                             <form class="form-horizontal">
                                 <div id="review"></div>
@@ -204,7 +164,7 @@ $this->title =$productDetail[0]['name'];
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-12"> <img src="index.php?route=tool/captcha" alt="" id="captcha" /> </div>
+                                    <div class="col-sm-12"> <img src="" alt="" id="captcha" /> </div>
                                 </div>
                                 <div class="buttons">
                                     <div class="pull-right">
@@ -629,110 +589,8 @@ $this->title =$productDetail[0]['name'];
         });
     });
     //--></script>
+
 <script type="text/javascript"><!--
-    $('.date').datetimepicker({
-        pickTime: false
-    });
-
-    $('.datetime').datetimepicker({
-        pickDate: true,
-        pickTime: true
-    });
-
-    $('.time').datetimepicker({
-        pickDate: false
-    });
-
-    $('button[id^=\'button-upload\']').on('click', function() {
-        var node = this;
-
-        $('#form-upload').remove();
-
-        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
-
-        $('#form-upload input[name=\'file\']').trigger('click');
-
-        $('#form-upload input[name=\'file\']').on('change', function() {
-            $.ajax({
-                url: 'index.php?route=tool/upload',
-                type: 'post',
-                dataType: 'json',
-                data: new FormData($(this).parent()[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $(node).button('loading');
-                },
-                complete: function() {
-                    $(node).button('reset');
-                },
-                success: function(json) {
-                    $('.text-danger').remove();
-
-                    if (json['error']) {
-                        $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
-                    }
-
-                    if (json['success']) {
-                        alert(json['success']);
-
-                        $(node).parent().find('input').attr('value', json['code']);
-                    }
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-                }
-            });
-        });
-    });
-    //--></script>
-<script type="text/javascript"><!--
-    $('#review').delegate('.pagination a', 'click', function(e) {
-        e.preventDefault();
-
-        $('#review').fadeOut('slow');
-
-        $('#review').load(this.href);
-
-        $('#review').fadeIn('slow');
-    });
-
-    $('#review').load('index.php?route=product/product/review&product_id=43');
-
-    $('#button-review').on('click', function() {
-        $.ajax({
-            url: 'index.php?route=product/product/write&product_id=43',
-            type: 'post',
-            dataType: 'json',
-            data: 'name=' + encodeURIComponent($('input[name=\'name\']').val()) + '&text=' + encodeURIComponent($('textarea[name=\'text\']').val()) + '&rating=' + encodeURIComponent($('input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=' + encodeURIComponent($('input[name=\'captcha\']').val()),
-            beforeSend: function() {
-                $('#button-review').button('loading');
-            },
-            complete: function() {
-                $('#button-review').button('reset');
-                $('#captcha').attr('src', 'index.php?route=tool/captcha#'+new Date().getTime());
-                $('input[name=\'captcha\']').val('');
-            },
-            success: function(json) {
-                $('.alert-success, .alert-danger').remove();
-
-                if (json['error']) {
-                    $('#review').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
-                }
-
-                if (json['success']) {
-                    $('#review').after('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
-
-                    $('input[name=\'name\']').val('');
-                    $('textarea[name=\'text\']').val('');
-                    $('input[name=\'rating\']:checked').prop('checked', false);
-                    $('input[name=\'captcha\']').val('');
-                }
-            }
-        });
-    });
-
     $(document).ready(function() {
         $('.thumbnails').magnificPopup({
             type:'image',
@@ -741,6 +599,12 @@ $this->title =$productDetail[0]['name'];
                 enabled:true
             }
         });
+        $('#star').raty({
+            score: function() {
+                return $(this).attr('data-score');
+            }
+        });
     });
+
     //--></script>
 

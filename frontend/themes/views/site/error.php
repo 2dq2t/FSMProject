@@ -9,7 +9,8 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
-<div class="site-error">
+<div class="container content-inner">
+    <div class="row content-subinner">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -23,5 +24,5 @@ $this->title = $name;
     <p>
         Please contact us if you think this is a server error. Thank you.
     </p>
-
+</div>
 </div>

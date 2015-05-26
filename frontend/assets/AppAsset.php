@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
         'js/jquery/owl-carousel/owl.carousel.css',
         'js/jquery/owl-carousel/owl.transitions.css',
         'js/jquery/magnific/magnific-popup.css',
+        'js/jquery/raty/jquery.raty.css',
     ];
     public $js = [
         'js/bootstrap/bootstrap.min.js',
@@ -38,8 +39,8 @@ class AppAsset extends AssetBundle
         'js/megnor/jquery.custom.min.js',
         'js/megnor/scrolltop.min.js',
         'js/megnor/jquery.formalize.min.js',
-        'js/common.js',
         'js/jquery/magnific/jquery.magnific-popup.min.js',
+        'js/jquery/raty/jquery.raty.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -28,6 +28,7 @@ AppAsset::register($this);
     <?php $this->head() ?>
     <script src="/fsmproject/frontend/web/js/jquery/jquery-2.1.1.min.js"></script>
     <script src="/fsmproject/frontend/web/js/jquery/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/FSMProject/frontend/web/js/common.js"></script>
 </head>
 <body class="common-home layout-2 left-col">
 <?php $this->beginBody() ?>
@@ -354,8 +355,9 @@ $baseUrl = Yii::$app->request->baseUrl;
         <div class="copy-right">Powered By <a href="http://www.opencart.com">OpenCart</a> Your Store &copy; 2015</div>
     </div>
 </footer>
-<?php $this->endBody() ?>
 </body>
+<?php $this->endBody() ?>
+
 <<div id="fb-root"></div>
 <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];

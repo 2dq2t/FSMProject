@@ -60,51 +60,51 @@ $this->title = 'Đăng kí';
             <fieldset id="information">
                 <legend>Thông tin cá nhân</legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Họ và tên</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Họ và tên</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelGuest, 'full_name',[
                             'showLabels'=>false
                         ])->textInput(['placeholder'=>'Họ và tên']); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Email</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Email</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelGuest, 'email',[
                             'showLabels'=>false
                         ])->textInput(['placeholder'=>'Email']); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Số điện thoại</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Số điện thoại</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelGuest, 'phone_number',[
                             'showLabels'=>false
                         ])->textInput(['placeholder'=>'Số điện thoại']); ?>
                     </div>
                 </div>
             </fieldset>
-            <fieldset id="password">
-                <legend>Mật khẩu của bạn</legend>
+            <fieldset id="password" class="register">
+                <legend>Tài khoản</legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Tên Đăng Nhập</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Tên Đăng Nhập</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelCustomer, 'username',[
                             'showLabels'=>false
                         ])->textInput(['placeholder'=>'Tên Đăng Nhập']); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Mật Khẩu</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Mật Khẩu</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelCustomer, 'password',[
                             'showLabels'=>false
                         ])->passwordInput(['placeholder'=>'Mật Khẩu']); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-fullname">Xác Nhận Mật Khẩu</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label" for="input-fullname">Xác Nhận Mật Khẩu</label>
+                    <div class="col-sm-9">
                         <?= $form->field($modelCustomer, 're_password',[
                             'showLabels'=>false
                         ])->passwordInput(['placeholder'=>'Xác Nhận Mật Khẩu']); ?>

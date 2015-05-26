@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 	/* Search */
 	$('#search input[name=\'search\']').parent().find('button').on('click', function() {
-		url = $('base').attr('href') + 'index.php?route=product/search';
+		url ='index.php?r=site/search';
 
 		var value = $('header input[name=\'search\']').val();
 
@@ -138,7 +138,7 @@ $(document).ready(function() {
 var cart = {
 	'add': function(product_id, quantity) {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/add',
+			url: 'fsmproject/frontend/web/index.php?r=site/cart',
 			type: 'post',
 			data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -273,7 +273,7 @@ var wishlist = {
 var compare = {
 	'add': function(product_id) {
 		$.ajax({
-			url: 'index.php?route=product/compare/add',
+			url: 'fsmproject/frontend/web/index.php?r=site/compare',
 			type: 'post',
 			data: 'product_id=' + product_id,
 			dataType: 'json',

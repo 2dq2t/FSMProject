@@ -86,7 +86,7 @@ class SiteController extends Controller
     {
         //select category in navbar
         $query = new Query();
-        $query->select(['category.name as categoryname', 'product.name as productname'])
+        $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
                ->from('category')->leftJoin('product', 'category.id = product.category_id');
         $command = $query->createCommand();
         $modelCategory = $command->queryAll();
@@ -101,7 +101,7 @@ class SiteController extends Controller
         $newProduct = Product::find()->where(['active'=>'1'])->orderBy(['id'=>SORT_DESC])->limit(5)->all();
         foreach($newProduct as $item){
             $imagePath = Image::find()->where(['product_id'=>$item['id']])->one();
-            print_r($imagePath);
+            //print_r($imagePath);
         }
         $season = Season::find(['from','to'])->all();
         $slideShow = SlideShow::find()->all();
@@ -124,7 +124,13 @@ class SiteController extends Controller
             $productDetail = Product::find()->where(['name' => $productName])->all();
             $productImage = Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
             $starRating = new Rating();
-            return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'starRating' => $starRating]);
+            //select category in navbar
+            $query = new Query();
+            $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
+                ->from('category')->leftJoin('product', 'category.id = product.category_id');
+            $command = $query->createCommand();
+            $modelCategory = $command->queryAll();
+            return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'modelCategory' => $modelCategory]);
         }
     }
 
