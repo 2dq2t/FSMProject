@@ -35,7 +35,7 @@ class CustomerController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['update' ],
+                'only' => ['update','manageacc','changepass' ],
                 'rules' => [
                     [
                         'allow' => true,
