@@ -224,7 +224,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                         data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span> <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="index.php?r=site/register">Tài khoản của tôi</a>
+                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>">Tài khoản của tôi</a>
                                         </li>
                                         <li>
                                             <a href="#">Đơn hàng của tôi</a>

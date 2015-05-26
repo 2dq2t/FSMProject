@@ -2363,4 +2363,26 @@ footer{margin:0 15px;}
 	
 }
 
+.h2-account{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.list-unstyled-account{
+    background: none repeat scroll 0 0 #f8f8f8;
+    border: 1px solid #eeeeee;
+    margin-bottom: 10px;
+    overflow: auto;
+    padding: 10px;
+}
+
+.list-unstyled-account li{
+    padding: 4px 0;
+}
+
+.list-unstyled-account li a{
+    background: url("../images/megnor/footerbullet1.png") no-repeat scroll left center transparent;
+    padding-left: 12px;
+}
 /*Megnor www.templatemela.com - End */

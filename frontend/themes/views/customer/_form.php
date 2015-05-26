@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use kartik\alert\Alert;
 use kartik\widgets\DepDrop;
@@ -20,134 +20,108 @@ if(isset($modelCustomer->avatar)) {
 
 ?>
 
-<div class="row">
-    <div id="top-banner-and-menu">
-        <div class="container">
-            <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
-                <?php
-                echo Alert::widget([
-                    'type' => (!empty($message['type'])) ? $message['type'] : Alert::TYPE_DANGER,
-                    'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
-                    'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-                    'body' => (!empty($message['message'])) ? Html::encode($message['message']) : Yii::t('app', 'Message Not Set!'),
-                    'showSeparator' => true,
-                    'delay' => 3000
-                ]);
-                ?>
-            <?php endforeach; ?>
-            <!--BEGIN NAVBAR-->
-            <div class="col-xs-12 col-sm-4 col-md-3 sidemenu-holder">
-                <div class="side-menu animate-dropdown">
-                    <div class="head"><i class="fa fa-list"></i> Tài khoản của bạn</div>
-                    <nav class="yamm megamenu-horizontal" role="navigation">
-                        <ul class="nav">
-                            <li class="dropdown menu-item">
-                                <a href="#" class="">Quản lý tài khoản</a>
-                            </li><!-- /.menu-item -->
-                            <li class="dropdown menu-item">
-                                <a href="#" class="" >Thông tin tài khoản</a>
-                            </li><!-- /.menu-item -->
-                            <li class="dropdown menu-item">
-                                <a href="#" class="" >Đơn hàng của tôi</a>
-                            </li><!-- /.menu-item -->
-                            <li class="dropdown menu-item">
-                                <a href="#" class="" >Sản phẩm yêu thích</a>
-                            </li><!-- /.menu-item -->
-                            <li class="dropdown menu-item">
-                                <a href="#" class="" >Mã khách hàng của tôi</a>
-                            </li><!-- /.menu-item -->
-                            <li class="dropdown menu-item">
-                                <a href="#" class="" >Thoát</a>
-                            </li><!-- /.menu-item -->
-                        </ul>
-                    </nav>
+<div class="container content-inner">
+
+    <div class="row content-subinner">
+        <ul class="breadcrumb">
+            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i class="fa fa-home"></i></a></li>
+            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Account</a></li>
+        </ul>
+        <column id="column-left" class="col-sm-3 hidden-xs">
+            <div class="box">
+                <div class="box-heading">Account</div>
+                <div class="list-group">
+                    <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">My Account</a>
+                    <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Edit Account</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/password" class="list-group-item">Password</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/address" class="list-group-item">Address Books</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist" class="list-group-item">Wish List</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order" class="list-group-item">Order History</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/download" class="list-group-item">Downloads</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/reward" class="list-group-item">Reward Points</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/return" class="list-group-item">Returns</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/transaction" class="list-group-item">Transactions</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/newsletter" class="list-group-item">Newsletter</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/recurring" class="list-group-item">Recurring payments</a>
+                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/logout" class="list-group-item">Logout</a>
                 </div>
-            </div><!--END NAVBAR-->
-
-            <!--BEGIN CONTENT-->
-            <div class="col-xs-12 col-sm-8 col-md-9 homebanner-holder">
-                <fieldset class="scheduler-border">
-                    <?php $form = ActiveForm::begin(['id' => 'form-manage-acc', 'method' => 'post', 'options' => ['class' => 'login-form cf-style-1', 'enctype'=>'multipart/form-data']]); ?>
-
-                    <div class="field-row">
-                        <label>Avatar</label>
-                        <?= $form->field($modelCustomer, 'avatar')->widget(\kartik\widgets\FileInput::className(), [
-                            'options' => [
-                                'accept' => 'image/*'
-                            ],
-                            'pluginOptions' => [
-                                'showCaption' => true,
-                                'allowedFileExtensions' => ['jpeg', 'jpg', 'gif', 'png'],
-                                'showUpload' => false,
-                                'initialPreview' => $user_avatar,
-                                'overwriteInitial' => true,
-                                'layoutTemplates' => [
-                                    'footer' => '<div class="file-thumbnail-footer">'.
-                                        '<div class="file-caption-name">{caption}</div>'.
-                                        '<div class="file-actions">'.
-                                        '<div class="file-footer-buttons">'.
-                                        '<button type="button" class="kv-file-remove btn btn-xs btn-default" title="Remove file">'.
-                                        '<i class="glyphicon glyphicon-trash text-danger"></i>'.
-                                        '</button>'.
-                                        '</div>'.
-                                        '</div>'.
-                                        '</div>'
+            </div>
+        </column>
+        <div id="content" class="col-sm-9">      <h1 class="page-title">My Account Information</h1>
+            <?php $form = ActiveForm::begin([
+                'type'=>ActiveForm::TYPE_HORIZONTAL,
+                'formConfig'=>['labelSpan'=>3, 'deviceSize'=>ActiveForm::SIZE_SMALL],
+            ]);
+            ?>
+                <fieldset>
+                    <legend>Your Personal Details</legend>
+                    <div class="form-group" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-firstname">Avatar </label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelCustomer, 'avatar')->widget(\kartik\widgets\FileInput::className(), [
+                                'options' => [
+                                    'accept' => 'image/*'
+                                ],
+                                'pluginOptions' => [
+                                    'showCaption' => true,
+                                    'allowedFileExtensions' => ['jpeg', 'jpg', 'gif', 'png'],
+                                    'showUpload' => false,
+                                    'initialPreview' => $user_avatar,
+                                    'overwriteInitial' => true,
+                                    'layoutTemplates' => [
+                                        'footer' => '<div class="file-thumbnail-footer">'.
+                                            '<div class="file-caption-name">{caption}</div>'.
+                                            '<div class="file-actions">'.
+                                            '<div class="file-footer-buttons">'.
+                                            '<button type="button" class="kv-file-remove btn btn-xs btn-default" title="Remove file">'.
+                                            '<i class="glyphicon glyphicon-trash text-danger"></i>'.
+                                            '</button>'.
+                                            '</div>'.
+                                            '</div>'.
+                                            '</div>'
+                                    ]
                                 ]
-                            ]
-                        ])->label(false) ?>
+                            ])->label(false) ?>
+                        </div>
                     </div>
-
-                    <div class="field-row">
-                        <label>Tên đăng nhập</label>
-                        <?= $form->field($modelCustomer, 'username', [
-                            'inputOptions' => [
-                                'class' => 'le-input',
-                                'maxlength' => 255,
-                            ],
-                        ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Mật khẩu</label>
-                        <span style="padding: 9px;">*****</span>
-                        <?php
-                        echo "<a href='index.php?r=customer/changepass&id=".Yii::$app->user->identity->id."' style='float: right; padding-right: 9px;'>Đổi mật khẩu</a>"
-                        ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Họ và tên</label>
-                        <?= $form->field($modelGuest, 'full_name', [
-                            'inputOptions' => [
-                                'class' => 'le-input',
-                                'maxlength' => 255,
-                            ],
-                        ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Email</label>
-                        <?= $form->field($modelGuest, 'email', [
-                            'inputOptions' => [
-                                'class' => 'le-input',
-                                'maxlength' => 255,
-                            ],
-                        ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Giới tính</label>
-                        <?= $form->field($modelCustomer, 'gender')->dropDownList(
-                            ['Male' => 'Nam', 'Female' => 'Nữ', 'Other' => 'Khác'],
-                            ['class'=>'le-select-address'])
-                            ->label(false);
-                        ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="field-row">
-                        <label>Ngày sinh</label>
-                        <?= $form->field($modelCustomer, 'dob')->widget(DatePicker::className(),
-                            [
+                    <div class="form-group required" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-lastname">Tên Đăng Nhập</label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelCustomer, 'username',[
+                                'showLabels'=>false
+                            ])->textInput(); ?>
+                        </div>
+                    </div>
+                    <div class="form-group required" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-email">Họ và tên</label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelGuest, 'full_name',[
+                                'showLabels'=>false
+                            ])->textInput(); ?>
+                        </div>
+                    </div>
+                    <div class="form-group required" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-telephone">Email</label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelGuest, 'email',[
+                                'showLabels'=>false
+                            ])->textInput(); ?>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-fax">Giới tính</label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelCustomer, 'gender',[
+                                'showLabels'=>false
+                            ])->dropDownList(['Male' => 'Nam', 'Female' => 'Nữ', 'Other' => 'Khác']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0px;">
+                        <label class="col-sm-2 control-label" for="input-fax">Ngày sinh</label>
+                        <div class="col-sm-10">
+                            <?= $form->field($modelCustomer, 'dob',[
+                                'showLabels'=>false
+                            ])->widget(DatePicker::className(),[
                                 'removeButton' => false,
                                 'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                 'pluginOptions' => [
@@ -155,19 +129,17 @@ if(isset($modelCustomer->avatar)) {
                                     'endDate' => '+0d',
                                     'todayHighlight' => true
                                 ],
-                                'options' => ['class' => 'le-input'],
-                            ])->label(false); ?>
-                    </div><!-- /.field-row -->
-
-                    <div class="buttons-holder">
-                        <button type="submit" class="le-button huge" name="submit">Lưu thông tin</button>
-                    </div><!-- /.buttons-holder -->
-
-                    <?php ActiveForm::end(); ?>
+                            ]);?>
+                        </div>
+                    </div>
                 </fieldset>
-            </div><!--END CONTENT-->
+                <div class="buttons clearfix">
+                    <div class="pull-left"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account" class="btn btn-default">Back</a></div>
+                    <div class="pull-right">
+                        <input type="submit" value="Lưu" class="btn btn-primary" />
+                    </div>
+                </div>
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>
-<section id="top-brands" class="wow fadeInUp">
-</section>
