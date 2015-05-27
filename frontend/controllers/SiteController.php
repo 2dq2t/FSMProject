@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Category;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
@@ -34,6 +35,7 @@ use kartik\alert\Alert;
  */
 class SiteController extends Controller
 {
+
     public $enableCsrfValidation = false;
     /**
      * @inheritdoc
@@ -87,7 +89,7 @@ class SiteController extends Controller
         //select category in navbar
         $query = new Query();
         $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
-               ->from('category')->leftJoin('product', 'category.id = product.category_id');
+               ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
         $command = $query->createCommand();
         $modelCategory = $command->queryAll();
         /*$provider = new SqlDataProvider([
@@ -114,6 +116,30 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionCategory(){
+        if (Yii::$app->request->isGet) {
+
+            if (empty($_GET['category']))
+                return $this->goHome();
+            $categoryName = $_GET['category'];
+            $categoryID = Category::find()->where(['name'=>$categoryName])->one();
+            $productQuery = new Query();
+            $productQuery->select([ 'product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                ,'product.tax as product_tax','image.path as image_path'])->from('product')->leftJoin('image','product.id = image.product_id')->where(['product.active'=>1,'product.category_id'=>$categoryID['id']])->groupBy('product.id');
+            $productCommand = $productQuery->createCommand();
+            $product = $productCommand->queryAll();
+
+            $query = new Query();
+            $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
+                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
+            $command = $query->createCommand();
+            $modelCategory = $command->queryAll();
+            return $this->render('category',[
+                'modelCategory'=>$modelCategory,'category_name'=>$categoryName,'product'=>$product
+            ]);
+        }
+    }
+
     public function actionViewDetail()
     {
         if (Yii::$app->request->isGet) {
@@ -127,7 +153,7 @@ class SiteController extends Controller
             //select category in navbar
             $query = new Query();
             $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
-                ->from('category')->leftJoin('product', 'category.id = product.category_id');
+                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
             $command = $query->createCommand();
             $modelCategory = $command->queryAll();
             return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'modelCategory' => $modelCategory]);
@@ -159,8 +185,14 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goHome();
         } else {
+            //select category in navbar
+            $query = new Query();
+            $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
+                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
+            $command = $query->createCommand();
+            $modelCategory = $command->queryAll();
             return $this->render('login', [
-                'model' => $model,
+                'model' => $model,'modelCategory' => $modelCategory
             ]);
         }
     }
@@ -254,7 +286,11 @@ class SiteController extends Controller
 
         $modelCustomer = new Customer();
         $modelGuest = new Guest();
-
+        $query = new Query();
+        $query->select(['category.name as categoryname', 'product.name as productname','product.id as productId'])
+            ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
+        $command = $query->createCommand();
+        $modelCategory = $command->queryAll();
         if($modelCustomer->load(Yii::$app->request->post())
             && $modelGuest->load(Yii::$app->request->post())){
 
@@ -275,12 +311,14 @@ class SiteController extends Controller
                         return $this->render('register', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
+                            'modelCategory' => $modelCategory,
                         ]);
                     }
                 }else{
                     return $this->render('register', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
+                        'modelCategory' => $modelCategory,
                     ]);
                 }
             }catch (Exception $e){
@@ -290,6 +328,7 @@ class SiteController extends Controller
             return $this->render('register',[
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
+                'modelCategory' => $modelCategory,
             ]);
         }
 

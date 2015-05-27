@@ -27,10 +27,18 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <script src="/fsmproject/frontend/web/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="/fsmproject/frontend/web/js/bootstrap/bootstrap.min.js"></script>
     <script src="/fsmproject/frontend/web/js/jquery/owl-carousel/owl.carousel.min.js"></script>
-    <script src="/FSMProject/frontend/web/js/common.js"></script>
 </head>
 <body class="common-home layout-2 left-col">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=369040309965950";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 <?php $this->beginBody() ?>
 <?php
 $baseUrl = Yii::$app->request->baseUrl;
@@ -80,177 +88,7 @@ $baseUrl = Yii::$app->request->baseUrl;
         </div>
     </div>
 </header>
-<nav class="nav-container" role="navigation">
-    <div class="nav-inner">
-        <!-- ======= Menu Code START ========= -->
-        <!-- Opencart 3 level Category Menu-->
-        <div class="container">
-            <div id="menu" class="main-menu">
 
-                <div class="nav-responsive"><span>Menu</span>
-
-                    <div class="expandable"></div>
-                </div>
-                <ul class="main-navigation">
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20">Electronics</a>
-
-                        <ul>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20_59">Laptops</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20_60">Tablates</a>
-
-                            </li>
-
-                            <li>
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20_26"
-                                   class="activSub">PC</a>
-                                <ul class="col4">
-                                    <li>
-                                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=26_61">Dell</a>
-                                    </li>
-                                    <li>
-                                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=26_62">Samsung</a>
-                                    </li>
-                                </ul>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20_27">Mac</a>
-
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=18">Parts
-                            &amp; Accessories</a>
-
-                        <ul>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=18_46">Macs</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=18_45">Windows</a>
-
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25">Components</a>
-
-                        <ul>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25_29">Mice
-                                    and Trackballs</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25_28">Monitors</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25_30">Printers</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25_31">Scanners</a>
-
-                            </li>
-
-                            <li>
-
-                                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=25_32">Web
-                                    Cameras</a>
-
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=57">Interiors</a>
-                    </li>
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=17">Kitchen</a>
-                    </li>
-                    <li>
-                        <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=24">House
-                            Holds</a>
-                    </li>
-                </ul>
-            </div>
-            <nav id="top">
-                <div class="container">
-                    <div id="top-links" class="nav">
-                        <ul class="list-inline">
-                            <?php if(Yii::$app->user->isGuest): ?>
-                                <li class="dropdown myaccount"><a
-                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
-                                        title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span>My Account</span> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
-                                        <li>
-                                            <a href="index.php?r=site/register">Register</a>
-                                        </li>
-                                        <li>
-                                            <a href="index.php?r=site/login">Login</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            <?php else: ?>
-                                <li class="dropdown myaccount"><a
-                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
-                                        title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
-                                        <li>
-                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>">Tài khoản của tôi</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Đơn hàng của tôi</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Sản phẩm yêu thích</a>
-                                        </li>
-                                        <li>
-                                            <a href="<?= $baseUrl."/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            <?php endif; ?>
-                            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist"
-                                   id="wishlist-total" title="Wish List (0)"> <span>Wish List (0)</span></a></li>
-                            <li class="checkout"><a
-                                    href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/checkout"
-                                    title="Checkout"> <span>Checkout</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- ======= Menu Code END ========= -->
-        </div>
-    </div>
-</nav>
 
 <?= Breadcrumbs::widget([
     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -357,14 +195,5 @@ $baseUrl = Yii::$app->request->baseUrl;
 </footer>
 </body>
 <?php $this->endBody() ?>
-
-<<div id="fb-root"></div>
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=369040309965950";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
 </html>
 <?php $this->endPage() ?>

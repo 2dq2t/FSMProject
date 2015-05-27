@@ -20,7 +20,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'js/font-awesome/css/font-awesome.min.css',
         'http://fonts.googleapis.com/css?family=Open+Sans:400,700',
-        'http://fonts.googleapis.com/css?family=Rokkitt:400,700',
+        'http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700&subset=vietnamese',
         'stylesheet/stylesheet.css',
         'stylesheet/megnor/carousel.css',
         'stylesheet/megnor/custom.css',
@@ -31,7 +31,6 @@ class AppAsset extends AssetBundle
         'js/jquery/raty/jquery.raty.css',
     ];
     public $js = [
-        'js/bootstrap/bootstrap.min.js',
         'js/megnor/custom.js',
         'js/megnor/jstree.min.js',
         'js/megnor/carousel.min.js',

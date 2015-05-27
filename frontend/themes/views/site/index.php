@@ -6,7 +6,10 @@ use yii\helpers\Html;
 $this->title = 'Fresh Garden';
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
-
+<?php echo $this->render('_navbar',[
+    'modelCategory' => $modelCategory,
+]);
+?>
 <div class="container content-inner">
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
         <?php

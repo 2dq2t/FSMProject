@@ -8,6 +8,10 @@
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title =$productDetail[0]['name'];
 ?>
+<?php echo $this->render('_navbar',[
+    'modelCategory' => $modelCategory,
+]);
+?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-home"></i></a></li>
@@ -113,7 +117,7 @@ $this->title =$productDetail[0]['name'];
                     </div>
 
                     <!-- Like Facebook Button -->
-                    <div class="addthis_toolbox addthis_default_style fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+                    <div class="fb-like" data-href="<?php echo "localhost/".Yii::$app->request->getUrl(); ?>" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
                     <!-- Like Facebook Button END -->
 
                 </div>

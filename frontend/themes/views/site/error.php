@@ -9,6 +9,10 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
+<?php echo $this->render('_navbar',[
+    'modelCategory' => $modelCategory,
+]);
+?>
 <div class="container content-inner">
     <div class="row content-subinner">
 

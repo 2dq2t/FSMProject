@@ -329,8 +329,8 @@ div.required .control-label:before {
 .main-menu > ul > li > a {
 	  color: #ffffff;
     display: block;
-    font-family: "Rokkitt","Open Sans",Arial,Verdana,sans-serif;
-    font-size: 18px;
+    font-family: "Open Sans Condensed", "Open Sans",Arial,Verdana,sans-serif;
+    font-size: 16px;
     font-weight: bold;
     height: 43px;
     line-height: 20px;
@@ -641,7 +641,7 @@ footer a {
 #footer .column.contact li a{background:none;padding:0;}
 footer h5 {
 	color: #8ac42f;
-	font-family: "Rokkitt","Open Sans",Arial,Verdana,sans-serif;
+	font-family: "Open Sans Condensed","Open Sans",Arial,Verdana,sans-serif;
 	font-size: 16px;
 	margin-bottom: 4px;
 	margin-top: 0;
@@ -1280,7 +1280,7 @@ h2.price {
 -khtml-border-radius:0px;
 -moz-border-radius:0px;
 	color: #ffffff;
-	font-family: "Rokkitt","Open Sans",Arial,Verdana,sans-serif;
+	font-family: "Open Sans",Arial,Verdana,sans-serif;
 	font-size: 16px;
 	height: 46px;
 	line-height: 13px;
@@ -1297,7 +1297,7 @@ h2.price {
 
 #content .box .box-heading {
 	color: #75ad17;
-	font-family: "Rokkitt","Open Sans",Arial,Verdana,sans-serif;
+	font-family: "Open Sans",Arial,Verdana,sans-serif;
 	font-size: 20px;
 	padding: 8px 0;
 	text-transform: uppercase;
@@ -1958,7 +1958,7 @@ background: url("../images/megnor/sprite.png") no-repeat scroll 1px -229px trans
 
 .productpage h3 {
     color: #8ac42f;
-    font-family: "Rokkitt",Open San,Arial,Verdana,sans-serif;
+    font-family: Open San,Arial,Verdana,sans-serif;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -2390,3 +2390,4 @@ footer{margin:0 15px;}
 {
     width: 100% !important;
 }
+.fb-like-box, .fb-like-box span, .fb-like-box span iframe[style] { width: 100% !important; }
