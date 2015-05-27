@@ -164,7 +164,7 @@ class SiteController extends Controller
     {
         if(Yii::$app->request->isAjax){
             $data = Yii::$app->request->post();
-            $productId = json_decode($data['id']);
+            $productId = json_decode($data['product_id']);
             $wishList = new WishList();
             $wishList->customer_id = \Yii::$app->user->identity->getId();
             $wishList->product_id = $productId;

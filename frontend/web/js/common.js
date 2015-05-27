@@ -43,23 +43,6 @@ $(document).ready(function() {
 		}
 	});
 		
-	// Currency
-	$('#currency .currency-select').on('click', function(e) {
-		e.preventDefault();
-
-		$('#currency input[name=\'code\']').attr('value', $(this).attr('name'));
-
-		$('#currency').submit();
-	});
-
-	// Language
-	$('#language a').on('click', function(e) {
-		e.preventDefault();
-
-		$('#language input[name=\'code\']').attr('value', $(this).attr('href'));
-
-		$('#language').submit();
-	});
 
 	/* Search */
 	$('#search input[name=\'search\']').parent().find('button').on('click', function() {
@@ -241,8 +224,7 @@ var voucher = {
 	}
 }
 
-var wishlist = {
-	'add': function(product_id) {
+function addWishList(product_id) {
 		$.ajax({
 			url: 'fsmproject/frontend/web/index.php?r=site/wish-list',
 			type: 'post',
@@ -264,11 +246,7 @@ var wishlist = {
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			}
 		});
-	},
-	'remove': function() {
-
 	}
-}
 
 var compare = {
 	'add': function(product_id) {

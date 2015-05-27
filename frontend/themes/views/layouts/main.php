@@ -26,9 +26,10 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <script src="/fsmproject/frontend/web/js/jquery/jquery-2.1.1.min.js"></script>
-    <script src="/fsmproject/frontend/web/js/bootstrap/bootstrap.min.js"></script>
-    <script src="/fsmproject/frontend/web/js/jquery/owl-carousel/owl.carousel.min.js"></script>
+    <script src="<?= Yii::$app->request->baseUrl."/js/jquery/jquery-2.1.1.min.js"?>"></script>
+    <script src="<?= Yii::$app->request->baseUrl."/js/bootstrap/bootstrap.min.js"?>"></script>
+    <script src="<?= Yii::$app->request->baseUrl."/js/jquery/owl-carousel/owl.carousel.min.js"?>"></script>
+    <script src="<?= Yii::$app->request->baseUrl."/js/common.js"?>"></script>
 </head>
 <body class="common-home layout-2 left-col">
 <div id="fb-root"></div>
