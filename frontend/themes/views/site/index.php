@@ -440,7 +440,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <span class="featured_default_width" style="display:none; visibility:hidden"></span>
 
                         <div class="box latest">
-                            <div class="box-heading">Latest</div>
+                            <div class="box-heading">Mùa này có gì?</div>
                             <div class="box-content">
                                 <div class="customNavigation">
                                     <a class="prev">&nbsp;</a>

@@ -102,33 +102,9 @@ $this->title =$productDetail[0]['name'];
 
 
                             <button type="button" id="button-cart" data-loading-text="Loading..." title="Add to Cart" class="addtocart" ><span>Add to Cart</span></button> <span>&nbsp;&nbsp;- OR -&nbsp;&nbsp;</span>
-                            <script>
-                                function addWishList(product_id) {
-                                    $.ajax({
-                                        url: 'fsmproject/frontend/web/index.php?r=site/wish-list',
-                                        type: 'post',
-                                        data: {product_id: product_id},
-                                        dataType: 'json',
-                                        success: function(json) {
-                                            $('.alert').remove();
 
-                                            if (json['success']) {
-                                                $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                                            }
-
-                                            if (json['info']) {
-                                                $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                                            }
-
-                                            $('#wishlist-total').html(json['total']);
-
-                                            $('html, body').animate({ scrollTop: 0 }, 'slow');
-                                        }
-                                    });
-                                }
-                            </script>
                             <div class="btn-group">
-                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="addWishList(<?php echo $productDetail[0]['id'] ?> );">Add to Wish List</button>
+                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add(<?php echo $productDetail[0]['id'] ?> );">Add to Wish List</button>
                                 <button type="button"  class="compare" title="Add to Compare" onclick="compare.add('43');">Add to Compare</button>
                             </div>
                         </div>

@@ -5,6 +5,7 @@
  * Date: 27/05/2015
  * Time: 7:25 CH
  */
+$baseUrl= Yii::$app->request->baseUrl;
 ?>
 <nav class="nav-container" role="navigation">
     <div class="nav-inner">

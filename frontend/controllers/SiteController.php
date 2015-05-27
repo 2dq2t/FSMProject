@@ -92,20 +92,15 @@ class SiteController extends Controller
                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
         $command = $query->createCommand();
         $modelCategory = $command->queryAll();
-        /*$provider = new SqlDataProvider([
-            'sql' => 'SELECT product.id,product.name,product.price,image.path FROM product,image WHERE product.active=:active AND product.id=image.product_id ORDER BY product.id DESC ',
-            'params' => [':active' => 1],
-            'pagination' => [
-                'pageSize' => 5,
-            ],
-        ]);
-        $product = $provider->getModels();*/
-        $newProduct = Product::find()->where(['active'=>'1'])->orderBy(['id'=>SORT_DESC])->limit(5)->all();
+        $newProduct = Product::find()->where(['active'=>'1'])->orderBy(['id'=>SORT_DESC])->limit(10)->all();
         foreach($newProduct as $item){
             $imagePath = Image::find()->where(['product_id'=>$item['id']])->one();
             //print_r($imagePath);
         }
-        $season = Season::find(['from','to'])->all();
+        $season = Season::find(['id','from','to'])->all();
+        foreach($season as $item){
+            echo date("d-m",$item['from']);
+        }
         $slideShow = SlideShow::find()->all();
         /*echo '<pre>';
         //print_r($newProduct) ;
@@ -148,7 +143,6 @@ class SiteController extends Controller
                 return $this->goHome();
             $productName = $_GET['product'];
             $productDetail = Product::find()->where(['name' => $productName])->all();
-            $productImage = Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
             $starRating = new Rating();
             //select category in navbar
             $query = new Query();
@@ -156,21 +150,39 @@ class SiteController extends Controller
                 ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active'=>1]);
             $command = $query->createCommand();
             $modelCategory = $command->queryAll();
+
+
+            $productImage = Image::find()->where(['product_id' => $productDetail['0']['id']])->all();
             return $this->render('viewDetail', ['productDetail' => $productDetail, 'productImage' => $productImage, 'modelCategory' => $modelCategory]);
         }
     }
 
     public function actionWishList()
     {
-        if(Yii::$app->request->isAjax){
+        $json = array();
+
+        if(Yii::$app->user->isGuest)
+            $json['info'] = "Bạn phải đăng nhập để thực hiện chức năng này";
+        else{
+            $customerId = Yii::$app->user->identity->getId();
             $data = Yii::$app->request->post();
             $productId = json_decode($data['product_id']);
-            $wishList = new WishList();
-            $wishList->customer_id = \Yii::$app->user->identity->getId();
-            $wishList->product_id = $productId;
-            $wishList->save();
+            if(WishList::find()->where(['customer_id'=>$customerId,'product_id'=>$productId])->exists()){
+                $json['info'] = "Sản phẩm đã tồn tại trong danh mục yêu thích!";
+            }
+            else{
+                $wishList = new WishList();
+                $wishList->customer_id = $customerId;
+                $wishList->product_id = $productId;
+                $wishList->save();
+                $json['total'] = WishList::find()->count('customer_id');
+                $json['success'] = "Đã thêm vào danh mục yêu thích";
+            }
+        }
+
+        if(Yii::$app->request->isAjax){
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [$productId];
+            return [json_encode($json)];
         }
 
     }

@@ -6,6 +6,10 @@
  * Time: 3:09 CH
  */
 ?>
+<?php echo $this->render('_navbar',[
+    'modelCategory' => $modelCategory,
+]);
+?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="<?=Yii::$app->request->baseUrl?>"><i class="fa fa-home"></i></a></li>

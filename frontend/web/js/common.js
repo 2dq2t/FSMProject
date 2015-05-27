@@ -224,29 +224,33 @@ var voucher = {
 	}
 }
 
-function addWishList(product_id) {
+var wishlist = {
+	'add': function(product_id) {
 		$.ajax({
-			url: 'fsmproject/frontend/web/index.php?r=site/wish-list',
+			url: 'index.php?r=site/wish-list',
 			type: 'post',
-			data: 'product_id=' + product_id,
+			data: {product_id: product_id},
 			dataType: 'json',
-			success: function(json) {
+			success: function(data) {
 				$('.alert').remove();
-
+                var json = $.parseJSON(data)
 				if (json['success']) {
 					$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#wishlist-total').html('Wish List ('+json['total']+')');
 				}
 
 				if (json['info']) {
 					$('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 				}
 
-				$('#wishlist-total').html(json['total']);
-
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			}
 		});
+	},
+	'remove': function() {
+
 	}
+}
 
 var compare = {
 	'add': function(product_id) {
