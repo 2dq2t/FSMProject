@@ -123,6 +123,10 @@ class AuthItemController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if (empty($model->children)) {
+                $model->children = [];
+            }
+
             $model->createItem();
             if (strlen($model->getErrorMessage()) > 0) {
 
@@ -209,6 +213,10 @@ class AuthItemController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if (empty($model->children)) {
+                $model->children = [];
+            }
+
             $model->updateItem();
 
             if (strlen($model->getErrorMessage()) > 0) {
