@@ -35,11 +35,11 @@ class CustomerController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['update' ],
+                'only' => ['update','manageacc','changepass' ],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => [ 'update'],
+                        'actions' => [ 'update','manageacc'],
                         'roles' => ['@'],
                     ],
                     [
@@ -95,6 +95,14 @@ class CustomerController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionManageacc($id){
+
+        if (Yii::$app->user->id != $id) {
+            return $this->redirect('index.php?r=customer/manageacc&id='.Yii::$app->user->id.'');
+        }
+        return $this->render('manageacc');
     }
 
     /**
