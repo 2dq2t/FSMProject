@@ -12,6 +12,9 @@ use Yii;
  * @property string $title
  * @property string $description
  * @property integer $active
+ * @property string $product_id
+ *
+ * @property Product $product
  */
 class SlideShow extends \yii\db\ActiveRecord
 {
@@ -33,9 +36,8 @@ class SlideShow extends \yii\db\ActiveRecord
     {
         return [
             [['path', 'title', 'description'], 'required'],
-            [['active'], 'integer'],
-            [['path', 'title'], 'string', 'max' => 255],
-            [['description'], 'string', 'max' => 255],
+            [['active', 'product_id'], 'integer'],
+            [['path', 'title', 'description'], 'string', 'max' => 255],
             [['image'], 'file', 'extensions' => 'jpeg, jpg, png, gif'],
             [['image'], 'required', 'on' => 'adminCreate']
         ];
@@ -48,10 +50,19 @@ class SlideShow extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-//            'path' => Yii::t('app', 'Path'),
+            'path' => Yii::t('app', 'Path'),
             'title' => Yii::t('app', 'Title'),
             'description' => Yii::t('app', 'Description'),
             'active' => Yii::t('app', 'Active'),
+            'product_id' => Yii::t('app', 'Product'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 }

@@ -9,8 +9,11 @@ use Yii;
  *
  * @property string $id
  * @property string $name
+ * @property integer $from
+ * @property integer $to
  * @property integer $active
  *
+ * @property ProductSeason[] $productSeasons
  * @property Product[] $products
  */
 class Season extends \yii\db\ActiveRecord
@@ -31,8 +34,9 @@ class Season extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'from', 'to'], 'required'],
             [['active'], 'integer'],
+            [['from', 'to'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique']
         ];
@@ -46,6 +50,8 @@ class Season extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
+            'from' => Yii::t('app', 'From'),
+            'to' => Yii::t('app', 'To'),
             'active' => Yii::t('app', 'Active'),
         ];
     }
@@ -53,8 +59,16 @@ class Season extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getProductSeasons()
+    {
+        return $this->hasMany(ProductSeason::className(), ['season_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['season_id' => 'id']);
+        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_season', ['season_id' => 'id']);
     }
 }

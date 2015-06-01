@@ -117,19 +117,52 @@ class SeasonController extends Controller
     {
         $model = new Season();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-plus',
-                'message' => 'Season Record has been saved.',
-                'title' => 'Add Season'
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->from) {
+            $model->from = date('m/d/Y', $model->from);
+        }
+
+        if ($model->to) {
+            $model->to = date('m/d/Y', $model->to);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->from = strtotime($model->from);
+            $model->to = strtotime($model->to);
+
+            if($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 5000,
+                    'icon' => 'fa fa-plus',
+                    'message' => 'Season Record has been saved.',
+                    'title' => 'Add Season'
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                if ($model->from) {
+                    $model->from = date('m/d/Y', $model->from);
+                }
+
+                if ($model->to) {
+                    $model->to = date('m/d/Y', $model->to);
+                }
+
+                Yii::$app->getSession()->setFlash('danger', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season',
+                    'title' => Yii::t('app', 'Add Season'),
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [
@@ -148,15 +181,49 @@ class SeasonController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-pencil',
-                'message' => 'Season Record has been updated.',
-                'title' => 'Update Season'
-            ]);
-            return $this->redirect(['index']);
+        if ($model->from) {
+            $model->from = date('m/d/Y', $model->from);
+        }
+
+        if ($model->to) {
+            $model->to = date('m/d/Y', $model->to);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->from = strtotime($model->from);
+            $model->to = strtotime($model->to);
+
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 5000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => 'Season Record has been updated.',
+                    'title' => 'Update Season'
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                if ($model->from) {
+                    $model->from = date('m/d/Y', $model->from);
+                }
+
+                if ($model->to) {
+                    $model->to = date('m/d/Y', $model->to);
+                }
+
+                Yii::$app->getSession()->setFlash('danger', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season',
+                    'title' => Yii::t('app', 'Edit Season'),
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

@@ -33,15 +33,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= \yii\bootstrap\Tabs::widget([
         'items' => [
             [
-                'label' => Yii::t('app', 'Permissions'),
-                'content' => $this->render('_gridview', ['data' => $permissions, 'id' => 'operations', 'label' => Yii::t('app', 'Permissions')]),
+                'label' => '<i class="fa fa-edit"></i> ' . Yii::t('app', 'Permissions'),
+                'content' => $this->render('_gridview', ['data' => $permissions, 'id' => 'operations', 'label' => Yii::t('app', 'Permissions'), 'type' => \yii\rbac\Item::TYPE_PERMISSION]),
                 'active' => true,
             ],
             [
-                'label' => Yii::t('app', 'Roles'),
-                'content' => $this->render('_gridview', ['data' => $roles,'id' => 'roles', 'label' => 'Roles']),
+                'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', 'Roles'),
+                'content' => $this->render('_gridview', ['data' => $roles,'id' => 'roles', 'label' => 'Roles', 'type' => \yii\rbac\Item::TYPE_ROLE]),
             ],
         ],
+        'encodeLabels'=>false
     ]); ?>
 
 </div>

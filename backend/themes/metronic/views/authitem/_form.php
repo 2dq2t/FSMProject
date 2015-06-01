@@ -64,11 +64,11 @@ use kartik\widgets\ActiveForm;
                         <?= $form->field($model, 'type', ['template' => '{input}'])->input('hidden'); ?>
                         <?= $form->field($model, 'name', [
                             'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                        ])->textInput(['maxlength' => 64, 'placeholder' => Yii::t('app', 'Enter permission name')]) ?>
+                        ])->textInput(['maxlength' => 64, 'placeholder' => $model->type == \yii\rbac\Item::TYPE_PERMISSION ? Yii::t('app', 'Enter permission name') : Yii::t('app', 'Enter role name')]) ?>
 
                         <?= $form->field($model, 'description', [
                             'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                        ])->textarea(['rows' => 3, 'placeholder' => Yii::t('app', 'Enter permission description')]) ?>
+                        ])->textarea(['rows' => 3, 'placeholder' => $model->type == \yii\rbac\Item::TYPE_PERMISSION ? Yii::t('app', 'Enter permission description') : Yii::t('app', 'Enter role description')]) ?>
 
                         <?= (!empty($rules)) ? $form->field($model, 'rule_name', [
                             'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"

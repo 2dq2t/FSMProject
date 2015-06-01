@@ -18,7 +18,7 @@ class SlideShowSearch extends SlideShow
     public function rules()
     {
         return [
-            [['id', 'active'], 'integer'],
+            [['id', 'active', 'product_id'], 'integer'],
             [['path', 'title', 'description'], 'safe'],
         ];
     }
@@ -58,6 +58,7 @@ class SlideShowSearch extends SlideShow
         $query->andFilterWhere([
             'id' => $this->id,
             'active' => $this->active,
+            'product_id' => $this->product_id,
         ]);
 
         $query->andFilterWhere(['like', 'path', $this->path])

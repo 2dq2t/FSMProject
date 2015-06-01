@@ -19,7 +19,7 @@ if(isset($images)) {
         if($image['path']){
             $product_image[] = Html::img(
             // Yii::$app->urlManagerFrontEnd->baseUrl . '/uploads/' . $model->id . '/' . $image->id . '.jpg',
-                '../../' . $image['path'],
+                '../../frontend/web/' . $image['path'],
                 ['class' => 'file-preview-image']
             );
         }
@@ -85,18 +85,13 @@ if(isset($images)) {
                     <h3 class="form-section"><?= Yii::t('app', 'Product')?></h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'barcode', [
-//                                            'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
+                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'name',[
-                                'addon' => [
-                                    'append' => [
-                                        'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
-                                    ],
-                                ]])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
+                            <?= $form->field($model, 'barcode', [
+//                                            'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                            ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
                         </div>
                         <!--/span-->
                     </div>
@@ -108,10 +103,15 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => '<ins>đ</ins>'
                                     ]
-                                ]])->textInput(['placeholder' => Yii::t('app', 'Enter product price..')]) ?>
+                                ]])->textInput(['id'=>'product_price','placeholder' => Yii::t('app', 'Enter product price..'), 'onkeyup' => 'javascript:this.value=Comma(this.value);']) ?>
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($model, 'quantity_in_stock')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
+                            <?= $form->field($model, 'quantity_in_stock',[
+                                'addon' => [
+                                    'append' => [
+                                        'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
+                                    ],
+                                ]])->textInput(['id' => 'product_quantity', 'maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
                         </div>
                     </div>
                     <!--/row-->
@@ -137,18 +137,28 @@ if(isset($images)) {
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'sold')->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
+                            <?= $form->field($model, 'sold')->textInput(['id' => 'product_sold','maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'tax')->textInput(['placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
+                            <?= $form->field($model, 'tax')->textInput(['id' => 'product_tax', 'placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
                         </div>
                         <!--/span-->
                     </div>
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'tag')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter product tags..')]) ?>
+                            <?= $form->field($model, 'product_tags')->widget(\kartik\widgets\Select2::className(), [
+                                'data' => \yii\helpers\ArrayHelper::map(\common\models\Tag::find()->all(), 'id', 'name'),
+                                'options' => [
+                                    'placeholder' => 'Select tags ...'
+                                ],
+                                'pluginOptions' => [
+                                    'tags' => true,
+                                    'allowClear' => true,
+                                ],
+
+                            ])?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
@@ -157,8 +167,7 @@ if(isset($images)) {
                                 'options' => [
                                     'placeholder' => 'Select season ...',
                                     'multiple' => true,
-                                    'allowClear' => true
-                                ],
+                                ]
                             ])?>
                         </div>
                         <!--/span-->
@@ -215,9 +224,9 @@ if(isset($images)) {
                 </div>
                 <div class="form-actions right">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
                                     <?= $this->blocks['submit']?>
@@ -226,10 +235,32 @@ if(isset($images)) {
                         </div>
                     </div>
                 </div>
-                <!--                </form>-->
                 <!-- END FORM-->
             </div>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<script>
+    function Comma(num) { //function to add commas to textboxes
+        num += '';
+        num = num.replace(' ', ''); num = num.replace(' ', ''); num = num.replace(' ', '');
+        num = num.replace(' ', ''); num = num.replace(' ', ''); num = num.replace(' ', '');
+        var x = num.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        return x1 + x2;
+    }
+
+    $("#product_price, #product_quantity, #product_tax, #product_sold").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        } else {
+            return true;
+        }
+    });
+</script>

@@ -7,7 +7,6 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Order */
 /* @var $customer common\models\Guest */
 /* @var $address common\models\Address */
-/* @var $ward common\models\Ward */
 /* @var $district common\models\District */
 /* @var $city common\models\City */
 
@@ -50,6 +49,79 @@ $this->params['breadcrumbs'][] = $this->title;
                 <form class="form-horizontal" role="form">
                     <div class="form-body">
                         <h2 class="margin-bottom-20"> <?= Yii::t('app', 'View Order Info - No: '. $this->title)?> </h2>
+                        <h3 class="form-section"><?= Yii::t('app', 'Customer ')?></h3>
+                        <?php
+                        $customer = \common\models\Guest::find()->where(['id' => $model->guest_id])->one();
+                        ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Full Name: ')?></label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">
+                                            <?= $customer->full_name ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Email: ')?></label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">
+                                            <?= $customer->email?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Phone Number: ')?></label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">
+                                            <?= $customer->phone_number?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <h3 class="form-section"><?= Yii::t('app', 'Shipping Info ')?></h3>
+                        <?php
+                        $address = \common\models\Address::find()->where(['id' => $model->address_id])->one();
+                        $district = \common\models\District::find()->where(['id' => $address->district_id])->one();
+                        $city = \common\models\City::find()->where(['id' => $district->city_id])->one();
+                        ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Shipping fee: ')?></label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">
+                                            <?= $model->shipping_fee ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Address: ')?></label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">
+                                            <?= $address->detail . ', ' . $district->name . ', ' . $city->name ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
                         <h3 class="form-section">Order Info</h3>
                         <div class="row">
                             <div class="col-md-6">
@@ -129,80 +201,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <!--/span-->
                         </div>
                         <!--/row-->
-                        <h3 class="form-section"><?= Yii::t('app', 'Customer ')?></h3>
-                        <?php
-                        $customer = \common\models\Guest::find()->where(['id' => $model->guest_id])->one();
-                        ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Full Name: ')?></label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static">
-                                            <?= $customer->full_name ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Email: ')?></label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static">
-                                            <?= $customer->email?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Phone Number: ')?></label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static">
-                                            <?= $customer->phone_number?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                        </div>
-                        <!--/row-->
-                        <h3 class="form-section"><?= Yii::t('app', 'Shipping Info ')?></h3>
-                        <?php
-                        $address = \common\models\Address::find()->where(['id' => $model->address_id])->one();
-                        $ward = \common\models\Ward::find()->where(['id' => $address->ward->id])->one();
-                        $district = \common\models\District::find()->where(['id' => $ward->district_id])->one();
-                        $city = \common\models\City::find()->where(['id' => $district->city_id])->one();
-                        ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Shipping fee: ')?></label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static">
-                                            <?= $model->shipping_fee ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3"><?= Yii::t('app', 'Address: ')?></label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static">
-                                            <?= $address->detail . ', ' . $ward->name . ', ' . $district->name . ', ' . $city->name ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                        </div>
-                        <!--/row-->
                         <h3 class="form-section"><?= Yii::t('app', 'Products Info ')?></h3>
                         <?php
 
@@ -263,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td>
                                                 <?php if ($product_info['product_image']) { ?>
                                                     <span id="product-image" class="product-image">
-                                                        <img src="<?php echo "../../frontend/web/" . $product_info['product_image']?>" alt="" class="img-thumbnail" />
+                                                        <img src="<?php echo "../../frontend/web/" . $product_info['product_image']?>" alt="" class="img-thumbnail"  width="50%" height="50%" />
                                                     </span>
                                                 <?php } ?>
                                             </td>
@@ -298,10 +296,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="form-actions">
                         <div class="row">
-                            <div class="col-md-6">
-
+                            <div class="col-md-3">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <div class="row">
                                     <div class="col-md-offset-3 col-md-12 pull-right">
                                         <?php echo $this->blocks['submit']?>

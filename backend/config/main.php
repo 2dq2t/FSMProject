@@ -29,7 +29,10 @@ return [
                 'basePath' => '@markdown/messages',
                 'forceTranslation' => true
             ]
-        ]
+        ],
+        'backup' => [
+            'class' => 'spanjeta\modules\backup\Module',
+        ],
     ],
     'components' => [
         'user' => [

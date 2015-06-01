@@ -26,9 +26,6 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property string $address_id
  *
- * @property DataExport[] $dataExports
- * @property Object[] $objects
- * @property DataImport[] $dataImports
  * @property Address $address
  */
 class Employee extends ActiveRecord implements IdentityInterface
@@ -84,30 +81,6 @@ class Employee extends ActiveRecord implements IdentityInterface
             'status' => Yii::t('app', 'Status'),
             'address_id' => Yii::t('app', 'Address ID'),
         ];
-    }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDataExports()
-    {
-        return $this->hasMany(DataExport::className(), ['employee_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getObjects()
-    {
-        return $this->hasMany(Object::className(), ['id' => 'object_id'])->viaTable('data_import', ['employee_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDataImports()
-    {
-        return $this->hasMany(DataImport::className(), ['employee_id' => 'id']);
     }
 
     /**

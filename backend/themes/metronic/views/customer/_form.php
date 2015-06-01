@@ -239,9 +239,9 @@ if($model->avatar) {
                     </div>
                     <div class="form-actions">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <div class="row">
                                     <div class="col-md-offset-3 col-md-9">
                                         <?= $this->blocks['submit']?>

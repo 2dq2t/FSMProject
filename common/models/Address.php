@@ -46,7 +46,7 @@ class Address extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'detail' => Yii::t('app', 'Detail'),
-            'district_id' => Yii::t('app', 'District ID'),
+            'district_id' => Yii::t('app', 'District'),
         ];
     }
 

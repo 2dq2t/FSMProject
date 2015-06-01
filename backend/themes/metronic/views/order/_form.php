@@ -52,7 +52,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-gift"></i>Form Sample
+                    <i class="fa fa-gift"></i><?= $this->title?>
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="collapse" data-original-title="" title="">
@@ -69,70 +69,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <!-- BEGIN FORM-->
                 <!--                <form action="#" class="form-horizontal">-->
                 <div class="form-body">
-                    <h3 class="form-section">Order Info</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'description', [
-                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textarea(['rows' => 3]) ?>
-                        </div>
-                        <!--/span-->
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'order_date', [
-                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->widget(\kartik\date\DatePicker::classname(), [
-                                'options' => ['placeholder' => Yii::t('app', 'Enter order date ..')],
-                                'removeButton' => false,
-                                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                                'pluginOptions' => [
-                                    'autoclose'=>true,
-//                                        'setDate' => date('yyyy-mm-dd'),
-//                                        'format' => 'yyyy-mm-dd',
-                                    'startDate' => '-0d',
-                                    'todayHighlight' => true
-                                ]
-                            ]) ?>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'tax_amount', [
-                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textInput() ?>
-                        </div>
-                        <!--/span-->
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'net_amount', [
-                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textInput() ?>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'order_status_id', [
-                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->dropDownList(
-                                \yii\helpers\ArrayHelper::map(\backend\models\OrderStatus::find()->all(), 'id', 'name'),
-                                ['prompt'=>Yii::t('app', 'Select Order Status')]
-                            ) ?>
-                        </div>
-                        <!--/span-->
-                        <div class="col-md-6">
-
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <h3 class="form-section">Customer</h3>
+                    <h3 class="form-section"><?= Yii::t('app', 'Customer')?></h3>
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
                             <?= $form->field($guest, 'full_name', [
                                 'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer fullname')]) ?>
+                            ])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer full name')]) ?>
                         </div>
                         <div class="col-md-6">
                             <?= $form->field($guest, 'email', [
@@ -147,7 +90,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             ])->textInput(['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                         </div>
                     </div>
-                    <h3 class="form-section">Shipping</h3>
+                    <h3 class="form-section"><?= Yii::t('app', 'Shipping')?></h3>
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
@@ -165,8 +108,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                 'pluginOptions' => [
                                     'autoclose'=>true,
-//                                        'setDate' => date('yyyy-mm-dd'),
-//                                        'format' => 'yyyy-mm-dd',
                                     'startDate' => '-0d',
                                     'todayHighlight' => true
                                 ]
@@ -238,7 +179,47 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <div class="col-md-6">
                         </div>
                     </div>
-                    <h3 class="form-section">Product</h3>
+                    <h3 class="form-section"><?= Yii::t('app', 'Order Info')?></h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'order_date', [
+                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                            ])->widget(\kartik\date\DatePicker::classname(), [
+                                'options' => ['placeholder' => Yii::t('app', 'Enter order date ..')],
+                                'removeButton' => false,
+                                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+                                    'startDate' => '-0d',
+                                    'todayHighlight' => true
+                                ]
+                            ]) ?>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'order_status_id', [
+                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                            ])->dropDownList(
+                                \yii\helpers\ArrayHelper::map(\backend\models\OrderStatus::find()->all(), 'id', 'name'),
+                                ['prompt'=>Yii::t('app', 'Select Order Status')]
+                            ) ?>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'description', [
+                                'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                            ])->textarea(['rows' => 3]) ?>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <h3 class="form-section"><?= Yii::t('app', 'Product')?></h3>
                     <!--/row-->
                     <script type="text/javascript">
                         var products_added = [];
@@ -511,10 +492,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 </div>
                 <div class="form-actions">
                     <div class="row">
-                        <div class="col-md-6">
-
+                        <div class="col-md-3">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-12 pull-right">
                                     <?php echo $this->blocks['submit']?>

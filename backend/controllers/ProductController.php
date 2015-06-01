@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Image;
 use common\models\ProductSeason;
+use common\models\ProductTag;
+use common\models\Tag;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Product;
@@ -130,12 +132,19 @@ class ProductController extends Controller
         $model = new Product();
         $productImages = new Image();
         $product_seasons = new ProductSeason();
+        $product_tags = new ProductTag();
+
+        $model->price = number_format($model->price, 0, '', ' ');
 
         if ($model->load(Yii::$app->request->post())) {
 
+            // set create date as timestamp
             $model->create_date = strtotime('today');
 
             $file = UploadedFile::getInstances($productImages, 'product_image');
+
+            // remove space in product price
+            $model->price = preg_replace('/\s/', '', $model->price);
 
             try {
                 if ($model->save()) {
@@ -174,6 +183,24 @@ class ProductController extends Controller
                         $product_seasons->save();
                     }
 
+                    foreach ($model->product_tags as $product_tag) {
+                        // check tag exists
+                        if (Tag::find()->where(['id' => $product_tag])->exists()) {
+                            $product_tags->tag_id = $product_tag;
+                            $product_tags->product_id = $model->id;
+                            $product_tags->save();
+                        } else {
+                            // save if tag do not exists
+                            $tag = new Tag();
+                            $tag->name = $product_tag;
+                            $tag->save();
+
+                            $product_tags->tag_id = $tag->id;
+                            $product_tags->product_id = $model->id;
+                            $product_tags->save();
+                        }
+                    }
+
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_SUCCESS,
                         'duration' => 5000,
@@ -199,14 +226,13 @@ class ProductController extends Controller
 
                     return $this->render('create', [
                         'model' => $model,
-                        'productImages' => $productImages,
-                        'product_seasons' => $product_seasons
+                        'productImages' => $productImages
                     ]);
                 }
             } catch (Exception $e) {
                 Yii::$app->getSession()->setFlash('danger', [
                     'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
                     'message' => $e->getMessage(),
                     'title' => Yii::t('app', 'Add Product'),
@@ -214,16 +240,15 @@ class ProductController extends Controller
 
                 return $this->render('create', [
                     'model' => $model,
-                    'productImages' => $productImages,
-                    'product_seasons' => $product_seasons
+                    'productImages' => $productImages
                 ]);
             }
 
         } else {
+
             return $this->render('create', [
                 'model' => $model,
-                'productImages' => $productImages,
-                'product_seasons' => $product_seasons
+                'productImages' => $productImages
             ]);
         }
     }
@@ -239,11 +264,16 @@ class ProductController extends Controller
         $model = $this->findModel($id);
         $productImages = new Image();
         $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
+        $product_tags = ProductTag::find()->select('tag_id')->where(['product_id' => $id])->all();
 
         $model->product_seasons = ArrayHelper::map($product_seasons, 'season_id', 'season_id');
+        $model->product_tags = ArrayHelper::map($product_tags, 'tag_id', 'tag_id');
         $images = Image::find()->where(['product_id' => $id])->all();
 
+        $model->price = number_format($model->price, 0, '', ' ');
+
         if ($model->load(Yii::$app->request->post())) {
+            $model->price = preg_replace('/\s/', '', $model->price);
             $file = UploadedFile::getInstances($productImages, 'product_image');
             try {
                 if ($model->save()) {
@@ -297,9 +327,43 @@ class ProductController extends Controller
                         $product_season->save();
                     }
 
+                    if (empty($model->product_tags)) {
+                        $model->product_tags = [];
+                    }
+
+                    foreach ($product_tags as $tag) {
+                        $key = array_search($tag->tag_id, $model->product_tags);
+
+                        if ($key === false) {
+                            ProductTag::find()->where(['tag_id' => $tag->tag_id])->andWhere(['product_id' => $id])->one()->delete();
+                        } else {
+                            unset($model->product_tags[$key]);
+                        }
+                    }
+
+                    foreach ($model->product_tags as $tag) {
+                        // check tag exists
+                        if (Tag::find()->where(['id' => $tag])->exists()) {
+                            $product_tag = new ProductTag();
+                            $product_tag->tag_id = $tag;
+                            $product_tag->product_id = $model->id;
+                            $product_tag->save();
+                        } else {
+                            // save if tag do not exists
+                            $tags = new Tag();
+                            $tags->name = $tag;
+                            $tags->save();
+
+                            $product_tag = new ProductTag();
+                            $product_tag->tag_id = $tags->id;
+                            $product_tag->product_id = $model->id;
+                            $product_tag->save();
+                        }
+                    }
+
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_SUCCESS,
-                        'duration' => 5000,
+                        'duration' => 0,
                         'icon' => 'fa fa-pencil',
                         'message' => Yii::t('app', 'Product Record has been edited.'),
                         'title' => Yii::t('app', 'Edit Product'),
@@ -345,7 +409,6 @@ class ProductController extends Controller
                 'model' => $model,
                 'productImages' => $productImages,
                 'images' => $images,
-                'product_seasons' => $product_seasons
             ]);
         }
     }

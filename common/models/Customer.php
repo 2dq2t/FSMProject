@@ -96,7 +96,7 @@ class Customer extends ActiveRecord implements IdentityInterface
             're_password' => Yii::t('app', 'Xác nhận Mật khẩu'),
             're_new_password' => Yii::t('app', 'Xác nhận Mật khẩu mới'),
             'avatar' => Yii::t('app', 'Avatar'),
-            'dob' => Yii::t('app', 'Dob'),
+            'dob' => Yii::t('app', 'Date of birth'),
             'gender' => Yii::t('app', 'Gender'),
             'auth_key' => Yii::t('app', 'Auth Key'),
             'password_reset_token' => Yii::t('app', 'Password Reset Token'),

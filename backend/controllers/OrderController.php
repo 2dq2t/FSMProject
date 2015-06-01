@@ -86,6 +86,7 @@ class OrderController extends Controller
 
 //        $model->order_date = date('m/d/Y', $model->order_date);
 //        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+
         // load post data to model
         if ($model->load(Yii::$app->request->post()) &&
             $guest->load(Yii::$app->request->post()) &&
@@ -98,6 +99,7 @@ class OrderController extends Controller
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
+
                 if($address->save() && $guest->save()) {
                     $model->address_id = $address->id;
                     $model->guest_id = $guest->id;
@@ -105,6 +107,20 @@ class OrderController extends Controller
                     // convert string date time to timestamp
                     $model->order_date = strtotime($model->order_date);
                     $model->receiving_date = strtotime($model->receiving_date);
+
+                    // count tax amount and net amount
+                    $net_amount = 0;
+                    $tax_amount = 0;
+
+                    foreach ($order_details as $order_detail) {
+                        $net_amount += Product::find()->where(['id' => $order_detail->product_id])->one()['price']
+                            * $order_detail->quantity;
+                        $tax_amount += Product::find()->where(['id' => $order_detail->product_id])->one()['price']
+                            * $order_detail->quantity * (1-Product::find()->where(['id' => $order_detail->product_id])->one()['tax']);
+                    }
+
+                    $model->net_amount = $net_amount;
+                    $model->tax_amount = $tax_amount;
 
                     if ($model->save()) {
                         if ($flag = $model->save()) {
@@ -154,12 +170,17 @@ class OrderController extends Controller
                             }
                         }
                     } else {
-                        $model->order_date = date('m/d/Y', $model->order_date);
-                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                        if ($model->order_date) {
+                            $model->order_date = date('m/d/Y', $model->order_date);
+                        }
+
+                        if ($model->receiving_date) {
+                            $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                        }
 
                         Yii::$app->getSession()->setFlash('danger', [
                             'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
+                            'duration' => 0,
                             'icon' => 'fa fa-plus',
                             'message' => current($model->getFirstErrors()),
                             'title' => Yii::t('app', 'Add Order'),
@@ -174,12 +195,17 @@ class OrderController extends Controller
                         ]);
                     }
                 } else {
-                    $model->order_date = date('m/d/Y', $model->order_date);
-                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                    if ($model->order_date) {
+                        $model->order_date = date('m/d/Y', $model->order_date);
+                    }
+
+                    if ($model->receiving_date) {
+                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                    }
 
                     Yii::$app->getSession()->setFlash('danger', [
                         'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
+                        'duration' => 0,
                         'icon' => 'fa fa-plus',
                         'message' => $address->getFirstErrors() ? $address->getFirstErrors() : $guest->getFirstErrors() || 'Could not be save the address or guest.',
                         'title' => Yii::t('app', 'Add Order'),
@@ -196,12 +222,17 @@ class OrderController extends Controller
             } catch(Exception $e) {
                 $transaction->rollBack();
 
-                $model->order_date = date('m/d/Y', $model->order_date);
-                $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                if ($model->order_date) {
+                    $model->order_date = date('m/d/Y', $model->order_date);
+                }
+
+                if ($model->receiving_date) {
+                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                }
 
                 Yii::$app->getSession()->setFlash('danger', [
                     'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
                     'message' => $e->getMessage(),
                     'title' => Yii::t('app', 'Add Order'),
@@ -251,6 +282,7 @@ class OrderController extends Controller
             $order_detail['product_unit'] = Unit::find()->select('name')->where(['active' => 1, 'id' => $unit_id])->one()['name'];
             $order_detail['product_total'] = $order_detail['quantity'] * $order_detail['sell_price'];
             $order_detail['max_quantity'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['quantity_in_stock'] - Product::find()->where(['id' => $order_detail['product_id']])->one()['sold'];
+            $order_detail['tax'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['tax'];
         }
 
 
@@ -264,6 +296,16 @@ class OrderController extends Controller
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($order_details, 'order_id', 'order_id')));
 
             $errors = [];
+
+            $net_amount = 0;
+            $tax_amount = 0;
+
+            foreach ($order_details as $order_detail) {
+                $net_amount += $order_detail->quantity * $order_detail->sell_price;
+                $tax_amount += $order_detail->quantity * $order_detail->sell_price * (1 - $order_detail->tax);
+            }
+            $model->net_amount = $net_amount;
+            $model->tax_amount = $tax_amount;
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
@@ -334,8 +376,13 @@ class OrderController extends Controller
                             }
                         }
                     } else {
-                        $model->order_date = date('m/d/Y', $model->order_date);
-                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                        if ($model->order_date) {
+                            $model->order_date = date('m/d/Y', $model->order_date);
+                        }
+
+                        if ($model->receiving_date) {
+                            $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                        }
 
                         Yii::$app->getSession()->setFlash('danger', [
                             'type' => Alert::TYPE_DANGER,
@@ -354,8 +401,13 @@ class OrderController extends Controller
                         ]);
                     }
                 } else {
-                    $model->order_date = date('m/d/Y', $model->order_date);
-                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                    if ($model->order_date) {
+                        $model->order_date = date('m/d/Y', $model->order_date);
+                    }
+
+                    if ($model->receiving_date) {
+                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                    }
 
                     Yii::$app->getSession()->setFlash('danger', [
                         'type' => Alert::TYPE_DANGER,
@@ -377,8 +429,13 @@ class OrderController extends Controller
             } catch(Exception $e) {
                 $transaction->rollBack();
 
-                $model->order_date = date('m/d/Y', $model->order_date);
-                $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                if ($model->order_date) {
+                    $model->order_date = date('m/d/Y', $model->order_date);
+                }
+
+                if ($model->receiving_date) {
+                    $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                }
 
                 Yii::$app->getSession()->setFlash('danger', [
                     'type' => Alert::TYPE_DANGER,

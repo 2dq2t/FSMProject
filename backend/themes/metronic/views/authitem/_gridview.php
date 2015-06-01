@@ -90,6 +90,6 @@ $gridColumns = [
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
         'heading' => $label,
-        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create ' . $label), ['create'], ['class' => 'btn btn-success']),
+        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create ' . $label), ['create', 'type' => $type], ['class' => 'btn btn-success']),
     ],
 ]); ?>

@@ -18,7 +18,7 @@ class SeasonSearch extends Season
     public function rules()
     {
         return [
-            [['id', 'active'], 'integer'],
+            [['id', 'from', 'to', 'active'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -57,6 +57,8 @@ class SeasonSearch extends Season
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'from' => $this->from,
+            'to' => $this->to,
             'active' => $this->active,
         ]);
 

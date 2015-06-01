@@ -105,6 +105,13 @@ if($model->path) {
                     <div class="form-group">
                         <?= $form->field($model, 'description')->textarea(['maxlength' => 255]) ?>
                     </div>
+                    <div class="form-group">
+                        <?= $form->field($model, 'product_id')
+                            ->dropDownList(
+                                \yii\helpers\ArrayHelper::map(\common\models\Product::find()->all(), 'id', 'name'),
+                                ['prompt'=>Yii::t('app', 'Select Product')]
+                            ) ?>
+                    </div>
                 </div>
                 <div class="form-actions">
                     <div class="btn-set pull-right">

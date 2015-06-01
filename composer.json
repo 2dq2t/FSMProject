@@ -31,7 +31,11 @@
         "2amigos/yii2-date-picker-widget": "~1.0",
         "2amigos/yii2-ckeditor-widget": "~1.0",
         "kartik-v/yii2-detail-view": "*",
-        "wbraganca/yii2-dynamicform": "*"
+        "wbraganca/yii2-dynamicform": "*",
+        "spanjeta/yii2-backup": "*",
+        "kartik-v/yii2-field-range": "*",
+        "kartik-v/yii2-widget-select2": "*",
+        "kartik-v/yii2-krajee-base": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

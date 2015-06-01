@@ -120,7 +120,8 @@ AppAsset::register($this);
                     'customers',
                     'guest',
                     'order',
-                    'orderstatus'
+                    'orderstatus',
+                    'tag'
                 ],
                 'slideshow' => [
                     'slideshow',
@@ -144,7 +145,6 @@ AppAsset::register($this);
                     'mail',
                 ],
                 'settings' => [
-                    'file',
                     'backup'
                 ]
             ];
@@ -220,6 +220,9 @@ AppAsset::register($this);
                                 <li class="<?= active('ecommerce', 'guest') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-user"></i> Customers', ['guest/index']) ?>
                                 </li>
+                                <li class="<?= active('ecommerce', 'tag') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-user"></i> Tags', ['tag/index']) ?>
+                                </li>
                             </ul>
                         </li>
                         <li class="<?= active('users', 'customer') ? 'active' : '' ?>">
@@ -279,9 +282,6 @@ AppAsset::register($this);
                             <ul class="sub-menu">
                                 <li class="<?= active('settings', 'i18n') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-globe"></i> I18n', ['i18n/index']) ?>
-                                </li>
-                                <li class="<?= active('settings', 'file') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-layers"></i> Data', ['file/index']) ?>
                                 </li>
                                 <li class="<?= active('settings', 'backup') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-layers"></i> Backup', ['backup/default/index']) ?>

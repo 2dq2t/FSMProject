@@ -58,8 +58,36 @@ use kartik\alert\Alert;
                 <!-- BEGIN FORM-->
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
-                    <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter season name..')]) ?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter season name..')]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'from')->widget(\kartik\date\DatePicker::classname(), [
+                                'options' => ['placeholder' => Yii::t('app', 'From date ..')],
+                                'removeButton' => false,
+                                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+//                                    'startDate' => '-0d',
+                                    'todayHighlight' => true
+                                ]
+                            ]) ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'to')->widget(\kartik\date\DatePicker::classname(), [
+                                'options' => ['placeholder' => Yii::t('app', 'To date ..')],
+                                'removeButton' => false,
+                                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+//                                    'startDate' => '-0d',
+                                    'todayHighlight' => true
+                                ]
+                            ]) ?>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions">

@@ -65,7 +65,7 @@ class Order extends \yii\db\ActiveRecord
             'net_amount' => Yii::t('app', 'Net Amount'),
             'description' => Yii::t('app', 'Description'),
             'guest_id' => Yii::t('app', 'Guest ID'),
-            'order_status_id' => Yii::t('app', 'Order Status ID'),
+            'order_status_id' => Yii::t('app', 'Order Status'),
             'address_id' => Yii::t('app', 'Address ID'),
         ];
     }

@@ -23,6 +23,7 @@ class OrderDetails extends \yii\db\ActiveRecord
     public $product_price;
     public $product_total;
     public $max_quantity;
+    public $tax;
     /**
      * @inheritdoc
      */

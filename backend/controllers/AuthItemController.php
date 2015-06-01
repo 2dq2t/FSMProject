@@ -88,18 +88,39 @@ class AuthItemController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type)
     {
         $rules = ArrayHelper::map(\Yii::$app->getAuthManager()->getRules(), 'name', 'name');
         $model = new AuthItem();
 
         // get all auth_item
-        $items = ArrayHelper::map(Yii::$app->getAuthManager()->getPermissions(),
-            'name',
-            function ($item) {
-                return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
-            }
-        );
+        switch ($type) {
+            case Item::TYPE_PERMISSION:
+                $model->type = Item::TYPE_PERMISSION;
+                $items = ArrayHelper::map(
+                    \Yii::$app->getAuthManager()->getPermissions(),
+                    'name',
+                    function ($item) {
+                        return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
+                    }
+                );
+                break;
+            case Item::TYPE_ROLE:
+                $model->type = Item::TYPE_ROLE;
+                $items = ArrayHelper::map(
+                    ArrayHelper::merge(
+                        \Yii::$app->getAuthManager()->getPermissions(),
+                        \Yii::$app->getAuthManager()->getRoles()
+                    ),
+                    'name',
+                    function ($item) {
+                        return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
+                    }
+                );
+                break;
+            default:
+                throw new \InvalidArgumentException('Unexpected item type');
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->createItem();
@@ -135,8 +156,6 @@ class AuthItemController extends Controller
             }
 
         } else {
-            $model->type = Item::TYPE_PERMISSION;
-
             return $this->render('create', [
                 'model' => $model,
                 'rules' => $rules,
@@ -151,16 +170,38 @@ class AuthItemController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $type)
     {
         $rules = ArrayHelper::map(\Yii::$app->getAuthManager()->getRules(), 'name', 'name');
         $model = $this->findModel($id);
-        $items = ArrayHelper::map(Yii::$app->getAuthManager()->getPermissions(),
-            'name',
-            function ($item) {
-                return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
-            }
-        );
+
+
+        switch ($type) {
+            case Item::TYPE_PERMISSION:
+                $items = ArrayHelper::map(
+                    \Yii::$app->getAuthManager()->getPermissions(),
+                    'name',
+                    function ($item) {
+                        return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
+                    }
+                );
+                break;
+            case Item::TYPE_ROLE:
+                $items = ArrayHelper::map(
+                    ArrayHelper::merge(
+                        \Yii::$app->getAuthManager()->getPermissions(),
+                        \Yii::$app->getAuthManager()->getRoles()
+                    ),
+                    'name',
+                    function ($item) {
+                        return $item->name.(strlen($item->description) > 0 ? ' ['.$item->description.']' : '');
+                    }
+                );
+                break;
+            default:
+                throw new \InvalidArgumentException('Unexpected item type');
+        }
+
         $children = Yii::$app->getAuthManager()->getChildren($id);
 
         foreach ($children as $child) {
