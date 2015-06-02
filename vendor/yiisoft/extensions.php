@@ -354,15 +354,6 @@ return array (
       '@wbraganca/dynamicform' => $vendorDir . '/wbraganca/yii2-dynamicform',
     ),
   ),
-  'spanjeta/yii2-backup' => 
-  array (
-    'name' => 'spanjeta/yii2-backup',
-    'version' => '1.0.1.0',
-    'alias' => 
-    array (
-      '@spanjeta/modules/backup' => $vendorDir . '/spanjeta/yii2-backup',
-    ),
-  ),
   'yiisoft/yii2-jui' => 
   array (
     'name' => 'yiisoft/yii2-jui',

@@ -284,7 +284,7 @@ AppAsset::register($this);
                                     <?= HtmL::a('<i class="icon-globe"></i> I18n', ['i18n/index']) ?>
                                 </li>
                                 <li class="<?= active('settings', 'backup') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-layers"></i> Backup', ['backup/default/index']) ?>
+                                    <?= HtmL::a('<i class="icon-layers"></i> Backup', ['backup/index']) ?>
                                 </li>
                             </ul>
                         </li>

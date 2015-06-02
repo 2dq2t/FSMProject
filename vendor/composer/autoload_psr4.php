@@ -17,7 +17,6 @@ return array(
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform'),
     'vova07\\imperavi\\' => array($vendorDir . '/vova07/yii2-imperavi-widget/src'),
-    'spanjeta\\modules\\backup\\' => array($vendorDir . '/spanjeta/yii2-backup'),
     'sintret\\chat\\' => array($vendorDir . '/sintret/yii2-chat-adminlte'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),

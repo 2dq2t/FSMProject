@@ -3268,50 +3268,6 @@
         ]
     },
     {
-        "name": "spanjeta/yii2-backup",
-        "version": "v1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/spanjeta/yii2-backup.git",
-            "reference": "c1fd82ed287230f211ab12de5244dd373c72a079"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/spanjeta/yii2-backup/zipball/c1fd82ed287230f211ab12de5244dd373c72a079",
-            "reference": "c1fd82ed287230f211ab12de5244dd373c72a079",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "*"
-        },
-        "time": "2015-04-15 08:56:06",
-        "type": "yii2-extension",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "spanjeta\\modules\\backup\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Shiv Charan Panjeta",
-                "email": "shivcharan.panjeta@gmail.com"
-            }
-        ],
-        "description": "Database Backup and Restore functionality",
-        "keywords": [
-            "backup",
-            "database",
-            "restore",
-            "yii2"
-        ]
-    },
-    {
         "name": "components/flag-icon-css",
         "version": "0.7.1",
         "version_normalized": "0.7.1.0",

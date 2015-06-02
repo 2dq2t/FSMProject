@@ -30,8 +30,8 @@ return [
                 'forceTranslation' => true
             ]
         ],
-        'backup' => [
-            'class' => 'spanjeta\modules\backup\Module',
+        'backuprestore' => [
+            'class' => '\oe\modules\backuprestore\Module', //'layout' => '@admin-views/layouts/main', or what ever layout you use ... ...
         ],
     ],
     'components' => [
