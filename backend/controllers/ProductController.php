@@ -145,6 +145,9 @@ class ProductController extends Controller
 
             // remove space in product price
             $model->price = preg_replace('/\s/', '', $model->price);
+			
+			// Begin transaction
+            $transaction = Yii::$app->db->beginTransaction();
 
             try {
                 if ($model->save()) {
@@ -182,6 +185,10 @@ class ProductController extends Controller
 
                         $product_seasons->save();
                     }
+					
+					if (empty($model->product_tags)) {
+						$model->product_tags = [];
+					}
 
                     foreach ($model->product_tags as $product_tag) {
                         // check tag exists
@@ -200,6 +207,8 @@ class ProductController extends Controller
                             $product_tags->save();
                         }
                     }
+					
+					$transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_SUCCESS,
@@ -230,6 +239,7 @@ class ProductController extends Controller
                     ]);
                 }
             } catch (Exception $e) {
+				$transaction->rollBack();
                 Yii::$app->getSession()->setFlash('danger', [
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 0,
@@ -275,6 +285,9 @@ class ProductController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->price = preg_replace('/\s/', '', $model->price);
             $file = UploadedFile::getInstances($productImages, 'product_image');
+			
+			// Begin transaction
+            $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($model->save()) {
 
@@ -360,6 +373,8 @@ class ProductController extends Controller
                             $product_tag->save();
                         }
                     }
+					
+					$transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_SUCCESS,
@@ -389,6 +404,7 @@ class ProductController extends Controller
                 }
             } catch (Exception $e) {
 
+				$transaction->rollBack();
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 0,
