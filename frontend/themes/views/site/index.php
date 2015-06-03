@@ -7,7 +7,7 @@ $this->title = 'Fresh Garden';
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
 <?php echo $this->render('_navbar',[
-    'modelCategory' => $modelCategory,
+    'categories' => $categories,
 ]);
 ?>
 <div class="container content-inner">
@@ -29,21 +29,21 @@ $baseUrl = Yii::$app->request->baseUrl;
                 <div class="main-slider">
                     <div id="spinner"></div>
                     <div id="slideshow0" class="owl-carousel" style="opacity: 1;">
-                        <div class="item">
-                            <a href="#"><img
-                                    src="images/data/mainbanner2.jpg"
-                                    alt="mainbanner2" class="img-responsive"/></a>
-                        </div>
-                        <div class="item">
-                            <a href="#"><img
-                                    src="images/data/mainbanner3.jpg"
-                                    alt="mainbanner3" class="img-responsive"/></a>
-                        </div>
-                        <div class="item">
-                            <a href="#"><img
-                                    src="images/data/mainbanner1.jpg"
-                                    alt="mainbanner1" class="img-responsive"/></a>
-                        </div>
+                        <?php foreach($slide_show as $slide_show) {
+                            echo "<div class='item'>";
+                            if (!empty($slide_show['product_name'])) {
+                                echo "<a href='".Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$slide_show['product_name']."'><img
+                                    src='uploads/slideshow/".$slide_show['slide_show_id']."/".$slide_show['slide_show_path']."'
+                                    alt='".$slide_show['product_name']."' class='img-responsive'/></a>";
+                            }
+                            else{
+                                echo "<a href='#'><img
+                                    src='uploads/slideshow/".$slide_show['slide_show_id']."/".$slide_show['slide_show_path']."'
+                                    alt='".$slide_show['product_name']."' class='img-responsive'/></a>";
+                            }
+                            echo "</div> ";
+                        }
+                        ?>
                     </div>
                 </div>
                 <script type="text/javascript">
@@ -84,7 +84,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                     <column id="column-left" class="col-sm-3 hidden-xs">
 
                         <?php echo $this->render('_category',[
-                            'modelCategory' => $modelCategory,
+                            'categories' => $categories,
                         ]);
                         ?>
                         <?php echo $this->render('_leftBanner');
@@ -98,7 +98,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                     </column>
                     <div id="content" class="col-sm-9">
                         <div class="box">
-                            <div class="box-heading">Featured</div>
+                            <div class="box-heading">Sản phẩm mới</div>
                             <div class="box-content">
                                 <div class="customNavigation">
                                     <a class="prev">&nbsp;</a>
@@ -107,333 +107,67 @@ $baseUrl = Yii::$app->request->baseUrl;
 
 
                                 <div class="box-product product-carousel" id="featured-carousel">
+
+                                    <?php foreach($new_product as $product){?>
                                     <div class="slider-item">
                                         <div class="product-block product-thumb transition">
                                             <div class="product-block-inner ">
                                                 <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=43"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-220x200.jpg"
-                                                            alt="Nullam molli dolor " title="Nullam molli dolor "
+                                                    <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"><img
+                                                            src="<?=$product['product_image'] ?>"
+                                                            alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
                                                             class="img-responsive"/></a>
+                                                    <?php
+                                                    if($product['product_offer'] >0)
+                                                    echo "<span class='saleicon sale'>Sale</span>";
 
-
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                    </div>
+                                                    if($product['product_rating']>0) {
+                                                        echo "<div class='rating' >";
+                                                            for($i=0;$i<5;$i++){
+                                                                if($i<$product['product_rating']){
+                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                                                }
+                                                                else
+                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
+                                                            }
+                                                        echo "</div >";
+                                                    }
+                                                    ?>
                                                 </div>
                                                 <div class="product-details">
                                                     <div class="caption">
                                                         <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=43"
-                                                               title="Nullam molli dolor ">
-                                                                Nullam molli dolor </a>
+                                                            <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"
+                                                               title="<?=$product['product_name']?>">
+                                                                <?=$product['product_name']?></a>
                                                         </h4>
 
                                                         <div class="price">
-                                                            $602.00 <span class="price-tax">Ex Tax: $500.00</span>
+                                                            <?php
+                                                            if(!empty($product['product_offer'])){
+                                                                echo "<span class='price-old'>".$product['product_price']." VND</span>";
+                                                                $new_price = $product['product_price']-$product['product_offer'];
+                                                                echo "<span class='price-new'>".$new_price." VND</span>";
+                                                                echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                            }
+                                                            else{
+                                                                echo $product['product_price']." VND";
+                                                                echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                            }
+                                                            ?>
                                                         </div>
                                                     </div>
 
                                                     <div class="button-group">
                                                         <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('43');"><span>Add to Cart</span>
+                                                                onclick="cart.add('<?=$product['product_id']?>');"><span>Thêm vào giỏ hàng</span>
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/18-220x200.jpg"
-                                                            alt="Cum sociis natoqu" title="Cum sociis natoqu"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40"
-                                                               title="Cum sociis natoqu">
-                                                                Cum sociis natoqu </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $123.20 <span class="price-tax">Ex Tax: $101.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('40');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=42"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/17-220x200.jpg"
-                                                            alt="Donec sempr sem " title="Donec sempr sem "
-                                                            class="img-responsive"/></a>
-                                                    <span class="saleicon sale">Sale</span>
-
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=42"
-                                                               title="Donec sempr sem ">
-                                                                Donec sempr sem </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            <span class="price-old">$122.00</span><span
-                                                                class="price-new">$110.00</span>
-                                                            <span class="price-tax">Ex Tax: $90.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('42');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/13-220x200.jpg"
-                                                            alt="Aliquam suscipit" title="Aliquam suscipit"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47"
-                                                               title="Aliquam suscipit">
-                                                                Aliquam suscipit </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('47');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/15-220x200.jpg"
-                                                            alt="Arcu vitae imperdiet " title="Arcu vitae imperdiet "
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28"
-                                                               title="Arcu vitae imperdiet ">
-                                                                Arcu vitae imperdiet.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('28');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/12-220x200.jpg"
-                                                            alt="Aliquam volutpat" title="Aliquam volutpat"
-                                                            class="img-responsive"/></a>
-                                                    <span class="saleicon sale">Sale</span>
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30"
-                                                               title="Aliquam volutpat">
-                                                                Aliquam volutpat </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            <span class="price-old">$122.00</span><span
-                                                                class="price-new">$98.00</span>
-                                                            <span class="price-tax">Ex Tax: $80.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('30');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/25-220x200.jpg"
-                                                            alt="Consectetur adipiscing" title="Consectetur adipiscing"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41"
-                                                               title="Consectetur adipiscing">
-                                                                Consectetur adipisci.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('41');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=49"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/8-220x200.jpg"
-                                                            alt="Tellus volutpat ius" title="Tellus volutpat ius"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=49"
-                                                               title="Tellus volutpat ius">
-                                                                Tellus volutpat ius </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $241.99 <span class="price-tax">Ex Tax: $199.99</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('49');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=46"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/6-220x200.jpg"
-                                                            alt="Suspene potention" title="Suspene potention"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=46"
-                                                               title="Suspene potention">
-                                                                Suspene potention </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $1,202.00 <span class="price-tax">Ex Tax: $1,000.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('46');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <?php }?>
                                 </div>
                             </div>
                         </div>
@@ -449,737 +183,66 @@ $baseUrl = Yii::$app->request->baseUrl;
 
 
                                 <div class="box-product product-carousel" id="latest-carousel">
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
+                                    <?php foreach($new_product as $product){?>
+                                        <div class="slider-item">
+                                            <div class="product-block product-thumb transition">
+                                                <div class="product-block-inner ">
+                                                    <div class="image">
+                                                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"><img
+                                                                src="<?=$product['product_image'] ?>"
+                                                                alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
+                                                                class="img-responsive"/></a>
+                                                        <?php
+                                                        if($product['product_offer'] >0)
+                                                            echo "<span class='saleicon sale'>Sale</span>";
 
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=49"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/8-220x200.jpg"
-                                                            alt="Tellus volutpat ius" title="Tellus volutpat ius"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=49"
-                                                               title="Tellus volutpat ius">
-                                                                Tellus volutpat ius </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $241.99 <span class="price-tax">Ex Tax: $199.99</span>
-                                                        </div>
+                                                        if($product['product_rating']>0) {
+                                                            echo "<div class='rating' >";
+                                                            for($i=0;$i<5;$i++){
+                                                                if($i<$product['product_rating']){
+                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                                                }
+                                                                else
+                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
+                                                            }
+                                                            echo "</div >";
+                                                        }
+                                                        ?>
                                                     </div>
+                                                    <div class="product-details">
+                                                        <div class="caption">
+                                                            <h4>
+                                                                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"
+                                                                   title="<?=$product['product_name']?>">
+                                                                    <?=$product['product_name']?></a>
+                                                            </h4>
 
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('49');"><span>Add to Cart</span>
-                                                        </button>
+                                                            <div class="price">
+                                                                <?php
+                                                                if(!empty($product['product_offer'])){
+                                                                    echo "<span class='price-old'>".$product['product_price']." VND</span>";
+                                                                    $new_price = $product['product_price']-$product['product_offer'];
+                                                                    echo "<span class='price-new'>".$new_price." VND</span>";
+                                                                    echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                                }
+                                                                else{
+                                                                    echo $product['product_price']." VND";
+                                                                    echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="button-group">
+                                                            <button type="button" title="Add to Cart" class="addtocart"
+                                                                    onclick="cart.add('<?=$product['product_id']?>');"><span>Thêm vào giỏ hàng</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=48"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/19-220x200.jpg"
-                                                            alt="Ectus  rhoncusout" title="Ectus  rhoncusout"
-                                                            class="img-responsive"/></a>
-
-
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=48"
-                                                               title="Ectus  rhoncusout">
-                                                                Ectus rhoncusout </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                        <div class="rating">
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star off fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star off fa-stack-2x"></i></span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('48');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/13-220x200.jpg"
-                                                            alt="Aliquam suscipit" title="Aliquam suscipit"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47"
-                                                               title="Aliquam suscipit">
-                                                                Aliquam suscipit </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('47');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=46"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/6-220x200.jpg"
-                                                            alt="Suspene potention" title="Suspene potention"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=46"
-                                                               title="Suspene potention">
-                                                                Suspene potention </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $1,202.00 <span class="price-tax">Ex Tax: $1,000.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('46');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=45"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/26-220x200.jpg"
-                                                            alt="Pellentesque augue" title="Pellentesque augue"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=45"
-                                                               title="Pellentesque augue">
-                                                                Pellentesque augue </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $2,000.00 <span class="price-tax">Ex Tax: $2,000.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('45');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=44"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/24-220x200.jpg"
-                                                            alt="Palm Treo Pro" title="Palm Treo Pro"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=44"
-                                                               title="Palm Treo Pro">
-                                                                Palm Treo Pro </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $1,202.00 <span class="price-tax">Ex Tax: $1,000.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('44');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=43"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/23-220x200.jpg"
-                                                            alt="Nullam molli dolor " title="Nullam molli dolor "
-                                                            class="img-responsive"/></a>
-
-
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=43"
-                                                               title="Nullam molli dolor ">
-                                                                Nullam molli dolor </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $602.00 <span class="price-tax">Ex Tax: $500.00</span>
-                                                        </div>
-                                                        <div class="rating">
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star off fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star off fa-stack-2x"></i></span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('43');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=42"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/17-220x200.jpg"
-                                                            alt="Donec sempr sem " title="Donec sempr sem "
-                                                            class="img-responsive"/></a>
-                                                    <span class="saleicon sale">Sale</span>
-
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
-                                                        <span class="fa fa-stack"><i
-                                                                class="fa fa-star off fa-stack-2x"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=42"
-                                                               title="Donec sempr sem ">
-                                                                Donec sempr sem </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            <span class="price-old">$122.00</span><span
-                                                                class="price-new">$110.00</span>
-                                                            <span class="price-tax">Ex Tax: $90.00</span>
-                                                        </div>
-                                                        <div class="rating">
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star fa-stack-2x"></i></span>
-                                                            <span class="fa fa-stack"><i
-                                                                    class="fa fa-star off fa-stack-2x"></i></span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('42');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/25-220x200.jpg"
-                                                            alt="Consectetur adipiscing" title="Consectetur adipiscing"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41"
-                                                               title="Consectetur adipiscing">
-                                                                Consectetur adipisci.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('41');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/18-220x200.jpg"
-                                                            alt="Cum sociis natoqu" title="Cum sociis natoqu"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40"
-                                                               title="Cum sociis natoqu">
-                                                                Cum sociis natoqu </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $123.20 <span class="price-tax">Ex Tax: $101.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('40');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=36"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/20-220x200.jpg"
-                                                            alt="Integer tempor lacus " title="Integer tempor lacus "
-                                                            class="img-responsive"/></a>
-                                                    <span class="saleicon sale">Sale</span>
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=36"
-                                                               title="Integer tempor lacus ">
-                                                                Integer tempor lacus.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            <span class="price-old">$254.00</span><span
-                                                                class="price-new">$248.00</span>
-                                                            <span class="price-tax">Ex Tax: $205.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('36');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=35"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/27-220x200.jpg"
-                                                            alt="Praesent semneck" title="Praesent semneck"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=35"
-                                                               title="Praesent semneck">
-                                                                Praesent semneck </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('35');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=34"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/21-220x200.jpg"
-                                                            alt="Justo neque commodo " title="Justo neque commodo "
-                                                            class="img-responsive"/></a>
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=34"
-                                                               title="Justo neque commodo ">
-                                                                Justo neque commodo </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('34');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=33"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/9-220x200.jpg"
-                                                            alt="Vactramn denim" title="Vactramn denim"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=33"
-                                                               title="Vactramn denim">
-                                                                Vactramn denim </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $242.00 <span class="price-tax">Ex Tax: $200.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('33');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=32"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/22-220x200.jpg"
-                                                            alt="Nascetur ridiculus mus" title="Nascetur ridiculus mus"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=32"
-                                                               title="Nascetur ridiculus mus">
-                                                                Nascetur ridiculus m.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('32');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=31"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/3-220x200.jpg"
-                                                            alt="Praesent fringilla" title="Praesent fringilla"
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=31"
-                                                               title="Praesent fringilla">
-                                                                Praesent fringilla </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $98.00 <span class="price-tax">Ex Tax: $80.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('31');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/12-220x200.jpg"
-                                                            alt="Aliquam volutpat" title="Aliquam volutpat"
-                                                            class="img-responsive"/></a>
-                                                    <span class="saleicon sale">Sale</span>
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30"
-                                                               title="Aliquam volutpat">
-                                                                Aliquam volutpat </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            <span class="price-old">$122.00</span><span
-                                                                class="price-new">$98.00</span>
-                                                            <span class="price-tax">Ex Tax: $80.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('30');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=29"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/4-220x200.jpg"
-                                                            alt="Suspendisse massa " title="Suspendisse massa "
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=29"
-                                                               title="Suspendisse massa ">
-                                                                Suspendisse massa </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $337.99 <span class="price-tax">Ex Tax: $279.99</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('29');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="slider-item">
-                                        <div class="product-block product-thumb transition">
-                                            <div class="product-block-inner ">
-
-                                                <div class="image">
-                                                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28"><img
-                                                            src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/15-220x200.jpg"
-                                                            alt="Arcu vitae imperdiet " title="Arcu vitae imperdiet "
-                                                            class="img-responsive"/></a>
-
-
-                                                </div>
-                                                <div class="product-details">
-                                                    <div class="caption">
-                                                        <h4>
-                                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28"
-                                                               title="Arcu vitae imperdiet ">
-                                                                Arcu vitae imperdiet.. </a>
-                                                        </h4>
-
-                                                        <div class="price">
-                                                            $122.00 <span class="price-tax">Ex Tax: $100.00</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="button-group">
-                                                        <button type="button" title="Add to Cart" class="addtocart"
-                                                                onclick="cart.add('28');"><span>Add to Cart</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <?php }?>
                                 </div>
                             </div>
                         </div>

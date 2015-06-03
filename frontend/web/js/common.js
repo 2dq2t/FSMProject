@@ -151,7 +151,7 @@ var cart = {
 	},
 	'update': function(key, quantity) {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/edit',
+			url: 'index.php?r=site/wish-list&cart=add',
 			type: 'post',
 			data: 'key=' + key + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -173,7 +173,7 @@ var cart = {
 	},
 	'remove': function(key) {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/remove',
+			url: 'index.php?r=site/wish-list&cart=add',
 			type: 'post',
 			data: 'key=' + key,
 			dataType: 'json',
@@ -227,7 +227,7 @@ var voucher = {
 var wishlist = {
 	'add': function(product_id) {
 		$.ajax({
-			url: 'index.php?r=site/wish-list',
+			url: 'index.php?r=site/add-wish-list',
 			type: 'post',
 			data: {product_id: product_id},
 			dataType: 'json',

@@ -6,21 +6,21 @@
  * Time: 10:41 CH
  */
 $baseUrl = Yii::$app->request->baseUrl;
-$this->title =$productDetail[0]['name'];
+$this->title =$product_detail['name'];
 ?>
 <?php echo $this->render('_navbar',[
-    'modelCategory' => $modelCategory,
+    'categories' => $categories,
 ]);
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-home"></i></a></li>
-        <li><a href="<?php echo $baseUrl.'index.php?r=site/view-detail&product='.$productDetail[0]['name']?>"><?php echo $productDetail[0]['name'] ?></a></li>
+        <li><a href="<?php echo $baseUrl.'index.php?r=site/view-detail&product='.$product_detail['name']?>"><?php echo $product_detail['name'] ?></a></li>
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php echo $this->render('_category',[
-                'modelCategory' => $modelCategory,
+                'categories' => $categories,
             ]);
             ?>
             <?php echo $this->render('_leftBanner');
@@ -44,7 +44,7 @@ $this->title =$productDetail[0]['name'];
 
                             <!-- Megnor Cloud-Zoom Image Effect Start -->
                             <?php
-                                echo "<li class='image'><a class='thumbnail' href='".$productImage[0]['path']."' title='".$productDetail[0]['name']."'><img src='".$productImage[0]['path']."' title='".$productDetail[0]['name']."' alt='".$productDetail[0]['name']."' /></a></li>";
+                                echo "<li class='image'><a class='thumbnail' href='".$product_image[0]['path']."' title='".$product_detail['name']."'><img src='".$product_image[0]['path']."' title='".$product_detail['name']."' alt='".$product_detail['name']."' /></a></li>";
                             ?>
 
                             <div class="additional-carousel">
@@ -55,11 +55,11 @@ $this->title =$productDetail[0]['name'];
 
                                 <div id="additional-carousel" class="image-additional product-carousel">
                                     <?php
-                                    foreach ($productImage as $item) {
+                                    foreach ($product_image as $image) {
 
                                     echo "<div class='slider-item'>";
                                         echo "<div class='product-block'>";
-                                        echo "<a href='" . $item['path'] . "' title='".$productDetail[0]['name']." ' class='thumbnail elevatezoom-gallery' data-image='" . $item['path'] . "' data-zoom-image='" . $item['path'] . "'><img src='" . $item['path'] . "' width='74' title='".$productDetail[0]['name']." ' alt='".$productDetail[0]['name']."' /></a>";
+                                        echo "<a href='" . $image['path'] . "' title='".$product_detail['name']." ' class='thumbnail elevatezoom-gallery' data-image='" . $image['path'] . "' data-zoom-image='" . $image['path'] . "'><img src='" . $image['path'] . "' width='74' title='".$product_detail['name']." ' alt='".$product_detail['name']."' /></a>";
                                         echo "</div>";
                                         echo "</div>";
                                     }
@@ -75,22 +75,22 @@ $this->title =$productDetail[0]['name'];
                 </div>
 
                 <div class="col-sm-6 product-right">
-                    <h3 class="product-title"><?php echo $productDetail[0]['name'] ?> </h3>
+                    <h3 class="product-title"><?php echo $product_detail['name'] ?> </h3>
                     <ul class="list-unstyled">
-                        <li><span>Mã số sản phẩm:</span><?php echo $productDetail[0]['barcode'] ?></li>
-                        <li><span>Số lượng: </span><?php if ($productDetail[0]['quantity_in_stock'] - $productDetail[0]['sold'] > 0) echo $productDetail[0]['quantity_in_stock'] - $productDetail[0]['sold']; else echo "Trong kho"; ?></li>
+                        <li><span>Mã số sản phẩm:</span><?php echo $product_detail['barcode'] ?></li>
+                        <li><span>Số lượng: </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold']; else echo "Trong kho"; ?></li>
                         <li><p><span>Tiêu chuẩn:</span><span class="inline" style="margin-left: 3px"><a  href="http://vietgap.gov.vn/Content.aspx?mode=uc&page=About&Option=7" target="_blank"
                                             rel="nofollow">Chứng nhận rau an toàn VIETGAP</a></span></p></li>
-                        <li><p><?php echo $productDetail[0]['intro'] ?> </p></li>
+                        <li><p><?php echo $product_detail['intro'] ?> </p></li>
                     </ul>
 
 
                     <ul class="list-unstyled price">
                         <li class="price-title">Giá:</li>
                         <li class="price-normal">
-                            <h2 ><?php echo $productDetail[0]['price'] ?> VND</h2>
+                            <h2 ><?php echo $product_detail['price'] ?> VND</h2>
                         </li>
-                        <li class="tax price-tax">Thuế:<span class="price-tax"><?php echo $productDetail[0]['tax'] ?> VND</span></li>
+                        <li class="tax price-tax">Thuế:<span class="price-tax"><?php echo $product_detail['tax'] ?> VND</span></li>
                         <br/>
                     </ul>
                     <div id="product">
@@ -98,13 +98,13 @@ $this->title =$productDetail[0]['name'];
                         <div class="form-group quntity">
                             <label class="control-label" for="input-quantity">SL:</label>
                             <input type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control" />
-                            <input type="hidden" name="product_id" value="43" />
+                            <input type="hidden" id="product_id" name="product_id" value="<?php echo $product_detail['id'] ?>" />
 
 
-                            <button type="button" id="button-cart" data-loading-text="Loading..." title="Add to Cart" class="addtocart" ><span>Add to Cart</span></button> <span>&nbsp;&nbsp;- OR -&nbsp;&nbsp;</span>
+                            <button type="button" id="button-cart" data-loading-text="Loading..." title="Add to Cart" class="addtocart" ><span>Thêm vào giỏ hàng</span></button> <span>&nbsp;&nbsp;- OR -&nbsp;&nbsp;</span>
 
                             <div class="btn-group">
-                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add(<?php echo $productDetail[0]['id'] ?> );">Add to Wish List</button>
+                                <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add(<?php echo $product_detail['id']; ?> );">Thêm vào yêu thích</button>
                                 <button type="button"  class="compare" title="Add to Compare" onclick="compare.add('43');">Add to Compare</button>
                             </div>
                         </div>
@@ -127,7 +127,7 @@ $this->title =$productDetail[0]['name'];
                         <li><a href="#tab-review" data-toggle="tab">Nhận xét</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-description"><p><?php echo $productDetail[0]['description'] ?></p></div>
+                        <div class="tab-pane active" id="tab-description"><p><?php echo $product_detail['description'] ?></p></div>
 
                         <div class="tab-pane" id="tab-review">
                             <div class="fb-comments" data-href="<?php echo "localhost/".Yii::$app->request->getUrl(); ?>"
@@ -502,7 +502,7 @@ $this->title =$productDetail[0]['name'];
 <script type="text/javascript"><!--
     $('#button-cart').on('click', function() {
         $.ajax({
-            url: 'index.php?route=checkout/cart/add',
+            url: 'index.php?r=site/add-to-cart',
             type: 'post',
             data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
             dataType: 'json',
@@ -514,6 +514,7 @@ $this->title =$productDetail[0]['name'];
             },
             success: function(json) {
                 $('.alert, .text-danger').remove();
+                console.log(json);
                 $('.form-group').removeClass('has-error');
 
                 if (json['error']) {
@@ -560,12 +561,39 @@ $this->title =$productDetail[0]['name'];
                 enabled:true
             }
         });
+    });
+
+    //-->
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
         $('#star').raty({
-            score: function() {
-                return $(this).attr('data-score');
+            score:<?=$rating_average ?>,
+            click:function(score, evt) {
+                var product_id = document.getElementById('product_id').value;
+                $.ajax({
+                    url:'index.php?r=site/rate',
+                    type: 'post',
+                    data: {score:score,product_id: product_id},
+                    dataType: 'json',
+                    success:function(data){
+                        $('.alert').remove();
+                        var json = $.parseJSON(data)
+                        if (json['success']) {
+                            $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            //$('#star').raty('reload');
+                            $('#star').raty('readOnly', true);
+                        }
+
+                        if (json['error']) {
+                            $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                        }
+
+                        $('html, body').animate({ scrollTop: 0 }, 'slow');
+                    }
+                });
             }
         });
     });
-
-    //--></script>
+</script>
 

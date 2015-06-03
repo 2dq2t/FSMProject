@@ -11,17 +11,17 @@
     <div class="box-content ">
         <ul class="box-category treeview-list treeview">
             <?php $result = array();
-            foreach ($modelCategory as $item) {
+            foreach ($categories as $item) {
                 $cat_name = $item['categoryname'];
                 $product_name = $item['productname'];
                 $result[$cat_name][] = $product_name;
             }
             ?>
-            <?php foreach (array_keys($result) as $categories): ?>
+            <?php foreach (array_keys($result) as $category): ?>
             <li>
-                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$categories?>"><?= $categories ?></a>
+                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category?>"><?= $category ?></a>
                 <ul>
-                    <?php foreach ($result[$categories] as $key) { ?>
+                    <?php foreach ($result[$category] as $key) { ?>
                     <li>
                         <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$key?>"><?= $key ?></a>
                     </li>

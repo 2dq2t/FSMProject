@@ -7,7 +7,7 @@
  */
 ?>
 <?php echo $this->render('_navbar',[
-    'modelCategory' => $modelCategory,
+    'categories' => $categories,
 ]);
 ?>
 <div class="container content-inner">
@@ -18,7 +18,7 @@
 <div class="row content-subinner">
     <column id="column-left" class="col-sm-3 hidden-xs">
         <?php echo $this->render('_category',[
-            'modelCategory' => $modelCategory,
+            'categories' => $categories,
         ]);
         ?>
         <?php echo $this->render('_leftBanner');
@@ -47,34 +47,21 @@
             <div class="pagination-right">
                 <div class="sort-by-wrapper">
                     <div class="col-md-2 text-right sort-by">
-                        <label class="control-label" for="input-sort">Sort By:</label>
+                        <label class="control-label" for="input-sort">Sắp xếp theo:</label>
                     </div>
                     <div class="col-md-3 text-right sort">
                         <select id="input-sort" class="form-control" onchange="location = this.value;">
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=default&order=ASC"?>" selected="selected">Default</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=ASC"?>">Name (A - Z)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=DESC"?>">Name (Z - A)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=ASC"?>">Price (Low &gt; High)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=DESC"?>">Price (High &gt; Low)</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=default&order=ASC"?>" selected="selected">Mặc định</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=ASC"?>">Tên (A - Z)</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=DESC"?>">Tên (Z - A)</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=ASC"?>">Giá (Thấp &gt; Cao)</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=DESC"?>">Giá (Cao &gt; Thấp)</option>
                             <option value="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;sort=rating&amp;order=DESC">Rating (Highest)</option>
                             <option value="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;sort=rating&amp;order=ASC">Rating (Lowest)</option>
                         </select>
                     </div>
                 </div>
-                <div class="show-wrapper">
-                    <div class="col-md-1 text-right show">
-                        <label class="control-label" for="input-limit">Show:</label>
-                    </div>
-                    <div class="col-md-2 text-right limit">
-                        <select id="input-limit" class="form-control" onchange="location = this.value;">
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&limit=12"?>" selected="selected">12</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&limit=25"?>">25</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&limit=50"?>">50</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&limit=75"?>">75</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&limit=100"?>">100</option>
-                        </select>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -102,7 +89,7 @@
 
                                     <div class="compare-wishlist">
                                         <div class="wishlist-btn">
-                                            <button type="button" class="wishlist"  title="Add to Wish List" onclick="wishlist.add('31');">Add to Wish List</button>
+                                            <button type="button" class="wishlist"  title="Add to Wish List" onclick="wishlist.add(<?php echo $item['product_id']; ?> );">Thêm vào danh mục yêu thích</button>
                                         </div>
                                         <div class="compare-btn">
                                             <button type="button" class="compare"  title="Add to Compare" onclick="compare.add('31');">Add to Compare</button>

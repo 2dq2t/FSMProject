@@ -5,7 +5,7 @@ $this->title = 'Đăng nhập';
 
 ?>
 <?php echo $this->render('_navbar',[
-    'modelCategory' => $modelCategory,
+    'categories' => $categories,
 ]);
 ?>
 <div class="container content-inner">

@@ -20,18 +20,18 @@ $baseUrl= Yii::$app->request->baseUrl;
                 </div>
                 <ul class="main-navigation">
                     <?php $result = array();
-                    foreach ($modelCategory as $item) {
+                    foreach ($categories as $item) {
                         $cat_name = $item['categoryname'];
                         $product_name = $item['productname'];
                         $result[$cat_name][] = $product_name;
                     }
                     ?>
-                    <?php foreach (array_keys($result) as $categories): ?>
+                    <?php foreach (array_keys($result) as $category): ?>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$categories?>"><?= $categories ?></a>
+                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category?>"><?= $category ?></a>
 
                         <ul>
-                            <?php foreach ($result[$categories] as $key) { ?>
+                            <?php foreach ($result[$category] as $key) { ?>
                             <li>
                                 <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$key?>"><?= $key ?></a>
                             </li>
@@ -81,10 +81,10 @@ $baseUrl= Yii::$app->request->baseUrl;
                                 </li>
                             <?php endif; ?>
                             <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist"
-                                   id="wishlist-total" title="Wish List (0)"> <span>Wish List (0)</span></a></li>
+                                   id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích (0)</span></a></li>
                             <li class="checkout"><a
                                     href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/checkout"
-                                    title="Checkout"> <span>Checkout</span></a></li>
+                                    title="Checkout"> <span>Thanh toán</span></a></li>
                         </ul>
                     </div>
                 </div>
