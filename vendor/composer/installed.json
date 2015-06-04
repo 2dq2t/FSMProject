@@ -3658,5 +3658,130 @@
             "widget",
             "yii2"
         ]
+    },
+    {
+        "name": "maksyutin/yii2-dual-list-box",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/maksyutin/yii2-dual-list-box.git",
+            "reference": "d4f165d2a36024cb4e049d74b0730261cdb878dc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/maksyutin/yii2-dual-list-box/zipball/d4f165d2a36024cb4e049d74b0730261cdb878dc",
+            "reference": "d4f165d2a36024cb4e049d74b0730261cdb878dc",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "~2.0"
+        },
+        "time": "2015-02-27 23:36:21",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "maksyutin\\duallistbox\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "proprietary"
+        ],
+        "authors": [
+            {
+                "name": "Maksyutin Dmitriy",
+                "email": "maksyutin@yandex.ru",
+                "homepage": "http://maksyutin.ru"
+            },
+            {
+                "name": "Geodan B.V.",
+                "homepage": "http://www.geodan.nl"
+            }
+        ],
+        "description": "Dual list box Widget for Yii 2",
+        "keywords": [
+            "dual listview",
+            "dual-list-box",
+            "duallistbox",
+            "widget",
+            "yii 2",
+            "yii2"
+        ]
+    },
+    {
+        "name": "bower-asset/toastr",
+        "version": "2.1.1",
+        "version_normalized": "2.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/johnpapa/toastr-bower.git",
+            "reference": "8ff63def898c6ac619fef2d284576e8e4941cb1a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/johnpapa/toastr-bower/zipball/8ff63def898c6ac619fef2d284576e8e4941cb1a",
+            "reference": "8ff63def898c6ac619fef2d284576e8e4941cb1a",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.6.3"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "toastr.js",
+                "toastr.css"
+            ]
+        },
+        "installation-source": "dist"
+    },
+    {
+        "name": "lavrentiev/yii2-toastr",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/lavrentiev/yii2-toastr.git",
+            "reference": "f8db8b500a2b4a6b3dea14662055975f545b76fc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/lavrentiev/yii2-toastr/zipball/f8db8b500a2b4a6b3dea14662055975f545b76fc",
+            "reference": "f8db8b500a2b4a6b3dea14662055975f545b76fc",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/toastr": "2.1.1",
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-04-21 21:37:59",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "lavrentiev\\yii2toastr\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Eugene Lavrentiev (RyanTedder)",
+                "email": "lavrentiev.e@gmail.com"
+            }
+        ],
+        "description": "Simple javascript toast notifications",
+        "homepage": "https://github.com/lavrentiev",
+        "keywords": [
+            "extension",
+            "jquery",
+            "notification",
+            "toastr",
+            "yii2"
+        ]
     }
 ]

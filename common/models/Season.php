@@ -20,6 +20,7 @@ class Season extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+    public $products_list;
     /**
      * @inheritdoc
      */
@@ -36,7 +37,7 @@ class Season extends \yii\db\ActiveRecord
         return [
             [['name', 'from', 'to'], 'required'],
             [['active'], 'integer'],
-            [['from', 'to'], 'safe'],
+            [['from', 'to', 'products_list'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique']
         ];

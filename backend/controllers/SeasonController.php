@@ -8,6 +8,8 @@ use kartik\alert\Alert;
 use Yii;
 use common\models\Season;
 use common\models\SeasonSearch;
+use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -132,7 +134,7 @@ class SeasonController extends Controller
             if($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => Alert::TYPE_SUCCESS,
-                    'duration' => 5000,
+                    'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => 'Season Record has been saved.',
                     'title' => 'Add Season'
@@ -254,6 +256,73 @@ class SeasonController extends Controller
         ]);
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDetails($id) {
+        $model = $this->findModel($id);
+
+        $model->products_list = ArrayHelper::map(ProductSeason::find()->where(['season_id' => $id])->all(), 'product_id', 'product_id');
+        $products_list = $model->products_list;
+        $model->products_list = Json::encode($model->products_list);
+
+        if (Yii::$app->request->isPost) {
+
+            if (!$model->load(Yii::$app->request->post())) {
+                $model->products_list = [];
+            }
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                // check if user remove product then remove this product from product season
+                foreach ($products_list as $product_list) {
+                    $key = array_search($product_list, $model->products_list);
+                    if ($key === false) {
+                        ProductSeason::find()->where(['product_id' => $product_list])->andWhere(['season_id' => $model->id])->one()->delete();
+                    } else {
+                        unset($model->products_list[$key]);
+                    }
+                }
+
+                // insert new product_id to product_season
+                foreach ($model->products_list as $product_list) {
+                    $product_season = new ProductSeason();
+                    $product_season->product_id = $product_list;
+                    $product_season->season_id = $model->id;
+                    $product_season->save();
+                }
+
+                $transaction->commit();
+
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 5000,
+                    'icon' => 'fa fa-plus',
+                    'message' => 'Product season has been added.',
+                    'title' => 'Add Product season'
+                ]);
+
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                $model->products_list = Json::encode($model->products_list);
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 5000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Product season add failure. Try again later.'),
+                    'title' => 'Add Product season'
+                ]);
+            }
+
+            $model->products_list = Json::encode($products_list);
+
+            return $this->redirect(['season/details', 'id' => $model->id]);
+        }
+
+        return $this->render('details', [
+            'model' => $model
+        ]);
     }
 
     /**

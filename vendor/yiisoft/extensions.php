@@ -390,4 +390,22 @@ return array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
     ),
   ),
+  'maksyutin/yii2-dual-list-box' => 
+  array (
+    'name' => 'maksyutin/yii2-dual-list-box',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@maksyutin/duallistbox' => $vendorDir . '/maksyutin/yii2-dual-list-box',
+    ),
+  ),
+  'lavrentiev/yii2-toastr' => 
+  array (
+    'name' => 'lavrentiev/yii2-toastr',
+    'version' => '1.0.1.0',
+    'alias' => 
+    array (
+      '@lavrentiev/yii2toastr' => $vendorDir . '/lavrentiev/yii2-toastr',
+    ),
+  ),
 );

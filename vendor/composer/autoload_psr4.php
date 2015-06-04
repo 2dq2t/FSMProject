@@ -18,6 +18,8 @@ return array(
     'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform'),
     'vova07\\imperavi\\' => array($vendorDir . '/vova07/yii2-imperavi-widget/src'),
     'sintret\\chat\\' => array($vendorDir . '/sintret/yii2-chat-adminlte'),
+    'maksyutin\\duallistbox\\' => array($vendorDir . '/maksyutin/yii2-dual-list-box'),
+    'lavrentiev\\yii2toastr\\' => array($vendorDir . '/lavrentiev/yii2-toastr'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),
     'kartik\\touchspin\\' => array($vendorDir . '/kartik-v/yii2-widget-touchspin'),
@@ -57,4 +59,5 @@ return array(
     'dosamigos\\ckeditor\\' => array($vendorDir . '/2amigos/yii2-ckeditor-widget/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Zelenin\\yii\\widgets\\Summernote\\' => array($vendorDir . '/zelenin/yii2-summernote-widget'),
+    'duallistbox\\duallistbox\\' => array($vendorDir . '/duallistbox/yii2-dual-listbox'),
 );

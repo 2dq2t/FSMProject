@@ -7,16 +7,14 @@ use Yii;
 /**
  * This is the model class for table "order_view".
  *
- * @property string $id
- * @property string $customer_name
- * @property string $customer_phone_number
+ * @property string $order_id
  * @property string $order_date
  * @property string $receiving_date
- * @property double $shipping_fee
- * @property string $tax_amount
- * @property double $net_amount
- * @property string $description
- * @property string $order_status
+ * @property string $full_name
+ * @property string $email
+ * @property string $phone_number
+ * @property integer $order_status_id
+ * @property string $address
  */
 class OrderView extends \yii\db\ActiveRecord
 {
@@ -29,7 +27,7 @@ class OrderView extends \yii\db\ActiveRecord
     }
 
     public static function primaryKey(){
-        return ['id'];
+        return ['order_id'];
     }
 
     /**
@@ -38,11 +36,11 @@ class OrderView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'order_date', 'receiving_date', 'tax_amount'], 'integer'],
-            [['customer_name', 'customer_phone_number', 'order_date', 'receiving_date', 'shipping_fee', 'tax_amount', 'net_amount', 'description', 'order_status'], 'required'],
-            [['shipping_fee', 'net_amount'], 'number'],
-            [['customer_name', 'description', 'order_status'], 'string', 'max' => 255],
-            [['customer_phone_number'], 'string', 'max' => 15]
+            [['order_id', 'order_date', 'receiving_date', 'order_status_id'], 'integer'],
+            [['order_date', 'receiving_date', 'full_name', 'email', 'phone_number', 'address'], 'required'],
+            [['address'], 'string'],
+            [['full_name', 'email'], 'string', 'max' => 255],
+            [['phone_number'], 'string', 'max' => 15]
         ];
     }
 
@@ -52,16 +50,14 @@ class OrderView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'customer_name' => Yii::t('app', 'Customer Name'),
-            'customer_phone_number' => Yii::t('app', 'Customer Phone Number'),
+            'order_id' => Yii::t('app', 'Order ID'),
             'order_date' => Yii::t('app', 'Order Date'),
             'receiving_date' => Yii::t('app', 'Receiving Date'),
-            'shipping_fee' => Yii::t('app', 'Shipping Fee'),
-            'tax_amount' => Yii::t('app', 'Tax Amount'),
-            'net_amount' => Yii::t('app', 'Net Amount'),
-            'description' => Yii::t('app', 'Description'),
-            'order_status' => Yii::t('app', 'Order Status'),
+            'full_name' => Yii::t('app', 'Full Name'),
+            'email' => Yii::t('app', 'Email'),
+            'phone_number' => Yii::t('app', 'Phone Number'),
+            'order_status_id' => Yii::t('app', 'Order Status ID'),
+            'address' => Yii::t('app', 'Address'),
         ];
     }
 }

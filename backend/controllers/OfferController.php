@@ -121,7 +121,7 @@ class OfferController extends Controller
             $model->start_date = strtotime($model->start_date);
             $model->end_date = strtotime($model->end_date);
 
-            if ($$model->save()) {
+            if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 3000,
