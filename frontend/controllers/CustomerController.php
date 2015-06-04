@@ -39,7 +39,7 @@ class CustomerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => [ 'update','manageacc'],
+                        'actions' => [ 'update','manageacc','changepass'],
                         'roles' => ['@'],
                     ],
                     [
@@ -224,6 +224,11 @@ class CustomerController extends Controller
     }
 
     public function actionChangepass($id){
+
+        if (Yii::$app->user->id != $id) {
+            return $this->redirect('index.php?r=customer/changepass&id='.Yii::$app->user->id.'');
+        }
+
         $modelCustomer = $this->findModel($id);
         $modelCustomer->scenario = 'changepass';
         if($modelCustomer->load(Yii::$app->request->post())){
@@ -279,18 +284,131 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function actionSubcat() {
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $city_id = $parents[0];
-                $out = District::getOptionsByDistrict($city_id);
-                echo Json::encode(['output' => $out, 'selected' => '']);
-                return;
+    public function actionChangeaddress($id){
+
+        $modelCustomer = $this->findModel($id);
+        $modelUpdateAddress = Address::find()->where(['id' => $modelCustomer->address_id])->one();
+
+        //When address_id of Customer equal null => add new address
+        if($modelUpdateAddress == null) {
+            $modelAddress = new Address();
+            $modelCity = new City();
+            $modelDistrict = new District();
+
+            if($modelAddress->load(Yii::$app->request->post())){
+                $transaction = Yii::$app->db->beginTransaction();
+                try{
+                    if($modelAddress->save()){
+                        $modelCustomer->address_id = $modelAddress->id;
+                        $modelCustomer->save();
+                        $transaction->commit();
+
+                        Yii::$app->getSession()->setFlash('successful', [
+                            'type' => Alert::TYPE_SUCCESS,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => Yii::t('app', 'Your address has been saved.'),
+                            'title' => Yii::t('app', 'New Address'),
+                        ]);
+                        return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
+                    }
+                }catch (Exception $e){
+                    $errors = $modelCustomer->getErrors();
+                    foreach($errors as $error) {
+                        Yii::$app->getSession()->setFlash('failed', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => $error[0],
+                            'title' => Yii::t('app', 'Add Address'),
+                        ]);
+                    }
+
+                    $transaction->rollBack();
+                }
+            }else{
+                return $this->render('changeaddress', [
+                    'modelAddress' => $modelAddress,
+                    'modelCity' => $modelCity,
+                    'modelDistrict' => $modelDistrict,
+                ]);
+            }
+        }else{
+            $modelUpdateDistrict = District::find()->where(['id' => $modelUpdateAddress->district_id])->one();
+            $modelUpdateCity = City::find()->where(['id'=>$modelUpdateDistrict->city_id])->one();
+
+            if($modelUpdateAddress->load(Yii::$app->request->post())){
+                $transaction = Yii::$app->db->beginTransaction();
+                try{
+                    if($modelUpdateAddress->save()){
+                        $modelCustomer->address_id = $modelUpdateAddress->id;
+                        $transaction->commit();
+
+                        Yii::$app->getSession()->setFlash('successful', [
+                            'type' => Alert::TYPE_SUCCESS,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => Yii::t('app', 'Your address has been saved.'),
+                            'title' => Yii::t('app', 'Update Address'),
+                        ]);
+                        return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
+                    }
+                }catch (Exception $e){
+                    $errors = $modelCustomer->getErrors();
+                    foreach($errors as $error) {
+                        Yii::$app->getSession()->setFlash('failed', [
+                            'type' => Alert::TYPE_DANGER,
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => $error[0],
+                            'title' => Yii::t('app', 'Update Address'),
+                        ]);
+                    }
+
+                    $transaction->rollBack();
+                }
+            }else{
+                return $this->render('changeaddress', [
+                    'modelUpdateAddress' => $modelUpdateAddress,
+                    'modelUpdateCity' => $modelUpdateCity,
+                    'modelUpdateDistrict' => $modelUpdateDistrict,
+                ]);
             }
         }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
+
+
+    }
+
+    public function actionGetdistrict($id = null) {
+        if (isset($id)) {
+            $countDistrict= District::find()
+                ->where(['city_id' => $id])
+                ->count();
+
+            $districts = District::find()
+                ->where(['city_id' => $id])
+                ->all();
+
+            if($countDistrict>0){
+                foreach($districts as $district){
+                    echo "<option value='".$district->id."'>".$district->name."</option>";
+                }
+            }
+            else{
+                echo "<option>-</option>";
+            }
+        } else {
+            if (isset($_POST['depdrop_parents'])) {
+                $parents = $_POST['depdrop_parents'];
+                if ($parents != null) {
+                    $city_id = $parents[0];
+                    $out = District::getOptionsByDistrict($city_id);
+                    echo Json::encode(['output' => $out, 'selected' => '']);
+                    return;
+                }
+            }
+            echo Json::encode(['output'=>'', 'selected'=>'']);
+        }
     }
 
     /**
