@@ -24,11 +24,8 @@ $this->title =$product_detail['name'];
             ]);
             ?>
             <?php echo $this->render('_leftBanner');
-            ?>
-
-            <?php echo $this->render('_specialProduct');
-            ?>
-            <?php echo $this->render('_bestSeller');
+            require('_specialProduct.php');
+            require('bestSeller.php');
             ?>
         </column>
         <div id="content" class="productpage col-sm-9">      <div class="row">
@@ -44,7 +41,8 @@ $this->title =$product_detail['name'];
 
                             <!-- Megnor Cloud-Zoom Image Effect Start -->
                             <?php
-                                echo "<li class='image'><a class='thumbnail' href='".$product_image[0]['path']."' title='".$product_detail['name']."'><img src='".$product_image[0]['path']."' title='".$product_detail['name']."' alt='".$product_detail['name']."' /></a></li>";
+                            if(!empty($product_image_detail[0]['path']))
+                                echo "<li class='image'><a class='thumbnail' href='".$product_image_detail[0]['path']."' title='".$product_detail['name']."'><img src='".$product_image_detail[0]['path']."' title='".$product_detail['name']."' alt='".$product_detail['name']."' /></a></li>";
                             ?>
 
                             <div class="additional-carousel">
@@ -55,13 +53,15 @@ $this->title =$product_detail['name'];
 
                                 <div id="additional-carousel" class="image-additional product-carousel">
                                     <?php
-                                    foreach ($product_image as $image) {
+                                    if(!empty($product_image_detail[0]['path'])) {
+                                        foreach ($product_image_detail as $image) {
 
-                                    echo "<div class='slider-item'>";
-                                        echo "<div class='product-block'>";
-                                        echo "<a href='" . $image['path'] . "' title='".$product_detail['name']." ' class='thumbnail elevatezoom-gallery' data-image='" . $image['path'] . "' data-zoom-image='" . $image['path'] . "'><img src='" . $image['path'] . "' width='74' title='".$product_detail['name']." ' alt='".$product_detail['name']."' /></a>";
-                                        echo "</div>";
-                                        echo "</div>";
+                                            echo "<div class='slider-item'>";
+                                            echo "<div class='product-block'>";
+                                            echo "<a href='" . $image['path'] . "' title='" . $product_detail['name'] . " ' class='thumbnail elevatezoom-gallery' data-image='" . $image['path'] . "' data-zoom-image='" . $image['path'] . "'><img src='" . $image['path'] . "' width='74' title='" . $product_detail['name'] . " ' alt='" . $product_detail['name'] . "' /></a>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                        }
                                     }
                                     ?>
                                 </div>
@@ -79,6 +79,7 @@ $this->title =$product_detail['name'];
                     <ul class="list-unstyled">
                         <li><span>Mã số sản phẩm:</span><?php echo $product_detail['barcode'] ?></li>
                         <li><span>Số lượng: </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold']; else echo "Trong kho"; ?></li>
+                        <li><span>Khối lượng:</span><?php if(isset($product_unit['name'])) echo $product_unit['name'] ?></li>
                         <li><p><span>Tiêu chuẩn:</span><span class="inline" style="margin-left: 3px"><a  href="http://vietgap.gov.vn/Content.aspx?mode=uc&page=About&Option=7" target="_blank"
                                             rel="nofollow">Chứng nhận rau an toàn VIETGAP</a></span></p></li>
                         <li><p><?php echo $product_detail['intro'] ?> </p></li>
@@ -87,10 +88,25 @@ $this->title =$product_detail['name'];
 
                     <ul class="list-unstyled price">
                         <li class="price-title">Giá:</li>
-                        <li class="price-normal">
-                            <h2 ><?php echo $product_detail['price'] ?> VND</h2>
-                        </li>
-                        <li class="tax price-tax">Thuế:<span class="price-tax"><?php echo $product_detail['tax'] ?> VND</span></li>
+                        <?php
+                        if(!empty($product_offer)){
+                            echo "<li>";
+                            echo "<span class='old-price' style='text-decoration: line-through;'>".number_format($product_detail['price'])." VND </span>";
+                            echo "<li>";
+                        }
+                        else{
+                            echo "<li class='price-normal''>";
+                            echo "<h2 >".number_format($product_detail['price'])." VND</h2>";
+                            echo "</li>";
+                        }
+                        if(!empty($product_offer)){
+                            $price_offer = $product_detail['price']-$product_offer;
+                            echo "<li>";
+                            echo "<h2 class='special-price'>".number_format($price_offer)." VND</h2>";
+                            echo "<li>";
+                        }
+                        ?>
+                        <li class="tax price-tax">Thuế:<span class="price-tax"><?php echo number_format($product_detail['tax']) ?> VND</span></li>
                         <br/>
                     </ul>
                     <div id="product">
@@ -105,7 +121,7 @@ $this->title =$product_detail['name'];
 
                             <div class="btn-group">
                                 <button type="button"  class="wishlist" title="Add to Wish List" onclick="wishlist.add(<?php echo $product_detail['id']; ?> );">Thêm vào yêu thích</button>
-                                <button type="button"  class="compare" title="Add to Compare" onclick="compare.add('43');">Add to Compare</button>
+
                             </div>
                         </div>
                     </div>
@@ -469,10 +485,18 @@ $this->title =$product_detail['name'];
             </div>
 
             <div class="product-tag"><b>Tags:</b>
-                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/search&amp;tag=Donec">Donec</a>,
-                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/search&amp;tag=Maecenas">Maecenas</a>,
-                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/search&amp;tag=Nulla">Nulla</a>,
-                <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/search&amp;tag=Lorem">Lorem</a>
+                <?php
+                if(!empty($product_tag[0]['name'])) {
+                    foreach ($product_tag as $tag) {
+                        if($tag === end($product_tag)){
+                            echo "<a href='" . $baseUrl . "/index.php?r=site/search&amp;tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                        }
+                        else {
+                            echo "<a href='" . $baseUrl . "/index.php?r=site/search&amp;tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                            echo ", ";
+                        }
+                    }
+                }?>
             </div>
         </div>
 

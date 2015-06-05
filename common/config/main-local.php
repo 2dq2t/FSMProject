@@ -24,5 +24,8 @@ return [
                 'encryption' => 'tls',
             ],
         ],
+        'CommonFunction'=>[
+            'class'=>'common\components\CommonFunction',
+        ],
     ],
 ];

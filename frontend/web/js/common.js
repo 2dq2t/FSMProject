@@ -236,7 +236,7 @@ var wishlist = {
                 var json = $.parseJSON(data)
 				if (json['success']) {
 					$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                    $('#wishlist-total').html('Wish List ('+json['total']+')');
+                    $('#wishlist-total').html('Danh mục yêu thích ('+json['total']+')');
 				}
 
 				if (json['info']) {

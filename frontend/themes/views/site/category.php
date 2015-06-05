@@ -22,11 +22,8 @@
         ]);
         ?>
         <?php echo $this->render('_leftBanner');
-        ?>
-
-        <?php echo $this->render('_specialProduct');
-        ?>
-        <?php echo $this->render('_bestSeller');
+        require('_specialProduct.php');
+        require('bestSeller.php');
         ?>
     </column>
     <div id="content" class="col-sm-9 categorypage">
@@ -43,7 +40,6 @@
                     <button type="button" id="grid-view" class="btn btn-default grid" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
                 </div>
             </div>
-            <div class="compare-total"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/compare" id="compare-total">Product Compare (0)</a></div>
             <div class="pagination-right">
                 <div class="sort-by-wrapper">
                     <div class="col-md-2 text-right sort-by">

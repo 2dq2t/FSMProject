@@ -88,11 +88,8 @@ $baseUrl = Yii::$app->request->baseUrl;
                         ]);
                         ?>
                         <?php echo $this->render('_leftBanner');
-                        ?>
-
-                        <?php echo $this->render('_specialProduct');
-                        ?>
-                        <?php echo $this->render('_bestSeller');
+                        require('_specialProduct.php');
+                        require('bestSeller.php');
                         ?>
 
                     </column>
@@ -118,10 +115,10 @@ $baseUrl = Yii::$app->request->baseUrl;
                                                             alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
                                                             class="img-responsive"/></a>
                                                     <?php
-                                                    if($product['product_offer'] >0)
+                                                    if(isset($product['product_offer'])&&$product['product_offer'] >0)
                                                     echo "<span class='saleicon sale'>Sale</span>";
 
-                                                    if($product['product_rating']>0) {
+                                                    if(isset($product['product_rating'])&&$product['product_rating']>0) {
                                                         echo "<div class='rating' >";
                                                             for($i=0;$i<5;$i++){
                                                                 if($i<$product['product_rating']){
@@ -145,14 +142,14 @@ $baseUrl = Yii::$app->request->baseUrl;
                                                         <div class="price">
                                                             <?php
                                                             if(!empty($product['product_offer'])){
-                                                                echo "<span class='price-old'>".$product['product_price']." VND</span>";
+                                                                echo "<span class='price-old'>".number_format($product['product_price'])." VND</span>";
                                                                 $new_price = $product['product_price']-$product['product_offer'];
-                                                                echo "<span class='price-new'>".$new_price." VND</span>";
-                                                                echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                                echo "<span class='price-new'>".number_format($new_price)." VND</span>";
+                                                                echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
                                                             }
                                                             else{
-                                                                echo $product['product_price']." VND";
-                                                                echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
+                                                                echo number_format($product['product_price'])." VND";
+                                                                echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
                                                             }
                                                             ?>
                                                         </div>
@@ -174,7 +171,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <span class="featured_default_width" style="display:none; visibility:hidden"></span>
 
                         <div class="box latest">
-                            <div class="box-heading">Mùa này có gì?</div>
+                            <div class="box-heading"> Mùa này có gì? </div>
                             <div class="box-content">
                                 <div class="customNavigation">
                                     <a class="prev">&nbsp;</a>
@@ -183,7 +180,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 
 
                                 <div class="box-product product-carousel" id="latest-carousel">
-                                    <?php foreach($new_product as $product){?>
+                                    <?php foreach($product_season as $product){?>
                                         <div class="slider-item">
                                             <div class="product-block product-thumb transition">
                                                 <div class="product-block-inner ">
@@ -193,10 +190,10 @@ $baseUrl = Yii::$app->request->baseUrl;
                                                                 alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
                                                                 class="img-responsive"/></a>
                                                         <?php
-                                                        if($product['product_offer'] >0)
+                                                        if(isset($product['product_offer'])&&$product['product_offer'] >0)
                                                             echo "<span class='saleicon sale'>Sale</span>";
 
-                                                        if($product['product_rating']>0) {
+                                                        if(isset($product['product_rating'])&&$product['product_rating']>0) {
                                                             echo "<div class='rating' >";
                                                             for($i=0;$i<5;$i++){
                                                                 if($i<$product['product_rating']){
