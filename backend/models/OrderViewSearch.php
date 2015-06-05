@@ -18,8 +18,9 @@ class OrderViewSearch extends OrderView
     public function rules()
     {
         return [
-            [['order_id', 'order_status_id'], 'integer'],
-            [['full_name', 'email', 'phone_number', 'address', 'order_date', 'receiving_date'], 'safe'],
+            [['order_id', 'quantity', 'order_status_id'], 'integer'],
+            [['customer_name', 'customer_phone_no', 'product_name'], 'safe'],
+            [['sell_price', 'discount'], 'number'],
         ];
     }
 
@@ -57,17 +58,15 @@ class OrderViewSearch extends OrderView
 
         $query->andFilterWhere([
             'order_id' => $this->order_id,
-//            'order_date' => $this->order_date,
-//            'receiving_date' => $this->receiving_date,
+            'quantity' => $this->quantity,
+            'sell_price' => $this->sell_price,
+            'discount' => $this->discount,
             'order_status_id' => $this->order_status_id,
         ]);
 
-        $query->andFilterWhere(['like', 'full_name', $this->full_name])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'order_date', strtotime($this->order_date)])
-            ->andFilterWhere(['like', 'receiving_date', strtotime($this->receiving_date)])
-            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
-            ->andFilterWhere(['like', 'address', $this->address]);
+        $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
+            ->andFilterWhere(['like', 'customer_phone_no', $this->customer_phone_no])
+            ->andFilterWhere(['like', 'product_name', $this->product_name]);
 
         return $dataProvider;
     }

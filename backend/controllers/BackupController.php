@@ -112,8 +112,16 @@ class BackupController extends Controller
             $items = join('`,`', $itemNames);
             $itemValues = array_values($data);
             $itemValues = array_map("addslashes", $itemValues);
-            $valueString = join("','", $itemValues);
-            $valueString = "('" . $valueString . "'),";
+            $valueString = '';
+            foreach ($itemValues as $itemValue) {
+                if (is_numeric($itemValue)) {
+                    $valueString .= $itemValue . ",";
+                } else {
+                    $valueString .= "'" . $itemValue . "',";
+                }
+            }
+            $valueString = trim($valueString, ",");
+            $valueString = "(" . $valueString . ")";
             $values ="\n" . $valueString;
             if ($values != "")
             {
@@ -320,7 +328,7 @@ class BackupController extends Controller
         if (isset($file)) {
             $sqlFile = $this->path . basename($file);
             $flashError = 'success';
-            $flashMsg = 'Looks like working :)';
+            $flashMsg = 'Restore success.';
         } else {
             $flashError = 'error';
             $flashMsg = 'Problems with the file name';

@@ -40,6 +40,7 @@ class OrderController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                     'confirm' => ['post'],
+                    'delivered' => ['post'],
                     'cancel' => ['post']
                 ],
             ],
@@ -266,19 +267,44 @@ class OrderController extends Controller
         $model->order_status_id = OrderStatus::CONFIRM_ORDER;
         if ($model->save()) {
             Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
+                'type' => 'success',
                 'duration' => 3000,
                 'icon' => 'fa fa-check',
                 'message' => Yii::t('app', 'Confirm order successful!'),
                 'title' => Yii::t('app', 'Confirm Order'),
             ]);
         } else {
-            Yii::$app->getSession()->setFlash('danger', [
-                'type' => Alert::TYPE_DANGER,
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
                 'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Confirm oder failure. Please try again later/'),
                 'title' => Yii::t('app', 'Confirm Order'),
+            ]);
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionDelivered($id) {
+        $model = $this->findModel($id);
+
+        $model->order_status_id = OrderStatus::DELIVERED_ORDER;
+        if ($model->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-check',
+                'message' => Yii::t('app', 'Delivered order successful!'),
+                'title' => Yii::t('app', 'Delivered Order'),
+            ]);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-check',
+                'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Delivered oder failure. Please try again later/'),
+                'title' => Yii::t('app', 'Delivered Order'),
             ]);
         }
 
@@ -298,8 +324,8 @@ class OrderController extends Controller
                 'title' => Yii::t('app', 'Cancel Order'),
             ]);
         } else {
-            Yii::$app->getSession()->setFlash('danger', [
-                'type' => 'danger',
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
                 'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Cancel oder failure. Please try again later/'),

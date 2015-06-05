@@ -15,25 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
-//        echo lavrentiev\yii2toastr\Toastr::widget([
-//            'type' => (!empty($message['type'])) ? $message['type'] : 'success',
-//            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-//            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
-//            'clear' => false,
-//            'options' => [
-//                "closeButton" => true,
-//                "positionClass" => "toast-top-right",
-//                "timeOut" => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
-//            ]
-//        ]);
-        echo \kartik\alert\Alert::widget([
-            'type' => (!empty($message['type'])) ? $message['type'] : \kartik\alert\Alert::TYPE_DANGER,
+        echo lavrentiev\yii2toastr\Toastr::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-            'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
-            'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
-            'showSeparator' => true,
-            'options' => ['format' => 'raw']
+            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'clear' => false,
+            'options' => [
+                "closeButton" => true,
+                "positionClass" => "toast-top-right",
+                "timeOut" => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
+            ]
         ]);
     }
     ?>
@@ -42,9 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $gridColumns = [
-        ['class' => 'kartik\grid\SerialColumn'],
+//        ['class' => 'kartik\grid\SerialColumn'],
         [
-            'attribute' => 'full_name',
+            'attribute' => 'order_id'
+        ],
+        [
+            'attribute' => 'customer_name',
             'label' => Yii::t('app', 'Customer Name'),
             'width' => '20%',
             'filterType'=>GridView::FILTER_SELECT2,
@@ -55,29 +49,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer name')],
             'format'=>'raw'
         ],
+//        [
+//            'attribute' => 'order_date',
+//            'width' => '15%',
+//            'value' => function ($model) {
+//                return date('m/d/Y', $model->order_date);
+//            },
+//            'filterType' => GridView::FILTER_DATE,
+//            'filterWidgetOptions' => [
+//                'removeButton' => false,
+//                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+//                'pluginOptions' => [
+//                    'allowClear' => true,
+//                    'autoclose' => true,
+//                ],
+//            ],
+//        ],
         [
-            'attribute' => 'order_date',
-            'width' => '15%',
-            'value' => function ($model) {
-                return date('m/d/Y', $model->order_date);
-            },
-            'filterType' => GridView::FILTER_DATE,
-            'filterWidgetOptions' => [
-                'removeButton' => false,
-                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'autoclose' => true,
-                ],
-            ],
-        ],
-        [
-            'attribute' => 'phone_number',
+            'attribute' => 'customer_phone_no',
             'width' => '10%',
         ],
         [
-            'attribute' => 'address',
-            'label' => Yii::t('app', 'Shipping address'),
+            'attribute' => 'product_name',
+//            'label' => Yii::t('app', 'Shipping address'),
+        ],
+        [
+            'attribute' => 'quantity'
+        ],
+        [
+            'attribute' => 'sell_price'
         ],
         [
             'attribute' => 'order_status_id',
@@ -92,10 +92,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     $label_class = 'label-info';
                     $value = \backend\models\OrderStatus::find()->where(['id' => $model->order_status_id])->one()['name'];
                 } else if ($model->order_status_id == 2) {
-                    $label_class = 'label-success';
+                    $label_class = 'label-primary';
+                    $value = \backend\models\OrderStatus::find()->where(['id' => $model->order_status_id])->one()['name'];
+                } else if ($model->order_status_id == 3) {
+                    $label_class = 'label-danger';
                     $value = \backend\models\OrderStatus::find()->where(['id' => $model->order_status_id])->one()['name'];
                 } else {
-                    $label_class = 'label-danger';
+                    $label_class = 'label-success';
                     $value = \backend\models\OrderStatus::find()->where(['id' => $model->order_status_id])->one()['name'];
                 }
                 return \yii\helpers\Html::tag(
@@ -108,18 +111,26 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\ActionColumn',
             'width' => '11%',
-            'template' => '{confirm}{cancel}',
+            'template' => '{confirm}{delivered}{cancel}',
             'buttons' => [
                 'confirm' => function ($url, $model) {
-                    return $model->order_status_id <> 2 ? Html::a('<span class="btn btn-sm btn-success"><i class="fa fa-check"></i> ' . Yii::t('app', 'Confirm order') . '</span>',
+                    return $model->order_status_id <> 2 && $model->order_status_id <> 4 ? Html::a('<span class="btn btn-sm btn-primary"><i class="fa fa-check"></i> ' . Yii::t('app', 'Confirm order') . '</span>',
                         ['order/confirm', 'id' => $model->order_id],
                         [
                             'data-method' => 'post',
                             'title' => Yii::t('app', 'Confirm'),
                         ]). '&nbsp;<br/>' : '';
                 },
+                'delivered' => function ($url, $model) {
+                    return $model->order_status_id <> 3 && $model->order_status_id <> 1 && $model->order_status_id <> 4 ? Html::a('<span class="btn btn-sm btn-success"><i class="fa fa-check"></i> ' . Yii::t('app', 'Delivered order') . '</span>',
+                            ['order/delivered', 'id' => $model->order_id],
+                            [
+                                'data-method' => 'post',
+                                'title' => Yii::t('app', 'Delivered'),
+                            ]). '&nbsp;<br/>' : '';
+                },
                 'cancel' => function ($url, $model) {
-                    return $model->order_status_id <> 3 ? Html::a('<span class="btn btn-sm btn-warning"><i class="fa fa-check"></i> ' . Yii::t('app', 'Cancel order') . '</span>',
+                    return $model->order_status_id <> 3 && $model->order_status_id <> 4 ? Html::a('<span class="btn btn-sm btn-warning"><i class="fa fa-check"></i> ' . Yii::t('app', 'Cancel order') . '</span>',
                         ['order/cancel', 'id' => $model->order_id],
                         [
                             'data-method' => 'post',
@@ -157,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

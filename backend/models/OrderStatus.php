@@ -19,6 +19,7 @@ class OrderStatus extends \yii\db\ActiveRecord
     const PENDING_CONFIRM = 1;
     const CONFIRM_ORDER = 2;
     const CANCEL_ORDER = 3;
+    const DELIVERED_ORDER = 4;
     /**
      * @inheritdoc
      */

@@ -9,9 +9,10 @@ use Yii;
  *
  * @property string $product_id
  * @property string $rating_id
- * @property string $session_id
+ * @property string $customer_id
  *
  * @property Product $product
+ * @property Customer $customer
  * @property Rating $rating
  */
 class ProductRating extends \yii\db\ActiveRecord
@@ -30,9 +31,8 @@ class ProductRating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'rating_id'], 'required'],
-            [['product_id', 'rating_id'], 'integer'],
-            [['session_id'], 'string', 'max' => 255]
+            [['product_id', 'rating_id', 'customer_id'], 'required'],
+            [['product_id', 'rating_id', 'customer_id'], 'integer']
         ];
     }
 
@@ -42,9 +42,9 @@ class ProductRating extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'product_id' => 'Product ID',
-            'rating_id' => 'Rating ID',
-            'session_id' => 'Session ID',
+            'product_id' => Yii::t('app', 'Product ID'),
+            'rating_id' => Yii::t('app', 'Rating ID'),
+            'customer_id' => Yii::t('app', 'Customer ID'),
         ];
     }
 
@@ -54,6 +54,14 @@ class ProductRating extends \yii\db\ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
 
     /**

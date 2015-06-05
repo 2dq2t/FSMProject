@@ -47,8 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'name',
             'value'=>function ($model, $key, $index, $widget) {
                 return Html::a($model->name,
-                    '#',
-                    ['title'=>'View product detail', 'onclick'=>'alert("This will open the product page!")']);
+                    '../../frontend/web/index.php?r=site/view-detail&product=' . $model->name,
+                    [
+                        'title'=>'View product detail',
+                        'target'=>'_blank'
+                    ]);
             },
             'pageSummary'=>'Total',
             'filterType'=>GridView::FILTER_SELECT2,

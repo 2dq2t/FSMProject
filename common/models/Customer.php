@@ -26,6 +26,7 @@ use Yii;
  *
  * @property Address $address
  * @property Guest $guest
+ * @property ProductRating[] $productRatings
  * @property WishList[] $wishLists
  * @property Product[] $products
  */
@@ -122,6 +123,14 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function getGuest()
     {
         return $this->hasOne(Guest::className(), ['id' => 'guest_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductRatings()
+    {
+        return $this->hasMany(ProductRating::className(), ['customer_id' => 'id']);
     }
 
     /**

@@ -135,7 +135,7 @@ class AuthItemController extends Controller
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', $model->getErrorMessage()),
-                    'title' => Yii::t('app', 'Add Permission'),
+                    'title' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Add Permission') : Yii::t('app', 'Add Role'),
                 ]);
                 return $this->render('create', [
                     'model' => $model,
@@ -147,8 +147,8 @@ class AuthItemController extends Controller
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Permission has been saved.'),
-                    'title' => Yii::t('app', 'Add Permission'),
+                    'message' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Permission has been saved.') : Yii::t('app', 'Role has been saved.'),
+                    'title' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Add Permission') : Yii::t('app', 'Add Role'),
                 ]);
 
                 switch (Yii::$app->request->post('action', 'save')) {
@@ -226,7 +226,7 @@ class AuthItemController extends Controller
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', $model->getErrorMessage()),
-                    'title' => Yii::t('app', 'Edit Permission'),
+                    'title' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Edit Permission'): Yii::t('app', 'Edit Role'),
                 ]);
                 return $this->render('update', [
                     'model' => $model,
@@ -238,8 +238,8 @@ class AuthItemController extends Controller
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Permission has been edited.'),
-                    'title' => Yii::t('app', 'Edit Permission'),
+                    'message' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Permission has been edited.') : Yii::t('app', 'Role has been edited.'),
+                    'title' => $type == Item::TYPE_PERMISSION ? Yii::t('app', 'Edit Permission'): Yii::t('app', 'Edit Role'),
                 ]);
 
                 return $this->redirect(['index']);
@@ -265,7 +265,6 @@ class AuthItemController extends Controller
      */
     public function actionDelete($id)
     {
-//        $this->findModel($id)->delete();
         Yii::$app->getAuthManager()->remove(new Item(['name' => $id]));
 
         Yii::$app->getSession()->setFlash('success', [

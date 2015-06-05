@@ -501,18 +501,18 @@
       }
       this.settings.moveOnSelect = value;
       if (this.settings.moveOnSelect) {
-        this.container.addClass('moveonselect');
+        //this.container.addClass('moveonselect');
         var self = this;
-        this.elements.select1.on('change', function() {
+        this.elements.select1.on('dblclick', function() {
           move(self);
         });
-        this.elements.select2.on('change', function() {
+        this.elements.select2.on('dblclick', function() {
           remove(self);
         });
       } else {
         this.container.removeClass('moveonselect');
-        this.elements.select1.off('change');
-        this.elements.select2.off('change');
+        this.elements.select1.off('dblclick');
+        this.elements.select2.off('dblclick');
       }
       if (refresh) {
         refreshSelects(this);

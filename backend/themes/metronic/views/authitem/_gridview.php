@@ -52,7 +52,7 @@ $gridColumns = [
             ],
         ],
         'urlCreator' => function ($action, $model, $key, $index) {
-            $params = is_array($key) ? $key : ['id' => (string)$key];
+            $params = is_array($key) ? $key : ['id' => $key === 0 ? $model->name : (string)$key];
             if ($action != 'delete') {
                 $params['type'] = $model->type;
             }
