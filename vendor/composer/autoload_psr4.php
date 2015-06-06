@@ -16,6 +16,7 @@ return array(
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform'),
+    'vova07\\select2\\' => array($vendorDir . '/vova07/yii2-select2-widget/src'),
     'vova07\\imperavi\\' => array($vendorDir . '/vova07/yii2-imperavi-widget/src'),
     'sintret\\chat\\' => array($vendorDir . '/sintret/yii2-chat-adminlte'),
     'maksyutin\\duallistbox\\' => array($vendorDir . '/maksyutin/yii2-dual-list-box'),
@@ -59,5 +60,4 @@ return array(
     'dosamigos\\ckeditor\\' => array($vendorDir . '/2amigos/yii2-ckeditor-widget/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Zelenin\\yii\\widgets\\Summernote\\' => array($vendorDir . '/zelenin/yii2-summernote-widget'),
-    'duallistbox\\duallistbox\\' => array($vendorDir . '/duallistbox/yii2-dual-listbox'),
 );

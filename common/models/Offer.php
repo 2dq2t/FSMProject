@@ -9,7 +9,7 @@ use Yii;
  *
  * @property string $id
  * @property string $product_id
- * @property double $price
+ * @property double $discount
  * @property string $description
  * @property string $start_date
  * @property string $end_date
@@ -35,7 +35,7 @@ class Offer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'price', 'description', 'start_date', 'end_date'], 'required'],
+            [['product_id', 'discount', 'description', 'start_date', 'end_date'], 'required'],
             [['product_id', 'active'], 'integer'],
             [['price'], 'number'],
             [['start_date', 'end_date'], 'safe'],
@@ -51,7 +51,7 @@ class Offer extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'product_id' => Yii::t('app', 'Product ID'),
-            'price' => Yii::t('app', 'Price'),
+            'discount' => Yii::t('app', 'Discount'),
             'description' => Yii::t('app', 'Description'),
             'start_date' => Yii::t('app', 'Start Date'),
             'end_date' => Yii::t('app', 'End Date'),

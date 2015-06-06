@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'value' => 'product.name'
         ],
         [
-            'attribute' => 'price',
+            'attribute' => 'discount',
             'width' => '15%',
         ],
         [

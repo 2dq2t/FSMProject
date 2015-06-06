@@ -66,7 +66,7 @@ use kartik\alert\Alert;
                             ) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'price')->textInput(['placeholder' => Yii::t('app', 'Enter offer price..')]) ?>
+                        <?= $form->field($model, 'discount')->textInput(['placeholder' => Yii::t('app', 'Enter offer discount..')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'description')->textarea(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter offer price..')]) ?>

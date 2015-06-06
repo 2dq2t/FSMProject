@@ -19,7 +19,7 @@ class OfferSearch extends Offer
     {
         return [
             [['id', 'active'], 'integer'],
-            [['price'], 'number'],
+            [['discount'], 'number'],
             [['description', 'product_id', 'start_date', 'end_date'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class OfferSearch extends Offer
         $query->andFilterWhere([
             'id' => $this->id,
 //            'product_id' => $this->product_id,
-            'price' => $this->price,
+            'discount' => $this->discount,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'offer.active' => $this->active,

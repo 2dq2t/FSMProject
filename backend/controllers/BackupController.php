@@ -99,6 +99,14 @@ class BackupController extends Controller
 
     public function getData($tableName)
     {
+        $sql = 'SHOW CREATE TABLE `'.$tableName . '`';
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $table = $cmd->queryOne();
+
+        if (array_key_exists('Create View', $table)) {
+            return;
+        }
+
         $sql = 'SELECT * FROM `'.$tableName . '`';
         $cmd = \Yii::$app->db->createCommand($sql);
         $dataReader = $cmd->query();

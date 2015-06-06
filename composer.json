@@ -36,7 +36,8 @@
         "kartik-v/yii2-widget-select2": "*",
         "kartik-v/yii2-krajee-base": "dev-master",
         "maksyutin/yii2-dual-list-box": "dev-master",
-        "lavrentiev/yii2-toastr": "1.0.1"
+        "lavrentiev/yii2-toastr": "1.0.1",
+        "vova07/yii2-select2-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

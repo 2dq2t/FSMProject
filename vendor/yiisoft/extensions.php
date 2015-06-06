@@ -408,4 +408,13 @@ return array (
       '@lavrentiev/yii2toastr' => $vendorDir . '/lavrentiev/yii2-toastr',
     ),
   ),
+  'vova07/yii2-select2-widget' => 
+  array (
+    'name' => 'vova07/yii2-select2-widget',
+    'version' => '0.1.2.0',
+    'alias' => 
+    array (
+      '@vova07/select2' => $vendorDir . '/vova07/yii2-select2-widget/src',
+    ),
+  ),
 );
