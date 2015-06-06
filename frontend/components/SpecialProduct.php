@@ -22,10 +22,10 @@ class SpecialProduct extends Component{
             $offer_end_date = date("d-m-Y", $special['offer_end_date']);
             if ($offer_start_date <= $today && $today <= $offer_end_date) {
                 //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($special['product_id']);
+                $product_image = Yii::$app->CommonFunction->getProductOneImage($special['product_id']);
                 $special['product_image'] = $product_image;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($special['product_id']);
+                $rating_average = Yii::$app->CommonFunction->productRating($special['product_id']);
                 $special['product_rating'] = $rating_average;
                 array_push($special_product,$special);
             }

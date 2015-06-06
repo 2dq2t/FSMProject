@@ -247,35 +247,32 @@ var wishlist = {
 			}
 		});
 	},
-	'remove': function() {
+	'remove': function(product_id) {
+        $.ajax({
+            url: 'index.php?r=site/remove-wish-list',
+            type: 'post',
+            data: {product_id: product_id},
+            dataType: 'json',
+            success: function(data) {
+                $('.alert').remove();
+                var json = $.parseJSON(data)
+                if (json['success']) {
+                    $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    var product_id = 'product' + json['product_id'];
+                    $("#"+product_id).remove();
+                    $('#wishlist-total').html('Danh mục yêu thích ('+json['total']+')');
+                }
 
+                if (json['error']) {
+                    $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                }
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
 	}
 }
 
-var compare = {
-	'add': function(product_id) {
-		$.ajax({
-			url: 'fsmproject/frontend/web/index.php?r=site/compare',
-			type: 'post',
-			data: 'product_id=' + product_id,
-			dataType: 'json',
-			success: function(json) {
-				$('.alert').remove();
-
-				if (json['success']) {
-					$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-
-					$('#compare-total').html(json['total']);
-
-					$('html, body').animate({ scrollTop: 0 }, 'slow');
-				}
-			}
-		});
-	},
-	'remove': function() {
-
-	}
-}
 
 /* Agree to Terms */
 $(document).delegate('.agree', 'click', function(e) {

@@ -24,13 +24,13 @@ class BestSeller extends Component
         if (!empty($best_seller_on_tag[0]['product_id'])) {
             foreach ($best_seller_on_system as $key => $item) {
                 //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
+                $product_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
                 $best_seller_on_system[$key]['product_image'] = $product_image;
                 //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
+                $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $best_seller_on_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
                 $best_seller_on_system[$key]['product_rating'] = $rating_average;
 
                 foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
@@ -39,14 +39,14 @@ class BestSeller extends Component
                         unset($best_seller_on_tag[$best_seller_key]);
                     } else {
                         //get product image
-                        $product_image = Yii::$app->CommonFunction->getOneImage($best_seller_item['product_id']);
+                        $product_image = Yii::$app->CommonFunction->getProductOneImage($best_seller_item['product_id']);
                         $best_seller_on_tag[$best_seller_key]['product_image'] = $product_image;
                         //get product offer
-                        $product_offer = Yii::$app->CommonFunction->getOffer($best_seller_item['product_id']);
+                        $product_offer = Yii::$app->CommonFunction->getProductOffer($best_seller_item['product_id']);
                         $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
 
                         //Get rating average
-                        $rating_average = Yii::$app->CommonFunction->rating($best_seller_item['product_id']);
+                        $rating_average = Yii::$app->CommonFunction->productRating($best_seller_item['product_id']);
                         $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
                     }
                 }
@@ -54,13 +54,13 @@ class BestSeller extends Component
         } else {
             foreach ($best_seller_on_system as $key => $item) {
                 //get product image
-                $product_image =  Yii::$app->CommonFunction->getOneImage($item['product_id']);
+                $product_image =  Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
                 $best_seller_on_system[$key]['product_image'] = $product_image;
                 //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
+                $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $best_seller_on_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
                 $best_seller_on_system[$key]['product_rating'] = $rating_average;
             }
         }

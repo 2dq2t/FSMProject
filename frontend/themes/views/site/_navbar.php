@@ -73,7 +73,8 @@ $baseUrl= Yii::$app->request->baseUrl;
                                             <a href="#">Đơn hàng của tôi</a>
                                         </li>
                                         <li>
-                                            <a href="#">Sản phẩm yêu thích</a>
+                                            <a href="#">Sản phẩm yêu thích
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="<?= $baseUrl."/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
@@ -81,8 +82,10 @@ $baseUrl= Yii::$app->request->baseUrl;
                                     </ul>
                                 </li>
                             <?php endif; ?>
-                            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist"
-                                   id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích (0)</span></a></li>
+                            <li><a href="<?php echo Yii::$app->request->baseUrl."/index.php?r=site/wish-list";?>"
+                                   id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if(!Yii::$app->user->isGuest) {
+                                            $number_product = Yii::$app->NavBarMenu->numberProductWishList(Yii::$app->user->identity->getId());
+                                            echo " (".$number_product .")";}?></span></a></li>
                             <li class="checkout"><a
                                     href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/checkout"
                                     title="Checkout"> <span>Thanh toán</span></a></li>

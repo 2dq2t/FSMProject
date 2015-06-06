@@ -25,7 +25,7 @@ class CommonFunction extends Component{
         }
         return $copy;
     }
-    public function rating($product_id){
+    public function productRating($product_id){
         $rating_id = (new Query())->select('rating_id')->from('product_rating')->where(['product_id' => $product_id])->all();
         $total_score = 0;
         $count_rating = 0;
@@ -41,12 +41,12 @@ class CommonFunction extends Component{
         return $rating_average;
     }
 
-    public function getOneImage($product_id){
+    public function getProductOneImage($product_id){
         $product_image = (new Query())->select('path')->from('image')->where(['product_id' =>$product_id])->one();
         return $product_image['path'];
     }
 
-    public function getOffer($product_id){
+    public function getProductOffer($product_id){
         $offer = (new Query())->select('discount,start_date,end_date')->from('offer')->where(['active'=>1,'product_id'=>$product_id])->one();
         $today = date("d-m-Y");
         $offer_start_date = date("d-m-Y",$offer['start_date']);
@@ -58,5 +58,10 @@ class CommonFunction extends Component{
             $product_offer=null;
         return $product_offer;
     }
+    public function getProductUnit($product_id){
+        $unit_id = (new Query())->select('unit_id')->from('product')->where(['id'=>$product_id])->one();
+        $product_unit = (new Query())->select('name')->from('unit')->where(['id'=>$unit_id['unit_id']])->one();
 
+        return $product_unit['name'];
+    }
 }
