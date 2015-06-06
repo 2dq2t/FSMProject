@@ -4,9 +4,7 @@ use kartik\widgets\ActiveForm;
 $this->title = 'Đăng kí';
 
 ?>
-<?php echo $this->render('_navbar',[
-    'categories' => $categories,
-]);
+<?php require('_navBar.php');
 ?>
 <div class="container content-inner">
 

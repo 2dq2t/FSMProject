@@ -4,9 +4,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Đăng nhập';
 
 ?>
-<?php echo $this->render('_navbar',[
-    'categories' => $categories,
-]);
+<?php require('_navBar.php');
 ?>
 <div class="container content-inner">
 

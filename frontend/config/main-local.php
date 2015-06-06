@@ -6,6 +6,21 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'EHOTCcNGC4HCKHyhJ8KF44izLVOqDkvA',
         ],
+        'CommonFunction'=>[
+            'class'=>'frontend\components\CommonFunction',
+        ],
+        'BestSeller'=>[
+            'class'=>'frontend\components\BestSeller',
+        ],
+        'Category'=>[
+            'class'=>'frontend\components\Category',
+        ],
+        'SpecialProduct'=>[
+            'class'=>'frontend\components\SpecialProduct',
+        ],
+        'NavBarMenu'=>[
+            'class'=>'frontend\components\NavBarMenu',
+        ],
     ],
 ];
 

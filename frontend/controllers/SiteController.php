@@ -176,154 +176,17 @@ class SiteController extends Controller
         }
         $product_season = Yii::$app->CommonFunction->custom_shuffle($product_season);
 
-
-        //get special product - product has offer
-        $special_product = array();
-        $special_query = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax',
-            'offer.discount as product_offer','start_date as offer_start_date','end_date as offer_end_date'])->from('product')->innerJoin('offer','product.id = offer.product_id')->where(['product.active'=>1,'offer.active'=>1])->orderBy(['offer.discount'=>SORT_DESC])->limit(3)->all();
-        $today = date("d-m-Y");
-        foreach($special_query as $special) {
-            $offer_start_date = date("d-m-Y", $special['offer_start_date']);
-            $offer_end_date = date("d-m-Y", $special['offer_end_date']);
-            if ($offer_start_date <= $today && $today <= $offer_end_date) {
-                //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($special['product_id']);
-                $special['product_image'] = $product_image;
-                //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($special['product_id']);
-                $special['product_rating'] = $rating_average;
-                array_push($special_product,$special);
-            }
-        }
-
-        //get bestseller product
-        $best_seller_on_tag = array();
-        $tag_id = (new Query())->select('id')->from('tag')->where(['name'=>'bestseller'])->one();
-        if(!empty($tag_id['id'])) {
-            $best_seller_on_tag = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax'])->from('product')->innerJoin('product_tag', 'product.id = product_tag.product_id')->where(['product.active' => 1, 'product_tag.tag_id' => $tag_id['id']])->all();
-        }
-        $best_seller_on_system = (new Query())->select(['id as product_id','name as product_name','price as product_price','tax as product_tax','sold as product_sold'])->from('product')->where(['active' => '1'])->orderBy(['sold' => SORT_DESC])->limit(3)->all();
-        //get product's image, product offer, product rating and loại bỏ giá trị trùng nhau with bestseller product
-        if(!empty($best_seller_on_tag[0]['product_id'])) {
-            foreach ($best_seller_on_system as $key=> $item) {
-                //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                $best_seller_on_system[$key]['product_image'] = $product_image;
-                //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                $best_seller_on_system[$key]['product_rating'] = $rating_average;
-
-                foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
-                    //loại bỏ trùng product
-                    if ($item['product_id'] == $best_seller_item['product_id']) {
-                        unset($best_seller_on_tag[$best_seller_key]);
-                    } else {
-                        //get product image
-                        $product_image = Yii::$app->CommonFunction->getOneImage($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_image'] = $product_image;
-                        //get product offer
-                        $product_offer = Yii::$app->CommonFunction->getOffer($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
-
-                        //Get rating average
-                        $rating_average = Yii::$app->CommonFunction->rating($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
-                    }
-                }
-            }
-        }
-        else{
-            foreach ($best_seller_on_system as $key=> $item) {
-                //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                $best_seller_on_system[$key]['product_image'] = $product_image;
-                //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                $best_seller_on_system[$key]['product_rating'] = $rating_average;
-            }
-        }
-        $best_seller = array_merge($best_seller_on_tag,$best_seller_on_system);
-        $best_seller = Yii::$app->CommonFunction->custom_shuffle($best_seller);
-
-        //get category in navbar
-        $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
-            ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1])->all();
-
         //get slide image
         $slide_show = (new Query())->select(['slide_show.id as slide_show_id','slide_show.path as slide_show_path','product.name as product_name'])->from('slide_show')->leftJoin('product','slide_show.product_id = product.id')->where(['slide_show.active'=>1])->all();
 
         //get number wishlist
 
         return $this->render('index', [
-            'categories' => $categories, 'slide_show' => $slide_show,
-            'new_product'=>$new_product, 'product_season'=>$product_season,
-            'special_product'=>$special_product,'best_seller'=>$best_seller,
+             'slide_show' => $slide_show,'new_product'=>$new_product,
+             'product_season'=>$product_season,
         ]);
     }
-    public function actionBestSeller(){
-        //get bestseller product
-        $best_seller_on_tag = array();
-        $tag_id = (new Query())->select('id')->from('tag')->where(['name'=>'bestseller'])->one();
-        if(!empty($tag_id['id'])) {
-            $best_seller_on_tag = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax'])->from('product')->innerJoin('product_tag', 'product.id = product_tag.product_id')->where(['product.active' => 1, 'product_tag.tag_id' => $tag_id['id']])->all();
-        }
-        $best_seller_on_system = (new Query())->select(['id as product_id','name as product_name','price as product_price','tax as product_tax','sold as product_sold'])->from('product')->where(['active' => '1'])->orderBy(['sold' => SORT_DESC])->limit(3)->all();
-        //get product's image, product offer, product rating and loại bỏ giá trị trùng nhau with bestseller product
-        if(!empty($best_seller_on_tag[0]['product_id'])) {
-            foreach ($best_seller_on_system as $key=> $item) {
-                //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                $best_seller_on_system[$key]['product_image'] = $product_image;
-                //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                $best_seller_on_system[$key]['product_rating'] = $rating_average;
 
-                foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
-                    //loại bỏ trùng product
-                    if ($item['product_id'] == $best_seller_item['product_id']) {
-                        unset($best_seller_on_tag[$best_seller_key]);
-                    } else {
-                        //get product image
-                        $product_image = Yii::$app->CommonFunction->getOneImage($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_image'] = $product_image;
-                        //get product offer
-                        $product_offer = Yii::$app->CommonFunction->getOffer($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
-
-                        //Get rating average
-                        $rating_average = Yii::$app->CommonFunction->rating($best_seller_item['product_id']);
-                        $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
-                    }
-                }
-            }
-        }
-        else{
-            foreach ($best_seller_on_system as $key=> $item) {
-                //get product image
-                $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                $best_seller_on_system[$key]['product_image'] = $product_image;
-                //get product offer
-                $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                //Get rating average
-                $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                $best_seller_on_system[$key]['product_rating'] = $rating_average;
-            }
-        }
-        $best_seller = array_merge($best_seller_on_tag,$best_seller_on_system);
-        $best_seller = Yii::$app->CommonFunction->custom_shuffle($best_seller);
-
-        return $this->render('bestSeller',['best_seller'=>$best_seller]);
-    }
     public function actionSearch(){
 
     }
@@ -333,93 +196,16 @@ class SiteController extends Controller
 
             if (empty($_GET['category']))
                 return $this->goHome();/*
-            $sort = $_GET['sort'];
-            $limit = $_GET['limit'];*/
-            $categoryName = $_GET['category'];
-            $categoryID = Category::find()->where(['name' => $categoryName])->one();
-            $product = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $categoryID['id']])->groupBy('product.id')->all();
+            $sort = $_GET['sort'];;*/
+            $category_name = $_GET['category'];
+            $category_ID =(new Query())->select('id')->from('category')->where(['name' => $category_name])->one();
+            $category_product = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->all();
             $page = new Pagination();
 
-            //get category in navbar
-            $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
-                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1])->all();
-            //get special product - product has offer
-            $special_product = array();
-            $special_query = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax',
-                'offer.discount as product_offer','start_date as offer_start_date','end_date as offer_end_date'])->from('product')->innerJoin('offer','product.id = offer.product_id')->where(['product.active'=>1,'offer.active'=>1])->orderBy(['offer.discount'=>SORT_DESC])->limit(3)->all();
-            $today = date("d-m-Y");
-            foreach($special_query as $special) {
-                $offer_start_date = date("d-m-Y", $special['offer_start_date']);
-                $offer_end_date = date("d-m-Y", $special['offer_end_date']);
-                if ($offer_start_date <= $today && $today <= $offer_end_date) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($special['product_id']);
-                    $special['product_image'] = $product_image;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($special['product_id']);
-                    $special['product_rating'] = $rating_average;
-                    array_push($special_product,$special);
-                }
-            }
 
-            //get bestseller product
-            $best_seller_on_tag = array();
-            $tag_id = (new Query())->select('id')->from('tag')->where(['name'=>'bestseller'])->one();
-            if(!empty($tag_id['id'])) {
-                $best_seller_on_tag = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax'])->from('product')->innerJoin('product_tag', 'product.id = product_tag.product_id')->where(['product.active' => 1, 'product_tag.tag_id' => $tag_id['id']])->all();
-            }
-            $best_seller_on_system = (new Query())->select(['id as product_id','name as product_name','price as product_price','tax as product_tax','sold as product_sold'])->from('product')->where(['active' => '1'])->orderBy(['sold' => SORT_DESC])->limit(3)->all();
-            //get product's image, product offer, product rating and loại bỏ giá trị trùng nhau with bestseller product
-            if(!empty($best_seller_on_tag[0]['product_id'])) {
-                foreach ($best_seller_on_system as $key=> $item) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                    $best_seller_on_system[$key]['product_image'] = $product_image;
-                    //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                    $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                    $best_seller_on_system[$key]['product_rating'] = $rating_average;
-
-                    foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
-                        //loại bỏ trùng product
-                        if ($item['product_id'] == $best_seller_item['product_id']) {
-                            unset($best_seller_on_tag[$best_seller_key]);
-                        } else {
-                            //get product image
-                            $product_image = Yii::$app->CommonFunction->getOneImage($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_image'] = $product_image;
-                            //get product offer
-                            $product_offer = Yii::$app->CommonFunction->getOffer($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
-
-                            //Get rating average
-                            $rating_average = Yii::$app->CommonFunction->rating($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
-                        }
-                    }
-                }
-            }
-            else{
-                foreach ($best_seller_on_system as $key=> $item) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                    $best_seller_on_system[$key]['product_image'] = $product_image;
-                    //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                    $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                    $best_seller_on_system[$key]['product_rating'] = $rating_average;
-                }
-            }
-            $best_seller = array_merge($best_seller_on_tag,$best_seller_on_system);
-            $best_seller = Yii::$app->CommonFunction->custom_shuffle($best_seller);
             return $this->render('category', [
-                'categories' => $categories, 'category_name' => $categoryName, 'product' => $product,
-                'special_product'=>$special_product,'best_seller'=>$best_seller,
+                'category_name' => $category_name, 'category_product' => $category_product,
             ]);
         }
     }
@@ -440,13 +226,6 @@ class SiteController extends Controller
 
             //get product offer
             $product_offer = Yii::$app->CommonFunction->getOffer($product_detail['id']);
-
-            //select category in navbar
-            $query = new Query();
-            //get category in navbar
-            $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
-                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1])->all();
-
 
             //get product image
             $product_image_detail = Image::find()->where(['product_id' => $product_detail['id']])->all();
@@ -477,85 +256,11 @@ class SiteController extends Controller
             echo "<pre>";
             print_r($product_recent_view) ;
             echo "</pre>";*/
-            //get special product - product has offer
-            $special_product = array();
-            $special_query = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax',
-                'offer.discount as product_offer','start_date as offer_start_date','end_date as offer_end_date'])->from('product')->innerJoin('offer','product.id = offer.product_id')->where(['product.active'=>1,'offer.active'=>1])->orderBy(['offer.discount'=>SORT_DESC])->limit(3)->all();
-            $today = date("d-m-Y");
-            foreach($special_query as $special) {
-                $offer_start_date = date("d-m-Y", $special['offer_start_date']);
-                $offer_end_date = date("d-m-Y", $special['offer_end_date']);
-                if ($offer_start_date <= $today && $today <= $offer_end_date) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($special['product_id']);
-                    $special['product_image'] = $product_image;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($special['product_id']);
-                    $special['product_rating'] = $rating_average;
-                    array_push($special_product,$special);
-                }
-            }
 
-            //get bestseller product
-            $best_seller_on_tag = array();
-            $tag_id = (new Query())->select('id')->from('tag')->where(['name'=>'bestseller'])->one();
-            if(!empty($tag_id['id'])) {
-                $best_seller_on_tag = (new Query())->select(['product.id as product_id','product.name as product_name','product.price as product_price','product.tax as product_tax'])->from('product')->innerJoin('product_tag', 'product.id = product_tag.product_id')->where(['product.active' => 1, 'product_tag.tag_id' => $tag_id['id']])->all();
-            }
-            $best_seller_on_system = (new Query())->select(['id as product_id','name as product_name','price as product_price','tax as product_tax','sold as product_sold'])->from('product')->where(['active' => '1'])->orderBy(['sold' => SORT_DESC])->limit(3)->all();
-            //get product's image, product offer, product rating and loại bỏ giá trị trùng nhau with bestseller product
-            if(!empty($best_seller_on_tag[0]['product_id'])) {
-                foreach ($best_seller_on_system as $key=> $item) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                    $best_seller_on_system[$key]['product_image'] = $product_image;
-                    //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                    $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                    $best_seller_on_system[$key]['product_rating'] = $rating_average;
-
-                    foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
-                        //loại bỏ trùng product
-                        if ($item['product_id'] == $best_seller_item['product_id']) {
-                            unset($best_seller_on_tag[$best_seller_key]);
-                        } else {
-                            //get product image
-                            $product_image = Yii::$app->CommonFunction->getOneImage($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_image'] = $product_image;
-                            //get product offer
-                            $product_offer = Yii::$app->CommonFunction->getOffer($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
-
-                            //Get rating average
-                            $rating_average = Yii::$app->CommonFunction->rating($best_seller_item['product_id']);
-                            $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
-                        }
-                    }
-                }
-            }
-            else{
-                foreach ($best_seller_on_system as $key=> $item) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getOneImage($item['product_id']);
-                    $best_seller_on_system[$key]['product_image'] = $product_image;
-                    //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getOffer($item['product_id']);
-                    $best_seller_on_system[$key]['product_offer'] = $product_offer;
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->rating($item['product_id']);
-                    $best_seller_on_system[$key]['product_rating'] = $rating_average;
-                }
-            }
-            $best_seller = array_merge($best_seller_on_tag,$best_seller_on_system);
-            $best_seller = Yii::$app->CommonFunction->custom_shuffle($best_seller);
             return $this->render('viewDetail', [
                 'product_detail' => $product_detail,'product_image_detail' => $product_image_detail,
-                'categories' => $categories, 'product_offer' => $product_offer,
-                'rating_average' => $rating_average,'product_unit'=>$product_unit,
-                'special_product'=>$special_product,'best_seller'=>$best_seller,
-                'product_tag'=>$product_tag,
+                'product_offer' => $product_offer,'rating_average' => $rating_average,
+                'product_unit'=>$product_unit,'product_tag'=>$product_tag,
             ]);
         }
     }
@@ -673,14 +378,8 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goHome();
         } else {
-            //select category in navbar
-            $query = new Query();
-            $query->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
-                ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1]);
-            $command = $query->createCommand();
-            $categories = $command->queryAll();
             return $this->render('login', [
-                'model' => $model, 'categories' => $categories
+                'model' => $model,
             ]);
         }
     }
@@ -775,9 +474,6 @@ class SiteController extends Controller
 
         $modelCustomer = new Customer();
         $modelGuest = new Guest();
-        //get category in navbar
-        $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
-            ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1])->all();
 
         if ($modelCustomer->load(Yii::$app->request->post())
             && $modelGuest->load(Yii::$app->request->post())
@@ -799,14 +495,12 @@ class SiteController extends Controller
                         return $this->render('register', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
-                            'categories' => $categories,
                         ]);
                     }
                 } else {
                     return $this->render('register', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
-                        'categories' => $categories,
                     ]);
                 }
             } catch (Exception $e) {
@@ -816,7 +510,6 @@ class SiteController extends Controller
             return $this->render('register', [
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
-                'categories' => $categories,
             ]);
         }
 

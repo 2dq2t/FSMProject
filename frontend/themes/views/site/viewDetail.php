@@ -8,9 +8,7 @@
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title =$product_detail['name'];
 ?>
-<?php echo $this->render('_navbar',[
-    'categories' => $categories,
-]);
+<?php require('_navBar.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -19,13 +17,11 @@ $this->title =$product_detail['name'];
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
-            <?php echo $this->render('_category',[
-                'categories' => $categories,
-            ]);
-            ?>
-            <?php echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('bestSeller.php');
+            <?php
+                require('_category.php');
+                echo $this->render('_leftBanner');
+                require('_specialProduct.php');
+                require('_bestSeller.php');
             ?>
         </column>
         <div id="content" class="productpage col-sm-9">      <div class="row">

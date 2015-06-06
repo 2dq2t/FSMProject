@@ -10,7 +10,9 @@
     <div class="box-heading">Danh mục</div>
     <div class="box-content ">
         <ul class="box-category treeview-list treeview">
-            <?php $result = array();
+            <?php
+            $categories = Yii::$app->Category->category();
+            $result = array();
             foreach ($categories as $item) {
                 $cat_name = $item['categoryname'];
                 $product_name = $item['productname'];

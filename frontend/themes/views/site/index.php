@@ -6,9 +6,8 @@ use yii\helpers\Html;
 $this->title = 'Fresh Garden';
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
-<?php echo $this->render('_navbar',[
-    'categories' => $categories,
-]);
+<?php
+require('_navBar.php');
 ?>
 <div class="container content-inner">
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -83,13 +82,11 @@ $baseUrl = Yii::$app->request->baseUrl;
                 <div>
                     <column id="column-left" class="col-sm-3 hidden-xs">
 
-                        <?php echo $this->render('_category',[
-                            'categories' => $categories,
-                        ]);
-                        ?>
-                        <?php echo $this->render('_leftBanner');
+                        <?php
+                        require('_category.php');
+                        echo $this->render('_leftBanner');
                         require('_specialProduct.php');
-                        require('bestSeller.php');
+                        require('_bestSeller.php');
                         ?>
 
                     </column>
@@ -143,7 +140,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                                             <?php
                                                             if(!empty($product['product_offer'])){
                                                                 echo "<span class='price-old'>".number_format($product['product_price'])." VND</span>";
-                                                                $new_price = $product['product_price']-$product['product_offer'];
+                                                                $new_price = $product['product_price']*(100/$product['product_offer']);
                                                                 echo "<span class='price-new'>".number_format($new_price)." VND</span>";
                                                                 echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
                                                             }
@@ -218,7 +215,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                                                 <?php
                                                                 if(!empty($product['product_offer'])){
                                                                     echo "<span class='price-old'>".$product['product_price']." VND</span>";
-                                                                    $new_price = $product['product_price']-$product['product_offer'];
+                                                                    $new_price = $product['product_price']*(100/$product['product_offer']);;
                                                                     echo "<span class='price-new'>".$new_price." VND</span>";
                                                                     echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
                                                                 }

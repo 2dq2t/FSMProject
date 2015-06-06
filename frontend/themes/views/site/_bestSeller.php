@@ -13,6 +13,7 @@
 
         <div class="box-product product-grid" id="bestseller-grid">
             <?php
+            $best_seller = Yii::$app->BestSeller->bestSeller();
             $count = 0;
             foreach($best_seller as $product){
                 $count++;

@@ -1,9 +1,11 @@
 <?php
-namespace common\components;
+namespace frontend\components;
 use common\models\ProductRating;
 use common\models\Rating;
 use Yii;
 use yii\base\Component;
+use yii\db\Query;
+
 /**
  * Created by PhpStorm.
  * User: TuanThinh
@@ -24,12 +26,12 @@ class CommonFunction extends Component{
         return $copy;
     }
     public function rating($product_id){
-        $rating_id = ProductRating::find('rating_id')->where(['product_id' => $product_id])->all();
+        $rating_id = (new Query())->select('rating_id')->from('product_rating')->where(['product_id' => $product_id])->all();
         $total_score = 0;
         $count_rating = 0;
         foreach ($rating_id as $rating) {
             $count_rating++;
-            $score =(new \yii\db\Query())->select('rating')->from('rating') ->where(['id' => $rating['rating_id']])->one();
+            $score =(new Query())->select('rating')->from('rating') ->where(['id' => $rating['rating_id']])->one();
             $total_score += $score['rating'];
         }
         if ($total_score > 0 && $count_rating > 0) {
@@ -40,20 +42,21 @@ class CommonFunction extends Component{
     }
 
     public function getOneImage($product_id){
-        $product_image = (new \yii\db\Query())->select('path')->from('image')->where(['product_id' =>$product_id])->one();
+        $product_image = (new Query())->select('path')->from('image')->where(['product_id' =>$product_id])->one();
         return $product_image['path'];
     }
 
     public function getOffer($product_id){
-        $offer = (new \yii\db\Query())->select('discount,start_date,end_date')->from('offer')->where(['active'=>1,'product_id'=>$product_id])->one();
+        $offer = (new Query())->select('discount,start_date,end_date')->from('offer')->where(['active'=>1,'product_id'=>$product_id])->one();
         $today = date("d-m-Y");
         $offer_start_date = date("d-m-Y",$offer['start_date']);
         $offer_end_date = date("d-m-Y",$offer['end_date']);
         if($offer_start_date <= $today && $today <= $offer_end_date) {
-            $product_offer = $offer['price'];
+            $product_offer = $offer['discount'];
         }
         else
             $product_offer=null;
         return $product_offer;
     }
+
 }

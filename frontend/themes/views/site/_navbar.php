@@ -20,6 +20,7 @@ $baseUrl= Yii::$app->request->baseUrl;
                 </div>
                 <ul class="main-navigation">
                     <?php $result = array();
+                    $categories = Yii::$app->Category->category();
                     foreach ($categories as $item) {
                         $cat_name = $item['categoryname'];
                         $product_name = $item['productname'];

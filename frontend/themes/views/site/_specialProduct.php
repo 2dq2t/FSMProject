@@ -12,7 +12,9 @@
 
 
         <div class="box-product product-grid" id="special-grid">
-            <?php foreach($special_product as $product){?>
+            <?php
+            $special_product = Yii::$app->SpecialProduct->specialProduct();
+            foreach($special_product as $product){?>
                 <div class="slider-item">
                     <div class="product-block product-thumb transition">
                         <div class="product-block-inner ">

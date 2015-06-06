@@ -6,9 +6,7 @@
  * Time: 3:09 CH
  */
 ?>
-<?php echo $this->render('_navbar',[
-    'categories' => $categories,
-]);
+<?php require('_navBar.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -17,13 +15,11 @@
     </ul>
 <div class="row content-subinner">
     <column id="column-left" class="col-sm-3 hidden-xs">
-        <?php echo $this->render('_category',[
-            'categories' => $categories,
-        ]);
-        ?>
-        <?php echo $this->render('_leftBanner');
-        require('_specialProduct.php');
-        require('bestSeller.php');
+        <?php
+            require('_category.php');
+            echo $this->render('_leftBanner');
+            require('_specialProduct.php');
+            require('_bestSeller.php');
         ?>
     </column>
     <div id="content" class="col-sm-9 categorypage">
@@ -62,40 +58,41 @@
         </div>
 
         <div class="row productlist-grid">
-            <?php foreach($product as $item){?>
+            <?php foreach($category_product as $product){?>
             <div class="product-layout product-list col-xs-12">
                 <div class="product-thumb product-block">
                     <div class="product-block-inner">
                         <div class="image">
-                            <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$item['product_name']?>"><img src="<?= $item['image_path']?>" alt="<?=$item['product_name']?>" title="<?=$item['product_name']?>" class="img-responsive" /></a>
-
+                            <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"><img src="<?= $product['image_path']?>" alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>" class="img-responsive" /></a>
+                            <?php
+                            if(isset($product['product_offer'])&&$product['product_offer'] >0)
+                                echo "<span class='saleicon sale'>Sale</span>";
+                            ?>
                         </div>
                         <div class="product-details">
                             <div class="caption">
                                 <div class="left">
 
-                                    <h4><a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$item['product_name']?>" title="<?=$item['product_name']?>">
-                                            <?=$item['product_name']?>				</a>
+                                    <h4><a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>" title="<?=$product['product_name']?>">
+                                            <?=$product['product_name']?>				</a>
                                     </h4>
 
 
-                                    <div class="desc"><?= $item['product_intro']?></div>
+                                    <div class="desc"><?= $product['product_intro']?></div>
 
 
 
                                     <div class="compare-wishlist">
                                         <div class="wishlist-btn">
-                                            <button type="button" class="wishlist"  title="Add to Wish List" onclick="wishlist.add(<?php echo $item['product_id']; ?> );">Thêm vào danh mục yêu thích</button>
-                                        </div>
-                                        <div class="compare-btn">
-                                            <button type="button" class="compare"  title="Add to Compare" onclick="compare.add('31');">Add to Compare</button>
+                                            <button type="button" class="wishlist"  title="Add to Wish List" onclick="wishlist.add(<?php echo $product['product_id']; ?> );">Thêm vào danh mục yêu thích</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="right">
 
                                     <div class="price">
-                                        <?= $item['product_price']." VND"?>                                                      <span class="price-tax">Thuế: <?= $item['product_tax']." VND"?> </span>
+                                        <?= $product['product_price']." VND"?>
+                                        <span class="price-tax">Thuế: <?= number_format($product['product_tax'])." VND"?> </span>
                                     </div>
                                 </div>
                             </div>
