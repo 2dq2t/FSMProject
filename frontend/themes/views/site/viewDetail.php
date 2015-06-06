@@ -152,7 +152,7 @@ $this->title =$product_detail['name'];
 
             <div class="box">
 
-                <div class="box-heading">Related Products</div>
+                <div class="box-heading">Sản phẩm cùng danh mục</div>
                 <div class="box-content">
                     <div id="products-related" class="related-products">
 
@@ -164,317 +164,66 @@ $this->title =$product_detail['name'];
 
                         <div class="box-product product-carousel" id="related-carousel">
 
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/15-220x200.jpg" alt="Arcu vitae imperdiet " title="Arcu vitae imperdiet " class="img-responsive" />
+                            <?php foreach($products_same_category as $product){?>
+                                <div class="slider-item">
+                                    <div class="product-block product-thumb transition">
+                                        <div class="product-block-inner ">
+                                            <div class="image">
+                                                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"><img
+                                                        src="<?=$product['product_image'] ?>"
+                                                        alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
+                                                        class="img-responsive"/></a>
+                                                <?php
+                                                if(isset($product['product_offer'])&&$product['product_offer'] >0)
+                                                    echo "<span class='saleicon sale'>Sale</span>";
 
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=28" title="Arcu vitae imperdiet ">
-                                                        Arcu vitae imperdiet..				</a>
-                                                </h4>
+                                                if(isset($product['product_rating'])&&$product['product_rating']>0) {
+                                                    echo "<div class='rating' >";
+                                                    for($i=0;$i<5;$i++){
+                                                        if($i<$product['product_rating']){
+                                                            echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                                        }
+                                                        else
+                                                            echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
+                                                    }
+                                                    echo "</div >";
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="product-details">
+                                                <div class="caption">
+                                                    <h4>
+                                                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"
+                                                           title="<?=$product['product_name']?>">
+                                                            <?=$product['product_name']?></a>
+                                                    </h4>
 
-                                                <div class="price">
-                                                    $122.00																		<span class="price-tax">Ex Tax: $100.00</span>
+                                                    <div class="price">
+                                                        <?php
+                                                        if(!empty($product['product_offer'])){
+                                                            echo "<span class='price-old'>".number_format($product['product_price'])." VND</span>";
+                                                            $new_price = $product['product_price']*(100/$product['product_offer']);
+                                                            echo "<span class='price-new'>".number_format($new_price)." VND</span>";
+                                                            echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
+                                                        }
+                                                        else{
+                                                            echo number_format($product['product_price'])." VND";
+                                                            echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+
+                                                <div class="button-group">
+                                                    <button type="button" title="Add to Cart" class="addtocart"
+                                                            onclick="cart.add('<?=$product['product_id']?>');"><span>Thêm vào giỏ hàng</span>
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('28');"> <span>Add to Cart</span></button>
-
-                                            </div>
                                         </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
                                     </div>
                                 </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/12-220x200.jpg" alt="Aliquam volutpat" title="Aliquam volutpat" class="img-responsive" />
-                                                <div class="saleback">
-                                                    <span class="saleicon sale">Sale</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=30" title="Aliquam volutpat">
-                                                        Aliquam volutpat				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    <span class="price-old">$122.00</span><span class="price-new">$98.00</span>
-                                                    <span class="price-tax">Ex Tax: $80.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('30');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=31"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/3-220x200.jpg" alt="Praesent fringilla" title="Praesent fringilla" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=31" title="Praesent fringilla">
-                                                        Praesent fringilla				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $98.00																		<span class="price-tax">Ex Tax: $80.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('31');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=32"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/22-220x200.jpg" alt="Nascetur ridiculus mus" title="Nascetur ridiculus mus" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=32" title="Nascetur ridiculus mus">
-                                                        Nascetur ridiculus m..				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $122.00																		<span class="price-tax">Ex Tax: $100.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('32');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=33"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/9-220x200.jpg" alt="Vactramn denim" title="Vactramn denim" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=33" title="Vactramn denim">
-                                                        Vactramn denim				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $242.00																		<span class="price-tax">Ex Tax: $200.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('33');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=35"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/27-220x200.jpg" alt="Praesent semneck" title="Praesent semneck" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=35" title="Praesent semneck">
-                                                        Praesent semneck				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $122.00																		<span class="price-tax">Ex Tax: $100.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('35');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/18-220x200.jpg" alt="Cum sociis natoqu" title="Cum sociis natoqu" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=40" title="Cum sociis natoqu">
-                                                        Cum sociis natoqu				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $123.20																		<span class="price-tax">Ex Tax: $101.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('40');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/25-220x200.jpg" alt="Consectetur adipiscing" title="Consectetur adipiscing" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=41" title="Consectetur adipiscing">
-                                                        Consectetur adipisci..				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $122.00																		<span class="price-tax">Ex Tax: $100.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('41');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=44"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/24-220x200.jpg" alt="Palm Treo Pro" title="Palm Treo Pro" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=44" title="Palm Treo Pro">
-                                                        Palm Treo Pro				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $1,202.00																		<span class="price-tax">Ex Tax: $1,000.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('44');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=45"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/26-220x200.jpg" alt="Pellentesque augue" title="Pellentesque augue" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=45" title="Pellentesque augue">
-                                                        Pellentesque augue				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $2,000.00																		<span class="price-tax">Ex Tax: $2,000.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('45');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slider-item">
-                                <div class="product-block product-thumb transition">
-                                    <div class="product-block-inner">
-                                        <div class="image">
-                                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/13-220x200.jpg" alt="Aliquam suscipit" title="Aliquam suscipit" class="img-responsive" />
-
-                                            </a>
-                                        </div>
-                                        <div class="product-details">
-                                            <div class="caption">
-                                                <h4><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/product&amp;product_id=47" title="Aliquam suscipit">
-                                                        Aliquam suscipit				</a>
-                                                </h4>
-
-                                                <div class="price">
-                                                    $122.00																		<span class="price-tax">Ex Tax: $100.00</span>
-                                                </div>
-                                            </div>
-                                            <div class="button-group">
-                                                <button type="button"  title="Add to Cart" class="addtocart" onclick="cart.add('47');"> <span>Add to Cart</span></button>
-
-                                            </div>
-                                        </div>
-                                        <span class="related_default_width" style="display:none; visibility:hidden"></span>
-                                        <!-- Megnor Related Products Start -->
-                                    </div>
-                                </div>
-                            </div>
+                            <?php }?>
                         </div>
                     </div>
                 </div>

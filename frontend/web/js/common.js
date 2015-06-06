@@ -237,11 +237,17 @@ var wishlist = {
 				if (json['success']) {
 					$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                     $('#wishlist-total').html('Danh mục yêu thích ('+json['total']+')');
+                    setTimeout(function() {
+                        $('.alert').remove();
+                    }, 3000);
 				}
 
 				if (json['info']) {
 					$('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 				}
+                setTimeout(function() {
+                    $('.alert').remove();
+                }, 3000);
 
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			}
@@ -258,13 +264,23 @@ var wishlist = {
                 var json = $.parseJSON(data)
                 if (json['success']) {
                     $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    var remove_id = 'remove'+json['product_id'];
+                    $("#"+remove_id).removeAttr('data-toggle');
                     var product_id = 'product' + json['product_id'];
                     $("#"+product_id).remove();
                     $('#wishlist-total').html('Danh mục yêu thích ('+json['total']+')');
+                    var element = document.getElementById("wish_list");
+                        element.innerHTML = 'Danh mục yêu thích ('+json['total']+')';
+                    setTimeout(function() {
+                        $('.alert').remove();
+                    }, 3000);
                 }
 
                 if (json['error']) {
                     $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    setTimeout(function() {
+                        $('.alert').remove();
+                    }, 3000);
                 }
 
                 $('html, body').animate({ scrollTop: 0 }, 'slow');

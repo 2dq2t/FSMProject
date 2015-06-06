@@ -238,31 +238,60 @@ class SiteController extends Controller
             //get product tag
             $product_tag = (new Query())->select('name')->from('tag')->innerJoin('product_tag','tag.id = product_tag.tag_id')->where(['product_tag.product_id'=>$product_detail['id']])->all();
 
-            /*//get product recent view
+            //get product in same category
+            $products_same_category = array();
+            $products_category = (new Query())->select(['id as product_id','name as product_name','price as product_price','tax as product_tax'])->from('product')->where(['active' => '1','category_id'=>$product_detail['category_id']])->all();
+            foreach($products_category as $item){
+                if(!($item['product_id'] == $product_detail['id'])) {
+                    //get product image
+                    $product_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
+                    $item['product_image'] = $product_image;
+                    //get product offer
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $item['product_offer'] = $product_offer;
+
+                    //Get rating average
+                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $item['product_rating'] = $rating_average;
+
+                    array_push($products_same_category, $item);
+                }
+            }
+            //set product recent view
+            $flag = true;
             $product_recent_view = array();
             $product['product_id'] = $product_detail['id'];
             $product['product_name'] = $product_detail['name'];
             $product['product_price'] = $product_detail['price'];
             $product['product_rating'] = $rating_average;
             $product['product_offer'] = $product_offer;
-            $product['product_image'] = $product_image[0]['path'];
+            $product['product_image'] = $product_image_detail[0]['path'];
+            $product['product_tax'] = $product_detail['tax'];
             $product_session = Yii::$app->session->get('product_session');
             if(count($product_session) == 0 ) {
-                Yii::$app->session->set('product_session', $product);
+                Yii::$app->session->set('product_session', [$product]);
             }
-            else {
-                array_push($product_recent_view, $product_session);
-                array_push($product_recent_view,$product);
-                Yii::$app->session->set('product_session',$product_recent_view);
+            else{
+                foreach($product_session as $item){
+                    if(($item['product_id'] == $product['product_id'])){
+                        $flag = false;
+                    }
+                }
+                if($flag){
+                    array_push($product_session,$product);
+                    Yii::$app->session->set('product_session',$product_session);
+                }
             }
-            echo "<pre>";
-            print_r($product_recent_view) ;
+
+            /*echo "<pre>";
+            print_r($product_session) ;
             echo "</pre>";*/
 
             return $this->render('viewDetail', [
                 'product_detail' => $product_detail,'product_image_detail' => $product_image_detail,
                 'product_offer' => $product_offer,'rating_average' => $rating_average,
                 'product_unit'=>$product_unit,'product_tag'=>$product_tag,
+                'products_same_category'=>$products_same_category,
             ]);
         }
     }
@@ -280,8 +309,10 @@ class SiteController extends Controller
                 $product_detail['product_unit'] =  Yii::$app->CommonFunction->getProductUnit($item['product_id']);
                 array_push($wish_list_product,$product_detail);
             }
+            $product_session = Yii::$app->session->get('product_session');
             return $this->render('wishList',[
                 'wish_list_product'=>$wish_list_product,
+                'product_session'=>$product_session,
             ]);
         }
     }
@@ -344,20 +375,24 @@ class SiteController extends Controller
     public function actionAddToCart()
     {
         $json = array();
-       /* if (isset(Yii::$app->request->post())) {
-            $product_id = Yii::$app->request->post['product_id'];
-        } else {
-            $product_id = 0;
-        }
-        if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
-            $product_info = Product::find()->where(['id' => $product_id, 'active' => 1])->all();
-            if (isset(Yii::$app->request->post['quantity'])) {
-                $quantity = Yii::$app->request->post['quantity'];
+        if(Yii::$app->request->post()) {
+            $post_data = Yii::$app->request->post();
+            if (isset($post_data['product_id'])) {
+                $product_id = $post_data['product_id'];
             } else {
-                $quantity = 1;
+                $product_id = 0;
             }
+            if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
+                $product_info = Product::find()->where(['id' => $product_id, 'active' => 1])->all();
+                if (isset($post_data['quantity'])) {
+                    $quantity = $post_data['quantity'];
+                    $json =$quantity;
+                } else {
+                    $quantity = 1;
+                }
 
-        }*/
+            }
+        }
         if (Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];

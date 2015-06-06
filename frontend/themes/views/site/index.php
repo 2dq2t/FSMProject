@@ -99,7 +99,6 @@ require('_navBar.php');
                                     <a class="next">&nbsp;</a>
                                 </div>
 
-
                                 <div class="box-product product-carousel" id="featured-carousel">
 
                                     <?php foreach($new_product as $product){?>
