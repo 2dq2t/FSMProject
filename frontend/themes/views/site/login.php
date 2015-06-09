@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Đăng nhập';
 
 ?>
-<?php require('_navBar.php');
+<?php require('_header.php');
 ?>
 <div class="container content-inner">
 

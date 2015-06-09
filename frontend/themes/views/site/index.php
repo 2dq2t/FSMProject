@@ -7,7 +7,7 @@ $this->title = 'Fresh Garden';
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
 <?php
-require('_navBar.php');
+require('_header.php');
 ?>
 <div class="container content-inner">
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>

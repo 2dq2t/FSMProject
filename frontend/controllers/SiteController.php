@@ -182,7 +182,6 @@ class SiteController extends Controller
         //get number wishlist
        /* $number_product = WishList::find()->where(['customer_id'=>Yii::$app->user->identity->getId()])->count();
         echo $number_product;*/
-
         return $this->render('index', [
              'slide_show' => $slide_show,'new_product'=>$new_product,
              'product_season'=>$product_season,
@@ -197,17 +196,37 @@ class SiteController extends Controller
         if (Yii::$app->request->isGet) {
 
             if (empty($_GET['category']))
-                return $this->goHome();/*
-            $sort = $_GET['sort'];;*/
-            $category_name = $_GET['category'];
-            $category_ID =(new Query())->select('id')->from('category')->where(['name' => $category_name])->one();
-            $category_product = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->all();
-            $page = new Pagination();
+                return $this->goHome();
+            else{
+                $category_name = $_GET['category'];
+                $category_ID =(new Query())->select('id')->from('category')->where(['name' => $category_name])->one();
+                if(! (empty($_GET['sort']) && empty($_GET['order']))){
+                    $sort = $_GET['sort'];
+                    $order = $_GET['order'];
+                    if($order == 'ASC')
+                        $order = SORT_ASC;
+                    else
+                        $order = SORT_DESC;
+                    $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.'.$sort=>$order]);
+                    $countQuery = clone $category_product_query;
+                    $pages = new Pagination(['totalCount'=>$countQuery->count()]);
+                    $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();
+                }
+                else{
+                    $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
+                    $countQuery = clone $category_product_query;
+                    $pages = new Pagination(['totalCount'=>$countQuery->count()]);
+                    $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();
+                }
+
+            }
+
 
 
             return $this->render('category', [
-                'category_name' => $category_name, 'category_product' => $category_product,
+                'category_name' => $category_name, 'category_product' => $category_product,'pages'=>$pages
             ]);
         }
     }
@@ -259,7 +278,6 @@ class SiteController extends Controller
             }
             //set product recent view
             $flag = true;
-            $product_recent_view = array();
             $product['product_id'] = $product_detail['id'];
             $product['product_name'] = $product_detail['name'];
             $product['product_price'] = $product_detail['price'];
@@ -283,9 +301,6 @@ class SiteController extends Controller
                 }
             }
 
-            /*echo "<pre>";
-            print_r($product_session) ;
-            echo "</pre>";*/
 
             return $this->render('viewDetail', [
                 'product_detail' => $product_detail,'product_image_detail' => $product_image_detail,
@@ -375,6 +390,7 @@ class SiteController extends Controller
     public function actionAddToCart()
     {
         $json = array();
+        $flag = true;
         if(Yii::$app->request->post()) {
             $post_data = Yii::$app->request->post();
             if (isset($post_data['product_id'])) {
@@ -382,15 +398,52 @@ class SiteController extends Controller
             } else {
                 $product_id = 0;
             }
-            if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
-                $product_info = Product::find()->where(['id' => $product_id, 'active' => 1])->all();
-                if (isset($post_data['quantity'])) {
-                    $quantity = $post_data['quantity'];
-                    $json =$quantity;
-                } else {
-                    $quantity = 1;
-                }
+            if($product_id == 0){
+                $json['error'] = "Có lỗi xảy ra, liên hệ chúng tôi để biết thêm chi tiết";
+            }
+            else{
+                if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
+                    $total_price = 0;
+                    $total_product = 0;
+                    if (isset($post_data['quantity'])) {
+                        $product_quantity = $post_data['quantity'];
+                    } else {
+                        $product_quantity = 1;
+                    }
+                    $product_cart = Yii::$app->session->get('product_cart');
+                    $product['product_id'] = $product_id;
+                    $product['product_quantity'] = $product_quantity;
+                    $product_price = (new Query())->select('price')->from('product')->where(['id'=>$product_id])->one();
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($product_id);
+                    $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'],$product_offer)*$product_quantity;
+                    $total_product += $product_quantity;
+                    if (count($product_cart) == 0) {
+                        Yii::$app->session->set('product_cart', [$product]);
+                        $json['success'] = "Đã thêm thành công sản phẩm vào giỏ hàng";
+                        $json['total'] = $total_product." Sản phẩm - ".number_format($total_price)." VND";
+                    } else {
+                        foreach ($product_cart as $key=>$item) {
+                            $product_price = (new Query())->select('price')->from('product')->where(['id'=>$item['product_id']])->one();
+                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                            $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'],$product_offer)*$item['product_quantity'];
+                            $total_product += $item['product_quantity'];
+                            if (($item['product_id'] == $product['product_id'])) {
+                                $product_cart[$key]['product_quantity'] = $item['product_quantity'] + $product_quantity;
+                                $flag = false;
+                            }
+                        }
+                        if ($flag) {
+                            array_push($product_cart, $product);
+                            Yii::$app->session->set('product_cart', $product_cart);
+                        } else {
+                            Yii::$app->session->set('product_cart', $product_cart);
+                        }
+                        $json['success'] = "Đã thêm thành công sản phẩm vào giỏ hàng";
+                        $json['total'] = ($total_product)." Sản phẩm - ".number_format($total_price)." VND";
+                    }
 
+
+                }
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -398,7 +451,51 @@ class SiteController extends Controller
             return [json_encode($json)];
         }
     }
-
+    public function actionCartInfo(){
+        return $this->renderPartial('cartInfo');
+    }
+    public function actionViewCart(){
+        $cart_info = Yii::$app->Header->cartInfo();
+        return $this->render('viewCart',['cart_info'=>$cart_info]);
+    }
+    public function actionRemoveFromCart(){
+        $json = array();
+        if(Yii::$app->request->post()) {
+            $post_data = Yii::$app->request->post();
+            if (isset($post_data['product_id'])) {
+                $product_id = $post_data['product_id'];
+            }
+            else {
+                    $product_id = 0;
+                }
+            if($product_id == 0){
+                $json['error'] = "Có lỗi xảy ra, liên hệ chúng tôi để biết thêm chi tiết";
+            }
+            else{
+                $total_price = 0;
+                $total_product = 0;
+                $product_cart = Yii::$app->session->get('product_cart');
+                foreach ($product_cart as $key=>$item) {
+                    if (($item['product_id'] == $product_id)) {
+                       unset($product_cart[$key]);
+                    }
+                    else{
+                        $product_price = (new Query())->select('price')->from('product')->where(['id'=>$item['product_id']])->one();
+                        $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                        $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'],$product_offer)*$item['product_quantity'];
+                        $total_product += $item['product_quantity'];
+                    }
+                }
+                Yii::$app->session->set('product_cart',$product_cart);
+                $json['success'] = "Đã xóa sản phẩm khỏi giỏ hàng";
+                $json['total'] = ($total_product)." Sản phẩm - ".number_format($total_price)." VND";
+            }
+        }
+        if (Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return [json_encode($json)];
+        }
+    }
     public function actionRate()
     {
         $json = array();

@@ -7,6 +7,42 @@
  */
 $baseUrl= Yii::$app->request->baseUrl;
 ?>
+<header>
+    <div class="header">
+        <div id="header-top" class="container">
+            <div class="header-top">
+
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-4 header-logo">
+                    <div id="logo">
+                        <a href="<?php echo $baseUrl?>"><img
+                                src="images/data/logo.png"
+                                title="Your Store" alt="Your Store" class="img-responsive"/></a>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="col-sm-5 header-search">
+                        <div id="search" class="input-group">
+                            <input type="text" name="search" value="" placeholder="Tìm kiếm"
+                                   class="form-control input-lg"/>
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-lg"></button>
+                              </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 header-cart">
+                       <?php require('cartInfo.php');?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <nav class="nav-container" role="navigation">
     <div class="nav-inner">
         <!-- ======= Menu Code START ========= -->
@@ -84,7 +120,7 @@ $baseUrl= Yii::$app->request->baseUrl;
                             <?php endif; ?>
                             <li><a href="<?php echo Yii::$app->request->baseUrl."/index.php?r=site/wish-list";?>"
                                    id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if(!Yii::$app->user->isGuest) {
-                                            $number_product = Yii::$app->NavBarMenu->numberProductWishList(Yii::$app->user->identity->getId());
+                                            $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                                             echo " (".$number_product .")";}?></span></a></li>
                             <li class="checkout"><a
                                     href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/checkout"

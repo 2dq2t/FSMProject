@@ -8,7 +8,7 @@
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title =$product_detail['name'];
 ?>
-<?php require('_navBar.php');
+<?php require('_header.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -283,9 +283,8 @@ $this->title =$product_detail['name'];
             },
             success: function(json) {
                 $('.alert, .text-danger').remove();
-                console.log(json);
                 $('.form-group').removeClass('has-error');
-
+                var json = $.parseJSON(json)
                 if (json['error']) {
                     if (json['error']['option']) {
                         for (i in json['error']['option']) {
@@ -309,12 +308,16 @@ $this->title =$product_detail['name'];
 
                 if (json['success']) {
                     $('.breadcrumb').after('<div class="alert alert-success">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-
+                    //
                     $('#cart-total').html(json['total']);
 
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
 
-                    $('#cart > ul').load('index.php?route=common/cart/info ul li');
+                    $('#cart > ul').load('index.php?r=site/cart-info ul li');
+
+                    setTimeout(function() {
+                        $('.alert').remove();
+                    }, 2000);
                 }
             }
         });

@@ -55,7 +55,7 @@ class CommonFunction extends Component{
             $product_offer = $offer['discount'];
         }
         else
-            $product_offer=null;
+            $product_offer=0;
         return $product_offer;
     }
     public function getProductUnit($product_id){
@@ -63,5 +63,11 @@ class CommonFunction extends Component{
         $product_unit = (new Query())->select('name')->from('unit')->where(['id'=>$unit_id['unit_id']])->one();
 
         return $product_unit['name'];
+    }
+    public function productPrice($product_price,$product_offer){
+        if($product_offer != 0)
+            return ($product_price*(100/$product_offer));
+        else
+            return $product_price;
     }
 }

@@ -121,7 +121,7 @@ $(document).ready(function() {
 var cart = {
 	'add': function(product_id, quantity) {
 		$.ajax({
-			url: 'fsmproject/frontend/web/index.php?r=site/cart',
+			url: 'index.php?r=site/add-to-cart',
 			type: 'post',
 			data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -130,7 +130,7 @@ var cart = {
 			},
 			success: function(json) {
 				$('.alert, .text-danger').remove();
-
+                var json = $.parseJSON(json);
 				$('#cart > button').button('reset');
 
 				if (json['redirect']) {
@@ -144,7 +144,11 @@ var cart = {
 
 					$('html, body').animate({ scrollTop: 0 }, 'slow');
 
-					$('#cart > ul').load('index.php?route=common/cart/info ul li');
+					$('#cart > ul').load('index.php?r=site/cart-info ul li');
+
+                    setTimeout(function() {
+                        $('.alert').remove();
+                    }, 2000);
 				}
 			}
 		});
@@ -159,36 +163,38 @@ var cart = {
 				$('#cart > button').button('loading');
 			},
 			success: function(json) {
+                var json = $.parseJSON(json);
 				$('#cart > button').button('reset');
 
 				$('#cart-total').html(json['total']);
 
 				if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
-					location = 'index.php?route=checkout/cart';
+					location = 'index.php?r=site/check-out';
 				} else {
-					$('#cart > ul').load('index.php?route=common/cart/info ul li');
+					$('#cart > ul').load('index.php?r=site/cart-info ul li');
 				}
 			}
 		});
 	},
-	'remove': function(key) {
+	'remove': function(product_id) {
 		$.ajax({
-			url: 'index.php?r=site/wish-list&cart=add',
+			url: 'index.php?r=site/remove-from-cart',
 			type: 'post',
-			data: 'key=' + key,
+			data: 'product_id=' + product_id,
 			dataType: 'json',
 			beforeSend: function() {
 				$('#cart > button').button('loading');
 			},
 			success: function(json) {
+                var json = $.parseJSON(json);
 				$('#cart > button').button('reset');
 
 				$('#cart-total').html(json['total']);
 
-				if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
-					location = 'index.php?route=checkout/cart';
+				if (getURLVar('r') == 'site/view-cart') {
+					location = 'index.php?r=site/view-cart';
 				} else {
-					$('#cart > ul').load('index.php?route=common/cart/info ul li');
+					$('#cart > ul').load('index.php?r=site/cart-info ul li');
 				}
 			}
 		});
@@ -239,7 +245,7 @@ var wishlist = {
                     $('#wishlist-total').html('Danh mục yêu thích ('+json['total']+')');
                     setTimeout(function() {
                         $('.alert').remove();
-                    }, 3000);
+                    }, 2000);
 				}
 
 				if (json['info']) {
@@ -247,7 +253,7 @@ var wishlist = {
 				}
                 setTimeout(function() {
                     $('.alert').remove();
-                }, 3000);
+                }, 2000);
 
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			}
@@ -273,14 +279,14 @@ var wishlist = {
                         element.innerHTML = 'Danh mục yêu thích ('+json['total']+')';
                     setTimeout(function() {
                         $('.alert').remove();
-                    }, 3000);
+                    }, 2000);
                 }
 
                 if (json['error']) {
                     $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                     setTimeout(function() {
                         $('.alert').remove();
-                    }, 3000);
+                    }, 2000);
                 }
 
                 $('html, body').animate({ scrollTop: 0 }, 'slow');

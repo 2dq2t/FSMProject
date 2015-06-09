@@ -10,6 +10,9 @@ use yii\captcha\Captcha;
 $this->title = 'Contact';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php
+require('_header.php');
+?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
 

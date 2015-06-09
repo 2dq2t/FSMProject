@@ -9,7 +9,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 $this->title = "Yêu thích";
 ?>
 <?php
-require('_navBar.php');
+require('_header.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -31,11 +31,18 @@ require('_navBar.php');
         <div id="content" class="col-sm-9">
             <div class="row">
                 <h1 id="wish_list" class="page-title">Danh mục yêu thích <?php if (!Yii::$app->user->isGuest) {
-                        $number_product = Yii::$app->NavBarMenu->numberProductWishList(Yii::$app->user->identity->getId());
+                        $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                         echo " (" . $number_product . ")";
                     } ?>
                 </h1>
-
+                <?php if(empty($wish_list_product)){?>
+                    <p> Không có sản phẩm nào trong danh mục yêu thích </p>
+                    <div class="buttons">
+                        <div class="pull-right"><a
+                                href="<?= $baseUrl ?>"
+                                class="btn btn-primary">Về trang chủ</a></div>
+                    </div>
+                <?php }else{ ?>
                 <div class="table-responsive">
                     <table class="table table-bordered shopping-cart">
                         <thead>
@@ -51,7 +58,7 @@ require('_navBar.php');
                         <?php foreach ($wish_list_product as $product) { ?>
                             <tr id="<?= "product" . $product['product_id'] ?>">
                                 <td class="text-center  col-sm-2 row-sm-2">
-                                    <a href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                    <a href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img style="width: 94px;height: 94px"
                                             src="<?= $product['product_image'] ?>" alt="<?= $product['product_name'] ?>"
                                             title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                                 </td>
@@ -80,11 +87,13 @@ require('_navBar.php');
 
                                 </td>
                             </tr>
-                        <?php } ?>
                         </tbody>
+                        <?php } ?>
                     </table>
                 </div>
+                <?php } ?>
             </div>
+
             <div class="box">
 
                 <div class="box-heading">Sản phẩm đã xem gần đây</div>
@@ -99,7 +108,7 @@ require('_navBar.php');
 
                         <div class="box-product product-carousel" id="related-carousel">
 
-                            <?php foreach($product_session as $product){?>
+                            <?php  if( count($product_session) >0)foreach($product_session as $product){?>
                                 <div class="slider-item">
                                     <div class="product-block product-thumb transition">
                                         <div class="product-block-inner ">

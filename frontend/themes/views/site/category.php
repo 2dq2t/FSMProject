@@ -6,7 +6,7 @@
  * Time: 3:09 CH
  */
 ?>
-<?php require('_navBar.php');
+<?php require('_header.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -43,13 +43,11 @@
                     </div>
                     <div class="col-md-3 text-right sort">
                         <select id="input-sort" class="form-control" onchange="location = this.value;">
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=default&order=ASC"?>" selected="selected">Mặc định</option>
+                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name?>" selected="selected">Mặc định</option>
                             <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=ASC"?>">Tên (A - Z)</option>
                             <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=DESC"?>">Tên (Z - A)</option>
                             <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=ASC"?>">Giá (Thấp &gt; Cao)</option>
                             <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=DESC"?>">Giá (Cao &gt; Thấp)</option>
-                            <option value="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;sort=rating&amp;order=DESC">Rating (Highest)</option>
-                            <option value="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;sort=rating&amp;order=ASC">Rating (Lowest)</option>
                         </select>
                     </div>
                 </div>
@@ -91,7 +89,13 @@
                                 <div class="right">
 
                                     <div class="price">
-                                        <?= $product['product_price']." VND"?>
+                                        <?php
+                                        if(isset($product['product_offer'])) {
+                                            $new_price = $product['product_price'] * (100 / $product['product_offer']);
+                                            echo number_format($new_price)." VND";
+                                        }
+                                        else
+                                            echo number_format($product['product_price'])." VND"?>
                                         <span class="price-tax">Thuế: <?= number_format($product['product_tax'])." VND"?> </span>
                                     </div>
                                 </div>
@@ -108,8 +112,13 @@
             <?php } ?>
         </div>
         <div class="pagination-wrapper">
-            <div class="col-sm-6 text-left page-link"><ul class="pagination"><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">|&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">1</a></li><li class="active"><span>2</span></li></ul></div>
-            <div class="col-sm-6 text-right page-result">Showing 13 to 18 of 18 (2 Pages)</div>
+            <?php
+            echo \yii\widgets\LinkPager::widget([
+            'pagination' => $pages,
+            ]);
+            ?>
+            <!--<div class="col-sm-6 text-left page-link"><ul class="pagination"><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">|&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">1</a></li><li class="active"><span>2</span></li></ul></div>
+            <div class="col-sm-6 text-right page-result">Showing 13 to 18 of 18 (2 Pages)</div>-->
         </div>
     </div>
 </div>

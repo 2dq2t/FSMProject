@@ -4,7 +4,7 @@ use kartik\widgets\ActiveForm;
 $this->title = 'Đăng kí';
 
 ?>
-<?php require('_navBar.php');
+<?php require('_header.php');
 ?>
 <div class="container content-inner">
 

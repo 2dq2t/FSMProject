@@ -44,51 +44,6 @@ AppAsset::register($this);
 <?php
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
-<header>
-    <div class="header">
-        <div id="header-top" class="container">
-            <div class="header-top">
-
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-
-                <div class="col-sm-4 header-logo">
-                    <div id="logo">
-                        <a href="<?php echo $baseUrl?>"><img
-                                src="images/data/logo.png"
-                                title="Your Store" alt="Your Store" class="img-responsive"/></a>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="col-sm-5 header-search">
-                        <div id="search" class="input-group">
-                            <input type="text" name="search" value="" placeholder="Search"
-                                   class="form-control input-lg"/>
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-lg"></button>
-                              </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 header-cart">
-                        <div id="cart" class="btn-group btn-block">
-                            <button type="button" data-toggle="dropdown" data-loading-text="Loading..."
-                                    class="btn btn-inverse btn-block btn-lg dropdown-toggle"><span id="cart-total">0 item(s) - $0.00</span>
-                            </button>
-                            <ul class="dropdown-menu pull-right cart-menu">
-                                <li>
-                                    <p class="text-center">Your shopping cart is empty!</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 
 
 <?= Breadcrumbs::widget([
