@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\alert\Alert;
 use Yii;
 use common\models\SlideShow;
 use common\models\SlideShowSearch;
@@ -131,7 +130,7 @@ class SlideShowController extends Controller
                 $path->saveAs($dir . '/' . $model->path);
 
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                    'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', 'Slide show has been saved.'),
@@ -145,16 +144,14 @@ class SlideShowController extends Controller
                         return $this->redirect(['index']);
                 }
             } else {
-                $errors = $model->getErrors();
-                foreach($errors as $error) {
-                    Yii::$app->getSession()->setFlash('error', [
-                        'type' => Alert::TYPE_DANGER,
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => $error[0],
-                        'title' => Yii::t('app', 'Add Slide show'),
-                    ]);
-                }
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save slide show. Please try again later.',
+                    'title' => Yii::t('app', 'Add Slide show'),
+                ]);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -186,24 +183,38 @@ class SlideShowController extends Controller
             $model->path = Yii::$app->security->generateRandomString().".{$ext}";
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($path) {
-                // directory to save image in local
-                $dir = Yii::getAlias('@frontend/web/uploads/slideshow/' . $model->id);
-                FileHelper::removeDirectory($dir);
-                FileHelper::createDirectory($dir);
-                $path->saveAs($dir . '/' . $model->path);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if ($path) {
+                    // directory to save image in local
+                    $dir = Yii::getAlias('@frontend/web/uploads/slideshow/' . $model->id);
+                    FileHelper::removeDirectory($dir);
+                    FileHelper::createDirectory($dir);
+                    $path->saveAs($dir . '/' . $model->path);
+                }
+
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Slide show has been edited.'),
+                    'title' => Yii::t('app', 'Edit Slide show'),
+                ]);
+
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Slide show has been edited.'),
+                    'title' => Yii::t('app', 'Edit Slide show'),
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
             }
-
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Slide show has been edited.'),
-                'title' => Yii::t('app', 'Edit Slide show'),
-            ]);
-
-            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -224,7 +235,7 @@ class SlideShowController extends Controller
         $slideshow->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-pencil',
             'message' => Yii::t('app', 'Slide show has been deleted.'),

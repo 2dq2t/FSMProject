@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\alert\Alert;
 use kartik\helpers\Html;
 use Yii;
 use common\models\Faq;
@@ -116,19 +115,33 @@ class FaqController extends Controller
     {
         $model = new Faq();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Faq has been saved.'),
-                'title' => Yii::t('app', 'Add Faq')
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Faq has been saved.'),
+                    'title' => Yii::t('app', 'Add Faq')
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) :  Yii::t('app', 'Faq added error.'),
+                    'title' => Yii::t('app', 'Add Faq')
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [
@@ -147,15 +160,29 @@ class FaqController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Faq has been edited.'),
-                'title' => Yii::t('app', 'Update Faq')
-            ]);
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Faq has been edited.'),
+                    'title' => Yii::t('app', 'Update Faq')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Faq has been edited error.'),
+                    'title' => Yii::t('app', 'Update Faq')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -176,7 +203,7 @@ class FaqController extends Controller
         $faq->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => Yii::t('app', 'Faq has been deleted.'),

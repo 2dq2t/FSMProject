@@ -413,7 +413,7 @@
             $hasSelect2.each(function() {
                 var id = $(this).attr('id');
                 var configSelect2 = eval($(this).attr('data-krajee-select2'));
-                $(this).select2('destroy');
+                //$(this).select2('destroy');
                 $.when($('#' + id).select2(configSelect2)).done(initSelect2Loading(id));
                 $('#' + id).on('select2-open', function() {
                     initSelect2DropStyle(id)

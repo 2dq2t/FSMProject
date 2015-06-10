@@ -36,8 +36,9 @@ class Voucher extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'code', 'discount', 'start_date', 'end_date', 'order_id'], 'required'],
-            [['discount', 'start_date', 'end_date', 'active', 'order_id'], 'integer'],
+            [['name', 'code', 'discount', 'start_date', 'end_date'], 'required'],
+            [['discount', 'active', 'order_id'], 'integer'],
+            [['start_date', 'end_date'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['code'], 'string', 'max' => 45]
         ];

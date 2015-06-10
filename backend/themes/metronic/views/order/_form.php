@@ -225,68 +225,92 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <!--/row-->
                     <script type="text/javascript">
                         var products_added = [];
+
+                        var old_value = -1;
+                        function setOldValue(id) {
+                            old_value = id.find('option:selected').val();
+                        }
+
+                        function getProductData(id) {
+                            var select_id = id.attr('id');
+                            var i=select_id.substring(select_id.indexOf("-")+1,select_id.lastIndexOf("-"));
+
+                            var selected_value = parseInt(id.find('option:selected').val());
+
+                            // if select change value
+//                            if(selected_value != old_value) {
+//                                console.log("o1: " + old_value);
+//                                console.log("sle: " + selected_value);
+//                                console.log(products_added.indexOf(selected_value));
+//                                if (products_added.indexOf(selected_value) != -1) {
+//                                    console.log("dasdsa");
+//                                    var index = products_added.indexOf(selected_value);
+//                                    products_added.splice(index, 1);
+//                                }
+//
+//                                console.log(products_added);
+//
+//                                clear(i);
+//                            }
+
+                            // if has a selected value in products added array
+//                            if ($.inArray(selected_value, products_added) !== -1) {
+//                                clear(i);
+//                                alert("You already select this product. Please again!");
+//                                return;
+//                            }
+//
+//                            if (selected_value) {
+//                                // if not add value to products_added array
+//                                products_added.push(selected_value);
+//                            }
+
+                            if(selected_value) {
+                                $.post( "index.php?r=order/get-product-info&id=" + selected_value, function( product_info ) {
+                                    var product_infos = JSON.parse(product_info);
+                                    $("#product-" + i +"-price").text(product_infos["price"]);
+                                    $("#product-" + i +"-unit").text(product_infos["unit"]);
+                                    $("#product-" + i +"-total").text(product_infos["price"] * document.getElementById("orderdetails-" + i + "-quantity").value);
+                                    var image = document.createElement("img");
+                                    var imageParent = document.getElementById("product-" + i +"-image");
+                                    image.className = "img-thumbnail";
+                                    image.src = "../../frontend/web/" + product_infos["image"];
+                                    imageParent.appendChild(image);
+                                });
+                            } else {
+                                var index = products_added.indexOf(selected_value);
+                                if (index > -1) {
+                                    products_added.splice(index, 1);
+                                }
+                            }
+                        }
+
+                        function clear(id) {
+                            var select_id = id.attr('id');
+                            var i=select_id.substring(select_id.indexOf("-")+1,select_id.lastIndexOf("-"));
+                            id.select2('val', '');
+                            $("#product-" + i +"-image").text("");
+                            $("#product-" + i +"-price").text("");
+                            $("#product-" + i +"-unit").text("");
+                            $("#product-" + i +"-total").text("");
+                            $("#orderdetails-" + i + "-quantity").val(1);
+                        }
                     </script>
                     <?php
-                    $script = '
-                            jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-                                jQuery(".dynamicform_wrapper .product-item").last().each(function(indice) {
-                                    jQuery(this).prop("selectedIndex","");
+                    $script = "
+                            jQuery('.dynamicform_wrapper').on('afterInsert', function(e, item) {
+                                var select_id = $(item).find('select').attr('id');
+                                $(item).find('select').value = '';
+                                clear($(item).find('select'));
+                                $('#' + select_id).on('select2:selecting', function() {
+                                    setOldValue($(this));
                                 });
-                                jQuery(".dynamicform_wrapper .product-image").last().each(function(indice) {
-                                    jQuery(this).text("");
-                                });
-                                jQuery(".dynamicform_wrapper .product-unit").last().each(function(indice) {
-                                    jQuery(this).text("");
-                                });
-                                jQuery(".dynamicform_wrapper .product-price").last().each(function(indice) {
-                                    jQuery(this).text("");
-                                });
-                                jQuery(".dynamicform_wrapper .product-total").last().each(function(indice) {
-                                    jQuery(this).text("");
+
+                                $('#' + select_id).change(function(){
+                                    getProductData($(item).find('select'));
                                 });
                             });
-
-                            var box, oldValue;
-
-                            // Get a reference to the select box\'s DOM element.
-                            // This can be any of several ways; below I\'ll look
-                            // it up by ID.
-                            function select(element) {
-//                                box = document.getElementById("theSelect");
-                                if (element.addEventListener) {
-                                    // DOM2 standard
-                                    element.addEventListener("change", changeHandler, false);
-                                }
-                                else if (element.attachEvent) {
-                                    // IE fallback
-                                    element.attachEvent("onchange", changeHandler);
-                                }
-                                else {
-                                    // DOM0 fallback
-                                    element.onchange = changeHandler;
-                                }
-                            }
-
-                            // Our handler
-                            function changeHandler(event) {
-                                var index, newValue;
-
-                              // Get the current index
-                              index = this.selectedIndex;
-                              if (index >= 0 && this.options.length > index) {
-                                  // Get the new value
-                                  newValue = this.options[index].value;
-                              }
-
-                              // **Your code here**: old value is `oldValue`, new value is `newValue`
-                              // Note that `newValue`` may well be undefined
-                              display("Old value: " + oldValue);
-                              display("New value: " + newValue);
-
-                              // When done processing the change, remember the old value
-                              oldValue = newValue;
-                            }
-                        ';
+                        ";
                     $this->registerJs($script);
                     ?>
                     <div class="row">
@@ -352,72 +376,21 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         <td class="count"></td>
                                         <td>
                                             <div class="col-md-12">
-                                                <?php echo $form->field($order_item, "[{$i}]product_id")->dropDownList(
-                                                    \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => \common\models\Product::STATUS_ACTIVE])->all(), 'id', 'name'),
-                                                    [
-                                                        'prompt'=>Yii::t('app', 'Select product'),
-                                                        'class' => 'form-control product-item',
-                                                        'onclick'=> '
-                                                                    this.oldvalue = this.value;
-                                                                ',
-                                                        'onchange'=>'
-
-                                                                    var id = this.id;
-                                                                    var value = this.value;
-                                                                    var i=id.substring(id.indexOf("-")+1,id.lastIndexOf("-"));
-                                                                    if(this.value !== this.oldvalue) {
-                                                                        var index = products_added.indexOf(this.oldvalue);
-                                                                        if (index > -1) {
-                                                                            products_added.splice(index, 1);
-                                                                        }
-
-                                                                        $("#product-" + i +"-image").text("");
-                                                                        $("#product-" + i +"-price").text("");
-                                                                        $("#product-" + i +"-unit").text("");
-                                                                        $("#product-" + i +"-total").text("");
-                                                                        $("#orderdetails-" + i + "-quantity").val(1);
-                                                                    }
-
-                                                                    if ($.inArray(value, products_added) !== -1) {
-                                                                        $("#product-" + i +"-image").text("");
-                                                                        $("#product-" + i +"-price").text("");
-                                                                        $("#product-" + i +"-unit").text("");
-                                                                        $("#product-" + i +"-total").text("");
-                                                                        $("#orderdetails-" + i + "-quantity").val(1);
-                                                                        this.value = "";
-                                                                        alert("You already select this product. Please again!");
-                                                                        return false;
-                                                                    }
-                                                                    products_added.push(value);
-                                                                    console.log(products_added)
-
-                                                                    if(this.value != 0) {
-                                                                        $.post( "index.php?r=order/get-product-info&id="+$(this).val(), function( product_info ) {
-                                                                            var productinfo = JSON.parse(product_info);
-                                                                            $("#product-" + i +"-price").text(productinfo["price"]);
-                                                                            $("#product-" + i +"-unit").text(productinfo["unit"]);
-                                                                            $("#product-" + i +"-total").text(productinfo["price"] * document.getElementById("orderdetails-" + i + "-quantity").value);
-                                                                            var image = document.createElement("img");
-                                                                            var imageParent = document.getElementById("product-" + i +"-image");
-                                                                            image.className = "img-thumbnail";
-                                                                            image.src = "../../frontend/web/" + productinfo["image"];
-                                                                            imageParent.appendChild(image);
-                                                                        });
-                                                                    } else {
-                                                                        var index = products_added.indexOf(value);
-                                                                        if (index > -1) {
-                                                                            products_added.splice(index, 1);
-                                                                        }
-
-                                                                        $("#product-" + i +"-image").text("");
-                                                                        $("#product-" + i +"-price").text("");
-                                                                        $("#product-" + i +"-unit").text("");
-                                                                        $("#product-" + i +"-total").text("");
-                                                                        $("#orderdetails-" + i + "-quantity").val(1);
-                                                                    }
-                                                                    '
+                                                <?php echo $form->field($order_item, "[{$i}]product_id")->widget(\kartik\widgets\Select2::className(), [
+                                                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => \common\models\Product::STATUS_ACTIVE])->all(), 'id', 'name'),
+                                                    'options' => ['placeholder' => 'Select a state ...'],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => true
+                                                    ],
+                                                    'pluginEvents' => [
+                                                        "change" => "function() {
+                                                            getProductData($(this));
+                                                        }",
+                                                        "select2:selecting" => "function() {
+                                                            setOldValue($(this));
+                                                        }",
                                                     ]
-                                                )->label(false) ?>
+                                                ])->label(false)?>
                                             </div>
                                         </td>
                                         <td>

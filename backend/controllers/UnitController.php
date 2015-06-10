@@ -2,19 +2,9 @@
 
 namespace backend\controllers;
 
-use common\models\Image;
-use common\models\Offer;
-use common\models\OrderDetails;
-use common\models\Product;
-use common\models\ProductSeason;
-use common\models\WishList;
-use kartik\alert\Alert;
-use kartik\helpers\Html;
 use Yii;
 use common\models\Unit;
 use common\models\UnitSearch;
-use yii\base\Exception;
-use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -125,19 +115,32 @@ class UnitController extends Controller
     {
         $model = new Unit();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Unit Record has been saved.'),
-                'title' => Yii::t('app', 'Add Unit')
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Unit Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Unit')
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Unit')
+                ]);
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [
@@ -156,16 +159,29 @@ class UnitController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Unit Record has been updated.'),
-                'title' => Yii::t('app', 'Update Unit')
-            ]);
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) ) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Unit Record has been updated.'),
+                    'title' => Yii::t('app', 'Update Unit')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit Record has been updated.'),
+                    'title' => Yii::t('app', 'Update Unit')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -186,8 +202,8 @@ class UnitController extends Controller
         $unit->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
-            'duration' => 5000,
+            'type' => 'success',
+            'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => Yii::t('app', 'Unit Record has been deleted.'),
             'title' => Yii::t('app', 'Delete Unit')

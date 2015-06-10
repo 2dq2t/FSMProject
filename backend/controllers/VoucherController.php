@@ -116,21 +116,55 @@ class VoucherController extends Controller
     {
         $model = new Voucher();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Voucher has been saved.'),
-                'title' => Yii::t('app', 'Add Voucher')
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->start_date = strtotime($model->start_date);
+            $model->end_date = strtotime($model->end_date);
+
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Voucher has been saved.'),
+                    'title' => Yii::t('app', 'Add Voucher')
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                if ($model->start_date != '') {
+                    $model->start_date = date('m/d/Y', $model->start_date);
+                }
+
+                if($model->end_date != '') {
+                    $model->end_date = date('m/d/Y', $model->end_date);
+                }
+
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Add Voucher errors. '),
+                    'title' => Yii::t('app', 'Add Voucher')
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
+
         } else {
+            if ($model->start_date != '') {
+                $model->start_date = date('m/d/Y', $model->start_date);
+            }
+
+            if($model->end_date != '') {
+                $model->end_date = date('m/d/Y', $model->end_date);
+            }
+
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -157,7 +191,7 @@ class VoucherController extends Controller
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                    'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
                     'message' => Yii::t('app', 'Voucher has been edited.'),
@@ -173,11 +207,11 @@ class VoucherController extends Controller
                     $model->end_date = date('m/d/Y', $model->end_date);
                 }
 
-                Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
                     'duration' => 0,
-                    'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Update Voucher errors. ') . $model->errors,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update Voucher errors. '),
                     'title' => Yii::t('app', 'Update Voucher')
                 ]);
 
@@ -207,7 +241,7 @@ class VoucherController extends Controller
         $voucher->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => Yii::t('app', 'Voucher has been deleted.'),

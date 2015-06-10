@@ -18,8 +18,8 @@ class VoucherSearch extends Voucher
     public function rules()
     {
         return [
-            [['id', 'discount', 'start_date', 'end_date', 'active', 'order_id'], 'integer'],
-            [['name', 'code'], 'safe'],
+            [['id', 'discount', 'active', 'order_id'], 'integer'],
+            [['name', 'code', 'start_date', 'end_date'], 'safe'],
         ];
     }
 
@@ -58,14 +58,16 @@ class VoucherSearch extends Voucher
         $query->andFilterWhere([
             'id' => $this->id,
             'discount' => $this->discount,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+//            'start_date' => $this->start_date,
+//            'end_date' => $this->end_date,
             'active' => $this->active,
             'order_id' => $this->order_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'code', $this->code]);
+            ->andFilterWhere(['like', 'code', $this->code])
+            ->andFilterWhere(['like', 'start_date', strtotime($this->start_date)])
+            ->andFilterWhere(['like', 'end_date', strtotime($this->end_date)]);
 
         return $dataProvider;
     }

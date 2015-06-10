@@ -13,15 +13,9 @@ use common\models\Image;
 use common\models\OrderDetails;
 use common\models\Product;
 use common\models\Unit;
-use common\models\Voucher;
-use common\models\Ward;
-use kartik\widgets\Alert;
 use Yii;
 use common\models\Order;
-use common\models\OrderSearch;
 use yii\base\Exception;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -126,17 +120,32 @@ class OrderController extends Controller
                     $model->net_amount = $net_amount;
                     $model->tax_amount = $tax_amount;
 
+                    // set field value for each order_detail
+                    foreach($order_details as $i => $order_detail){
+                        $product = Product::find()->where(['id' => $order_detail['product_id']])->one();
+                        $order_detail['product_image'] = Image::find()->select('path')->where(['product_id' => $order_detail['product_id']])->one()['path'];
+                        $unit_id = $product['unit_id'];
+                        $order_detail['product_unit'] = Unit::find()->select('name')->where(['active' => 1, 'id' => $unit_id])->one()['name'];
+                        $order_detail['sell_price'] = $product['price'];
+                        $order_detail['product_total'] = $order_detail['quantity'] * $product['price'];
+                        $order_detail['max_quantity'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['quantity_in_stock'] - Product::find()->where(['id' => $order_detail['product_id']])->one()['sold'];
+                        $order_detail['tax'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['tax'];
+                    }
+
+                    $errors = [];
                     if ($model->save()) {
                         if ($flag = $model->save()) {
                             $product_id = [];
                             // Save each OrderDetails to database
                             foreach ($order_details as $order_detail) {
+                                // check if product is unselected
                                 if (!$order_detail->product_id) {
                                     $transaction->rollBack();
                                     $errors[] = Yii::t('app', 'Product not be empty.');
                                     break;
                                 }
 
+                                // check if two same product selected
                                 if ($product_id && in_array($order_detail->product_id, $product_id)) {
                                     $transaction->rollBack();
                                     $errors[] = Yii::t('app', 'Each product must be unique.');
@@ -156,10 +165,13 @@ class OrderController extends Controller
                                 }
                             }
                         }
-                        if ($flag) {
-                            $transaction->commit();
+                        if ($flag && empty($errors)) {
+                            if ($transaction->getIsActive()) {
+                                $transaction->commit();
+                            }
+
                             Yii::$app->getSession()->setFlash('success', [
-                                'type' => Alert::TYPE_SUCCESS,
+                                'type' => 'success',
                                 'duration' => 3000,
                                 'icon' => 'fa fa-plus',
                                 'message' => Yii::t('app', 'Add Order successful.'),
@@ -172,6 +184,34 @@ class OrderController extends Controller
                                 default:
                                     return $this->redirect(['index']);
                             }
+                        } else {
+                            if ($model->order_date) {
+                                $model->order_date = date('m/d/Y', $model->order_date);
+                            }
+
+                            if ($model->receiving_date) {
+                                $model->receiving_date = date('m/d/Y', $model->receiving_date);
+                            }
+
+                            if ($transaction->getIsActive()) {
+                                $transaction->rollBack();
+                            }
+
+                            Yii::$app->getSession()->setFlash('error', [
+                                'type' => 'error',
+                                'duration' => 0,
+                                'icon' => 'fa fa-plus',
+                                'message' => !empty($errors) ? $errors[0] : current($model->getFirstErrors()),
+                                'title' => Yii::t('app', 'Add Order'),
+                            ]);
+
+                            return $this->render('create', [
+                                'model' => $model,
+                                'guest' => $guest,
+                                'address' => $address,
+                                'city' => $city,
+                                'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
+                            ]);
                         }
                     } else {
                         if ($model->order_date) {
@@ -182,11 +222,15 @@ class OrderController extends Controller
                             $model->receiving_date = date('m/d/Y', $model->receiving_date);
                         }
 
-                        Yii::$app->getSession()->setFlash('danger', [
-                            'type' => Alert::TYPE_DANGER,
+                        if ($transaction->getIsActive()) {
+                            $transaction->rollBack();
+                        }
+
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => current($model->getFirstErrors()),
+                            'message' => !empty($errors) ? $errors[0] : current($model->getFirstErrors()),
                             'title' => Yii::t('app', 'Add Order'),
                         ]);
 
@@ -207,11 +251,15 @@ class OrderController extends Controller
                         $model->receiving_date = date('m/d/Y', $model->receiving_date);
                     }
 
-                    Yii::$app->getSession()->setFlash('danger', [
-                        'type' => Alert::TYPE_DANGER,
+                    if ($transaction->getIsActive()) {
+                        $transaction->rollBack();
+                    }
+
+                    Yii::$app->getSession()->setFlash('error', [
+                        'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => $address->getFirstErrors() ? $address->getFirstErrors() : $guest->getFirstErrors() || 'Could not be save the address or guest.',
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || 'Could not be save the address or guest.',
                         'title' => Yii::t('app', 'Add Order'),
                     ]);
 
@@ -224,7 +272,9 @@ class OrderController extends Controller
                     ]);
                 }
             } catch(Exception $e) {
-                $transaction->rollBack();
+                if ($transaction->getIsActive()) {
+                    $transaction->rollBack();
+                }
 
                 if ($model->order_date) {
                     $model->order_date = date('m/d/Y', $model->order_date);
@@ -234,11 +284,11 @@ class OrderController extends Controller
                     $model->receiving_date = date('m/d/Y', $model->receiving_date);
                 }
 
-                Yii::$app->getSession()->setFlash('danger', [
-                    'type' => Alert::TYPE_DANGER,
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save order.Please try again.'),
                     'title' => Yii::t('app', 'Add Order'),
                 ]);
 
@@ -278,7 +328,7 @@ class OrderController extends Controller
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Confirm oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Confirm oder failure. Please try again later/'),
                 'title' => Yii::t('app', 'Confirm Order'),
             ]);
         }
@@ -303,7 +353,7 @@ class OrderController extends Controller
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Delivered oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder failure. Please try again later/'),
                 'title' => Yii::t('app', 'Delivered Order'),
             ]);
         }
@@ -328,7 +378,7 @@ class OrderController extends Controller
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => $model->getFirstErrors() ? $model->getFirstErrors() : Yii::t('app', 'Cancel oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Cancel oder failure. Please try again later/'),
                 'title' => Yii::t('app', 'Cancel Order'),
             ]);
         }

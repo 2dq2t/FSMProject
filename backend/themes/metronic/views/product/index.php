@@ -14,14 +14,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
-        echo \kartik\alert\Alert::widget([
-            'type' => (!empty($message['type'])) ? $message['type'] : \kartik\alert\Alert::TYPE_DANGER,
+        echo lavrentiev\yii2toastr\Toastr::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-            'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-            'body' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
-            'delay' => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
-            'showSeparator' => true,
-            'options' => ['format' => 'raw']
+            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'clear' => false,
+            'options' => [
+                "closeButton" => true,
+                "positionClass" => "toast-top-right",
+                "timeOut" => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
+            ]
         ]);
     }
     ?>
@@ -50,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     '../../frontend/web/index.php?r=site/view-detail&product=' . $model->name,
                     [
                         'title'=>'View product detail',
-                        'target'=>'_blank'
+                        'onclick'=>"window.open(this.href,'_blank');return false;"
                     ]);
             },
             'pageSummary'=>'Total',

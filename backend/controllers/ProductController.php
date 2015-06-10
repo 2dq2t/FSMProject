@@ -6,7 +6,6 @@ use common\models\Image;
 use common\models\ProductSeason;
 use common\models\ProductTag;
 use common\models\Tag;
-use kartik\alert\Alert;
 use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
@@ -211,8 +210,8 @@ class ProductController extends Controller
 					$transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_SUCCESS,
-                        'duration' => 5000,
+                        'type' => 'success',
+                        'duration' => 3000,
                         'icon' => 'fa fa-plus',
                         'message' => Yii::t('app', 'Product Record has been saved.'),
                         'title' => Yii::t('app', 'Add Product'),
@@ -225,11 +224,14 @@ class ProductController extends Controller
                             return $this->redirect(['index']);
                     }
                 } else {
-                    Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_DANGER,
+                    if ($transaction->getIsActive()) {
+                        $transaction->rollBack();
+                    }
+                    Yii::$app->getSession()->setFlash('error', [
+                        'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($model->getFirstErrors()),
+                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product. Please try again'),
                         'title' => Yii::t('app', 'Add Product'),
                     ]);
 
@@ -239,12 +241,14 @@ class ProductController extends Controller
                     ]);
                 }
             } catch (Exception $e) {
-				$transaction->rollBack();
-                Yii::$app->getSession()->setFlash('danger', [
-                    'type' => Alert::TYPE_DANGER,
+                if ($transaction->getIsActive()) {
+                    $transaction->rollBack();
+                }
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save product. Please try again'),
                     'title' => Yii::t('app', 'Add Product'),
                 ]);
 
@@ -377,7 +381,7 @@ class ProductController extends Controller
 					$transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_SUCCESS,
+                        'type' => 'success',
                         'duration' => 0,
                         'icon' => 'fa fa-pencil',
                         'message' => Yii::t('app', 'Product Record has been edited.'),
@@ -387,11 +391,15 @@ class ProductController extends Controller
                     return $this->redirect(['index']);
                 } else {
 
-                    Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_DANGER,
+                    if ($transaction->getIsActive()) {
+                        $transaction->rollBack();
+                    }
+
+                    Yii::$app->getSession()->setFlash('error', [
+                        'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a product',
+                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product. Please try again'),
                         'title' => Yii::t('app', 'Edit Product'),
                     ]);
 
@@ -404,12 +412,14 @@ class ProductController extends Controller
                 }
             } catch (Exception $e) {
 
-				$transaction->rollBack();
+                if ($transaction->getIsActive()) {
+                    $transaction->rollBack();
+                }
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
+                    'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a product.',
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save product. Please try again'),
                     'title' => Yii::t('app', 'Edit Product'),
                 ]);
 
@@ -442,7 +452,7 @@ class ProductController extends Controller
         $product->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Product Record has been deleted.',

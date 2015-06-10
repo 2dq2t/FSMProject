@@ -54,6 +54,7 @@ class Employee extends ActiveRecord implements IdentityInterface
             [['dob', 'start_date'], 'safe'],
             [['gender'], 'string'],
             [['full_name', 'password', 'email', 'image', 'auth_key', 'password_reset_token'], 'string', 'max' => 255],
+            [['password'], 'string', 'min' => 6],
             [['email'], 'unique'],
             [['email'], 'email'],
             [['phone_number'], 'string', 'max' => 15, 'min' => 10],

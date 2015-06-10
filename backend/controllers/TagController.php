@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\alert\Alert;
 use Yii;
 use common\models\Tag;
 use common\models\TagSearch;
@@ -63,19 +62,32 @@ class TagController extends Controller
     {
         $model = new Tag();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-plus',
-                'message' => 'Tag has been saved.',
-                'title' => 'Add Tag'
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => 'Tag has been saved.',
+                    'title' => 'Add Tag'
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Tag has been saved.',
+                    'title' => 'Add Tag'
+                ]);
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [
@@ -94,15 +106,28 @@ class TagController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-pencil',
-                'message' => 'Tag has been updated.',
-                'title' => 'Update Tag'
-            ]);
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => 'Tag has been updated.',
+                    'title' => 'Update Tag'
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Tag has been updated.',
+                    'title' => 'Update Tag'
+                ]);
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -121,8 +146,8 @@ class TagController extends Controller
         $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
-            'duration' => 5000,
+            'type' => 'success',
+            'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Tag has been deleted.',
             'title' => 'Delete Tag'

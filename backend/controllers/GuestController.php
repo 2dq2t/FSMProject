@@ -2,17 +2,9 @@
 
 namespace backend\controllers;
 
-use common\models\Customer;
-use common\models\Order;
-use common\models\OrderDetails;
-use common\models\Voucher;
-use common\models\WishList;
-use kartik\alert\Alert;
 use Yii;
 use common\models\Guest;
 use common\models\GuestSearch;
-use yii\base\Exception;
-use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,19 +64,32 @@ class GuestController extends Controller
     {
         $model = new Guest();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Customer Record has been saved.'),
-                'title' => Yii::t('app', 'Add Customer')
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Customer Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Customer')
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? $model->getFirstErrors() : Yii::t('app', 'Customer Record has been save error.'),
+                    'title' => Yii::t('app', 'Add Customer')
+                ]);
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
 
         } else {
@@ -104,16 +109,30 @@ class GuestController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Customer has been edited.'),
-                'title' => Yii::t('app', 'Update Customer')
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Customer has been edited.'),
+                    'title' => Yii::t('app', 'Update Customer')
+                ]);
 
-            return $this->redirect(['index']);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Customer has been edit error.'),
+                    'title' => Yii::t('app', 'Update Customer')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -132,7 +151,7 @@ class GuestController extends Controller
 //        $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => Yii::t('app', 'Customer has been deleted.'),

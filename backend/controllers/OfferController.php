@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\alert\Alert;
 use Yii;
 use common\models\Offer;
 use common\models\OfferSearch;
@@ -123,7 +122,7 @@ class OfferController extends Controller
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                    'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', 'Offer has been add.'),
@@ -140,10 +139,10 @@ class OfferController extends Controller
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
+                    'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => 'Create Offer error. ' . $model->errors,
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Create Offer error. ',
                     'title' => Yii::t('app', 'Add Offer')
                 ]);
 
@@ -178,7 +177,7 @@ class OfferController extends Controller
 
             if ( $model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                    'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', 'Offer has been edited.'),
@@ -195,10 +194,10 @@ class OfferController extends Controller
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
+                    'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => 'Update Offer error. ' . $model->errors,
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Update Offer error. ',
                     'title' => Yii::t('app', 'Update Offer')
                 ]);
 
@@ -227,7 +226,7 @@ class OfferController extends Controller
         $offer->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-plus',
             'message' => Yii::t('app', 'Offer has been deleted.'),

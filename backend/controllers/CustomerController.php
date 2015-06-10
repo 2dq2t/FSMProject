@@ -5,9 +5,7 @@ namespace backend\controllers;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
-use common\models\Ward;
 use common\models\Address;
-use kartik\alert\Alert;
 use Yii;
 use common\models\Customer;
 use common\models\CustomerSearch;
@@ -175,7 +173,7 @@ class CustomerController extends Controller
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_SUCCESS,
+                            'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => Yii::t('app', 'User has been saved.'),
@@ -199,9 +197,9 @@ class CustomerController extends Controller
                             $model->created_at = date('m/d/Y', $model->created_at);
                         }
 
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => 'error',
+                            'duration' => 0,
                             'icon' => 'fa fa-plus',
                             'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a user',
                             'title' => Yii::t('app', 'Add User'),
@@ -228,11 +226,11 @@ class CustomerController extends Controller
                     $model->created_at = date('m/d/Y', $model->created_at);
                 }
 
-                Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a user',
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a user'),
                     'title' => Yii::t('app', 'Add User'),
                 ]);
 
@@ -335,7 +333,7 @@ class CustomerController extends Controller
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_SUCCESS,
+                            'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
                             'message' => Yii::t('app', 'User has been edited.'),
@@ -355,10 +353,10 @@ class CustomerController extends Controller
                         $model->password = NULL;
 
                         Yii::$app->getSession()->setFlash('error', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 3000,
+                            'type' => 'error',
+                            'duration' => 0,
                             'icon' => 'fa fa-pencil',
-                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a user',
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not be save a user'),
                             'title' => Yii::t('app', 'Edit User'),
                         ]);
 
@@ -382,10 +380,10 @@ class CustomerController extends Controller
                 $model->password = NULL;
 
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a user.',
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a user.'),
                     'title' => Yii::t('app', 'Edit User'),
                 ]);
 
@@ -424,7 +422,7 @@ class CustomerController extends Controller
         $customer->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'error',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'User has been deleted.',

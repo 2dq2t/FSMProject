@@ -2,9 +2,7 @@
 
 namespace backend\controllers;
 
-use common\models\Product;
 use common\models\ProductSeason;
-use kartik\alert\Alert;
 use Yii;
 use common\models\Season;
 use common\models\SeasonSearch;
@@ -133,7 +131,7 @@ class SeasonController extends Controller
 
             if($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
+                    'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => 'Season Record has been saved.',
@@ -154,11 +152,11 @@ class SeasonController extends Controller
                     $model->to = date('m/d/Y', $model->to);
                 }
 
-                Yii::$app->getSession()->setFlash('danger', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season. Please try again.',
                     'title' => Yii::t('app', 'Add Season'),
                 ]);
 
@@ -198,8 +196,8 @@ class SeasonController extends Controller
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
-                    'duration' => 5000,
+                    'type' => 'success',
+                    'duration' => 3000,
                     'icon' => 'fa fa-pencil',
                     'message' => 'Season Record has been updated.',
                     'title' => 'Update Season'
@@ -214,9 +212,9 @@ class SeasonController extends Controller
                     $model->to = date('m/d/Y', $model->to);
                 }
 
-                Yii::$app->getSession()->setFlash('danger', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-pencil',
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season',
                     'title' => Yii::t('app', 'Edit Season'),
@@ -241,15 +239,15 @@ class SeasonController extends Controller
      */
     public function actionDelete($id)
     {
-        ProductSeason::updateAll(['active' => ProductSeason::STATUS_INACTIVE], ['season_id' => $id]);
+        ProductSeason::deleteAll(['season_id'=>$id]);
 
         $season = $this->findModel($id);
         $season->active = Season::STATUS_INACTIVE;
         $season->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
-            'duration' => 5000,
+            'type' => 'success',
+            'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Season Record has been deleted.',
             'title' => 'Delete Season'
@@ -295,8 +293,8 @@ class SeasonController extends Controller
                 $transaction->commit();
 
                 Yii::$app->getSession()->setFlash('success', [
-                    'type' => Alert::TYPE_SUCCESS,
-                    'duration' => 5000,
+                    'type' => 'success',
+                    'duration' => 3000,
                     'icon' => 'fa fa-plus',
                     'message' => 'Product season has been added.',
                     'title' => 'Add Product season'
@@ -307,10 +305,10 @@ class SeasonController extends Controller
                 $model->products_list = Json::encode($model->products_list);
 
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 5000,
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Product season add failure. Try again later.'),
+                    'message' => Yii::t('app', 'Could not be add product. Try again later.'),
                     'title' => 'Add Product season'
                 ]);
             }

@@ -50,7 +50,7 @@ class OrderDetails extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'product_id' => Yii::t('app', 'Product ID'),
+            'product_id' => Yii::t('app', 'Product'),
             'order_id' => Yii::t('app', 'Order ID'),
             'sell_price' => Yii::t('app', 'Sell Price'),
             'quantity' => Yii::t('app', 'Quantity'),

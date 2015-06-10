@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\alert\Alert;
 use Yii;
 use common\models\Rating;
 use common\models\RatingSearch;
@@ -10,7 +9,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\Url;
 
 /**
  * RatingController implements the CRUD actions for Rating model.
@@ -97,19 +95,33 @@ class RatingController extends Controller
     {
         $model = new Rating();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Rating has been saved.'),
-                'title' => Yii::t('app', 'Add Rating'),
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) ) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Rating has been saved.'),
+                    'title' => Yii::t('app', 'Add Rating'),
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Could not be save rating. Please try again later.'),
+                    'title' => Yii::t('app', 'Add Rating'),
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
 
         } else {
@@ -129,15 +141,29 @@ class RatingController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 5000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Rating has been edited.'),
-                'title' => Yii::t('app', 'Update Rating'),
-            ]);
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Rating has been edited.'),
+                    'title' => Yii::t('app', 'Update Rating'),
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating has been edited.'),
+                    'title' => Yii::t('app', 'Update Rating'),
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -156,7 +182,7 @@ class RatingController extends Controller
         $this->findModel($id)->delete();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
             'message' => Yii::t('app', 'Rating has been deleted.'),

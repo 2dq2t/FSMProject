@@ -5,7 +5,6 @@ namespace backend\controllers;
 use common\models\Address;
 use common\models\City;
 use common\models\District;
-use common\models\Ward;
 use kartik\alert\Alert;
 use Yii;
 use backend\models\Employee;
@@ -157,8 +156,6 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
-
-
                         if($model->assignments == '') {
                             $model->assignments = [];
                         }
@@ -167,6 +164,9 @@ class EmployeeController extends Controller
                             try {
                                 \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
                             } catch (\Exception $e) {
+                                if ($transaction->getIsActive()) {
+                                    $transaction->rollBack();
+                                }
                                 $errors[] = 'Cannot assign "'.$assignment.'" to user';
                             }
                         }
@@ -174,7 +174,7 @@ class EmployeeController extends Controller
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_SUCCESS,
+                            'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => Yii::t('app', 'Employee has been saved.'),
@@ -188,9 +188,10 @@ class EmployeeController extends Controller
                                 return $this->redirect(['index']);
                         }
                     } else {
-                        // if save to user error return create page
-//                        $model->password = $password_return;
-//                        $model->re_password = $re_password_return;
+                        if ($transaction->getIsActive()) {
+                            $transaction->rollBack();
+                        }
+
                         if ($model->dob != '') {
                             $model->dob = date('m/d/Y', $model->dob);
                         }
@@ -200,11 +201,11 @@ class EmployeeController extends Controller
                         }
 
                         // get errors
-                        Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || 'Could not save a employee.',
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Could not save a employee.'),
                             'title' => Yii::t('app', 'Add Employee'),
                         ]);
 
@@ -218,7 +219,9 @@ class EmployeeController extends Controller
                     }
                 }
             } catch (Exception $e) {
-                $transaction->rollBack();
+                if ($transaction->getIsActive()) {
+                    $transaction->rollBack();
+                }
                 if ($model->dob != '') {
                     $model->dob = date('m/d/Y', $model->dob);
                 }
@@ -227,10 +230,10 @@ class EmployeeController extends Controller
                     $model->start_date = date('m/d/Y', $model->start_date);
                 }
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage() ? $e->getMessage() : 'Could not be save a employee.',
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a employee.'),
                     'title' => Yii::t('app', 'Add Employee'),
                 ]);
 
@@ -288,6 +291,7 @@ class EmployeeController extends Controller
 
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
+            $errors = [];
             try{
                 // Save address info to database
                 if($address->save()) {
@@ -312,7 +316,7 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
-                        $errors = [];
+
 
                         if($model->assignments == '') {
                             $model->assignments = [];
@@ -338,7 +342,7 @@ class EmployeeController extends Controller
                         $transaction->commit();
 
                         Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_SUCCESS,
+                            'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => Yii::t('app', 'Employee has been saved.'),
@@ -352,9 +356,10 @@ class EmployeeController extends Controller
                                 return $this->redirect(['index']);
                         }
                     } else {
-                        // if save to user error return create page
-//                        $model->password = $password_return;
-//                        $model->re_password = $re_password_return;
+                        if ($transaction->getIsActive()) {
+                            $transaction->rollBack();
+                        }
+
                         if ($model->dob != '') {
                             $model->dob = date('m/d/Y', $model->dob);
                         }
@@ -365,10 +370,10 @@ class EmployeeController extends Controller
 
                         // get errors
                         Yii::$app->getSession()->setFlash('success', [
-                            'type' => Alert::TYPE_DANGER,
+                            'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || 'Could not be save a employee',
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Could not be save a employee'),
                             'title' => Yii::t('app', 'Add Employee'),
                         ]);
 
@@ -381,6 +386,10 @@ class EmployeeController extends Controller
                         ]);
                     }
                 } else {
+
+                    if ($transaction->getIsActive()) {
+                        $transaction->rollBack();
+                    }
                     if ($model->dob != '') {
                         $model->dob = date('m/d/Y', $model->dob);
                     }
@@ -390,11 +399,11 @@ class EmployeeController extends Controller
                     }
 
                     // get errors
-                    Yii::$app->getSession()->setFlash('success', [
-                        'type' => Alert::TYPE_DANGER,
+                    Yii::$app->getSession()->setFlash('error', [
+                        'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : 'Could not be save a employee',
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : Yii::t('app', 'Could not be save a employee'),
                         'title' => Yii::t('app', 'Add Employee'),
                     ]);
 
@@ -407,13 +416,15 @@ class EmployeeController extends Controller
                     ]);
                 }
             } catch (Exception $e) {
-                $transaction->rollBack();
+                if ($transaction->getIsActive()) {
+                    $transaction->rollBack();
+                }
 
                 Yii::$app->getSession()->setFlash('error', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
+                    'type' => 'error',
+                    'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => !empty($errors) != '' ? $errors : $e->getMessage(),
+                    'message' => !empty($errors) != '' ? $errors[0] : $e->getMessage(),
                     'title' => Yii::t('app', 'Edit Employee'),
                 ]);
 
@@ -449,7 +460,7 @@ class EmployeeController extends Controller
             $employee->save();
 
             Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
+                'type' => 'success',
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
                 'message' => Yii::t('app', 'Employee has been deleted.'),
@@ -457,8 +468,8 @@ class EmployeeController extends Controller
             ]);
         } else {
             Yii::$app->getSession()->setFlash('error', [
-                'type' => Alert::TYPE_DANGER,
-                'duration' => 3000,
+                'type' => 'error',
+                'duration' => 0,
                 'icon' => 'fa fa-plus',
                 'message' => Yii::t('app', 'You can\'t delete yourself.'),
                 'title' => Yii::t('app', 'Delete Employee'),

@@ -2,19 +2,9 @@
 
 namespace backend\controllers;
 
-use common\models\Customer;
-use common\models\Image;
-use common\models\Offer;
-use common\models\OrderDetails;
-use common\models\Product;
-use common\models\ProductSeason;
-use common\models\WishList;
-use kartik\alert\Alert;
 use Yii;
 use common\models\Category;
 use common\models\CategorySearch;
-use yii\base\Exception;
-use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -122,22 +112,35 @@ class CategoryController extends Controller
     {
         $model = new Category();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Category Record has been saved.'),
-                'title' => Yii::t('app', 'Add Category')
-            ]);
-            switch (Yii::$app->request->post('action', 'save')) {
-                case 'next':
-                    return $this->redirect(['create']);
-                default:
-                    return $this->redirect(['index']);
-            }
+        if ($model->load(Yii::$app->request->post()) ) {
 
-//            return $this->redirect(['index']);
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Category Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Category')
+                ]);
+                switch (Yii::$app->request->post('action', 'save')) {
+                    case 'next':
+                        return $this->redirect(['create']);
+                    default:
+                        return $this->redirect(['index']);
+                }
+            } else {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category Record saved error.'),
+                    'title' => Yii::t('app', 'Add Category')
+                ]);
+
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -155,15 +158,29 @@ class CategoryController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => Alert::TYPE_SUCCESS,
-                'duration' => 3000,
-                'icon' => 'fa fa-pencil',
-                'message' => Yii::t('app', 'Category has been edited.'),
-                'title' => Yii::t('app', 'Update Category')
-            ]);
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-pencil',
+                    'message' => Yii::t('app', 'Category has been edited.'),
+                    'title' => Yii::t('app', 'Update Category')
+                ]);
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-pencil',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category has been edited.'),
+                    'title' => Yii::t('app', 'Update Category')
+                ]);
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -184,7 +201,7 @@ class CategoryController extends Controller
         $category->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => Alert::TYPE_SUCCESS,
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
             'message' => 'Category Record has been deleted.',
