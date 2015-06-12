@@ -46,9 +46,9 @@ class Guest extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'full_name' => Yii::t('app', 'Full Name'),
+            'full_name' => Yii::t('app', 'Họ Và Tên'),
             'email' => Yii::t('app', 'Email'),
-            'phone_number' => Yii::t('app', 'Phone Number'),
+            'phone_number' => Yii::t('app', 'Số Điện Thoại'),
         ];
     }
 

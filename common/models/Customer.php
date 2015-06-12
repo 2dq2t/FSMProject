@@ -52,18 +52,17 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password'], 'required'],
+            [['username', 'password','re_password'], 'required'],
             [['username', 'password', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
-//            [['username', 'gender', 'created_at', 'address_id'], 'required', 'on' => 'adminedit'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
             [['dob', 'created_at', 'updated_at'], 'safe'],
             [['created_at', 'updated_at', 'status', 'guest_id', 'address_id'], 'integer'],
             [['gender'], 'string'],
-            [['username', 'avatar'], 'string', 'max' => 255, 'min' => '6', 'tooShort' => '{attribute} phải có ít nhất 6 kí tự'],
-            [['password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
-            [['new_password'], 'string', 'max' => 255, 'min' => 8, 'tooShort' => '{attribute} phải có ít nhất 8 kí tự'],
-            ['re_password', 'compare', 'compareAttribute' => 'password','message' => '{attribute} không khớp'],
-            ['re_new_password', 'compare', 'compareAttribute' => 'new_password','message' => '{attribute} không khớp'],
+            [['username', 'avatar'], 'string', 'max' => 255, 'min' => 6],
+            [['password'], 'string', 'max' => 255, 'min' => 6],
+            [['new_password'], 'string', 'max' => 255, 'min' => 6],
+            ['re_password', 'compare', 'compareAttribute' => 'password'],
+            ['re_new_password', 'compare', 'compareAttribute' => 'new_password'],
             [['auth_key', 'password_reset_token'], 'string', 'max' => 255],
             [['username'], 'unique'],
             [['avatar'], 'file', 'extensions' => 'jpeg, jpg, png, gif']
@@ -91,11 +90,11 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'username' => Yii::t('app', 'Username'),
-            'password' => Yii::t('app', 'Password'),
-            'new_password' => Yii::t('app', 'Mật khẩu mới'),
-            're_password' => Yii::t('app', 'Xác nhận Mật khẩu'),
-            're_new_password' => Yii::t('app', 'Xác nhận Mật khẩu mới'),
+            'username' => Yii::t('app', 'Tên Đăng Nhập'),
+            'password' => Yii::t('app', 'Mật Khẩu'),
+            'new_password' => Yii::t('app', 'Mật Khẩu Mới'),
+            're_password' => Yii::t('app', 'Xác Nhận Mật Khẩu'),
+            're_new_password' => Yii::t('app', 'Xác Nhận Mật Khẩu Mới'),
             'avatar' => Yii::t('app', 'Avatar'),
             'dob' => Yii::t('app', 'Date of birth'),
             'gender' => Yii::t('app', 'Gender'),
