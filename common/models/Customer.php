@@ -52,7 +52,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password','re_password'], 'required'],
+            [['username', 'password'], 'required'],
             [['username', 'password', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
             [['new_password', 're_new_password'], 'required','on' => 'changepass' ],
             [['dob', 'created_at', 'updated_at'], 'safe'],
