@@ -60,40 +60,33 @@ if($model->image) {
                 <div class="tools">
                     <a href="javascript:;" class="collapse" data-original-title="" title="">
                     </a>
-                    <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
-                    </a>
-                    <a href="javascript:;" class="reload" data-original-title="" title="">
-                    </a>
+<!--                    <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">-->
+<!--                    </a>-->
+<!--                    <a href="javascript:;" class="reload" data-original-title="" title="">-->
+<!--                    </a>-->
                     <a href="javascript:;" class="remove" data-original-title="" title="">
                     </a>
                 </div>
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-<!--                <form action="#" class="form-horizontal">-->
-                <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data', 'class' => 'form-horizontal']]); ?>
+                <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data', 'class' => 'horizontal-form']]); ?>
                     <div class="form-body">
-                        <h3 class="form-section"><?= $this->title ?></h3>
+                        <h3 class="form-section"><?= Yii::t('app', 'Employee Details') ?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'full_name', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter full name')]) ?>
+                                <?= $form->field($model, 'full_name')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter full name')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'password', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->passwordInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter password')]) ?>
+                                <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter password')]) ?>
                             </div>
                             <!--/span-->
                         </div>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'dob', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->widget(\kartik\date\DatePicker::classname(), [
+                                <?= $form->field($model, 'dob')->widget(\kartik\date\DatePicker::classname(), [
                                     'options' => ['placeholder' => Yii::t('app', 'Enter birth day..')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
@@ -106,9 +99,7 @@ if($model->image) {
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'image', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->widget(\kartik\widgets\FileInput::className(), [
+                                <?= $form->field($model, 'image')->widget(\kartik\widgets\FileInput::className(), [
                                     'options' => [
                                         'accept' => 'image/*'
                                     ],
@@ -138,39 +129,29 @@ if($model->image) {
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'gender', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => '']) ?>
+                                <?= $form->field($model, 'gender')->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => '']) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'phone_number', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 15, 'placeholder' => Yii::t('app', 'Enter phone number')]) ?>
+                                <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15, 'placeholder' => Yii::t('app', 'Enter phone number')]) ?>
                             </div>
                             <!--/span-->
                         </div>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'email', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter email')]) ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter email')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'note', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textarea(['rows' => 6, 'placeholder' => Yii::t('app', 'Enter note')]) ?>
+                                <?= $form->field($model, 'note')->textarea(['rows' => 6, 'placeholder' => Yii::t('app', 'Enter note')]) ?>
                             </div>
                             <!--/span-->
                         </div>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'start_date', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->widget(\kartik\date\DatePicker::classname(), [
+                                <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
                                     'options' => ['placeholder' => Yii::t('app', 'Enter start date work..')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
@@ -190,32 +171,26 @@ if($model->image) {
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($address, 'detail', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 100]) ?>
+                                <?= $form->field($address, 'detail')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter employee address')])->label(Yii::t('app', 'Address')) ?>
                             </div>
                             <div class="col-md-6">
                                 <?php
 
                                 if ($city->id) {
-                                    echo $form->field($city, 'id', [
-                                        'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                    ])->dropDownList(
-                                            \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                            [
-                                                'prompt'=>Yii::t('app', 'Select City'),
-                                                'onchange'=>'
+                                    echo $form->field($city, 'id')->dropDownList(
+                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+                                        [
+                                            'prompt'=>Yii::t('app', 'Select City'),
+                                            'onchange'=>'
                                         $.post( "index.php?r=employee/getdistrict&id="+$(this).val(), function( file ) {
                                             $( "select#district-id" ).length = 0;
                                             $( "select#district-id" ).html( file );
                                         });'
-                                            ]);
+                                        ]);
                                 } else {
-                                    echo $form->field($city, 'id', [
-                                        'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                    ])->dropDownList(
-                                            \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                            ['prompt'=>Yii::t('app', 'Select City')]);
+                                    echo $form->field($city, 'id')->dropDownList(
+                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+                                        ['prompt'=>Yii::t('app', 'Select City')]);
                                 }
 
                                 ?>
@@ -226,9 +201,7 @@ if($model->image) {
                                 <?php
 
                                 if ($city->id) {
-                                    echo $form->field($address, 'district_id', [
-                                        'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                    ])->dropDownList(
+                                    echo $form->field($address, 'district_id')->dropDownList(
                                         \yii\helpers\ArrayHelper::map(
                                             \common\models\District::find()
                                                 ->where(['city_id' => $city->id])
@@ -238,9 +211,7 @@ if($model->image) {
                                         ]
                                     );
                                 } else {
-                                    echo $form->field($address, 'district_id', [
-                                        'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                    ])->widget(\kartik\widgets\DepDrop::classname(), [
+                                    echo $form->field($address, 'district_id')->widget(\kartik\widgets\DepDrop::classname(), [
                                         'options'=>['prompt' => Yii::t('app', 'Select District')],
                                         'pluginOptions'=>[
                                             'depends'=>[Html::getInputId($city, 'id')],
@@ -262,17 +233,15 @@ if($model->image) {
                         <h3 class="form-section"><?= Yii::t('app', 'Permission')?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'assignments', [
-                                    'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->multiselect(
+                                <?= $form->field($model, 'assignments')->multiselect(
                                     \yii\helpers\ArrayHelper::map(
-                                    \Yii::$app->getAuthManager()->getRoles(),
-                                    'name',
-                                    function ($item) {
-                                        return $item->name . (strlen($item->description) > 0
-                                            ? ' [' . $item->description . ']'
-                                            : '');
-                                    }), [
+                                        \Yii::$app->getAuthManager()->getRoles(),
+                                        'name',
+                                        function ($item) {
+                                            return $item->name . (strlen($item->description) > 0
+                                                ? ' [' . $item->description . ']'
+                                                : '');
+                                        }), [
                                     'height' => '100%',
                                     'container' => ['class' => 'bg-white']
                                 ])?>
@@ -280,8 +249,7 @@ if($model->image) {
                             <div class="col-md-6"></div>
                         </div>
                     </div>
-
-                    <div class="form-actions">
+                    <div class="form-actions right">
                         <div class="row">
                             <div class="col-md-3">
                             </div>
@@ -294,7 +262,6 @@ if($model->image) {
                             </div>
                         </div>
                     </div>
-<!--                </form>-->
                 <?php ActiveForm::end(); ?>
                 <!-- END FORM-->
             </div>
