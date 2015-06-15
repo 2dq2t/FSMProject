@@ -756,6 +756,7 @@ HTML;
     {
 
         $modelCustomer = new Customer();
+        $modelCustomer->scenario = 'addCustomer';
         $modelGuest = new Guest();
 
         if ($modelCustomer->load(Yii::$app->request->post())

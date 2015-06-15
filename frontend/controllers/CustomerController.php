@@ -230,7 +230,7 @@ class CustomerController extends Controller
         }
 
         $modelCustomer = $this->findModel($id);
-        $modelCustomer->scenario = 'changepass';
+        $modelCustomer->scenario = 'changePassword';
         if($modelCustomer->load(Yii::$app->request->post())){
             $transaction = Yii::$app->db->beginTransaction();
             try{
