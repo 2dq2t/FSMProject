@@ -39,7 +39,7 @@ $product_in_cart = $cart_info['product_in_cart']
                                 href="<?php echo $baseUrl . 'index.php?r=site/view-detail&product=' . $product['product_name'] ?>"><?= $product['product_name'] ?></a>
                         </td>
                         <td class="text-right">x <?= $product['product_quantity'] ?></td>
-                        <td class="text-right"><?= number_format($product['product_price']) ?></td>
+                        <td class="text-right"><?= number_format($product['product_price']*$product['product_quantity']) ?></td>
                         <td class="text-center">
                             <button type="button" onclick="cart.remove(<?= $product['product_id'] ?>);"
                                     title="Remove" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
@@ -51,13 +51,8 @@ $product_in_cart = $cart_info['product_in_cart']
         <li>
             <div>
                 <table class="table table-bordered">
-
                     <tr>
-                        <td class="text-right"><strong>VAT (10%)</strong></td>
-                        <td class="text-right"><strong></strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>Tổng tiền</strong></td>
+                        <td class="text-right"><strong>Tổng tiền:</strong></td>
                         <td class="text-right"><strong><?=number_format($total_price)?></strong></td>
                     </tr>
                 </table>

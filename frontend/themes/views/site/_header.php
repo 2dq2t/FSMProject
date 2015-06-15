@@ -50,7 +50,7 @@ $baseUrl= Yii::$app->request->baseUrl;
         <div class="container">
             <div id="menu" class="main-menu">
 
-                <div class="nav-responsive"><span>Menu</span>
+                <div class="nav-responsive"><span>Danh mục</span>
 
                     <div class="expandable"></div>
                 </div>
@@ -86,13 +86,13 @@ $baseUrl= Yii::$app->request->baseUrl;
                                 <li class="dropdown myaccount"><a
                                         href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
                                         title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span>My Account</span> <span class="caret"></span></a>
+                                        data-toggle="dropdown"><span>Tài khoản của tôi</span> <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="index.php?r=site/register">Register</a>
+                                            <a href="index.php?r=site/register">Đăng ký</a>
                                         </li>
                                         <li>
-                                            <a href="index.php?r=site/login">Login</a>
+                                            <a href="index.php?r=site/login">Đăng nhập</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -109,22 +109,16 @@ $baseUrl= Yii::$app->request->baseUrl;
                                             <a href="#">Đơn hàng của tôi</a>
                                         </li>
                                         <li>
-                                            <a href="#">Sản phẩm yêu thích
-                                            </a>
-                                        </li>
-                                        <li>
                                             <a href="<?= $baseUrl."/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
                                         </li>
                                     </ul>
                                 </li>
-                            <?php endif; ?>
+
                             <li><a href="<?php echo Yii::$app->request->baseUrl."/index.php?r=site/wish-list";?>"
                                    id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if(!Yii::$app->user->isGuest) {
                                             $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                                             echo " (".$number_product .")";}?></span></a></li>
-                            <li class="checkout"><a
-                                    href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/checkout"
-                                    title="Checkout"> <span>Thanh toán</span></a></li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>

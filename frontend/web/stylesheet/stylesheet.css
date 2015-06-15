@@ -307,6 +307,7 @@ div.required .control-label:before {
     margin: 0 auto 0 -43px;
     padding-left: 35px;
     width: 1064px;
+    display: inline-block;
  }
  
  
@@ -1926,7 +1927,7 @@ background: url("../images/megnor/sprite.png") no-repeat scroll 1px -229px trans
 .product-compare .btn-primary{margin:5px 0 5px;}
 .productpage .write-review,.productpage .review-count{margin: 0 10px;}
 
-.checkout-cart .hasCustomSelect{width: 95% !important;}
+.common-home .hasCustomSelect{width: 95% !important;}
 .category_img img{max-width:none;}
 .category_description {  margin-top: 4px;}
 .category_thumb { margin-bottom: 25px;}
@@ -2034,7 +2035,7 @@ font-size:18px;
 .productpage .rating-wrapper{ margin: 15px 0;  border-bottom: 1px solid #e7e7e7;    line-height: 20px;}
 #content.productpage .list-unstyled.price li.discount{display:block;  color: #4d4d4d; font-size: 12px; font-weight: normal;padding:0;}	
 #product .radio, #product .checkbox	{margin:0;}
-.checkout-cart .input-group.btn-block .form-control {padding: 3px 5px; text-align: center; width:40px;}
+.common-home .input-group.btn-block .form-control {padding: 3px 5px; text-align: center; width:50px;}
 .table.table-bordered .input-group-btn { float: left;}
 .checkout-cart h2 , .information-contact h3 {  font-size: 14px;font-weight:bold;}
 .account-register h2 {margin-bottom:15px;}
@@ -2084,11 +2085,11 @@ font-size:18px;
 .product-compare .table-bordered tr td:first-child { font-weight: bold; text-align: right;}
 .product-compare .table-bordered tbody tr td { border: 1px solid #dddddd;text-align:center;}
 .product-compare .table-bordered thead tr td:first-child { border: 1px solid #dddddd !important;  text-align: left;  background-color: #f7f7f7;}
-.product-search .sortcat {  width: 35%;}
-.product-search .subcategory {  width: auto;}
-.product-search .search-checkbox { margin: 10px 0 0;}
-.product-search  h2{font-weight:bold;font-size:14px;}
-.product-search #button-search {float: right;  margin-bottom: 15px;}
+.common-home .sortcat {  width: 35%;}
+.common-home .subcategory {  width: auto;}
+.common-home .search-checkbox { margin: 10px 0 0;}
+.common-home  h2{font-weight:bold;font-size:14px;}
+.common-home #button-search {float: right;  margin-bottom: 15px;}
 .bootstrap-datetimepicker-widget td.active, .bootstrap-datetimepicker-widget td.active:hover{background-color:#8ac42f !important; color:#fff !important;}
 .bootstrap-datetimepicker-widget td.day:hover, .bootstrap-datetimepicker-widget td.hour:hover, .bootstrap-datetimepicker-widget td.minute:hover, .bootstrap-datetimepicker-widget td.second:hover{background-color:#6ccbe2 !important; color:#fff!important;}
 .accordion-toggle .fa-caret-down::before{vertical-align:-4px;}

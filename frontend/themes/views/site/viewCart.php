@@ -6,7 +6,7 @@
  * Time: 10:41 CH
  */
 $baseUrl = Yii::$app->request->baseUrl;
-$this->title = "Yêu thích";
+$this->title = "Giỏ hàng";
 ?>
 <?php
 $cart_info = Yii::$app->Header->cartInfo();
@@ -21,8 +21,8 @@ require('_header.php');
     <ul class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/wish-list"; ?>"
-               title="Danh mục yêu thích">Giỏ hàng</a>
+            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/view-cart"; ?>"
+               title="Giỏ hàng">Giỏ hàng</a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -35,7 +35,6 @@ require('_header.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">
-            <div class="row">
                 <h1 id="wish_list" class="page-title">Giỏ hàng <?php if (!Yii::$app->user->isGuest) {
                         $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                         echo " (" . $number_product . ")";
@@ -49,7 +48,7 @@ require('_header.php');
                             class="btn btn-primary">Tiếp tục mua hàng</a></div>
                 </div>
                 <?php }else { ?>
-                <form action="http://opencart-demos.org/OPC05/OPC050107/index.php?route=checkout/cart/edit"
+                <form action="<?=$baseUrl."/index.php?r=site/update-cart"?>"
                       method="post" enctype="multipart/form-data">
 
                     <div class="table-responsive">
@@ -78,28 +77,27 @@ require('_header.php');
                                             href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= $product['product_name'] ?></a>
                                         <br/>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <div class="input-group btn-block" style="max-width: 200px;">
-                                            <input type="text" name="quantity[<?= $product['product_id'] ?>]"
-                                                   value="<?= $product['product_quantity'] ?>" size="1"
-                                                   class="form-control">
-                                        <span class="input-group-btn">
-                                            <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary"
-                                                    data-original-title="Cập nhật"><i class="fa fa-refresh"></i>
-                                            </button>
-                                            <button id="<?= "remove" . $product['product_id'] ?>" type="button"
-                                                    data-toggle="tooltip" title="Xóa"
-                                                    class="btn btn-danger"
-                                                    onclick="cart.remove(<?= $product['product_id'] ?>);"><i
-                                                    class="fa fa-times-circle"></i>
-                                            </button>
-                                        </span>
+                                            <input class="form-control"type="number" min="1" name="update_cart[<?= $product['product_id'] ?>]"
+                                                   value="<?= $product['product_quantity'] ?>">
+                                            <span class="input-group-btn">
+                                                <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary"
+                                                        data-original-title="Cập nhật"><i class="fa fa-refresh"></i>
+                                                </button>
+                                                <button id="<?= "remove" . $product['product_id'] ?>" type="button"
+                                                        data-toggle="tooltip" title="Xóa"
+                                                        class="btn btn-danger"
+                                                        onclick="cart.remove(<?= $product['product_id'] ?>);"><i
+                                                        class="fa fa-times-circle"></i>
+                                                </button>
+                                            </span>
                                         </div>
                                     </td>
                                     <td class="text-center"><?php
                                         echo number_format($product['product_price']) . " VND";
                                         ?></td>
-                                    <td class="text-center"><?php $total_price_of_one_product = $product['product_price'] * $product['product_quantity'];
+                                    <td class="text-center"><?php $total_price_of_one_product = $product['product_price']*$product['product_quantity'];
                                         echo number_format($total_price_of_one_product) . " VND"
                                         ?></td>
 
@@ -126,33 +124,33 @@ require('_header.php');
                                 <label class="col-sm-2 control-label" for="input-coupon">Sử dụng mã giảm giá</label>
 
                                 <div class="input-group">
-                                    <input type="text" name="coupon" value="" placeholder="Nhập mã giảm giá"
-                                           id="input-coupon" class="form-control">
+                                    <input type="text" name="voucher" value="" placeholder="Nhập mã giảm giá"
+                                           id="input-voucher" class="form-control">
                                     <span class="input-group-btn">
-                                    <input type="button" value="Áp dụng" id="button-coupon" data-loading-text="Loading..."
+                                    <input type="button" value="Áp dụng" id="button-voucher" data-loading-text="Loading..."
                                            class="btn btn-primary">
                                     </span>
                                 </div>
                                 <script type="text/javascript"><!--
-                                    $('#button-coupon').on('click', function () {
+                                    $('#button-voucher').on('click', function() {
                                         $.ajax({
-                                            url: 'index.php?route=checkout/coupon/coupon',
+                                            url: 'index.php?r=site/voucher',
                                             type: 'post',
-                                            data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+                                            data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
                                             dataType: 'json',
-                                            beforeSend: function () {
-                                                $('#button-coupon').button('loading');
+                                            beforeSend: function() {
+                                                $('#button-voucher').button('loading');
                                             },
-                                            complete: function () {
-                                                $('#button-coupon').button('reset');
+                                            complete: function() {
+                                                $('#button-voucher').button('reset');
                                             },
-                                            success: function (json) {
+                                            success: function(json) {
                                                 $('.alert').remove();
 
                                                 if (json['error']) {
                                                     $('.breadcrumb').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 
-                                                    $('html, body').animate({scrollTop: 0}, 'slow');
+                                                    $('html, body').animate({ scrollTop: 0 }, 'slow');
                                                 }
 
                                                 if (json['redirect']) {
@@ -173,10 +171,6 @@ require('_header.php');
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <td class="text-right"><strong>VAT (10%):</strong></td>
-                                <td class="text-right"></td>
-                            </tr>
-                            <tr>
                                 <td class="text-right"><strong>Tổng tiền:</strong></td>
                                 <td class="text-right"><?= number_format($total_price) . " VND" ?></td>
                             </tr>
@@ -194,7 +188,6 @@ require('_header.php');
                 </div>
                 <?php } ?>
             </div>
-        </div>
         <script type="text/javascript"><!--
             $(document).ready(function () {
                 $('.thumbnails').magnificPopup({

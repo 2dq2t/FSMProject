@@ -29,7 +29,6 @@ require('_header.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">
-            <div class="row">
                 <h1 id="wish_list" class="page-title">Danh mục yêu thích <?php if (!Yii::$app->user->isGuest) {
                         $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                         echo " (" . $number_product . ")";
@@ -92,7 +91,6 @@ require('_header.php');
                     </table>
                 </div>
                 <?php } ?>
-            </div>
 
             <div class="box">
 

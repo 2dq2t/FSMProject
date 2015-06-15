@@ -32,7 +32,7 @@ class Header extends Component{
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer) * $item['product_quantity'];
                 $total_product += $item['product_quantity'];
-                $product_cart[$key]['product_price'] = Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                $product_cart[$key]['product_price'] = Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer);
                 $product_cart[$key]['product_image'] = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
                 $product_name = (new Query())->select('name')->from('product')->where(['id' => $item['product_id'], 'active' => 1])->one();
                 $product_cart[$key]['product_name'] = $product_name['name'];

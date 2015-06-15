@@ -153,29 +153,6 @@ var cart = {
 			}
 		});
 	},
-	'update': function(key, quantity) {
-		$.ajax({
-			url: 'index.php?r=site/wish-list&cart=add',
-			type: 'post',
-			data: 'key=' + key + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
-			dataType: 'json',
-			beforeSend: function() {
-				$('#cart > button').button('loading');
-			},
-			success: function(json) {
-                var json = $.parseJSON(json);
-				$('#cart > button').button('reset');
-
-				$('#cart-total').html(json['total']);
-
-				if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
-					location = 'index.php?r=site/check-out';
-				} else {
-					$('#cart > ul').load('index.php?r=site/cart-info ul li');
-				}
-			}
-		});
-	},
 	'remove': function(product_id) {
 		$.ajax({
 			url: 'index.php?r=site/remove-from-cart',
@@ -195,35 +172,6 @@ var cart = {
 					location = 'index.php?r=site/view-cart';
 				} else {
 					$('#cart > ul').load('index.php?r=site/cart-info ul li');
-				}
-			}
-		});
-	}
-}
-
-var voucher = {
-	'add': function() {
-
-	},
-	'remove': function(key) {
-		$.ajax({
-			url: 'index.php?route=checkout/cart/remove',
-			type: 'post',
-			data: 'key=' + key,
-			dataType: 'json',
-			beforeSend: function() {
-				$('#cart > button').button('loading');
-			},
-			complete: function() {
-				$('#cart > button').button('reset');
-			},
-			success: function(json) {
-				$('#cart-total').html(json['total']);
-
-				if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
-					location = 'index.php?route=checkout/cart';
-				} else {
-					$('#cart > ul').load('index.php?route=common/cart/info ul li');
 				}
 			}
 		});

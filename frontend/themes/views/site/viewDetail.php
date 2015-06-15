@@ -249,26 +249,6 @@ $this->title =$product_detail['name'];
 </div>
 
 <script type="text/javascript"><!--
-    $('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
-        $.ajax({
-            url: 'index.php?route=product/product/getRecurringDescription',
-            type: 'post',
-            data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
-            dataType: 'json',
-            beforeSend: function() {
-                $('#recurring-description').html('');
-            },
-            success: function(json) {
-                $('.alert, .text-danger').remove();
-
-                if (json['success']) {
-                    $('#recurring-description').html(json['success']);
-                }
-            }
-        });
-    });
-    //--></script>
-<script type="text/javascript"><!--
     $('#button-cart').on('click', function() {
         $.ajax({
             url: 'index.php?r=site/add-to-cart',
