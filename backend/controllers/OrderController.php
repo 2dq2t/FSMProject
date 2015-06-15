@@ -243,14 +243,6 @@ class OrderController extends Controller
                         ]);
                     }
                 } else {
-                    if ($model->order_date) {
-                        $model->order_date = date('m/d/Y', $model->order_date);
-                    }
-
-                    if ($model->receiving_date) {
-                        $model->receiving_date = date('m/d/Y', $model->receiving_date);
-                    }
-
                     if ($transaction->getIsActive()) {
                         $transaction->rollBack();
                     }
