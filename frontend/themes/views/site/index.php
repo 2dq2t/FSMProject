@@ -111,7 +111,7 @@ require('_header.php');
                                                             alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
                                                             class="img-responsive"/></a>
                                                     <?php
-                                                    if(isset($product['product_offer'])&&$product['product_offer'] >0)
+                                                    if(isset($product['product_offer'])&& ($product['product_offer'] >0))
                                                     echo "<span class='saleicon sale'>Sale</span>";
 
                                                     if(isset($product['product_rating'])&&$product['product_rating']>0) {
@@ -139,7 +139,7 @@ require('_header.php');
                                                             <?php
                                                             if(!empty($product['product_offer'])){
                                                                 echo "<span class='price-old'>".number_format($product['product_price'])." VND</span>";
-                                                                $new_price = $product['product_price']*(100/$product['product_offer']);
+                                                                $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'],$product['product_offer']);
                                                                 echo "<span class='price-new'>".number_format($new_price)." VND</span>";
                                                                 echo "<span class='price-tax'>Thuế: ".number_format($product['product_tax'])." VND</span>";
                                                             }
@@ -186,7 +186,7 @@ require('_header.php');
                                                                 alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>"
                                                                 class="img-responsive"/></a>
                                                         <?php
-                                                        if(isset($product['product_offer'])&&$product['product_offer'] >0)
+                                                        if(isset($product['product_offer'])&&($product['product_offer'] >0))
                                                             echo "<span class='saleicon sale'>Sale</span>";
 
                                                         if(isset($product['product_rating'])&&$product['product_rating']>0) {
@@ -214,7 +214,7 @@ require('_header.php');
                                                                 <?php
                                                                 if(!empty($product['product_offer'])){
                                                                     echo "<span class='price-old'>".$product['product_price']." VND</span>";
-                                                                    $new_price = $product['product_price']*(100/$product['product_offer']);;
+                                                                    $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'],$product['product_offer']);
                                                                     echo "<span class='price-new'>".$new_price." VND</span>";
                                                                     echo "<span class='price-tax'>Thuế: ".$product['product_tax']." VND</span>";
                                                                 }

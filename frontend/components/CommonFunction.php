@@ -66,8 +66,12 @@ class CommonFunction extends Component{
     }
     public function productPrice($product_price,$product_offer){
         if($product_offer != 0)
-            return ($product_price*(100/$product_offer));
+            return $product_price - ($product_price*($product_offer/100));
         else
             return $product_price;
+    }
+    public function sellingPrice($product_price,$product_offer){
+        $selling_price = $product_price - ($product_price*($product_offer/100));
+        return $selling_price;
     }
 }

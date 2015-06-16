@@ -96,7 +96,7 @@ $this->title =$product_detail['name'];
                             echo "</li>";
                         }
                         if(!empty($product_offer)){
-                            $price_offer = $product_detail['price']-$product_offer;
+                            $price_offer = Yii::$app->CommonFunction->sellingPrice($product_detail['price'],$product_offer);;
                             echo "<li>";
                             echo "<h2 class='special-price'>".number_format($price_offer)." VND</h2>";
                             echo "<li>";
@@ -334,11 +334,17 @@ $this->title =$product_detail['name'];
                         if (json['success']) {
                             $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                             //$('#star').raty('reload');
+                            setTimeout(function() {
+                                $('.alert').remove();
+                            }, 2000);
                             $('#star').raty('readOnly', true);
                         }
 
                         if (json['error']) {
                             $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            setTimeout(function() {
+                                $('.alert').remove();
+                            }, 2000);
                         }
 
                         $('html, body').animate({ scrollTop: 0 }, 'slow');

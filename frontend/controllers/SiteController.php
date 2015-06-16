@@ -147,40 +147,39 @@ class SiteController extends Controller
         $season = Season::find()->all();
         $season_id = null;
         foreach ($season as $season_item) {
-            $season_from = date("d-m", $season_item['from']);
-            $season_to = date("d-m", $season_item['to']);
-            $today = date("d-m");
+            $season_from = date("m-d", $season_item['from']);
+            $season_to = date("m-d", $season_item['to']);
+            $today = date("m-d");
             if ($season_from <= $today && $today <= $season_to) {
-                $season_id = $season_item['id'];
-            }
-        }
-        $product_id = ProductSeason::find()->where(['season_id' => $season_id])->all();
-        if (!empty($product_id[0]['season_id'])) {
-            foreach ($product_id as $product_item) {
-                $product = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'id' => $product_item['product_id']])->one();
-                if (!empty($product['product_id'])) {
-                    //get product image
-                    $product_image = Yii::$app->CommonFunction->getProductOneImage($product_item['product_id']);
-                    $product['product_image'] = $product_image;
-                    //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getProductOffer($product_item['product_id']);
-                    $product['product_offer'] = $product_offer;
+                $product_id = ProductSeason::find()->where(['season_id' =>$season_item['id']])->all();
+                if (!empty($product_id[0]['season_id'])) {
+                    foreach ($product_id as $product_item) {
+                        $product = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'id' => $product_item['product_id']])->one();
+                        if (!empty($product['product_id'])) {
+                            //get product image
+                            $product_image = Yii::$app->CommonFunction->getProductOneImage($product_item['product_id']);
+                            $product['product_image'] = $product_image;
+                            //get product offer
+                            $product_offer = Yii::$app->CommonFunction->getProductOffer($product_item['product_id']);
+                            $product['product_offer'] = $product_offer;
 
-                    //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->productRating($product_item['product_id']);
-                    $product['product_rating'] = $rating_average;
+                            //Get rating average
+                            $rating_average = Yii::$app->CommonFunction->productRating($product_item['product_id']);
+                            $product['product_rating'] = $rating_average;
 
-                    array_push($product_season, $product);
-                    $product = null;
+                            array_push($product_season, $product);
+                            $product = null;
+                        }
+                    }
                 }
             }
         }
+
         $product_season = Yii::$app->CommonFunction->custom_shuffle($product_season);
 
         //get slide image
         $slide_show = (new Query())->select(['slide_show.id as slide_show_id', 'slide_show.path as slide_show_path', 'product.name as product_name'])->from('slide_show')->leftJoin('product', 'slide_show.product_id = product.id')->where(['slide_show.active' => 1])->all();
 
-        echo $width;
         //get number wishlist
         /* $number_product = WishList::find()->where(['customer_id'=>Yii::$app->user->identity->getId()])->count();
          echo $number_product;*/
@@ -584,7 +583,7 @@ class SiteController extends Controller
                 }
                 $check_exist_rating = ProductRating::find()->where(['product_id' => $product_id, 'customer_id' => Yii::$app->user->identity->getId()])->one();
                 if (!empty($check_exist_rating['rating_id']))
-                    $json['error'] = "Sản phẩm này đã được bạn đánh giá!";
+                    $json['error'] = "Bạn chỉ được đánh giá một lần/ 1 sản phẩm!";
                 else {
                     if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
                         if (isset($postData['score'])) {
