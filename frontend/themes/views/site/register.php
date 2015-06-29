@@ -1,7 +1,7 @@
 <?php
 
 use kartik\widgets\ActiveForm;
-$this->title = 'Đăng kí';
+$this->title = 'Đăng ký';
 
 ?>
 <?php require('_header.php');
@@ -11,49 +11,30 @@ $this->title = 'Đăng kí';
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <div class="box">
-                <div class="box-heading">Account</div>
+                <div class="box-heading">Tài Khoản</div>
                 <div class="list-group">
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/login"
-                       class="list-group-item">Login</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/register"
-                        class="list-group-item">Register</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/forgotten"
-                        class="list-group-item">Forgotten Password</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
-                       class="list-group-item">My Account</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/address"
-                       class="list-group-item">Address Books</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist"
-                        class="list-group-item">Wish List</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order"
-                        class="list-group-item">Order History</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/download"
-                        class="list-group-item">Downloads</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/reward"
-                        class="list-group-item">Reward Points</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/return"
-                        class="list-group-item">Returns</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/transaction"
-                        class="list-group-item">Transactions</a> <a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/newsletter"
-                        class="list-group-item">Newsletter</a><a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/recurring"
-                        class="list-group-item">Recurring payments</a>
+                    <a href="#"
+                       class="list-group-item">Đăng Nhập</a>
+                    <a href="#"
+                        class="list-group-item">Đăng Ký</a>
+                    <a href="#"
+                        class="list-group-item">Quên Mật Khẩu</a>
+                    <a href="#"
+                       class="list-group-item">Yêu Thích</a>
                 </div>
             </div>
         </column>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i
+                <li><a href="#"><i
                             class="fa fa-home"></i></a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Account</a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/register">Register</a>
+                <li><a href="#">Tài Khoản</a></li>
+                <li><a href="#">Đăng Ký</a>
                 </li>
             </ul>
-            <h2>Register Account</h2>
+            <h2>Đăng Ký Tài Khoản</h2>
 
-            <p>If you already have an account with us, please login at the <a
-                    href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/login">login page</a>.</p>
+            <p>Hãy đăng ký để trở thành khách hàng của Fresh Garden</p>
             <?php $form = ActiveForm::begin([
                 'type'=>ActiveForm::TYPE_HORIZONTAL,
                 'formConfig'=>['labelSpan'=>3, 'deviceSize'=>ActiveForm::SIZE_SMALL],
@@ -62,61 +43,55 @@ $this->title = 'Đăng kí';
             <fieldset id="information">
                 <legend>Thông tin cá nhân</legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Họ và tên</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelGuest, 'full_name',[
-                            'showLabels'=>false
-                        ])->textInput(['placeholder'=>'Họ và tên']); ?>
+                            'showLabels'=>true
+                        ])->textInput(['placeholder'=> $modelGuest->getAttributeLabel('full_name')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Email</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelGuest, 'email',[
-                            'showLabels'=>false
-                        ])->textInput(['placeholder'=>'Email']); ?>
+                            'showLabels'=>true
+                        ])->textInput(['placeholder'=> $modelGuest->getAttributeLabel('email')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Số điện thoại</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelGuest, 'phone_number',[
-                            'showLabels'=>false
-                        ])->textInput(['placeholder'=>'Số điện thoại']); ?>
+                            'showLabels'=>true
+                        ])->textInput(['placeholder'=> $modelGuest->getAttributeLabel('phone_number')]); ?>
                     </div>
                 </div>
             </fieldset>
             <fieldset id="password" class="register">
                 <legend>Tài khoản</legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Tên Đăng Nhập</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelCustomer, 'username',[
-                            'showLabels'=>false
-                        ])->textInput(['placeholder'=>'Tên Đăng Nhập']); ?>
+                            'showLabels'=>true
+                        ])->textInput(['placeholder'=> $modelCustomer->getAttributeLabel('username')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Mật Khẩu</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelCustomer, 'password',[
-                            'showLabels'=>false
-                        ])->passwordInput(['placeholder'=>'Mật Khẩu']); ?>
+                            'showLabels'=>true
+                        ])->passwordInput(['placeholder'=> $modelCustomer->getAttributeLabel('password')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 control-label" for="input-fullname">Xác Nhận Mật Khẩu</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <?= $form->field($modelCustomer, 're_password',[
-                            'showLabels'=>false
-                        ])->passwordInput(['placeholder'=>'Xác Nhận Mật Khẩu']); ?>
+                            'showLabels'=>true
+                        ])->passwordInput(['placeholder'=> $modelCustomer->getAttributeLabel('re_password')]); ?>
                     </div>
                 </div>
             </fieldset>
             <div class="buttons">
-                <div class="pull-right">I have read and agree to the <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information/agree&amp;information_id=3" class="agree"><b>Privacy Policy</b></a>                        <input type="checkbox" name="agree" value="1" />
+                <div class="pull-right">Tôi đã đọc và đồng ý với điều khoản sử dụng của <a href="#" class="agree"><b>Fresh Garden</b></a>
                     &nbsp;
-                    <input type="submit" value="Đăng ký" class="btn btn-primary" />
+                    <input type="submit" value="Đăng Ký" class="btn btn-primary" />
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

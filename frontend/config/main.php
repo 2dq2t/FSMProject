@@ -12,10 +12,8 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-    'components' => [/*
-        'request' => [
-            'baseUrl' => $baseUrl,
-        ],*/
+    'components' => [
+
         'user' => [
             'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
@@ -32,13 +30,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*'urlManager' => [
-            'baseUrl' => '/',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'suffix'=>'.html',
-            'rules' => []
-        ],*/
+
 		'view'=>[
 			'theme'=>[
 				'pathMap'=>[
@@ -58,7 +50,6 @@ return [
                 'yii\bootstrap\BootstrapAsset' => [
                     'css' => [],
                 ],
-
             ],
         ],
     ],

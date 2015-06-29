@@ -84,11 +84,11 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'username' => Yii::t('app', 'Tên Đăng Nhập'),
-            'password' => Yii::t('app', 'Mật Khẩu'),
-            'new_password' => Yii::t('app', 'Mật Khẩu Mới'),
-            're_password' => Yii::t('app', 'Xác Nhận Mật Khẩu'),
-            're_new_password' => Yii::t('app', 'Xác Nhận Mật Khẩu Mới'),
+            'username' => Yii::t('app', 'Username'),
+            'password' => Yii::t('app', 'Password'),
+            'new_password' => Yii::t('app', 'New Password'),
+            're_password' => Yii::t('app', 'Confirm Password'),
+            're_new_password' => Yii::t('app', 'Confirm Password'),
             'avatar' => Yii::t('app', 'Avatar'),
             'dob' => Yii::t('app', 'Date of birth'),
             'gender' => Yii::t('app', 'Gender'),

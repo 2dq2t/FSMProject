@@ -5,7 +5,7 @@
  * Date: 27/05/2015
  * Time: 7:25 CH
  */
-$baseUrl= Yii::$app->request->baseUrl;
+$baseUrl = Yii::$app->request->baseUrl;
 ?>
 <header>
     <div class="header">
@@ -20,7 +20,7 @@ $baseUrl= Yii::$app->request->baseUrl;
 
                 <div class="col-sm-4 header-logo">
                     <div id="logo">
-                        <a href="<?php echo $baseUrl?>"><img
+                        <a href="<?php echo $baseUrl ?>"><img
                                 src="images/data/logo.png"
                                 title="Your Store" alt="Your Store" class="img-responsive"/></a>
                     </div>
@@ -36,7 +36,7 @@ $baseUrl= Yii::$app->request->baseUrl;
                         </div>
                     </div>
                     <div class="col-sm-3 header-cart">
-                       <?php require('cartInfo.php');?>
+                        <?php require('cartInfo.php'); ?>
                     </div>
                 </div>
             </div>
@@ -64,17 +64,17 @@ $baseUrl= Yii::$app->request->baseUrl;
                     }
                     ?>
                     <?php foreach (array_keys($result) as $category): ?>
-                    <li>
-                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category?>"><?= $category ?></a>
+                        <li>
+                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= $category ?></a>
 
-                        <ul>
-                            <?php foreach ($result[$category] as $key) { ?>
-                            <li>
-                                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$key?>"><?= $key ?></a>
-                            </li>
-                            <?php }; ?>
-                        </ul>
-                    </li>
+                            <ul>
+                                <?php foreach ($result[$category] as $key) { ?>
+                                    <li>
+                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $key ?>"><?= $key ?></a>
+                                    </li>
+                                <?php }; ?>
+                            </ul>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -82,42 +82,39 @@ $baseUrl= Yii::$app->request->baseUrl;
                 <div class="container">
                     <div id="top-links" class="nav">
                         <ul class="list-inline">
-                            <?php if(Yii::$app->user->isGuest): ?>
-                                <li class="dropdown myaccount"><a
-                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
-                                        title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span>Tài khoản của tôi</span> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
-                                        <li>
-                                            <a href="index.php?r=site/register">Đăng ký</a>
-                                        </li>
-                                        <li>
-                                            <a href="index.php?r=site/login">Đăng nhập</a>
-                                        </li>
-                                    </ul>
+                            <?php if (Yii::$app->user->isGuest): ?>
+                                <li>
+                                    <a href="index.php?r=site/register">Đăng Ký</a>
+                                </li>
+                                <li>
+                                    <a href="index.php?r=site/login">Đăng Nhập</a>
                                 </li>
                             <?php else: ?>
                                 <li class="dropdown myaccount"><a
-                                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account"
+                                        href="#"
                                         title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span> <span class="caret"></span></a>
+                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span>
+                                        <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>">Tài khoản của tôi</a>
+                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>">Tài
+                                                khoản của tôi</a>
                                         </li>
                                         <li>
                                             <a href="#">Đơn hàng của tôi</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $baseUrl."/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
+                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
                                         </li>
                                     </ul>
                                 </li>
 
-                            <li><a href="<?php echo Yii::$app->request->baseUrl."/index.php?r=site/wish-list";?>"
-                                   id="wishlist-total" title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if(!Yii::$app->user->isGuest) {
-                                            $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
-                                            echo " (".$number_product .")";}?></span></a></li>
+                                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/wish-list"; ?>"
+                                       id="wishlist-total"
+                                       title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if (!Yii::$app->user->isGuest) {
+                                                $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
+                                                echo " (" . $number_product . ")";
+                                            } ?></span></a></li>
                             <?php endif; ?>
                         </ul>
                     </div>
