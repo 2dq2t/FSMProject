@@ -7,7 +7,7 @@
  */
 ?>
 <div class="box">
-    <div class="box-heading">Danh mục</div>
+    <div class="box-heading"><?= Yii::t('app', 'CategoryLabel') ?></div>
     <div class="box-content ">
         <ul class="box-category treeview-list treeview">
             <?php
@@ -20,16 +20,16 @@
             }
             ?>
             <?php foreach (array_keys($result) as $category): ?>
-            <li>
-                <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category?>"><?= $category ?></a>
-                <ul>
-                    <?php foreach ($result[$category] as $key) { ?>
-                    <li>
-                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$key?>"><?= $key ?></a>
-                    </li>
-                    <?php }; ?>
-                </ul>
-            </li>
+                <li>
+                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= $category ?></a>
+                    <ul>
+                        <?php foreach ($result[$category] as $key) { ?>
+                            <li>
+                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $key ?>"><?= $key ?></a>
+                            </li>
+                        <?php }; ?>
+                    </ul>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>

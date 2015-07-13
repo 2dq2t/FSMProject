@@ -3574,7 +3574,7 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 }
 
 .input-group-btn:last-child>.btn,.input-group-btn:last-child>.btn-group {
-    margin-left: -1px;
+    margin-left: 5px;
 }
 .checkout-cart .input-group-btn:last-child > .btn, .checkout-cart .input-group-btn:last-child > .btn-group{ margin-left: 3px;}
 .nav {
@@ -4677,7 +4677,7 @@ a.list-group-item.active>.badge,.nav-pills>.active>a>.badge {
 .alert .fa-check-circle{display:none;}
 
 .alert-success ,.alert-info {
-    background: url("../../images/megnor/success.png") no-repeat scroll 10px center #3EE874;
+    background: url("../../images/megnor/success.png") no-repeat scroll 10px center #EFEFEF;
     border: 1px solid #dbdee1;
     border-radius: 5px;
 }

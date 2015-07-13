@@ -5,121 +5,138 @@
  * Date: 27/05/2015
  * Time: 3:09 CH
  */
+$this->title = Yii::t('app', 'CategoryTitle');
 ?>
 <?php require('_header.php');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="<?=Yii::$app->request->baseUrl?>"><i class="fa fa-home"></i></a></li>
-        <li><a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name?>"><?=$category_name?></a></li>
+        <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
+        <li>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"><?= $category_name ?></a>
+        </li>
     </ul>
-<div class="row content-subinner">
-    <column id="column-left" class="col-sm-3 hidden-xs">
-        <?php
+    <div class="row content-subinner">
+        <column id="column-left" class="col-sm-3 hidden-xs">
+            <?php
             require('_category.php');
             echo $this->render('_leftBanner');
             require('_specialProduct.php');
             require('_bestSeller.php');
-        ?>
-    </column>
-    <div id="content" class="col-sm-9 categorypage">
-        <h2 class="page-title"><?=$category_name?></h2>
-        <div class="row category_thumb">
-            <div class="col-sm-2 category_img"><img src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/inner_banner-720x112.jpg" alt="Electronics" title="Electronics" class="img-thumbnail" /></div>
-            <div class="col-sm-10 category_description">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</div>
-        </div>
+            ?>
+        </column>
+        <div id="content" class="col-sm-9 categorypage">
+            <h2 class="page-title"><?= $category_name ?></h2>
 
-        <div class="category_filter">
-            <div class="col-md-4 btn-list-grid">
-                <div class="btn-group">
-                    <button type="button" id="list-view" class="btn btn-default list" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
-                    <button type="button" id="grid-view" class="btn btn-default grid" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
-                </div>
+            <div class="row category_thumb">
+                <div class="col-sm-2 category_img"><img
+                        src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/inner_banner-720x112.jpg"
+                        alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
             </div>
-            <div class="pagination-right">
-                <div class="sort-by-wrapper">
-                    <div class="col-md-2 text-right sort-by">
-                        <label class="control-label" for="input-sort">Sắp xếp theo:</label>
-                    </div>
-                    <div class="col-md-3 text-right sort">
-                        <select id="input-sort" class="form-control" onchange="location = this.value;">
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name?>" selected="selected">Mặc định</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=ASC"?>">Tên (A - Z)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=name&order=DESC"?>">Tên (Z - A)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=ASC"?>">Giá (Thấp &gt; Cao)</option>
-                            <option value="<?= Yii::$app->request->baseUrl."/index.php?r=site/category&category=".$category_name."&sort=price&order=DESC"?>">Giá (Cao &gt; Thấp)</option>
-                        </select>
+
+            <div class="category_filter">
+                <div class="col-md-4 btn-list-grid">
+                    <div class="btn-group">
+                        <button type="button" id="list-view" class="btn btn-default list" data-toggle="tooltip"
+                                title="List"><i class="fa fa-th-list"></i></button>
+                        <button type="button" id="grid-view" class="btn btn-default grid" data-toggle="tooltip"
+                                title="Grid"><i class="fa fa-th"></i></button>
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <div class="row productlist-grid">
-            <?php foreach($category_product as $product){?>
-            <div class="product-layout product-list col-xs-12">
-                <div class="product-thumb product-block">
-                    <div class="product-block-inner">
-                        <div class="image">
-                            <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>"><img src="<?= $product['image_path']?>" alt="<?=$product['product_name']?>" title="<?=$product['product_name']?>" class="img-responsive" /></a>
-                            <?php
-                            if(isset($product['product_offer'])&&$product['product_offer'] >0)
-                                echo "<span class='saleicon sale'>Sale</span>";
-                            ?>
+                <div class="pagination-right">
+                    <div class="sort-by-wrapper">
+                        <div class="col-md-2 text-right sort-by">
+                            <label class="control-label" for="input-sort"><?= Yii::t('app', 'SortByLabel') ?></label>
                         </div>
-                        <div class="product-details">
-                            <div class="caption">
-                                <div class="left">
+                        <div class="col-md-3 text-right sort">
+                            <select id="input-sort" class="form-control" onchange="location = this.value;">
+                                <option
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"
+                                    selected="selected"><?= Yii::t('app', 'DefaultLabel') ?></option>
+                                <option
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                <option
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                <option
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                <option
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                            </select>
+                        </div>
+                    </div>
 
-                                    <h4><a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/view-detail&product=".$product['product_name']?>" title="<?=$product['product_name']?>">
-                                            <?=$product['product_name']?>				</a>
-                                    </h4>
+                </div>
+            </div>
+
+            <div class="row productlist-grid">
+                <?php foreach ($category_product as $product) { ?>
+                    <div class="product-layout product-list col-xs-12">
+                        <div class="product-thumb product-block">
+                            <div class="product-block-inner">
+                                <div class="image">
+                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                            src="<?= $product['image_path'] ?>" alt="<?= $product['product_name'] ?>"
+                                            title="<?= $product['product_name'] ?>" class="img-responsive"/></a>
+                                    <?php
+                                    if (isset($product['product_offer']) && $product['product_offer'] > 0)
+                                        echo "<span class='saleicon sale'>" . Yii::t('app', 'SaleLabel') . "</span>";
+                                    ?>
+                                </div>
+                                <div class="product-details">
+                                    <div class="caption">
+                                        <div class="left">
+
+                                            <h4>
+                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                   title="<?= $product['product_name'] ?>">
+                                                    <?= $product['product_name'] ?>                </a>
+                                            </h4>
 
 
-                                    <div class="desc"><?= $product['product_intro']?></div>
+                                            <div class="desc"><?= $product['product_intro'] ?></div>
 
 
+                                            <div class="compare-wishlist">
+                                                <div class="wishlist-btn">
+                                                    <button type="button" class="wishlist" title="Add to Wish List"
+                                                            onclick="wishlist.add(<?php echo $product['product_id']; ?> );"><?= Yii::t('app', 'AddToWishListLabel') ?></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="right">
 
-                                    <div class="compare-wishlist">
-                                        <div class="wishlist-btn">
-                                            <button type="button" class="wishlist"  title="Add to Wish List" onclick="wishlist.add(<?php echo $product['product_id']; ?> );">Thêm vào danh mục yêu thích</button>
+                                            <div class="price">
+                                                <?php
+                                                if (isset($product['product_offer'])) {
+                                                    $new_price = $product['product_price'] * (100 / $product['product_offer']);
+                                                    echo number_format($new_price) . " " . Yii::t('app', 'VNDLabel');
+                                                } else
+                                                    echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') ?>
+                                                <span
+                                                    class="price-tax"><?= Yii::t('app', 'TaxLabel') . " " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') ?> </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="right">
+                                    <div class="button-group">
+                                        <button type="button" title="<?= Yii::t('app', 'AddToCartLabel') ?>"
+                                                class="addtocart" onclick="cart.add('31');">
+                                            <span><?= Yii::t('app', 'AddToCartLabel') ?></span></button>
 
-                                    <div class="price">
-                                        <?php
-                                        if(isset($product['product_offer'])) {
-                                            $new_price = $product['product_price'] * (100 / $product['product_offer']);
-                                            echo number_format($new_price)." VND";
-                                        }
-                                        else
-                                            echo number_format($product['product_price'])." VND"?>
-                                        <span class="price-tax">Thuế: <?= number_format($product['product_tax'])." VND"?> </span>
                                     </div>
+
                                 </div>
                             </div>
-                            <div class="button-group">
-                                <button type="button"   title="Add to Cart" class="addtocart" onclick="cart.add('31');"><span>Add to Cart</span></button>
-
-                            </div>
-
                         </div>
                     </div>
-                </div>
+                <?php } ?>
             </div>
-            <?php } ?>
-        </div>
-        <div class="pagination-wrapper">
-            <?php
-            echo \yii\widgets\LinkPager::widget([
-            'pagination' => $pages,
-            ]);
-            ?>
-            <!--<div class="col-sm-6 text-left page-link"><ul class="pagination"><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">|&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">&lt;</a></li><li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/category&amp;path=20&amp;page=1">1</a></li><li class="active"><span>2</span></li></ul></div>
-            <div class="col-sm-6 text-right page-result">Showing 13 to 18 of 18 (2 Pages)</div>-->
+            <div class="pagination-wrapper">
+                <?php
+                echo \yii\widgets\LinkPager::widget([
+                    'pagination' => $pages,
+                ]);
+                ?>
+            </div>
         </div>
     </div>
-</div>
 </div>

@@ -37,12 +37,13 @@ $baseUrl = Yii::$app->request->baseUrl;
                 </script>
                 <div class="header-right">
                     <div class="col-sm-5 header-search">
-                        <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']])?>
+                        <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']]) ?>
                         <!--                            <input type="hidden" name="mode" value="product_name">-->
                         <div class="typeahead">
                             <div class="u-posRelative">
                                 <input class="typeahead-hint" type="text" tabindex="-1" readonly>
-                                <input class="typeahead-input" id="search-input" type="text" name="q" placeholder="Tìm kiếm...">
+                                <input class="typeahead-input" id="search-input" type="text" name="q"
+                                       placeholder="<?= Yii::t('app', 'SearchLabel') ?>">
                                 <img class="typeahead-spinner" src="images/spinner.gif">
                             </div>
                             <div class="typeahead-menu"></div>
@@ -51,7 +52,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <?php \yii\widgets\ActiveForm::end(); ?>
                     </div>
                     <div class="col-sm-3 header-cart">
-                        <?php require('cartInfo.php');?>
+                        <?php require('cartInfo.php'); ?>
                     </div>
                 </div>
             </div>
@@ -65,7 +66,7 @@ $baseUrl = Yii::$app->request->baseUrl;
         <div class="container">
             <div id="menu" class="main-menu">
 
-                <div class="nav-responsive"><span>Danh mục</span>
+                <div class="nav-responsive"><span><?= Yii::t('app', 'CategoryLabel') ?></span>
 
                     <div class="expandable"></div>
                 </div>
@@ -126,7 +127,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 
                                 <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/wish-list"; ?>"
                                        id="wishlist-total"
-                                       title="Danh mục yêu thích (0)"> <span>Danh mục yêu thích <?php if (!Yii::$app->user->isGuest) {
+                                       title="Danh mục yêu thích (0)"> <span><?= Yii::t('app', 'WishListLabel') ?><?php if (!Yii::$app->user->isGuest) {
                                                 $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
                                                 echo " (" . $number_product . ")";
                                             } ?></span></a></li>

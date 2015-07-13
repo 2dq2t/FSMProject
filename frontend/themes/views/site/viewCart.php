@@ -6,7 +6,7 @@
  * Time: 10:41 CH
  */
 $baseUrl = Yii::$app->request->baseUrl;
-$this->title = "Giỏ hàng";
+$this->title = Yii::t('app', 'ShoppingCartLabel');
 ?>
 <?php
 $cart_info = Yii::$app->Header->cartInfo();
@@ -22,7 +22,7 @@ require('_header.php');
         <li><a href="index.php"><i class="fa fa-home"></i></a></li>
         <li>
             <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/view-cart"; ?>"
-               title="Giỏ hàng">Giỏ hàng</a>
+               title="Giỏ hàng"><?= Yii::t('app', 'ShoppingCartLabel') ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -35,31 +35,32 @@ require('_header.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">
-                <h1 id="wish_list" class="page-title">Giỏ hàng <?php if (!Yii::$app->user->isGuest) {
-                        $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
-                        echo " (" . $number_product . ")";
-                    } ?>
-                </h1>
-                <?php if (empty($product_in_cart)){?>
-                    <p> Không có sản phẩm nào trong giỏ hàng </p>
-                    <div class="buttons">
+            <h1 id="wish_list"
+                class="page-title"><?= Yii::t('app', 'ShoppingCartLabel') ?><?php if (!Yii::$app->user->isGuest) {
+                    $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
+                    echo " (" . $number_product . ")";
+                } ?>
+            </h1>
+            <?php if (empty($product_in_cart)) { ?>
+                <p><?= Yii::t('app', 'ShoppingCart_MSG01') ?></p>
+                <div class="buttons">
                     <div class="pull-right"><a
                             href="<?= $baseUrl ?>"
-                            class="btn btn-primary">Tiếp tục mua hàng</a></div>
+                            class="btn btn-primary"><?= Yii::t('app', 'ContinueShoppingLabel') ?></a></div>
                 </div>
-                <?php }else { ?>
-                <form action="<?=$baseUrl."/index.php?r=site/update-cart"?>"
+            <?php } else { ?>
+                <form action="<?= $baseUrl . "/index.php?r=site/update-cart" ?>"
                       method="post" enctype="multipart/form-data">
 
                     <div class="table-responsive">
                         <table class="table table-bordered shopping-cart">
                             <thead>
                             <tr>
-                                <td class="text-center col-sm-2">Hình ảnh</td>
-                                <td class="text-center">Tên sản phẩm</td>
-                                <td class="text-center">Số lượng</td>
-                                <td class="text-center">Giá sản phẩm</td>
-                                <td class="text-center">Tổng tiền</td>
+                                <td class="text-center col-sm-2"><?= Yii::t('app', 'ImageLabel') ?></td>
+                                <td class="text-left"><?= Yii::t('app', 'ProductNameLabel') ?></td>
+                                <td class="text-left"><?= Yii::t('app', 'QuantityLabel') ?></td>
+                                <td class="text-right"><?= Yii::t('app', 'ProductPrice') ?></td>
+                                <td class="text-right"><?= Yii::t('app', 'SumPriceLabel') ?></td>
 
                             </tr>
                             </thead>
@@ -73,20 +74,24 @@ require('_header.php');
                                                 alt="<?= $product['product_name'] ?>"
                                                 title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                                     </td>
-                                    <td class="text-center"><a
+                                    <td class="text-left"><a
                                             href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= $product['product_name'] ?></a>
                                         <br/>
                                     </td>
                                     <td class="text-left">
                                         <div class="input-group btn-block" style="max-width: 200px;">
-                                            <input class="form-control"type="number" min="1" name="update_cart[<?= $product['product_id'] ?>]"
+                                            <input class="form-control" type="number" min="1"
+                                                   name="update_cart[<?= $product['product_id'] ?>]"
                                                    value="<?= $product['product_quantity'] ?>">
                                             <span class="input-group-btn">
-                                                <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary"
-                                                        data-original-title="Cập nhật"><i class="fa fa-refresh"></i>
+                                                <button type="submit" data-toggle="tooltip" title=""
+                                                        class="btn btn-primary"
+                                                        data-original-title="<?= Yii::t('app', 'UpdateLabel') ?>"><i
+                                                        class="fa fa-refresh"></i>
                                                 </button>
                                                 <button id="<?= "remove" . $product['product_id'] ?>" type="button"
-                                                        data-toggle="tooltip" title="Xóa"
+                                                        data-toggle="tooltip"
+                                                        title="<?= Yii::t('app', 'DeleteLabel') ?>"
                                                         class="btn btn-danger"
                                                         onclick="cart.remove(<?= $product['product_id'] ?>);"><i
                                                         class="fa fa-times-circle"></i>
@@ -94,11 +99,11 @@ require('_header.php');
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="text-center"><?php
-                                        echo number_format($product['product_price']) . " VND";
+                                    <td class="text-right"><?php
+                                        echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
                                         ?></td>
-                                    <td class="text-center"><?php $total_price_of_one_product = $product['product_price']*$product['product_quantity'];
-                                        echo number_format($total_price_of_one_product) . " VND"
+                                    <td class="text-right"><?php $total_price_of_one_product = $product['product_price'] * $product['product_quantity'];
+                                        echo number_format($total_price_of_one_product) . " " . Yii::t('app', 'VNDLabel');
                                         ?></td>
 
                                 </tr>
@@ -107,50 +112,53 @@ require('_header.php');
                         </table>
                     </div>
                 </form>
-                <h2>What would you like to do next?</h2>
+                <h2><?= Yii::t('app', 'ShoppingCartNotice01') ?></h2>
 
-                <p>Choose if you have a discount code or reward points you want to use or would like to estimate your
-                    delivery cost.</p>
+                <p><?= Yii::t('app', 'ShoppingCartNotice02') ?></p>
 
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title"><a href="#collapse-coupon" class="accordion-toggle"
-                                                       data-toggle="collapse" data-parent="#accordion">Sử dụng mã giảm
-                                    giá <i class="fa fa-caret-down"></i></a></h4>
+                                                       data-toggle="collapse"
+                                                       data-parent="#accordion"><?= Yii::t('app', 'ShoppingCartNotice03') ?>
+                                    <i class="fa fa-caret-down"></i></a></h4>
                         </div>
                         <div id="collapse-coupon" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <label class="col-sm-2 control-label" for="input-coupon">Sử dụng mã giảm giá</label>
+                                <label class="col-sm-2 control-label"
+                                       for="input-coupon"><?= Yii::t('app', 'ShoppingCartNotice03') ?></label>
 
                                 <div class="input-group">
-                                    <input type="text" name="voucher" value="" placeholder="Nhập mã giảm giá"
+                                    <input type="text" name="voucher" value=""
+                                           placeholder="<?= Yii::t('app', 'ShoppingCartNotice04') ?>"
                                            id="input-voucher" class="form-control">
                                     <span class="input-group-btn">
-                                    <input type="button" value="Áp dụng" id="button-voucher" data-loading-text="Loading..."
+                                    <input type="button" value="<?= Yii::t('app', 'ApplyLabel') ?>" id="button-voucher"
+                                           data-loading-text="Loading..."
                                            class="btn btn-primary">
                                     </span>
                                 </div>
                                 <script type="text/javascript"><!--
-                                    $('#button-voucher').on('click', function() {
+                                    $('#button-voucher').on('click', function () {
                                         $.ajax({
                                             url: 'index.php?r=site/voucher',
                                             type: 'post',
                                             data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
                                             dataType: 'json',
-                                            beforeSend: function() {
+                                            beforeSend: function () {
                                                 $('#button-voucher').button('loading');
                                             },
-                                            complete: function() {
+                                            complete: function () {
                                                 $('#button-voucher').button('reset');
                                             },
-                                            success: function(json) {
+                                            success: function (json) {
                                                 $('.alert').remove();
 
                                                 if (json['error']) {
                                                     $('.breadcrumb').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 
-                                                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                                    $('html, body').animate({scrollTop: 0}, 'slow');
                                                 }
 
                                                 if (json['redirect']) {
@@ -171,8 +179,8 @@ require('_header.php');
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <td class="text-right"><strong>Tổng tiền:</strong></td>
-                                <td class="text-right"><?= number_format($total_price) . " VND" ?></td>
+                                <td class="text-right"><strong><?= Yii::t('app', 'SumPriceLabel') ?>:</strong></td>
+                                <td class="text-right"><?= number_format($total_price) . " " . Yii::t('app', 'VNDLabel') ?></td>
                             </tr>
                             </tbody>
                         </table>
@@ -181,13 +189,13 @@ require('_header.php');
                 <div class="buttons">
                     <div class="pull-left"><a
                             href="<?= $baseUrl ?>"
-                            class="btn btn-default">Tiếp tục mua hàng</a></div>
+                            class="btn btn-default"><?= Yii::t('app', 'ContinueShoppingLabel') ?></a></div>
                     <div class="pull-right"><a
                             href="<?= $baseUrl . "/index.php?r=site/checkout" ?>"
-                            class="btn btn-primary">Thanh toán</a></div>
+                            class="btn btn-primary"><?= Yii::t('app', 'CheckoutLabel') ?></a></div>
                 </div>
-                <?php } ?>
-            </div>
+            <?php } ?>
+        </div>
         <script type="text/javascript"><!--
             $(document).ready(function () {
                 $('.thumbnails').magnificPopup({
