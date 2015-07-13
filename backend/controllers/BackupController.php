@@ -124,6 +124,8 @@ class BackupController extends Controller
             foreach ($itemValues as $itemValue) {
                 if (is_numeric($itemValue)) {
                     $valueString .= $itemValue . ",";
+                } else if ($itemValue == '') {
+                    $valueString .= NULL;
                 } else {
                     $valueString .= "'" . $itemValue . "',";
                 }
