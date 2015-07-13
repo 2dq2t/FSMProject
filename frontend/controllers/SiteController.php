@@ -189,6 +189,28 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionAutoComplete($q) {
+        $query = new Query();
+        $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
+            ->from('product')
+            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
+            ->join('INNER JOIN', '(
+                    SELECT product_id, resize_path
+                    FROM image
+                    GROUP BY product_id
+                ) AS i', 'i.product_id = product.id')
+            ->where('MATCH(product.name) AGAINST ("+' .mysql_real_escape_string($q). '*" IN BOOLEAN MODE) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+            ->limit(10);
+        $command = $query->createCommand();
+        $products = $command->queryAll();
+        $out = [];
+        foreach($products as $product) {
+            $out[] = $product;
+        }
+
+        echo json_encode($out);
+    }
+
     public function actionPrefetch() {
         $query = new Query();
         $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')

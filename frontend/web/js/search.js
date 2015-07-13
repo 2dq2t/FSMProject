@@ -2,6 +2,7 @@ $(document).ready(function() {
     var engine, remoteHost, template;
 
     $.support.cors = true;
+    localStorage.clear();
 
     remoteHost = 'http://localhost/fsmproject/frontend/web/index.php?r=';
     template = Handlebars.compile($("#result-template").html());
