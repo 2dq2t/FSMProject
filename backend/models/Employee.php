@@ -106,7 +106,7 @@ class Employee extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        throw new NotSupportedException(Yii::t('app', '"findIdentityByAccessToken" is not implemented.'));
     }
 
     /**

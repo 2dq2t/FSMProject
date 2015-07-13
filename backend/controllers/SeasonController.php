@@ -48,7 +48,7 @@ class SeasonController extends Controller
 
             if(!$model) {
                 // store a default json response as desired by editable
-                $message = 'The Season do not exist.';
+                $message = Yii::t('app', 'The Season do not exist.');
                 echo $out = Json::encode(['output'=>'', 'message'=>$message]);
                 return;
             }
@@ -134,8 +134,8 @@ class SeasonController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => 'Season Record has been saved.',
-                    'title' => 'Add Season'
+                    'message' => Yii::t('app', 'Season Record has been saved.'),
+                    'title' => Yii::t('app', 'Add Season')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -199,8 +199,8 @@ class SeasonController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => 'Season Record has been updated.',
-                    'title' => 'Update Season'
+                    'message' => Yii::t('app', 'Season Record has been updated.'),
+                    'title' => Yii::t('app', 'Update Season')
                 ]);
                 return $this->redirect(['index']);
             } else {
@@ -249,8 +249,8 @@ class SeasonController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Season Record has been deleted.',
-            'title' => 'Delete Season'
+            'message' => Yii::t('app', 'Season Record has been deleted.'),
+            'title' => Yii::t('app', 'Delete Season')
         ]);
 
         return $this->redirect(['index']);
@@ -296,8 +296,8 @@ class SeasonController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => 'Product season has been added.',
-                    'title' => 'Add Product season'
+                    'message' => Yii::t('app', 'Product season has been added.'),
+                    'title' => Yii::t('app', 'Add Product season')
                 ]);
 
             } catch (Exception $e) {
@@ -309,7 +309,7 @@ class SeasonController extends Controller
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
                     'message' => Yii::t('app', 'Could not be add product. Try again later.'),
-                    'title' => 'Add Product season'
+                    'title' => Yii::t('app', 'Add Product season')
                 ]);
             }
 
@@ -335,7 +335,7 @@ class SeasonController extends Controller
         if (($model = Season::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

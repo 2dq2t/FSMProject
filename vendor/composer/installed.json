@@ -3667,5 +3667,101 @@
             "toastr",
             "yii2"
         ]
+    },
+    {
+        "name": "bower-asset/jsoneditor",
+        "version": "v3.2.0",
+        "version_normalized": "3.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/josdejong/jsoneditor.git",
+            "reference": "63e61dd817f771782c3bf6eafaf6f1069e034569"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/josdejong/jsoneditor/zipball/63e61dd817f771782c3bf6eafaf6f1069e034569",
+            "reference": "63e61dd817f771782c3bf6eafaf6f1069e034569",
+            "shasum": ""
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "jsoneditor.min.js",
+                "jsoneditor.min.css"
+            ],
+            "bower-asset-ignore": [
+                "app",
+                "build",
+                "downloads",
+                "src",
+                "misc",
+                "node_modules",
+                "test",
+                "tools",
+                ".idea",
+                "gulpfile.js",
+                "package.json",
+                ".npmignore",
+                ".gitignore"
+            ]
+        },
+        "installation-source": "dist",
+        "description": "A web-based tool to view, edit and format JSON"
+    },
+    {
+        "name": "devgroup/yii2-jsoneditor",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/DevGroup-ru/yii2-jsoneditor.git",
+            "reference": "b4656d7953d78e513fc5dfe42b4c9515c07a0c67"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/DevGroup-ru/yii2-jsoneditor/zipball/b4656d7953d78e513fc5dfe42b4c9515c07a0c67",
+            "reference": "b4656d7953d78e513fc5dfe42b4c9515c07a0c67",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jsoneditor": "~3.1",
+            "yiisoft/yii2": "2.0.*"
+        },
+        "require-dev": {
+            "yiisoft/yii2-debug": "2.0.*"
+        },
+        "time": "2014-12-16 14:27:06",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "devgroup\\jsoneditor\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0+"
+        ],
+        "authors": [
+            {
+                "name": "Alexander Kozhevnikov",
+                "email": "b37hr3z3n@gmail.com"
+            },
+            {
+                "name": "Evgeny Dubovitsky",
+                "email": "flynn068@gmail.com"
+            },
+            {
+                "name": "Pavel Fedotov",
+                "email": "fps.06@mail.ru"
+            }
+        ],
+        "description": "Yii2 jsoneditor widget",
+        "keywords": [
+            "editor",
+            "json",
+            "jsoneditor",
+            "yii2"
+        ]
     }
 ]

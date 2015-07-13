@@ -119,7 +119,7 @@ class AuthItemController extends Controller
                 );
                 break;
             default:
-                throw new \InvalidArgumentException('Unexpected item type');
+                throw new \InvalidArgumentException(Yii::t('app', 'Unexpected item type'));
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -203,7 +203,7 @@ class AuthItemController extends Controller
                 );
                 break;
             default:
-                throw new \InvalidArgumentException('Unexpected item type');
+                throw new \InvalidArgumentException(Yii::t('app', 'Unexpected item type'));
         }
 
         $children = Yii::$app->getAuthManager()->getChildren($id);
@@ -290,7 +290,7 @@ class AuthItemController extends Controller
         if (($model = AuthItem::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

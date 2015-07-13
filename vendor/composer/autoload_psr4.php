@@ -56,6 +56,7 @@ return array(
     'kartik\\' => array($vendorDir . '/kartik-v/strength-meter'),
     'dosamigos\\datepicker\\' => array($vendorDir . '/2amigos/yii2-date-picker-widget/src'),
     'dosamigos\\ckeditor\\' => array($vendorDir . '/2amigos/yii2-ckeditor-widget/src'),
+    'devgroup\\jsoneditor\\' => array($vendorDir . '/devgroup/yii2-jsoneditor'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Zelenin\\yii\\widgets\\Summernote\\' => array($vendorDir . '/zelenin/yii2-summernote-widget'),
 );

@@ -13,8 +13,8 @@ use kartik\alert\Alert;
     <?php
     echo lavrentiev\yii2toastr\Toastr::widget([
         'type' => (!empty($message['type'])) ? $message['type'] : 'success',
-        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-        'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : Yii::t('app', 'Title Not Set!'),
+        'message' => (!empty($message['message'])) ? $message['message'] : Yii::t('app', 'Message Not Set!'),
         'clear' => false,
         'options' => [
             "closeButton" => true,

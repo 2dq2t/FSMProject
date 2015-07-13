@@ -149,7 +149,7 @@ class SlideShowController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save slide show. Please try again later.',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not be save slide show. Please try again later.'),
                     'title' => Yii::t('app', 'Add Slide show'),
                 ]);
 
@@ -257,7 +257,7 @@ class SlideShowController extends Controller
         if (($model = SlideShow::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

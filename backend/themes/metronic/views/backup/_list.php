@@ -38,7 +38,7 @@ echo GridView::widget([
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{restore_action}',
-            'header' => 'Restore DB',
+            'header' => Yii::t('app', 'Restore DB'),
             'buttons' => [
                 'restore_action' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-import"></span>', $url, [
@@ -56,7 +56,7 @@ echo GridView::widget([
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{download_action}',
-            'header' => 'Download',
+            'header' => Yii::t('app', 'Download'),
             'buttons' => [
                 'download_action' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', $url, [

@@ -262,14 +262,14 @@ class BackupController extends Controller
             if (file_exists($sqlFile)) {
                 unlink($sqlFile);
                 $flashError = 'success';
-                $flashMsg = 'The file ' . $sqlFile . ' was successfully deleted.';
+                $flashMsg = \Yii::t('app', 'The file {file} was successfully deleted.', ['{file}' => $sqlFile]);
             } else {
                 $flashError = 'error';
-                $flashMsg = 'The file ' . $sqlFile . ' was not found.';
+                $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['{file}' => $sqlFile]);
             }
         } else {
             $flashError = 'error';
-            $flashMsg = 'The file ' . $file . ' was not found.';
+            $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['{file}' => $sqlFile]);
         }
         \Yii::$app->getSession()->setFlash($flashError, $flashMsg);
         $this->redirect(['index']);
@@ -318,7 +318,7 @@ class BackupController extends Controller
         $filePath = $this->getPath() . basename($filename);
 
         if (!is_file($filePath)) {
-            $errors[] = 'file not found';
+            $errors[] = \Yii::t('app', 'File not found');
         }
         if ($errors !== []) {
             throw new HttpException(403, implode(', ', $errors));
@@ -338,10 +338,10 @@ class BackupController extends Controller
         if (isset($file)) {
             $sqlFile = $this->path . basename($file);
             $flashError = 'success';
-            $flashMsg = 'Restore success.';
+            $flashMsg = \Yii::t('app', 'Restore success.');
         } else {
             $flashError = 'error';
-            $flashMsg = 'Problems with the file name';
+            $flashMsg = \Yii::t('app', 'Problems with the file name');
         }
         $this->execSqlFile($sqlFile);
 

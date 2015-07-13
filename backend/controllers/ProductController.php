@@ -467,8 +467,8 @@ class ProductController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Product Record has been deleted.',
-            'title' => 'Delete Product'
+            'message' => Yii::t('app', 'Product Record has been deleted.'),
+            'title' => Yii::t('app', 'Delete Product')
         ]);
 
         return $this->redirect(['index']);
@@ -486,7 +486,7 @@ class ProductController extends Controller
         if (($model = Product::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 

@@ -167,7 +167,7 @@ class EmployeeController extends Controller
                                 if ($transaction->getIsActive()) {
                                     $transaction->rollBack();
                                 }
-                                $errors[] = 'Cannot assign "'.$assignment.'" to user';
+                                $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
                             }
                         }
 
@@ -335,7 +335,7 @@ class EmployeeController extends Controller
                             try {
                                 \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
                             } catch (\Exception $e) {
-                                $errors[] = 'Cannot assign "'.$assignment.'" to user';
+                                $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
                             }
                         }
 
@@ -457,15 +457,25 @@ class EmployeeController extends Controller
         if ($this->findModel($id)->email !== Yii::$app->user->identity->email) {
             $employee = $this->findModel($id);
             $employee->status = Employee::STATUS_INACTIVE;
-            $employee->save();
+//            $employee->save();
 
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Employee has been deleted.'),
-                'title' => Yii::t('app', 'Delete Employee'),
-            ]);
+            if ($employee->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Employee has been deleted.'),
+                    'title' => Yii::t('app', 'Delete Employee'),
+                ]);
+            } else {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Could not delete employee. Please try again.'),
+                    'title' => Yii::t('app', 'Delete Employee'),
+                ]);
+            }
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
@@ -491,7 +501,7 @@ class EmployeeController extends Controller
         if (($model = Employee::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 

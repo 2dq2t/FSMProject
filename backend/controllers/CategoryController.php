@@ -204,8 +204,8 @@ class CategoryController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'Category Record has been deleted.',
-            'title' => 'Delete Category'
+            'message' => Yii::t('app', 'Category Record has been deleted.'),
+            'title' => Yii::t('app', 'Delete Category')
         ]);
 
         return $this->redirect(['index']);
@@ -223,7 +223,7 @@ class CategoryController extends Controller
         if (($model = Category::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

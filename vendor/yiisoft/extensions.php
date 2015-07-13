@@ -399,4 +399,13 @@ return array (
       '@lavrentiev/yii2toastr' => $vendorDir . '/lavrentiev/yii2-toastr',
     ),
   ),
+  'devgroup/yii2-jsoneditor' => 
+  array (
+    'name' => 'devgroup/yii2-jsoneditor',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@devgroup/jsoneditor' => $vendorDir . '/devgroup/yii2-jsoneditor',
+    ),
+  ),
 );

@@ -25,3 +25,7 @@ table#datatable_reviews {
     counter-increment: section;
     content: counter(section);
 }
+
+div.tree {
+    background-color: white;
+}

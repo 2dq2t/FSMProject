@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Create Customer', ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Customer'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 
