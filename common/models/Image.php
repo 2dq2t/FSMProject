@@ -7,10 +7,11 @@ use Yii;
 /**
  * This is the model class for table "image".
  *
- * @property integer $id
+ * @property string $id
  * @property string $name
  * @property string $path
- * @property integer $product_id
+ * @property string $resize_path
+ * @property string $product_id
  *
  * @property Product $product
  */
@@ -31,10 +32,9 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'path', 'product_id'], 'required'],
+            [['name', 'path', 'resize_path', 'product_id'], 'required'],
             [['product_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-            [['path'], 'string', 'max' => 255],
+            [['name', 'path', 'resize_path'], 'string', 'max' => 255],
             [['product_image'], 'file', 'skipOnEmpty'=> true, 'maxFiles' => 10, 'extensions' => 'jpeg, jpg, png, gif']
         ];
     }
@@ -48,6 +48,7 @@ class Image extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'path' => Yii::t('app', 'Path'),
+            'resize_path' => Yii::t('app', 'Resize Path'),
             'product_id' => Yii::t('app', 'Product ID'),
         ];
     }

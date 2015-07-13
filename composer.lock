@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4853ae07704e60a1d053812f8f72af9",
+    "hash": "4f373585b0c327d9695c6230b3e78d29",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -402,34 +402,6 @@
                     "Gruntfile.js",
                     "node_modules",
                     "package.json"
-                ]
-            }
-        },
-        {
-            "name": "bower-asset/select2",
-            "version": "3.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/select2/select2.git",
-                "reference": "6633cda9061d9fc65075dd140c63f9a6adbcbd72"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/select2/select2/zipball/6633cda9061d9fc65075dd140c63f9a6adbcbd72",
-                "reference": "6633cda9061d9fc65075dd140c63f9a6adbcbd72",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7.1"
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": [
-                    "select2.js",
-                    "select2.css",
-                    "select2.png",
-                    "select2x2.png",
-                    "select2-spinner.gif"
                 ]
             }
         },
@@ -979,61 +951,6 @@
             "time": "2015-03-02 13:30:23"
         },
         {
-            "name": "kartik-v/yii2-dynagrid",
-            "version": "v1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-dynagrid.git",
-                "reference": "3be2f3b4b5807eb0720283598f1352ad7e136f52"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/3be2f3b4b5807eb0720283598f1352ad7e136f52",
-                "reference": "3be2f3b4b5807eb0720283598f1352ad7e136f52",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/yii2-grid": "*",
-                "kartik-v/yii2-sortable": "*",
-                "kartik-v/yii2-widget-activeform": "*",
-                "kartik-v/yii2-widget-select2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "kartik\\dynagrid\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD 3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "Turbo charge the Yii 2 GridView with personalized columns, page size, and themes.",
-            "homepage": "https://github.com/kartik-v/yii2-dynagrid",
-            "keywords": [
-                "columns",
-                "dynamic",
-                "extension",
-                "grid",
-                "hide",
-                "order",
-                "reorder",
-                "show",
-                "sort",
-                "visibility",
-                "widget",
-                "yii2"
-            ],
-            "time": "2015-02-13 07:43:32"
-        },
-        {
             "name": "kartik-v/yii2-editable",
             "version": "v1.7.2",
             "source": {
@@ -1413,53 +1330,6 @@
                 "popover-x"
             ],
             "time": "2014-11-25 09:26:09"
-        },
-        {
-            "name": "kartik-v/yii2-sortable",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-sortable.git",
-                "reference": "439a27e0f77b0b7beabd6a11f6b32ce6277484ff"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-sortable/zipball/439a27e0f77b0b7beabd6a11f6b32ce6277484ff",
-                "reference": "439a27e0f77b0b7beabd6a11f6b32ce6277484ff",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/yii2-krajee-base": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "kartik\\sortable\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD 3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "Create sortable lists and grids using HTML5 drag and drop API for Yii 2.0.",
-            "homepage": "https://github.com/kartik-v/yii2-sortable",
-            "keywords": [
-                "bootstrap",
-                "extension",
-                "jquery",
-                "range",
-                "sortable",
-                "widget",
-                "yii2"
-            ],
-            "time": "2014-11-10 18:37:03"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -2483,63 +2353,6 @@
             "time": "2015-02-27 23:36:21"
         },
         {
-            "name": "phpoffice/phpexcel",
-            "version": "dev-develop",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "a287bd44df0ff439fc51e497a8357b2ba4bcea60"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/a287bd44df0ff439fc51e497a8357b2ba4bcea60",
-                "reference": "a287bd44df0ff439fc51e497a8357b2ba4bcea60",
-                "shasum": ""
-            },
-            "require": {
-                "ext-xml": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PHPExcel": "Classes/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Maarten Balliauw",
-                    "homepage": "http://blog.maartenballiauw.be"
-                },
-                {
-                    "name": "Mark Baker"
-                },
-                {
-                    "name": "Franck Lefevre",
-                    "homepage": "http://blog.rootslabs.net"
-                },
-                {
-                    "name": "Erik Tilt"
-                }
-            ],
-            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
-            "homepage": "http://phpexcel.codeplex.com",
-            "keywords": [
-                "OpenXML",
-                "excel",
-                "php",
-                "spreadsheet",
-                "xls",
-                "xlsx"
-            ],
-            "time": "2015-04-16 00:10:04"
-        },
-        {
             "name": "sintret/yii2-chat-adminlte",
             "version": "dev-master",
             "source": {
@@ -2806,68 +2619,6 @@
                 "yii2"
             ],
             "time": "2015-04-03 08:07:30"
-        },
-        {
-            "name": "vova07/yii2-select2-widget",
-            "version": "0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vova07/yii2-select2-widget.git",
-                "reference": "8b1a0907c24caf7471bdb5f6946f04a5920a1176"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vova07/yii2-select2-widget/zipball/8b1a0907c24caf7471bdb5f6946f04a5920a1176",
-                "reference": "8b1a0907c24caf7471bdb5f6946f04a5920a1176",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/select2": "3.*",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "scrutinizer/ocular": "~1.1"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.0.x-dev"
-                },
-                "asset-installer-paths": {
-                    "bower-asset-library": "vendor/bower"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "vova07\\select2\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Crudu Vasile",
-                    "email": "bazillio07@yandex.ru",
-                    "homepage": "https://github.com/vova07",
-                    "role": "Developer"
-                }
-            ],
-            "description": "The select2 widget for Yii framework.",
-            "homepage": "https://github.com/vova07/yii2-select2-widget",
-            "keywords": [
-                "extension",
-                "select",
-                "select 2",
-                "select2",
-                "widget",
-                "yii",
-                "yii 2",
-                "yii2"
-            ],
-            "time": "2015-04-05 21:07:23"
         },
         {
             "name": "wbraganca/yii2-dynamicform",
@@ -3228,6 +2979,34 @@
             }
         },
         {
+            "name": "bower-asset/select2",
+            "version": "3.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/select2/select2.git",
+                "reference": "6633cda9061d9fc65075dd140c63f9a6adbcbd72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/select2/select2/zipball/6633cda9061d9fc65075dd140c63f9a6adbcbd72",
+                "reference": "6633cda9061d9fc65075dd140c63f9a6adbcbd72",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.7.1"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "select2.js",
+                    "select2.css",
+                    "select2.png",
+                    "select2x2.png",
+                    "select2-spinner.gif"
+                ]
+            }
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.10.5",
             "source": {
@@ -3431,6 +3210,53 @@
                 "tabs-x"
             ],
             "time": "2015-02-01 00:21:13"
+        },
+        {
+            "name": "kartik-v/yii2-sortable",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-sortable.git",
+                "reference": "439a27e0f77b0b7beabd6a11f6b32ce6277484ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-sortable/zipball/439a27e0f77b0b7beabd6a11f6b32ce6277484ff",
+                "reference": "439a27e0f77b0b7beabd6a11f6b32ce6277484ff",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\sortable\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Create sortable lists and grids using HTML5 drag and drop API for Yii 2.0.",
+            "homepage": "https://github.com/kartik-v/yii2-sortable",
+            "keywords": [
+                "bootstrap",
+                "extension",
+                "jquery",
+                "range",
+                "sortable",
+                "widget",
+                "yii2"
+            ],
+            "time": "2014-11-10 18:37:03"
         },
         {
             "name": "phpspec/php-diff",
@@ -3708,7 +3534,6 @@
         "kartik-v/yii2-password": 20,
         "kartik-v/yii2-mpdf": 20,
         "zelenin/yii2-summernote-widget": 20,
-        "phpoffice/phpexcel": 20,
         "kartik-v/yii2-krajee-base": 20,
         "maksyutin/yii2-dual-list-box": 20
     },

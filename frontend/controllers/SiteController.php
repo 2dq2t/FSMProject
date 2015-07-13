@@ -189,21 +189,41 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSearch()
-    {
-        if(Yii::$app->request->get()){
-            $get_data = Yii::$app->request->get();
-            if(empty($get_data['search'])){
-                return $this->goHome();
-            }
-            else{
-                $search = $get_data['search'];
-                $product_query = new \yii\sphinx\Query();
-                $product_search =$product_query->from('product')->match($search)->all();
-                 print_r($product_search);
-            }
+    public function actionPrefetch() {
+        $query = new Query();
+        $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
+            ->from('product')
+            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
+            ->join('INNER JOIN', '(
+                    SELECT product_id, resize_path
+                    FROM image
+                    GROUP BY product_id
+                ) AS i', 'i.product_id = product.id')
+            ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+            ->limit(10);
+        $command = $query->createCommand();
+        $products = $command->queryAll();
+        $out = [];
+        foreach($products as $product) {
+            $out[] = $product;
         }
-        return $this->render('search');
+
+        echo json_encode($out);
+    }
+
+    public function actionSearch($q){
+        $query = new Query();
+        $query->select('product.name')
+            ->from('product')
+            ->join('INNER JOIN', 'category', 'product.category_id = category.id')
+            ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                )');
+        $command = $query->createCommand();
+        $products = $command->queryAll();
+        return $this->render('search', ['products' => $products]);
     }
 
     public function actionCategory()

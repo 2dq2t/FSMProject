@@ -23,11 +23,9 @@
         "kartik-v/yii2-password": "dev-master",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-mpdf": "dev-master",
-        "kartik-v/yii2-dynagrid": "*",
         "kartik-v/yii2-editable": "*",
         "vova07/yii2-imperavi-widget": "*",
         "zelenin/yii2-summernote-widget": "dev-master",
-        "phpoffice/phpexcel": "dev-develop",
         "2amigos/yii2-date-picker-widget": "~1.0",
         "2amigos/yii2-ckeditor-widget": "~1.0",
         "kartik-v/yii2-detail-view": "*",
@@ -36,8 +34,7 @@
         "kartik-v/yii2-widget-select2": "*",
         "kartik-v/yii2-krajee-base": "dev-master",
         "maksyutin/yii2-dual-list-box": "dev-master",
-        "lavrentiev/yii2-toastr": "1.0.1",
-        "vova07/yii2-select2-widget": "*"
+        "lavrentiev/yii2-toastr": "1.0.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

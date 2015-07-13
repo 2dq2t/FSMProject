@@ -25,18 +25,33 @@ $baseUrl = Yii::$app->request->baseUrl;
                                 title="Your Store" alt="Your Store" class="img-responsive"/></a>
                     </div>
                 </div>
-                <div class="header-right">
-                    <div class="col-sm-5 header-search">
-                        <div id="search" class="input-group">
-                            <input type="text" name="search" value="" placeholder="Tìm kiếm"
-                                   class="form-control input-lg"/>
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-lg"></button>
-                              </span>
+                <script id="result-template" type="text/x-handlebars-template">
+                    <div class="ProductSearch u-cf">
+                        <img class="ProductSearch-image" src="{{resize_path}}">
+
+                        <div class="ProductSearch-details">
+                            <div class="ProductSearch-ProductName">{{product_name}}</div>
+                            <div class="ProductSearch-categoryName">{{category_name}}</div>
                         </div>
                     </div>
+                </script>
+                <div class="header-right">
+                    <div class="col-sm-5 header-search">
+                        <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']])?>
+                        <!--                            <input type="hidden" name="mode" value="product_name">-->
+                        <div class="typeahead">
+                            <div class="u-posRelative">
+                                <input class="typeahead-hint" type="text" tabindex="-1" readonly>
+                                <input class="typeahead-input" id="search-input" type="text" name="q" placeholder="Tìm kiếm...">
+                                <img class="typeahead-spinner" src="images/spinner.gif">
+                            </div>
+                            <div class="typeahead-menu"></div>
+                        </div>
+                        <button class="u-hidden" type="submit">Search</button>
+                        <?php \yii\widgets\ActiveForm::end(); ?>
+                    </div>
                     <div class="col-sm-3 header-cart">
-                        <?php require('cartInfo.php'); ?>
+                        <?php require('cartInfo.php');?>
                     </div>
                 </div>
             </div>

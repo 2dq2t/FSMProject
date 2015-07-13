@@ -25,6 +25,7 @@ class AppAsset extends AssetBundle
         'stylesheet/megnor/carousel.css',
         'stylesheet/megnor/custom.css',
         'stylesheet/megnor/bootstrap.min.css',
+        'stylesheet/search.css',
         'js/jquery/owl-carousel/owl.carousel.css',
         'js/jquery/owl-carousel/owl.transitions.css',
         'js/jquery/magnific/magnific-popup.css',
@@ -40,6 +41,9 @@ class AppAsset extends AssetBundle
         'js/megnor/jquery.formalize.min.js',
         'js/jquery/magnific/jquery.magnific-popup.min.js',
         'js/jquery/raty/jquery.raty.js',
+        'js/handlebars.js',
+        'js/typeahead.bundle.min.js',
+        'js/search.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

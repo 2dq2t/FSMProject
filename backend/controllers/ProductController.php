@@ -6,6 +6,7 @@ use common\models\Image;
 use common\models\ProductSeason;
 use common\models\ProductTag;
 use common\models\Tag;
+use Faker\Provider\File;
 use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
@@ -144,8 +145,8 @@ class ProductController extends Controller
 
             // remove space in product price
             $model->price = preg_replace('/\s/', '', $model->price);
-			
-			// Begin transaction
+
+            // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
@@ -155,9 +156,12 @@ class ProductController extends Controller
                         foreach ($file as $image) {
                             // directory to save image in local
                             $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
+                            $dir_resize = Yii::getAlias('@frontend/web/uploads/products/resizeimages/' . $model->id);
                             FileHelper::createDirectory($dir);
+                            FileHelper::createDirectory($dir_resize);
                             // path to save database
                             $path = 'uploads/products/images/' . $model->id . '/';
+                            $path_resize = 'uploads/products/resizeimages/' . $model->id . '/';
 
                             $productImages = new Image();
                             $productImages->product_id = $model->id;
@@ -165,12 +169,14 @@ class ProductController extends Controller
                             // generate random name for image save
                             $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
                             $productImages->path = $path . $imageName;
+                            $productImages->resize_path = $path_resize . $imageName;
                             $images .= $imageName . $image->extension . '###';
 
                             $productImages->product_image = $images;
                             $productImages->save();
 
                             $image->saveAs($dir . '/' . $imageName);
+                            $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
                         }
                     }
 
@@ -184,10 +190,10 @@ class ProductController extends Controller
 
                         $product_seasons->save();
                     }
-					
-					if (empty($model->product_tags)) {
-						$model->product_tags = [];
-					}
+
+                    if (empty($model->product_tags)) {
+                        $model->product_tags = [];
+                    }
 
                     foreach ($model->product_tags as $product_tag) {
                         // check tag exists
@@ -206,8 +212,8 @@ class ProductController extends Controller
                             $product_tags->save();
                         }
                     }
-					
-					$transaction->commit();
+
+                    $transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => 'success',
@@ -289,8 +295,8 @@ class ProductController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->price = preg_replace('/\s/', '', $model->price);
             $file = UploadedFile::getInstances($productImages, 'product_image');
-			
-			// Begin transaction
+
+            // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($model->save()) {
@@ -301,13 +307,17 @@ class ProductController extends Controller
                         }
 
                         $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $id);
+                        $dir_resize = Yii::getAlias('@frontend/web/uploads/products/resizeimages/' . $id);
                         FileHelper::removeDirectory($dir);
+                        FileHelper::removeDirectory($dir_resize);
 
                         $images = '';
                         foreach ($file as $image) {
                             FileHelper::createDirectory($dir);
+                            FileHelper::createDirectory($dir_resize);
                             // path to save database
                             $path = 'uploads/products/images/' . $model->id . '/';
+                            $path_resize = 'uploads/products/resizeimages/' . $model->id . '/';
 
                             $productImages = new Image();
                             $productImages->product_id = $model->id;
@@ -315,12 +325,14 @@ class ProductController extends Controller
                             // generate random name for image save
                             $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
                             $productImages->path = $path . $imageName;
+                            $productImages->resize_path = $path_resize . $imageName;
                             $images .= $imageName . $image->extension . '###';
 
                             $productImages->product_image = $images;
                             $productImages->save();
 
                             $image->saveAs($dir . '/' . $imageName);
+                            $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
                         }
                     }
 
@@ -377,8 +389,8 @@ class ProductController extends Controller
                             $product_tag->save();
                         }
                     }
-					
-					$transaction->commit();
+
+                    $transaction->commit();
 
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => 'success',
@@ -476,5 +488,51 @@ class ProductController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Image resize
+     * @param string $original_image
+     * @param string $resize_path
+     * @param int $width
+     * @param int $height
+     * @param string $type
+     */
+    private function resizeImage($original_image, $resize_path, $width, $height, $type)
+    {
+        /* Get original image*/
+        list($w_original, $h_original) = getimagesize($original_image);
+        /* calculate new image size with ratio */
+        $ratio = max($width / $w_original, $height / $h_original);
+        $w_original = ceil($width / $ratio);
+        $h_original = ceil($height / $ratio);
+        /* read binary data from image file */
+        $imgString = file_get_contents($original_image);
+        /* create image from string */
+        $image = imagecreatefromstring($imgString);
+        $tmp = imagecreatetruecolor($width, $height);
+        imagecopyresampled($tmp, $image,
+            0, 0,
+            0, 0,
+            $width, $height,
+            $w_original, $h_original);
+        /* Save image */
+        switch ($type) {
+            case 'image/jpeg':
+                imagejpeg($tmp, $resize_path, 100);
+                break;
+            case 'image/png':
+                imagepng($tmp, $resize_path, 0);
+                break;
+            case 'image/gif':
+                imagegif($tmp, $resize_path);
+                break;
+            default:
+                exit;
+                break;
+        }
+        /* cleanup memory */
+        imagedestroy($image);
+        imagedestroy($tmp);
     }
 }
