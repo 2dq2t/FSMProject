@@ -125,7 +125,7 @@ class BackupController extends Controller
                 if (is_numeric($itemValue)) {
                     $valueString .= $itemValue . ",";
                 } else if ($itemValue == '') {
-                    $valueString .= NULL;
+                    $valueString .= "NULL";
                 } else {
                     $valueString .= "'" . $itemValue . "',";
                 }
