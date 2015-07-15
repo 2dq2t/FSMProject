@@ -113,14 +113,13 @@ $baseUrl = Yii::$app->request->baseUrl;
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>">Tài
-                                                khoản của tôi</a>
+                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
                                         </li>
                                         <li>
-                                            <a href="#">Đơn hàng của tôi</a>
+                                            <a href="#"><?= Yii::t('app', 'MyOrderLabel') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>" data-method="post">Thoát</a>
+                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>" data-method="post"><?= Yii::t('app', 'LogoutLabel') ?></a>
                                         </li>
                                     </ul>
                                 </li>
