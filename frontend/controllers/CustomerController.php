@@ -35,11 +35,11 @@ class CustomerController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['update','manageacc','changepass' ],
+                'only' => ['update', 'manageacc', 'changepass'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => [ 'update','manageacc','changepass'],
+                        'actions' => ['update', 'manageacc', 'changepass'],
                         'roles' => ['@'],
                     ],
                     [
@@ -52,55 +52,11 @@ class CustomerController extends Controller
         ];
     }
 
-    /**
-     * Lists all Customer models.
-     * @return mixed
-     */
-    public function actionIndex()
+    public function actionManageacc($id)
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Customer::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Customer model.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Customer model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Customer();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionManageacc($id){
 
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/manageacc&id='.Yii::$app->user->id.'');
+            return $this->redirect('index.php?r=customer/manageacc&id=' . Yii::$app->user->id . '');
         }
         return $this->render('manageacc');
     }
@@ -114,37 +70,38 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/update&id='.Yii::$app->user->id.'');
+            return $this->redirect('index.php?r=customer/update&id=' . Yii::$app->user->id . '');
         }
 
         $modelCustomer = $this->findModel($id);
         $modelGuest = Guest::find()->where(['id' => $modelCustomer->guest_id])->one();
 
-        if($modelCustomer->load(Yii::$app->request->post())
-            && $modelGuest->load(Yii::$app->request->post())){
+        if ($modelCustomer->load(Yii::$app->request->post())
+            && $modelGuest->load(Yii::$app->request->post())
+        ) {
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($modelGuest->save()) {
 
-                    $avatar = UploadedFile::getInstance($modelCustomer,'avatar');
+                    $avatar = UploadedFile::getInstance($modelCustomer, 'avatar');
 
-                    if($avatar) {
+                    if ($avatar) {
                         $ext = $avatar->extension;
                         // generate a unique file name
-                        $modelCustomer->avatar = Yii::$app->security->generateRandomString().".{$ext}";
-                    }else{
+                        $modelCustomer->avatar = Yii::$app->security->generateRandomString() . ".{$ext}";
+                    } else {
                         $modelCustomer->avatar = $modelCustomer->oldAttributes['avatar'];
                     }
 
                     $modelCustomer->guest_id = $modelGuest->id;
                     if ($modelCustomer->UpdateCustomer($id)) {
-                        if($avatar){
+                        if ($avatar) {
                             // directory to save image in local
                             $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
                             FileHelper::removeDirectory($dir);
                             FileHelper::createDirectory($dir);
-                                $avatar->saveAs($dir . '/' . $modelCustomer->avatar);
+                            $avatar->saveAs($dir . '/' . $modelCustomer->avatar);
                         }
 
                         $transaction->commit();
@@ -162,7 +119,7 @@ class CustomerController extends Controller
                     } else {
 
                         $errors = $modelCustomer->getErrors();
-                        foreach($errors as $error) {
+                        foreach ($errors as $error) {
                             Yii::$app->getSession()->setFlash('success', [
                                 'type' => Alert::TYPE_DANGER,
                                 'duration' => 3000,
@@ -180,7 +137,7 @@ class CustomerController extends Controller
                 } else {
 
                     $errors = $modelCustomer->getErrors();
-                    foreach($errors as $error) {
+                    foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('success', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
@@ -195,11 +152,11 @@ class CustomerController extends Controller
                         'modelGuest' => $modelGuest,
                     ]);
                 }
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 $transaction->rollBack();
 
                 $errors = $modelCustomer->getErrors();
-                foreach($errors as $error) {
+                foreach ($errors as $error) {
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_DANGER,
                         'duration' => 3000,
@@ -209,32 +166,33 @@ class CustomerController extends Controller
                     ]);
                 }
             }
-        }else{
+        } else {
 
             if ($modelCustomer->dob) {
                 $modelCustomer->dob = date('m/d/Y', $modelCustomer->dob);
             } else {
                 $modelCustomer->dob = NULL;
             }
-            return $this->render('update', [
+            return $this->render('_form', [
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
             ]);
         }
     }
 
-    public function actionChangepass($id){
+    public function actionChangepass($id)
+    {
 
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/changepass&id='.Yii::$app->user->id.'');
+            return $this->redirect('index.php?r=customer/changepass&id=' . Yii::$app->user->id . '');
         }
 
         $modelCustomer = $this->findModel($id);
         $modelCustomer->scenario = 'changePassword';
-        if($modelCustomer->load(Yii::$app->request->post())){
+        if ($modelCustomer->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
-            try{
-                if($modelCustomer->ChangePassword($id)){
+            try {
+                if ($modelCustomer->ChangePassword($id)) {
                     $transaction->commit();
 
                     Yii::$app->getSession()->setFlash('successful', [
@@ -246,10 +204,10 @@ class CustomerController extends Controller
                     ]);
 
                     return $this->redirect(['update', 'id' => $modelCustomer->id]);
-                }else{
+                } else {
 
                     $errors = $modelCustomer->getErrors();
-                    foreach($errors as $error) {
+                    foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('success', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
@@ -259,13 +217,13 @@ class CustomerController extends Controller
                         ]);
                     }
 
-                    return $this->render('changepass',[
+                    return $this->render('changepass', [
                         'modelCustomer' => $modelCustomer,
                     ]);
                 }
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 $errors = $modelCustomer->getErrors();
-                foreach($errors as $error) {
+                foreach ($errors as $error) {
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => Alert::TYPE_DANGER,
                         'duration' => 3000,
@@ -279,26 +237,27 @@ class CustomerController extends Controller
             }
         }
 
-        return $this->render('changepass',[
+        return $this->render('changepass', [
             'modelCustomer' => $modelCustomer,
         ]);
     }
 
-    public function actionChangeaddress($id){
+    public function actionChangeaddress($id)
+    {
 
         $modelCustomer = $this->findModel($id);
         $modelUpdateAddress = Address::find()->where(['id' => $modelCustomer->address_id])->one();
 
         //When address_id of Customer equal null => add new address
-        if($modelUpdateAddress == null) {
+        if ($modelUpdateAddress == null) {
             $modelAddress = new Address();
             $modelCity = new City();
             $modelDistrict = new District();
 
-            if($modelAddress->load(Yii::$app->request->post())){
+            if ($modelAddress->load(Yii::$app->request->post())) {
                 $transaction = Yii::$app->db->beginTransaction();
-                try{
-                    if($modelAddress->save()){
+                try {
+                    if ($modelAddress->save()) {
                         $modelCustomer->address_id = $modelAddress->id;
                         $modelCustomer->save();
                         $transaction->commit();
@@ -312,9 +271,9 @@ class CustomerController extends Controller
                         ]);
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
-                }catch (Exception $e){
+                } catch (Exception $e) {
                     $errors = $modelCustomer->getErrors();
-                    foreach($errors as $error) {
+                    foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
@@ -326,21 +285,21 @@ class CustomerController extends Controller
 
                     $transaction->rollBack();
                 }
-            }else{
+            } else {
                 return $this->render('changeaddress', [
                     'modelAddress' => $modelAddress,
                     'modelCity' => $modelCity,
                     'modelDistrict' => $modelDistrict,
                 ]);
             }
-        }else{
+        } else {
             $modelUpdateDistrict = District::find()->where(['id' => $modelUpdateAddress->district_id])->one();
-            $modelUpdateCity = City::find()->where(['id'=>$modelUpdateDistrict->city_id])->one();
+            $modelUpdateCity = City::find()->where(['id' => $modelUpdateDistrict->city_id])->one();
 
-            if($modelUpdateAddress->load(Yii::$app->request->post())){
+            if ($modelUpdateAddress->load(Yii::$app->request->post())) {
                 $transaction = Yii::$app->db->beginTransaction();
-                try{
-                    if($modelUpdateAddress->save()){
+                try {
+                    if ($modelUpdateAddress->save()) {
                         $modelCustomer->address_id = $modelUpdateAddress->id;
                         $transaction->commit();
 
@@ -353,9 +312,9 @@ class CustomerController extends Controller
                         ]);
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
-                }catch (Exception $e){
+                } catch (Exception $e) {
                     $errors = $modelCustomer->getErrors();
-                    foreach($errors as $error) {
+                    foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
@@ -367,7 +326,7 @@ class CustomerController extends Controller
 
                     $transaction->rollBack();
                 }
-            }else{
+            } else {
                 return $this->render('changeaddress', [
                     'modelUpdateAddress' => $modelUpdateAddress,
                     'modelUpdateCity' => $modelUpdateCity,
@@ -379,9 +338,10 @@ class CustomerController extends Controller
 
     }
 
-    public function actionGetdistrict($id = null) {
+    public function actionGetdistrict($id = null)
+    {
         if (isset($id)) {
-            $countDistrict= District::find()
+            $countDistrict = District::find()
                 ->where(['city_id' => $id])
                 ->count();
 
@@ -389,12 +349,11 @@ class CustomerController extends Controller
                 ->where(['city_id' => $id])
                 ->all();
 
-            if($countDistrict>0){
-                foreach($districts as $district){
-                    echo "<option value='".$district->id."'>".$district->name."</option>";
+            if ($countDistrict > 0) {
+                foreach ($districts as $district) {
+                    echo "<option value='" . $district->id . "'>" . $district->name . "</option>";
                 }
-            }
-            else{
+            } else {
                 echo "<option>-</option>";
             }
         } else {
@@ -407,21 +366,8 @@ class CustomerController extends Controller
                     return;
                 }
             }
-            echo Json::encode(['output'=>'', 'selected'=>'']);
+            echo Json::encode(['output' => '', 'selected' => '']);
         }
-    }
-
-    /**
-     * Deletes an existing Customer model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

@@ -7,11 +7,7 @@ return [
         ],
         'i18n' => [
             'translations' => [
-                'frontend*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@common/messages',
-                ],
-                'backend*' => [
+                'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@common/messages',
                 ],

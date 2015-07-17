@@ -2,13 +2,9 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use kartik\widgets\DatePicker;
 use kartik\alert\Alert;
-use kartik\widgets\DepDrop;
-use common\models\City;
-/* @var $this yii\web\View */
-/* @var $model common\models\Customer */
-/* @var $form yii\widgets\ActiveForm */
+$this->title = Yii::t('app', 'ChangeAddressInfoLabel');
+require('../themes/views/site/_header.php');
 ?>
 <?php
 
@@ -34,22 +30,11 @@ if(isset($modelCustomer->avatar)) {
         ?>
     <?php endforeach; ?>
     <div class="row content-subinner">
-        <column id="column-left" class="col-sm-3 hidden-xs">
-            <div class="box">
-                <div class="box-heading">Tài Khoản</div>
-                <div class="list-group">
-                    <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Tài Khoản Của Tôi</a>
-                    <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Tài Khoản</a>
-                    <a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Mật Khẩu</a>
-                    <a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Địa Chỉ</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/logout" class="list-group-item">Thoát</a>
-                </div>
-            </div>
-        </column>
+    <?php require('_leftMenu.php'); ?>
         <ul class="breadcrumb">
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i class="fa fa-home"></i></a></li>
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Tài Khoản</a></li>
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/password">Thay Đổi Địa Chỉ</a></li>
+            <li><a href="index.php"><i class="fa fa-home"></i></a></li>
+            <li><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a></li>
+            <li><a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id;?>"><?= Yii::t('app', 'ChangeAddressInfoLabel') ?></a></li>
         </ul>
         <div id="content" class="col-sm-9">
             <?php $form = ActiveForm::begin([
@@ -58,25 +43,25 @@ if(isset($modelCustomer->avatar)) {
             ]);
             ?>
             <fieldset>
-                <legend>Thông tin địa chỉ</legend>
+                <legend><?=Yii::t('app','AddressInfoLabel')?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname">Địa Chỉ</label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelAddress->generateAttributeLabel('detail') ?></label>
                     <div class="col-sm-10">
                         <?php
                             if(isset($modelUpdateAddress)){
                                 echo $form->field($modelUpdateAddress, 'detail',[
                                     'showLabels'=>false
-                                ])->textInput();
+                                ])->textInput(['placeholder' => $modelUpdateAddress->generateAttributeLabel('detail')]);
                             }else{
                                 echo $form->field($modelAddress, 'detail',[
                                     'showLabels'=>false
-                                ])->textInput();
+                                ])->textInput(['placeholder' => $modelAddress->generateAttributeLabel('detail')]);
                             }
                         ?>
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname">Tỉnh / Thành Phố</label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?=Yii::t('app','CityLabel')?></label>
                     <div class="col-sm-10">
                         <?php
                             if (isset($modelUpdateAddress)) {
@@ -101,7 +86,7 @@ if(isset($modelCustomer->avatar)) {
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname">Quận / Huyện</label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?=Yii::t('app','DistrictLabel')?></label>
                     <div class="col-sm-10">
                         <?php
                             if (isset($modelUpdateAddress)) {
@@ -129,9 +114,9 @@ if(isset($modelCustomer->avatar)) {
                 </div>
             </fieldset>
             <div class="buttons clearfix">
-                <div class="pull-left"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account" class="btn btn-default">Quay lại</a></div>
+                <div class="pull-left"><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>" class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
                 <div class="pull-right">
-                    <input type="submit" value="Lưu" class="btn btn-primary" />
+                    <input type="submit" value="<?= Yii::t('app', 'SaveLabel') ?>" class="btn btn-primary" />
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

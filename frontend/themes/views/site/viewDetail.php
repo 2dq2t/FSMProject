@@ -116,7 +116,7 @@ $this->title = $product_detail['name'];
                     <div id="product">
 
                         <div class="form-group quntity">
-                            <label class="control-label" for="input-quantity"><?= Yii::t('app', 'QuantityLabel') ?>
+                            <label class="control-label" for="input-quantity"><?= Yii::t('app', 'QuantityLabelMin') ?>
                                 :</label>
                             <input type="text" name="quantity" value="1" size="2" id="input-quantity"
                                    class="form-control"/>

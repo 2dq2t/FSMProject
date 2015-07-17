@@ -48,7 +48,7 @@ class CategoryController extends Controller
             $out = Json::encode(['output'=>'', 'message'=>'']);
 
             // fetch the first entry in posted file (there should
-            // only be one entry anyway in this array for an 
+            // only be one entry anyway in this array for an
             // editable submission)
             // - $posted is the posted file for Book without any indexes
             // - $post is the converted array for single model validation

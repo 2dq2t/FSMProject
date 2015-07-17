@@ -1,44 +1,34 @@
 <?php
 
 use kartik\widgets\ActiveForm;
-$this->title = 'Tài khoản của tôi';
 
+$this->title = Yii::t('app','MyAccountLabel');
+$baseUrl = Yii::$app->request->baseUrl;
+?>
+<?php
+require('../themes/views/site/_header.php');
 ?>
 <div class="container content-inner">
 
     <div class="row content-subinner">
-        <column id="column-left" class="col-sm-3 hidden-xs">
-            <div class="box">
-                <div class="box-heading">Tài khoản</div>
-                <div class="list-group">
-                    <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Tài Khoản Của Tôi</a>
-                    <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Tài Khoản</a>
-                    <a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Mật Khẩu</a>
-                    <a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id;?>" class="list-group-item">Thay Đổi Địa Chỉ</a>
-                    <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/logout" class="list-group-item">Thoát</a>
-                </div>
-            </div>
-        </column>
+        <?php require('_leftMenu.php'); ?>
         <ul class="breadcrumb">
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i class="fa fa-home"></i></a></li>
-            <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">Tài Khoản</a></li>
+            <li><a href="index.php"><i
+                        class="fa fa-home"></i></a></li>
+            <li><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id;?>"><?=Yii::t('app','MyAccountLabel')?></a></li>
         </ul>
         <div id="content" class="col-sm-9">
-            <h2 class="h2-account" style="margin-bottom: 5px;">Tài Khoản Của Tôi</h2>
+            <h2 class="h2-account" style="margin-bottom: 5px;"><?=Yii::t('app','MyAccountLabel')?></h2>
             <ul class="list-unstyled-account">
-                <li><a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id;?>">Thay đổi thông tin tài khoản</a></li>
-                <li><a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>">Thay đổi mật khẩu</a></li>
-                <li><a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id;?>">Thay đổi địa chỉ</a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist">Thay đổi danh mục yêu thích</a></li>
+                <li><a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangeAccInfoLabel')?></a></li>
+                <li><a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangePassInfoLabel')?></a></li>
+                <li><a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangeAddressInfoLabel')?></a></li>
+                <li><a href="index.php?r=site/wish-list"><?=Yii::t('app','WishListLabel')?></a></li>
             </ul>
-            <h2 class="h2-account" style="margin-bottom: 5px;">Đơn Hàng Của Tôi</h2>
+            <h2 class="h2-account" style="margin-bottom: 5px;"><?=Yii::t('app','MyOrderLabel')?></h2>
             <ul class="list-unstyled-account">
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order">Lịch sử mua hàng</a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/download">Tải về</a></li>
-            </ul>
-            <h2 class="h2-account" style="margin-bottom: 5px;">Nhận Thông Báo</h2>
-            <ul class="list-unstyled-account">
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/newsletter">Theo dõi / Không theo dõi thông báo</a></li>
+                <li><a href="#"><?=Yii::t('app','OrderHistoryLabel')?></a></li>
+                <li><a href="#"><?=Yii::t('app','DownloadLabel')?></a></li>
             </ul>
         </div>
     </div>
