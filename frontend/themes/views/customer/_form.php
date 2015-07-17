@@ -39,7 +39,7 @@ if (isset($modelCustomer->avatar)) {
                 <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a>
             </li>
             <li>
-                <a href="index.php?r=customer/_form&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'ChangeAccInfoLabel') ?></a>
+                <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'ChangeAccInfoLabel') ?></a>
             </li>
         </ul>
         <div id="content" class="col-sm-9">
