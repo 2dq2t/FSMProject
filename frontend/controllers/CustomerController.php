@@ -110,8 +110,8 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Your Profile has been saved.'),
-                            'title' => Yii::t('app', 'Update Profile'),
+                            'message' => Yii::t('app', 'UpdateProfileMsg01'),
+                            'title' => Yii::t('app', 'ChangeAccInfoLabel'),
                         ]);
 
                         return $this->redirect(['update', 'id' => $modelCustomer->id]);
@@ -120,16 +120,16 @@ class CustomerController extends Controller
 
                         $errors = $modelCustomer->getErrors();
                         foreach ($errors as $error) {
-                            Yii::$app->getSession()->setFlash('success', [
+                            Yii::$app->getSession()->setFlash('failed', [
                                 'type' => Alert::TYPE_DANGER,
                                 'duration' => 3000,
                                 'icon' => 'fa fa-plus',
                                 'message' => $error[0],
-                                'title' => Yii::t('app', 'Update Profile'),
+                                'title' => Yii::t('app', 'ChangeAccInfoLabel'),
                             ]);
                         }
 
-                        return $this->render('update', [
+                        return $this->render('changeinfo', [
                             'modelCustomer' => $modelCustomer,
                             'modelGuest' => $modelGuest,
                         ]);
@@ -138,16 +138,16 @@ class CustomerController extends Controller
 
                     $errors = $modelCustomer->getErrors();
                     foreach ($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
+                        Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => $error[0],
-                            'title' => Yii::t('app', 'Update Profile'),
+                            'title' => Yii::t('app', 'ChangeAccInfoLabel'),
                         ]);
                     }
 
-                    return $this->render('update', [
+                    return $this->render('changeinfo', [
                         'modelCustomer' => $modelCustomer,
                         'modelGuest' => $modelGuest,
                     ]);
@@ -162,7 +162,7 @@ class CustomerController extends Controller
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
                         'message' => $error[0],
-                        'title' => Yii::t('app', 'Update Profile'),
+                        'title' => Yii::t('app', 'ChangeAccInfoLabel'),
                     ]);
                 }
             }
@@ -173,7 +173,7 @@ class CustomerController extends Controller
             } else {
                 $modelCustomer->dob = NULL;
             }
-            return $this->render('_form', [
+            return $this->render('changeinfo', [
                 'modelCustomer' => $modelCustomer,
                 'modelGuest' => $modelGuest,
             ]);
@@ -199,8 +199,8 @@ class CustomerController extends Controller
                         'type' => Alert::TYPE_SUCCESS,
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
-                        'message' => Yii::t('app', 'Your password has been saved.'),
-                        'title' => Yii::t('app', 'Update Profile'),
+                        'message' => Yii::t('app', 'ChangePasswordMsg01'),
+                        'title' => Yii::t('app', 'ChangePassInfoLabel'),
                     ]);
 
                     return $this->redirect(['update', 'id' => $modelCustomer->id]);
@@ -208,12 +208,12 @@ class CustomerController extends Controller
 
                     $errors = $modelCustomer->getErrors();
                     foreach ($errors as $error) {
-                        Yii::$app->getSession()->setFlash('success', [
+                        Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => $error[0],
-                            'title' => Yii::t('app', 'Add User'),
+                            'title' => Yii::t('app', 'ChangePassInfoLabel'),
                         ]);
                     }
 
@@ -224,12 +224,12 @@ class CustomerController extends Controller
             } catch (Exception $e) {
                 $errors = $modelCustomer->getErrors();
                 foreach ($errors as $error) {
-                    Yii::$app->getSession()->setFlash('success', [
+                    Yii::$app->getSession()->setFlash('failed', [
                         'type' => Alert::TYPE_DANGER,
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
                         'message' => $error[0],
-                        'title' => Yii::t('app', 'Add User'),
+                        'title' => Yii::t('app', 'ChangePassInfoLabel'),
                     ]);
                 }
 
@@ -266,8 +266,8 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Your address has been saved.'),
-                            'title' => Yii::t('app', 'New Address'),
+                            'message' => Yii::t('app', 'ChangeAddressMsg01'),
+                            'title' => Yii::t('app', 'ChangeAddressInfoLabel'),
                         ]);
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
@@ -279,7 +279,7 @@ class CustomerController extends Controller
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => $error[0],
-                            'title' => Yii::t('app', 'Add Address'),
+                            'title' => Yii::t('app', 'ChangeAddressInfoLabel'),
                         ]);
                     }
 
@@ -307,8 +307,8 @@ class CustomerController extends Controller
                             'type' => Alert::TYPE_SUCCESS,
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Your address has been saved.'),
-                            'title' => Yii::t('app', 'Update Address'),
+                            'message' => Yii::t('app', 'ChangeAddressMsg01'),
+                            'title' => Yii::t('app', 'ChangeAddressInfoLabel'),
                         ]);
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
@@ -320,7 +320,7 @@ class CustomerController extends Controller
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
                             'message' => $error[0],
-                            'title' => Yii::t('app', 'Update Address'),
+                            'title' => Yii::t('app', 'ChangeAddressInfoLabel'),
                         ]);
                     }
 

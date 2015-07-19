@@ -145,7 +145,8 @@ if (isset($modelCustomer->avatar)) {
                             'pluginOptions' => [
                                 'autoclose' => true,
                                 'endDate' => '+0d',
-                                'todayHighlight' => true
+                                'todayHighlight' => true,
+                                'format' => 'mm/dd/yyyy'
                             ],
                         ]); ?>
                     </div>

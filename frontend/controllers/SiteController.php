@@ -402,11 +402,11 @@ class SiteController extends Controller
                     $product_id = json_decode($post_data['product_id']);
                     $customer_id = Yii::$app->user->identity->getId();
                     WishList::findOne(['customer_id' => $customer_id, 'product_id' => $product_id])->delete();
-                    $json['success'] = "Đã xóa thành công sản phẩm khỏi danh mục yêu thích";
+                    $json['success'] = Yii::t('app','RemoveWishListMsg01');
                     $json['product_id'] = $product_id;
                     $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
                 } catch (\mysqli_sql_exception $ex) {
-                    $json['error'] = "Đã có lỗi xảy ra, vui lòng liên hệ để biết thêm chi tiết";
+                    $json['error'] = Yii::t('app','RemoveWishListMsg02');
                 }
             }
         }
@@ -421,13 +421,13 @@ class SiteController extends Controller
         $json = array();
         if (Yii::$app->request->post()) {
             if (Yii::$app->user->isGuest)
-                $json['info'] = "Bạn phải đăng nhập để thực hiện chức năng này";
+                $json['info'] = Yii::t('app','AddWishListMsg01');
             else {
                 $customer_id = Yii::$app->user->identity->getId();
                 $data = Yii::$app->request->post();
                 $product_id = json_decode($data['product_id']);
                 if (WishList::find()->where(['customer_id' => $customer_id, 'product_id' => $product_id])->exists()) {
-                    $json['info'] = "Sản phẩm đã tồn tại trong danh mục yêu thích!";
+                    $json['info'] = Yii::t('app','AddWishListMsg02');
                 } else {
                     //save to wish list
                     $wishList = new WishList();
@@ -435,11 +435,11 @@ class SiteController extends Controller
                     $wishList->product_id = $product_id;
                     $wishList->save();
                     $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
-                    $json['success'] = "Đã thêm vào danh mục yêu thích";
+                    $json['success'] = Yii::t('app','AddWishListMsg03');
                 }
             }
         } else
-            $json['info'] = "Đã có lỗi xảy ra, liên hệ với chúng tôi để biết thêm chi tiết";
+            $json['info'] = Yii::t('app','AddWishListMsg04');
         if (Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];
@@ -459,7 +459,7 @@ class SiteController extends Controller
                 $product_id = 0;
             }
             if ($product_id == 0) {
-                $json['error'] = "Có lỗi xảy ra, liên hệ chúng tôi để biết thêm chi tiết";
+                $json['error'] = Yii::t('app','AddtoCartMsg01');
             } else {
                 if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
                     $total_price = 0;
@@ -478,7 +478,7 @@ class SiteController extends Controller
                     $total_product += $product_quantity;
                     if (count($product_cart) == 0) {
                         Yii::$app->session->set('product_cart', [$product]);
-                        $json['success'] = "Đã thêm thành công sản phẩm vào giỏ hàng";
+                        $json['success'] = Yii::t('app','AddtoCartMsg02');
                         $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) . " VND";
                     } else {
                         foreach ($product_cart as $key => $item) {
@@ -497,7 +497,7 @@ class SiteController extends Controller
                         } else {
                             Yii::$app->session->set('product_cart', $product_cart);
                         }
-                        $json['success'] = "Đã thêm thành công sản phẩm vào giỏ hàng";
+                        $json['success'] = Yii::t('app','AddtoCartMsg02');
                         $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
                     }
 
@@ -552,7 +552,7 @@ class SiteController extends Controller
                 $product_id = 0;
             }
             if ($product_id == 0) {
-                $json['error'] = "Có lỗi xảy ra, liên hệ chúng tôi để biết thêm chi tiết";
+                $json['error'] = Yii::t('app','RemoveCartMsg01');
             } else {
                 $total_price = 0;
                 $total_product = 0;
@@ -568,7 +568,7 @@ class SiteController extends Controller
                     }
                 }
                 Yii::$app->session->set('product_cart', $product_cart);
-                $json['success'] = "Đã xóa sản phẩm khỏi giỏ hàng";
+                $json['success'] = Yii::t('app','RemoveCartMsg02');
                 $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
             }
         }
@@ -589,11 +589,11 @@ class SiteController extends Controller
             $voucher_start_date = date("d-m", $check_voucher['start_date']);
             $voucher_end_date = date("d-m", $check_voucher['end_date']);
             if ($check_voucher['active'] == 0) {
-                $json['error'] = "Mã giảm giá đã bị khóa, vui lòng liên hệ để biết thêm chi tiết";
+                $json['error'] = Yii::t('app','InputVoucherMsg01');
             } else if ($today < $voucher_start_date) {
-                $json['error'] = "Lỗi! Mã giảm giá có giá trị sử dụng từ ngày " . $voucher_start_date;
+                $json['error'] = Yii::t('app','InputVoucherMsg02') . $voucher_start_date;
             } else if ($today > $voucher_end_date) {
-                $json['error'] = "Mã giảm giá đã hết hạn từ ngày " . $voucher_end_date;
+                $json['error'] = Yii::t('app','InputVoucherMsg03') . $voucher_end_date;
             } else {
                 $discount = $check_voucher['discount'];
             }
@@ -615,7 +615,7 @@ class SiteController extends Controller
         $json = array();
         if (Yii::$app->request->post()) {
             if (Yii::$app->user->isGuest)
-                $json['error'] = "Bạn phải đăng nhập để thực hiện chức năng này";
+                $json['error'] = Yii::t('app','RatingProductMsg01');
             else {
                 $postData = Yii::$app->request->post();
                 if (isset($postData['product_id'])) {
@@ -625,7 +625,7 @@ class SiteController extends Controller
                 }
                 $check_exist_rating = ProductRating::find()->where(['product_id' => $product_id, 'customer_id' => Yii::$app->user->identity->getId()])->one();
                 if (!empty($check_exist_rating['rating_id']))
-                    $json['error'] = "Bạn chỉ được đánh giá một lần/ 1 sản phẩm!";
+                    $json['error'] = Yii::t('app','RatingProductMsg02');
                 else {
                     if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
                         if (isset($postData['score'])) {
@@ -638,14 +638,14 @@ class SiteController extends Controller
                         $product_rating->rating_id = $rating_info['id'];
                         $product_rating->customer_id = Yii::$app->user->identity->getId();
                         $product_rating->save();
-                        $json['success'] = "Bạn đã đánh giá " . $score . " sao cho sản phẩm này";
+                        $json['success'] = Yii::t('app','RatingProductMsg03') . $score . Yii::t('app','RatingProductMsg04');
                     } else {
-                        $json['error'] = "Có lỗi xảy ra, liên hệ với chúng tôi để biết thêm chi tiết!";
+                        $json['error'] = Yii::t('app','RatingProductMsg05');
                     }
                 }
             }
         } else {
-            $json['error'] = "Có lỗi xảy ra, liên hệ với chúng tôi để biết thêm chi tiết!";
+            $json['error'] = Yii::t('app','RatingProductMsg05');
         }
 
 
@@ -657,42 +657,6 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        /*if (Yii::$app->request->post() && Yii::$app->request->isAjax) {
-            $html = <<<HTML
-               <!-- <div class="row">
-                  <div class="col-sm-6">
-                    <h2>New Customer</h2>
-                    <p>Checkout Options:</p>
-                    <div class="radio">
-                      <label>
-                                <input type="radio" name="account" value="register" checked="checked">
-                                Register Account</label>
-                    </div>
-                        <div class="radio">
-                      <label>
-                                <input type="radio" name="account" value="guest">
-                                Guest Checkout</label>
-                    </div>
-                        <p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
-                    <input type="button" value="Continue" id="button-account" data-loading-text="Loading..." class="btn btn-primary">
-                  </div>
-                  <div class="col-sm-6">
-                    <h2>Returning Customer</h2>
-                    <p>I am a returning customer</p>
-                    <div class="form-group">
-                      <label class="control-label" for="input-email">E-Mail</label>
-                      <input type="text" name="email" value="" placeholder="E-Mail" id="input-email" class="form-control">
-                    </div>
-                    <div class="form-group">
-                      <label class="control-label" for="input-password">Password</label>
-                      <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control">
-                      <div class="forget-password"><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/forgotten">Forgotten Password</a></div></div>
-                    <input type="button" value="Login" id="button-login" data-loading-text="Loading..." class="btn btn-primary">
-                  </div>
-                </div>-->
-HTML;
-            return $this->renderAjax($html);
-        } else {*/
             if (!\Yii::$app->user->isGuest) {
                 return $this->goHome();
             }
@@ -705,7 +669,6 @@ HTML;
                     'model' => $model,
                 ]);
             }
-      //  }
     }
 
     public function actionLogout()
@@ -713,29 +676,6 @@ HTML;
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 
     public function actionRequestPasswordReset()
@@ -747,18 +687,18 @@ HTML;
                     'type' => Alert::TYPE_SUCCESS,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Check your email for further instructions.'),
-                    'title' => Yii::t('app', 'Request password reset'),
+                    'message' => Yii::t('app', 'RequestPasswordResetMsg01'),
+                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
                 ]);
 
                 return $this->goHome();
             } else {
-                Yii::$app->getSession()->setFlash('successful', [
+                Yii::$app->getSession()->setFlash('failed', [
                     'type' => Alert::TYPE_DANGER,
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Sorry, we are unable to reset password for email provided.'),
-                    'title' => Yii::t('app', 'Request password reset'),
+                    'message' => Yii::t('app', 'RequestPasswordResetMsg02'),
+                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
                 ]);
             }
         }
@@ -781,8 +721,8 @@ HTML;
                 'type' => Alert::TYPE_SUCCESS,
                 'duration' => 3000,
                 'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'New password was saved.'),
-                'title' => Yii::t('app', 'Password reset'),
+                'message' => Yii::t('app', 'ResetPasswordMsg01'),
+                'title' => Yii::t('app', 'ChangePassInfoLabel'),
             ]);
 
             return $this->goHome();

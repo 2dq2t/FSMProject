@@ -45,7 +45,7 @@ if(isset($modelCustomer->avatar)) {
             <fieldset>
                 <legend><?=Yii::t('app','AddressInfoLabel')?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelAddress->generateAttributeLabel('detail') ?></label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelUpdateAddress->generateAttributeLabel('detail') ?></label>
                     <div class="col-sm-10">
                         <?php
                             if(isset($modelUpdateAddress)){
