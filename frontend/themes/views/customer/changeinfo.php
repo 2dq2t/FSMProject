@@ -53,7 +53,7 @@ if (isset($modelCustomer->avatar)) {
                 <legend><?= Yii::t('app', 'AccountInfoLabel') ?></legend>
                 <div class="form-group" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-firstname"><?= $modelCustomer->generateAttributeLabel('avatar') ?></label>
+                           for="input-firstname"><?= Yii::t('app','Customer Avatar') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'avatar')->widget(\kartik\widgets\FileInput::className(), [
@@ -84,47 +84,47 @@ if (isset($modelCustomer->avatar)) {
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-lastname"><?= $modelCustomer->generateAttributeLabel('username') ?></label>
+                           for="input-lastname"><?= Yii::t('app','Customer Username') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'username', [
                             'showLabels' => false
-                        ])->textInput(['placeholder' => $modelCustomer->generateAttributeLabel('username')]); ?>
+                        ])->textInput(['placeholder' => Yii::t('app','Customer Username')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-email"><?= $modelGuest->generateAttributeLabel('full_name') ?></label>
+                           for="input-email"><?= Yii::t('app','Full Name') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelGuest, 'full_name', [
                             'showLabels' => false
-                        ])->textInput(['placeholder' => $modelGuest->generateAttributeLabel('full_name')]); ?>
+                        ])->textInput(['placeholder' => Yii::t('app','Full Name')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-telephone"><?= $modelGuest->generateAttributeLabel('email') ?></label>
+                           for="input-telephone"><?= Yii::t('app','Email') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelGuest, 'email', [
                             'showLabels' => false
-                        ])->textInput(['placeholder' => $modelGuest->generateAttributeLabel('email')]); ?>
+                        ])->textInput(['placeholder' => Yii::t('app','Email')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-fax"><?= $modelGuest->generateAttributeLabel('phone_number') ?></label>
+                           for="input-fax"><?= Yii::t('app','Phone Number') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelGuest, 'phone_number', [
                             'showLabels' => false
-                        ])->textInput(['placeholder' => $modelCustomer->generateAttributeLabel('username')]); ?>
+                        ])->textInput(['placeholder' => Yii::t('app','Phone Number')]); ?>
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-fax"><?= $modelCustomer->generateAttributeLabel('gender') ?></label>
+                           for="input-fax"><?= Yii::t('app','Customer Gender') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'gender', [
@@ -134,7 +134,7 @@ if (isset($modelCustomer->avatar)) {
                 </div>
                 <div class="form-group" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-fax"><?= $modelCustomer->generateAttributeLabel('dob') ?></label>
+                           for="input-fax"><?= Yii::t('app','Customer Date of birth') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'dob', [

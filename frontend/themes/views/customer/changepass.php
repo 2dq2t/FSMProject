@@ -36,19 +36,19 @@ require('../themes/views/site/_header.php');
             <fieldset>
                 <legend><?=Yii::t('app','PasswordLabel')?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelCustomer->generateAttributeLabel('new_password') ?></label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= Yii::t('app','Customer New Password') ?></label>
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'new_password',[
                             'showLabels'=>false
-                        ])->passwordInput(['placeholder'=>$modelCustomer->generateAttributeLabel('new_password')]); ?>
+                        ])->passwordInput(['placeholder'=> Yii::t('app','Customer New Password')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelCustomer->generateAttributeLabel('re_new_password') ?></label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= Yii::t('app','Customer Re_Confirm Password') ?></label>
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 're_new_password',[
                             'showLabels'=>false
-                        ])->passwordInput(['placeholder'=>$modelCustomer->generateAttributeLabel('re_new_password')]); ?>
+                        ])->passwordInput(['placeholder'=> Yii::t('app','Customer Re_Confirm Password')]); ?>
                     </div>
                 </div>
             </fieldset>

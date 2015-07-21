@@ -33,7 +33,7 @@ $this->title = Yii::t('app', 'LoginLabel');
                 <div class="col-sm-6 login">
                     <div class="well">
                         <h2><?= Yii::t('app', 'CustomerLabel') ?></h2>
-                        
+
                         <?php $form = ActiveForm::begin(['id' => 'form-login', 'method' => 'post']); ?>
                         <div class="form-group">
                             <label class="control-label"

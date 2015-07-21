@@ -45,17 +45,17 @@ if(isset($modelCustomer->avatar)) {
             <fieldset>
                 <legend><?=Yii::t('app','AddressInfoLabel')?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <label class="col-sm-2 control-label" for="input-lastname"><?= $modelUpdateAddress->generateAttributeLabel('detail') ?></label>
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= Yii::t('app','CustomerAddress') ?></label>
                     <div class="col-sm-10">
                         <?php
                             if(isset($modelUpdateAddress)){
                                 echo $form->field($modelUpdateAddress, 'detail',[
                                     'showLabels'=>false
-                                ])->textInput(['placeholder' => $modelUpdateAddress->generateAttributeLabel('detail')]);
+                                ])->textInput(['placeholder' => Yii::t('app','CustomerAddress')]);
                             }else{
                                 echo $form->field($modelAddress, 'detail',[
                                     'showLabels'=>false
-                                ])->textInput(['placeholder' => $modelAddress->generateAttributeLabel('detail')]);
+                                ])->textInput(['placeholder' => Yii::t('app','CustomerAddress')]);
                             }
                         ?>
                     </div>
