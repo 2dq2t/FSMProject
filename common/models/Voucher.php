@@ -51,12 +51,12 @@ class Voucher extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'code' => Yii::t('app', 'Code'),
-            'discount' => Yii::t('app', 'Discount'),
-            'start_date' => Yii::t('app', 'Start Date'),
-            'end_date' => Yii::t('app', 'End Date'),
-            'active' => Yii::t('app', 'Active'),
+            'name' => Yii::t('app', 'VoucherName'),
+            'code' => Yii::t('app', 'VoucherCode'),
+            'discount' => Yii::t('app', 'VoucherDiscount'),
+            'start_date' => Yii::t('app', 'Voucher Start Date'),
+            'end_date' => Yii::t('app', 'Voucher End Date'),
+            'active' => Yii::t('app', 'VoucherActive'),
             'order_id' => Yii::t('app', 'Order ID'),
         ];
     }

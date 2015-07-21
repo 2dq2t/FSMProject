@@ -62,13 +62,13 @@ use kartik\alert\Alert;
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter season name..')]) ?>
+                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter season name')]) ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <?= $form->field($model, 'from')->widget(\kartik\date\DatePicker::classname(), [
-                                'options' => ['placeholder' => Yii::t('app', 'From date ..')],
+                                'options' => ['placeholder' => Yii::t('app', 'From date')],
                                 'removeButton' => false,
                                 'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                 'pluginOptions' => [
@@ -80,7 +80,7 @@ use kartik\alert\Alert;
                         </div>
                         <div class="col-md-6">
                             <?= $form->field($model, 'to')->widget(\kartik\date\DatePicker::classname(), [
-                                'options' => ['placeholder' => Yii::t('app', 'To date ..')],
+                                'options' => ['placeholder' => Yii::t('app', 'To date')],
                                 'removeButton' => false,
                                 'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                 'pluginOptions' => [

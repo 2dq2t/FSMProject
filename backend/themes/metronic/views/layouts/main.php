@@ -111,38 +111,32 @@ AppAsset::register($this);
         <?php
         function active($catalog, $value = '') {
             $cataloguae = [
-                'ecommerce' => [
-                    'category',
-                    'product',
-                    'rating',
-                    'unit',
-                    'season',
-                    'customers',
-                    'guest',
-                    'order',
-                    'orderstatus',
-                    'tag'
-                ],
-                'slideshow' => [
-                    'slideshow',
-                ],
-                'users' => [
-                    'customer'
-                ],
-                'employees' => [
-                    'employee'
-                ],
-                'authitems' => [
-                    'authitem'
-                ],
-                'faqs' => [
-                    'faq'
-                ],
                 'marketing' => [
-                    'product_offer',
+                    'faq',
                     'voucher',
                     'offer',
                     'mail',
+                    'slideshow',
+                ],
+                'business' => [
+                    'category',
+                    'unit',
+                    'season',
+                    'tag',
+                    'rating',
+                    'product',
+                ],
+                'sale' => [
+                    'order',
+                    'orderstatus',
+                ],
+                'employee' => [
+                    'employee',
+                    'authitem',
+                ],
+                'customer' => [
+                    'guest',
+                    'customer',
                 ],
                 'settings' => [
                     'backup',
@@ -184,96 +178,118 @@ AppAsset::register($this);
                             </a>
                         </li>
 
-
-                        <li class="<?= active('ecommerce', '') ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-basket"></i>
-                                <span class="title"><?= Yii::t('app', 'eCommerce')?></span>
-                                <span class="arrow <?= active('ecommerce', '') ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="ecommerce_index.html">
-                                        <i class="icon-home"></i>
-                                        <?= Yii::t('app', 'Dashboard')?></a>
-                                </li>
-                                <li class="<?= active('ecommerce', 'category') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Categories'), ['category/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'order') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Order'), ['order/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'orderstatus') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Order Status'), ['orderstatus/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'rating') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-star"></i> ' . Yii::t('app', 'Rating'), ['rating/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'product') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-handbag"></i> ' . Yii::t('app', 'Products'), ['product/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'unit') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-list"></i> ' . Yii::t('app', 'Unit'), ['unit/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'season') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-grid"></i> ' . Yii::t('app', 'Season'), ['season/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'guest') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-user"></i> ' . Yii::t('app', 'Customers'), ['guest/index']) ?>
-                                </li>
-                                <li class="<?= active('ecommerce', 'tag') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-user"></i> ' . Yii::t('app', 'Tags'), ['tag/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="<?= active('users', 'customer') ? 'active' : '' ?>">
-                            <a href="index.php?r=customer%2Findex">
-                                <i class="icon-users"></i>
-                                <span class="title"><?= Yii::t('app', 'Users')?></span>
-                            </a>
-                        </li>
-                        <li class="<?= active('employees', 'employee') ? 'active' : '' ?>">
-                            <a href="index.php?r=employee%2Findex">
-                                <i class="icon-book-open"></i>
-                                <span class="title"><?= Yii::t('app', 'Employee')?></span>
-                            </a>
-                        </li>
-                        <li class="<?= active('authitems', 'authitem') ? 'active' : '' ?>">
-                            <a href="index.php?r=authitem%2Findex">
-                                <i class="icon-energy"></i>
-                                <span class="title"><?=Yii::t('app', 'Permissions')?></span>
-                            </a>
-                        </li>
-                        <li class="<?= active('slideshow', 'slideshow') ? 'active' : '' ?>">
-                            <a href="index.php?r=slideshow%2Findex">
-                                <i class="icon-crop"></i>
-                                <span class="title"><?= Yii::t('app', 'Slide Show')?></span>
-                            </a>
-                        </li>
-                        <li class="<?= active('faqs', 'faq') ? 'active' : '' ?>">
-                            <a href="index.php?r=faq%2Findex">
-                                <i class="icon-support"></i>
-                                <span class="title"><?= Yii::t('app', 'FAQs')?></span>
-                            </a>
-                        </li>
+                        <!--MARKETING-->
                         <li class="<?= active('marketing', '') ? 'active open' : '' ?>">
                             <a href="javascript:;">
-                                <i class="icon-basket"></i>
+                                <i class="icon-bar-chart"></i>
                                 <span class="title"><?= Yii::t('app', 'Marketing')?></span>
                                 <span class="arrow <?= active('marketing', '') ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
+                                <li class="<?= active('marketing', 'faq') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-support"></i> ' . Yii::t('app', 'FAQs'), ['faq/index']) ?>
+                                </li>
                                 <li class="<?= active('marketing', 'voucher') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-wallet"></i> ' . Yii::t('app', 'Voucher'), ['voucher/index']) ?>
                                 </li>
                                 <li class="<?= active('marketing', 'offer') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-share-alt"></i> ' . Yii::t('app', 'Product Offer'), ['offer/index']) ?>
                                 </li>
+                                <li class="<?= active('marketing', 'slideshow') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-crop"></i> ' . Yii::t('app', 'Slide Shows'), ['slideshow/index']) ?>
+                                </li>
                                 <li class="<?= active('marketing', 'mail') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['mail/index']) ?>
                                 </li>
                             </ul>
                         </li>
+                        <!--END MARKETING-->
+
+                        <!--BUSINESS-->
+                        <li class="<?= active('business', '') ? 'active open' : '' ?>">
+                            <a href="javascript:;">
+                                <i class="icon-present"></i>
+                                <span class="title"><?= Yii::t('app', 'Business')?></span>
+                                <span class="arrow <?= active('business', '') ? 'open' : '' ?>"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="<?= active('business', 'category') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Categories'), ['category/index']) ?>
+                                </li>
+                                <li class="<?= active('business', 'unit') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-list"></i> ' . Yii::t('app', 'Unit'), ['unit/index']) ?>
+                                </li>
+                                <li class="<?= active('business', 'season') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-grid"></i> ' . Yii::t('app', 'Season'), ['season/index']) ?>
+                                </li>
+                                <li class="<?= active('business', 'tag') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-pin"></i> ' . Yii::t('app', 'Tags'), ['tag/index']) ?>
+                                </li>
+                                <li class="<?= active('business', 'rating') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-star"></i> ' . Yii::t('app', 'Rating'), ['rating/index']) ?>
+                                </li>
+                                <li class="<?= active('business', 'product') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-handbag"></i> ' . Yii::t('app', 'Product'), ['product/index']) ?>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--END BUSINESS-->
+
+                        <!--SALE-->
+                        <li class="<?= active('sale', '') ? 'active open' : '' ?>">
+                            <a href="javascript:;">
+                                <i class="icon-basket"></i>
+                                <span class="title"><?= Yii::t('app', 'Sale')?></span>
+                                <span class="arrow <?= active('sale', '') ? 'open' : '' ?>"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="<?= active('sale', 'order') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Order'), ['order/index']) ?>
+                                </li>
+                                <li class="<?= active('sale', 'orderstatus') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Order Status'), ['orderstatus/index']) ?>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--END SALE-->
+
+                        <!--EMPLOYEE-->
+                        <li class="<?= active('employee', '') ? 'active open' : '' ?>">
+                            <a href="javascript:;">
+                                <i class="icon-user"></i>
+                                <span class="title"><?= Yii::t('app', 'Employee')?></span>
+                                <span class="arrow <?= active('employee', '') ? 'open' : '' ?>"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="<?= active('employee', 'employee') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'EmployeeInfo'), ['employee/index']) ?>
+                                </li>
+                                <li class="<?= active('employee', 'authitem') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-energy"></i> ' . Yii::t('app', 'Permissions'), ['authitem/index']) ?>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--END EMPLOYEE-->
+
+                        <!--CUSTOMER-->
+                        <li class="<?= active('customer', '') ? 'active open' : '' ?>">
+                            <a href="javascript:;">
+                                <i class="icon-user"></i>
+                                <span class="title"><?= Yii::t('app', 'Customer')?></span>
+                                <span class="arrow <?= active('customer', '') ? 'open' : '' ?>"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="<?= active('customer', 'guest') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Guest'), ['guest/index']) ?>
+                                </li>
+                                <li class="<?= active('customer', 'customer') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Customers'), ['customer/index']) ?>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--END CUSTOMER-->
+
+                        <!--SETTING-->
                         <li class="<?= active('settings', '') ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-settings"></i>
@@ -289,6 +305,7 @@ AppAsset::register($this);
                                 </li>
                             </ul>
                         </li>
+                        <!--END SETTING-->
                     </ul>
                     <!-- END SIDEBAR MENU -->
                 </div>

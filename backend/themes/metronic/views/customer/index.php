@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer username')],
+            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'Any Customer username')],
             'format'=>'raw'
         ],
         [
@@ -191,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Customer'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

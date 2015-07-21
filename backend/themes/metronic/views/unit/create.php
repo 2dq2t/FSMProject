@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Unit */
 
 $this->title = Yii::t('app', 'Create Unit');
-$this->params['breadcrumbs'][] = ['label' => 'Units', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app','Unit'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="unit-create">

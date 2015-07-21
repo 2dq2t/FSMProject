@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel backend\models\EmployeeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Employees');
+$this->title = Yii::t('app', 'EmployeeInfo');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>'employee full name'],
+            'filterInputOptions'=>['placeholder'=> Yii::t('app','Any Employee full name')],
             'format'=>'raw'
         ],
         [

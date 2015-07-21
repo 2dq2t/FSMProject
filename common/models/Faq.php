@@ -43,9 +43,9 @@ class Faq extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'question' => Yii::t('app', 'Question'),
-            'answer' => Yii::t('app', 'Answer'),
-            'active' => Yii::t('app', 'Active'),
+            'question' => Yii::t('app', 'FAQsQuestion'),
+            'answer' => Yii::t('app', 'FAQsAnswer'),
+            'active' => Yii::t('app', 'FAQsActive'),
         ];
     }
 }

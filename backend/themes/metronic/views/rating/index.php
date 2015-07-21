@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\RatingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Ratings');
+$this->title = Yii::t('app', 'Rating');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Create Rating', ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>'. Yii::t('app', 'Create Rating'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

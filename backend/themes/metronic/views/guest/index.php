@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\GuestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Customers');
+$this->title = Yii::t('app', 'Guest');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>'Any customer name'],
+            'filterInputOptions'=>['placeholder'=> Yii::t('app','Any customer name')],
             'format'=>'raw'
         ],
         [
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>'Any customer email'],
+            'filterInputOptions'=>['placeholder'=> Yii::t('app','Any customer email')],
             'format'=>'raw'
         ],
         [
@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Customer'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Guest'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

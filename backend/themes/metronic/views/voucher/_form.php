@@ -77,7 +77,7 @@ use kartik\alert\Alert;
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => Yii::t('app', 'Enter start date ...')],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter start date')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 //                            'language' => 'vi',
@@ -90,7 +90,7 @@ use kartik\alert\Alert;
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'end_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => Yii::t('app', 'Enter end date ...')],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter end date')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 //                            'language' => 'vi',

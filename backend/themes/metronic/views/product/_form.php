@@ -67,7 +67,7 @@ if(isset($images)) {
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-gift"></i>Form Sample
+                    <i class="fa fa-gift"></i><?=$this->title; ?>
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="collapse" data-original-title="" title="">
@@ -87,13 +87,13 @@ if(isset($images)) {
                     <h3 class="form-section"><?= Yii::t('app', 'Product')?></h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name..')]) ?>
+                            <?= $form->field($model, 'name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter product name')]) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
                             <?= $form->field($model, 'barcode', [
 //                                            'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                            ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode..')]) ?>
+                            ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode')]) ?>
                         </div>
                         <!--/span-->
                     </div>
@@ -105,7 +105,7 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => '<ins>đ</ins>'
                                     ]
-                                ]])->textInput(['id'=>'product_price','placeholder' => Yii::t('app', 'Enter product price..'), 'onkeyup' => 'javascript:this.value=Comma(this.value);']) ?>
+                                ]])->textInput(['id'=>'product_price','placeholder' => Yii::t('app', 'Enter product price'), 'onkeyup' => 'javascript:this.value=Comma(this.value);']) ?>
                         </div>
                         <div class="col-md-6">
                             <?= $form->field($model, 'quantity_in_stock',[
@@ -113,7 +113,7 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
                                     ],
-                                ]])->textInput(['id' => 'product_quantity', 'maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product..')]) ?>
+                                ]])->textInput(['id' => 'product_quantity', 'maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product')]) ?>
                         </div>
                     </div>
                     <!--/row-->
@@ -139,11 +139,11 @@ if(isset($images)) {
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'sold')->textInput(['id' => 'product_sold','maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product..')]) ?>
+                            <?= $form->field($model, 'sold')->textInput(['id' => 'product_sold','maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product')]) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'tax')->textInput(['id' => 'product_tax', 'placeholder' => Yii::t('app', 'Enter tax of product..')]) ?>
+                            <?= $form->field($model, 'tax')->textInput(['id' => 'product_tax', 'placeholder' => Yii::t('app', 'Enter tax of product')]) ?>
                         </div>
                         <!--/span-->
                     </div>
@@ -153,24 +153,24 @@ if(isset($images)) {
                             <?= $form->field($model, 'product_tags')->widget(\kartik\widgets\Select2::className(), [
                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Tag::find()->all(), 'id', 'name'),
                                 'options' => [
-                                    'placeholder' => 'Select tags ...'
+                                    'placeholder' => Yii::t('app', 'Select tags'),
                                 ],
                                 'pluginOptions' => [
                                     'tags' => true,
                                     'allowClear' => true,
                                 ],
 
-                            ])?>
+                            ])->label(Yii::t('app','Tags'))?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
                             <?= $form->field($model, 'product_seasons')->widget(\kartik\widgets\Select2::className(), [
                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
                                 'options' => [
-                                    'placeholder' => 'Select season ...',
+                                    'placeholder' => Yii::t('app', 'Select season'),
                                     'multiple' => true,
                                 ]
-                            ])?>
+                            ])->label(Yii::t('app','Season'))?>
                         </div>
                         <!--/span-->
                     </div>
@@ -181,7 +181,7 @@ if(isset($images)) {
                                 ->dropDownList(
                                     \yii\helpers\ArrayHelper::map(\common\models\Category::find()->all(), 'id', 'name'),
                                     ['prompt'=>Yii::t('app', 'Select Category')]
-                                ) ?>
+                                )->label(Yii::t('app','Categories')) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
@@ -190,7 +190,7 @@ if(isset($images)) {
                         <!--/span-->
                     </div>
                     <!--/row-->
-                    <h3 class="form-section">Images</h3>
+                    <h3 class="form-section"><?=Yii::t('app','Images')?></h3>
                     <div class="row">
                         <div class="col-md-12 ">
                             <?= $form->field($productImages, 'product_image[]')
@@ -220,7 +220,7 @@ if(isset($images)) {
                                                 '</div>'
                                         ]
                                     ]
-                                ]) ?>
+                                ])->label(Yii::t('app','ProductImages')) ?>
                         </div>
                     </div>
                 </div>

@@ -75,11 +75,11 @@ if($model->image) {
                         <h3 class="form-section"><?= Yii::t('app', 'Employee Details') ?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'full_name')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter full name')]) ?>
+                                <?= $form->field($model, 'full_name')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter employee full name')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter password')]) ?>
+                                <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter employee password')]) ?>
                             </div>
                             <!--/span-->
                         </div>
@@ -87,7 +87,7 @@ if($model->image) {
                         <div class="row">
                             <div class="col-md-6">
                                 <?= $form->field($model, 'dob')->widget(\kartik\date\DatePicker::classname(), [
-                                    'options' => ['placeholder' => Yii::t('app', 'Enter birth day..')],
+                                    'options' => ['placeholder' => Yii::t('app', 'Enter employee birth day')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                     'pluginOptions' => [
@@ -129,22 +129,22 @@ if($model->image) {
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'gender')->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => '']) ?>
+                                <?= $form->field($model, 'gender')->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => Yii::t('app','Select employee gender')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15, 'placeholder' => Yii::t('app', 'Enter phone number')]) ?>
+                                <?= $form->field($model, 'phone_number')->textInput(['maxlength' => 15, 'placeholder' => Yii::t('app', 'Enter employee phone number')]) ?>
                             </div>
                             <!--/span-->
                         </div>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'email')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter email')]) ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter employee email')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
-                                <?= $form->field($model, 'note')->textarea(['rows' => 6, 'placeholder' => Yii::t('app', 'Enter note')]) ?>
+                                <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
                             </div>
                             <!--/span-->
                         </div>
@@ -152,7 +152,7 @@ if($model->image) {
                         <div class="row">
                             <div class="col-md-6">
                                 <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
-                                    'options' => ['placeholder' => Yii::t('app', 'Enter start date work..')],
+                                    'options' => ['placeholder' => Yii::t('app', 'Enter employee start date')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                     'pluginOptions' => [
@@ -167,7 +167,7 @@ if($model->image) {
                             <!--/span-->
                         </div>
                         <!--/row-->
-                        <h3 class="form-section"><?= Yii::t('app', 'Address Info')?></h3>
+                        <h3 class="form-section"><?= Yii::t('app', 'EmployeeAddress')?></h3>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
@@ -186,11 +186,11 @@ if($model->image) {
                                             $( "select#district-id" ).length = 0;
                                             $( "select#district-id" ).html( file );
                                         });'
-                                        ]);
+                                        ])->label(Yii::t('app','CityLabel'));
                                 } else {
                                     echo $form->field($city, 'id')->dropDownList(
                                         \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                        ['prompt'=>Yii::t('app', 'Select City')]);
+                                        ['prompt'=>Yii::t('app', 'Select City')])->label(Yii::t('app','CityLabel'));
                                 }
 
                                 ?>
@@ -209,7 +209,7 @@ if($model->image) {
                                         [
                                             'prompt'=>Yii::t('app', 'Select District'),
                                         ]
-                                    );
+                                    )->label(Yii::t('app','DistrictLabel'));
                                 } else {
                                     echo $form->field($address, 'district_id')->widget(\kartik\widgets\DepDrop::classname(), [
                                         'options'=>['prompt' => Yii::t('app', 'Select District')],
@@ -218,7 +218,7 @@ if($model->image) {
                                             'placeholder'=>Yii::t('app', 'Select District'),
                                             'url'=>\yii\helpers\Url::to(['/employee/getdistrict'])
                                         ]
-                                    ]);
+                                    ])->label(Yii::t('app','DistrictLabel'));;
                                 }
 
                                 ?>
@@ -230,10 +230,10 @@ if($model->image) {
                             <!--/span-->
                         </div>
                         <!--/row-->
-                        <h3 class="form-section"><?= Yii::t('app', 'Permission')?></h3>
+                        <h3 class="form-section"><?= Yii::t('app', 'EmployeePermission')?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'assignments')->multiselect(
+                                <?= $form->field($model, 'assignments')->label(Yii::t('app', 'Employee Assignments'))->multiselect(
                                     \yii\helpers\ArrayHelper::map(
                                         \Yii::$app->getAuthManager()->getRoles(),
                                         'name',

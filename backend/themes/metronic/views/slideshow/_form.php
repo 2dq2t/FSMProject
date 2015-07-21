@@ -99,10 +99,10 @@ if($model->path) {
                                         '</div>'
                                 ]
                             ]
-                        ]) ?>
+                        ])->label(Yii::t('app','SlideShowImages')) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter title')]) ?>
+                        <?= $form->field($model, 'title')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter SlideShow title')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'description')->textarea(['maxlength' => 255]) ?>

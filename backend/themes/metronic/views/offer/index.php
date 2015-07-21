@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\OfferSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Offers');
+$this->title = Yii::t('app', 'Product Offer');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'attribute' => 'product_id',
-            'label' => Yii::t('app', 'Product Name'),
+            'label' => Yii::t('app', 'Product'),
             'width' => '22%',
             'value' => 'product.name'
         ],

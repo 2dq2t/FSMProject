@@ -55,7 +55,7 @@ if($model->avatar) {
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-gift"></i>Form Sample
+                    <i class="fa fa-gift"></i><?= $this->title ?>
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="collapse" data-original-title="" title="">
@@ -94,7 +94,7 @@ if($model->avatar) {
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])->widget(\kartik\widgets\FileInput::className(), [
                                     'options' => [
-                                        'accept' => 'image/*'
+                                        'accept' => 'image/*',
                                     ],
                                     'pluginOptions' => [
                                         'showCaption' => true,
@@ -122,7 +122,7 @@ if($model->avatar) {
                                 <?= $form->field($model, 'dob', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])->widget(\kartik\date\DatePicker::classname(), [
-                                    'options' => ['placeholder' => Yii::t('app', 'Enter birth date ...')],
+                                    'options' => ['placeholder' => Yii::t('app', 'Enter birth date')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                     'pluginOptions' => [
@@ -139,13 +139,13 @@ if($model->avatar) {
                             <div class="col-md-6">
                                 <?= $form->field($model, 'gender', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => '']) ?>
+                                ])->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => Yii::t('app','Select gender')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
                                 <?= $form->field($guest, 'full_name', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer fullname')]) ?>
+                                ])->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter customer fullname')]) ?>
                             </div>
                             <!--/span-->
                         </div>
@@ -162,13 +162,13 @@ if($model->avatar) {
                                 ])->textInput(['maxlength' => 15 , 'placeholder' => Yii::t('app', 'Enter customer phone number')]) ?>
                             </div>
                         </div>
-                        <h3 class="form-section"><?= Yii::t('app', 'Address')?></h3>
+                        <h3 class="form-section"><?= Yii::t('app', 'CustomerAddress')?></h3>
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
                                 <?= $form->field($address, 'detail', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
-                                ])->textInput(['maxlength' => 100]) ?>
+                                ])->textInput(['maxlength' => 100])->label(Yii::t('app','Address')) ?>
 
                             </div>
                             <div class="col-md-6">
@@ -188,14 +188,14 @@ if($model->avatar) {
                                                 var event = new Event("change");
                                                 document.getElementById("district-id").dispatchEvent(event);
                                             });'
-                                            ]);
+                                            ])->label(Yii::t('app','CityLabel'));
                                 } else {
                                     echo $form->field($city, 'id', [
                                         'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                     ])
                                         ->dropDownList(
                                             \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                            ['prompt'=>Yii::t('app', 'Select City')]);
+                                            ['prompt'=>Yii::t('app', 'Select City')])->label(Yii::t('app','CityLabel'));
                                 }
 
                                 ?>
@@ -216,7 +216,7 @@ if($model->avatar) {
                                         [
                                             'prompt'=>Yii::t('app', 'Select District'),
                                         ]
-                                    );
+                                    )->label(Yii::t('app','DistrictLabel'));
                                 } else {
                                     echo $form->field($address, 'district_id', [
                                         'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
@@ -227,7 +227,7 @@ if($model->avatar) {
                                             'placeholder'=>Yii::t('app', 'Select District'),
                                             'url'=>\yii\helpers\Url::to(['/customer/getdistrict'])
                                         ]
-                                    ]);
+                                    ])->label(Yii::t('app','DistrictLabel'));
                                 }
 
                                 ?>

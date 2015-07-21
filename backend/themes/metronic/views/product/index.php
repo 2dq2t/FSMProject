@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel common\models\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Products');
+$this->title = Yii::t('app', 'Product');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

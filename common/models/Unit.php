@@ -45,8 +45,8 @@ class Unit extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'active' => Yii::t('app', 'Active'),
+            'name' => Yii::t('app', 'UnitName'),
+            'active' => Yii::t('app', 'UnitActive'),
         ];
     }
 

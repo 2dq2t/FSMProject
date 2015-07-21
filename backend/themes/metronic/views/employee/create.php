@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\Employee */
 
 $this->title = Yii::t('app', 'Create Employee');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Employees'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'EmployeeInfo'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="employee-create">

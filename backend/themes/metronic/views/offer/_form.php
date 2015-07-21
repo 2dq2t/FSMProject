@@ -68,14 +68,14 @@ use kartik\alert\Alert;
                             ) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'discount')->textInput(['placeholder' => Yii::t('app', 'Enter offer discount..')]) ?>
+                        <?= $form->field($model, 'discount')->textInput(['placeholder' => Yii::t('app', 'Enter offer discount')]) ?>
                     </div>
                     <div class="form-group">
-                        <?= $form->field($model, 'description')->textarea(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter offer price..')]) ?>
+                        <?= $form->field($model, 'description')->textarea(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter offer description')]) ?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'start_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => Yii::t('app', 'Enter start date ...')],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter start date')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 //                            'language' => 'vi',
@@ -88,7 +88,7 @@ use kartik\alert\Alert;
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'end_date')->widget(\kartik\date\DatePicker::classname(), [
-                            'options' => ['placeholder' => Yii::t('app', 'Enter end date ...')],
+                            'options' => ['placeholder' => Yii::t('app', 'Enter end date')],
                             'removeButton' => false,
                             'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 //                            'language' => 'vi',

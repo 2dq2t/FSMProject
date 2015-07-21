@@ -8,7 +8,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\VoucherSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Vouchers');
+$this->title = Yii::t('app', 'Voucher');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -147,7 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Create Voucher', ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>'. Yii::t('app','Create Voucher'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

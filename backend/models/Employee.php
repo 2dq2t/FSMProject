@@ -69,17 +69,18 @@ class Employee extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'full_name' => Yii::t('app', 'Full Name'),
-            'password' => Yii::t('app', 'Password'),
-            'dob' => Yii::t('app', 'Dob'),
-            'gender' => Yii::t('app', 'Gender'),
-            'phone_number' => Yii::t('app', 'Phone Number'),
-            'email' => Yii::t('app', 'Email'),
-            'image' => Yii::t('app', 'Image'),
+            'full_name' => Yii::t('app', 'Employee Full Name'),
+            'password' => Yii::t('app', 'Employee Password'),
+            'dob' => Yii::t('app', 'Employee Dob'),
+            'gender' => Yii::t('app', 'Employee Gender'),
+            'phone_number' => Yii::t('app', 'Employee Phone Number'),
+            'email' => Yii::t('app', 'Employee Email'),
+            'note' => Yii::t('app','Employee Note'),
+            'image' => Yii::t('app', 'Employee Image'),
             'auth_key' => Yii::t('app', 'Auth Key'),
             'password_reset_token' => Yii::t('app', 'Password Reset Token'),
-            'start_date' => Yii::t('app', 'Start Date'),
-            'status' => Yii::t('app', 'Status'),
+            'start_date' => Yii::t('app', 'Employee Start Date'),
+            'status' => Yii::t('app', 'Employee Status'),
             'address_id' => Yii::t('app', 'Address ID'),
         ];
     }

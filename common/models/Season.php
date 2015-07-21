@@ -50,10 +50,10 @@ class Season extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'from' => Yii::t('app', 'From'),
-            'to' => Yii::t('app', 'To'),
-            'active' => Yii::t('app', 'Active'),
+            'name' => Yii::t('app', 'SeasonName'),
+            'from' => Yii::t('app', 'SeasonFrom'),
+            'to' => Yii::t('app', 'SeasonTo'),
+            'active' => Yii::t('app', 'SeasonActive'),
         ];
     }
 

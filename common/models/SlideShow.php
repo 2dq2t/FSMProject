@@ -51,9 +51,9 @@ class SlideShow extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'path' => Yii::t('app', 'Path'),
-            'title' => Yii::t('app', 'Title'),
-            'description' => Yii::t('app', 'Description'),
-            'active' => Yii::t('app', 'Active'),
+            'title' => Yii::t('app', 'SlideShowTitle'),
+            'description' => Yii::t('app', 'SlideShowDescription'),
+            'active' => Yii::t('app', 'SlideShowActive'),
             'product_id' => Yii::t('app', 'Product'),
         ];
     }

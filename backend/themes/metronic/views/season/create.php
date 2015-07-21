@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Season */
 
 $this->title = Yii::t('app', 'Create Season');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Seasons'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Season'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="season-create">

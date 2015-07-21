@@ -32,7 +32,7 @@ if(Yii::$app->session->getFlash('error')) {
     <?= $form->field($model, 'email')->textInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
         'autocomplete' => 'off',
-        'placeholder' => Yii::t('app', 'Username'),
+        'placeholder' => Yii::t('app', 'BLoginEmail'),
     ])->label(false) ?>
 </div>
 <div class="form-group">
@@ -40,30 +40,13 @@ if(Yii::$app->session->getFlash('error')) {
     <?= $form->field($model, 'password')->passwordInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
         'autocomplete' => 'off',
-        'placeholder' => Yii::t('app', 'Password')
+        'placeholder' => Yii::t('app', 'BLoginPassword')
     ])->label(false) ?>
 </div>
 <div class="form-actions">
-    <?= Html::submitButton('Login', ['class' => 'btn btn-success uppercase', 'name' => 'login-button']) ?>
+    <?= Html::submitButton(Yii::t('app','LoginLabel'), ['class' => 'btn btn-success uppercase', 'name' => 'login-button']) ?>
     <?= $form->field($model, 'rememberMe')->checkbox() ?>
-    <?= Html::a(Yii::t('app', 'Forgot Password?'), ['/site/request-password-reset'], ['class' => 'forget-password'])?>
-</div>
-<div class="login-options">
-    <h4>Or login with</h4>
-    <ul class="social-icons">
-        <li>
-            <a class="social-icon-color facebook" data-original-title="facebook" href="#"></a>
-        </li>
-        <li>
-            <a class="social-icon-color twitter" data-original-title="Twitter" href="#"></a>
-        </li>
-        <li>
-            <a class="social-icon-color googleplus" data-original-title="Goole Plus" href="#"></a>
-        </li>
-        <li>
-            <a class="social-icon-color linkedin" data-original-title="Linkedin" href="#"></a>
-        </li>
-    </ul>
+    <?= Html::a(Yii::t('app', 'ForgottenPasswordLabel'), ['/site/request-password-reset'], ['class' => 'forget-password'])?>
 </div>
 <!--</form>-->
 <?php ActiveForm::end(); ?>

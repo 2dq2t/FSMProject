@@ -48,8 +48,8 @@ class OrderStatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'comment' => Yii::t('app', 'Comment'),
+            'name' => Yii::t('app', 'OrderStatusName'),
+            'comment' => Yii::t('app', 'OrderStatusComment'),
         ];
     }
 

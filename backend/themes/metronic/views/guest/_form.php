@@ -28,7 +28,7 @@ use kartik\alert\Alert;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['order/index'], ['class' => 'btn btn-default btn-circle']) ?>
+    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['guest/index'], ['class' => 'btn btn-default btn-circle']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton('<i class="fa fa-check-circle"></i> ' . Yii::t('app', 'Save &amp; Continue'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'next']) ?>
@@ -61,7 +61,7 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Eneter customer fullname')]) ?>
+                        <?= $form->field($model, 'full_name')->textInput(['maxlength' => 255, 'placeholder' => Yii::t('app', 'Enter customer fullname')]) ?>
                     </div>
                 </div>
                 <div class="form-body">

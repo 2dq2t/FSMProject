@@ -33,20 +33,19 @@ $this->title = Yii::t('app', 'LoginLabel');
                 <div class="col-sm-6 login">
                     <div class="well">
                         <h2><?= Yii::t('app', 'CustomerLabel') ?></h2>
-
-                        <p><strong><?= Yii::t('app', 'LoginNotice02') ?></strong></p>
+                        
                         <?php $form = ActiveForm::begin(['id' => 'form-login', 'method' => 'post']); ?>
                         <div class="form-group">
                             <label class="control-label"
-                                   for="input-email"><?= $model->generateAttributeLabel('username') ?></label>
+                                   for="input-email"><?= Yii::t('app','FLoginUserName') ?></label>
                             <?= $form->field($model, 'username')
-                                ->label(false)->textInput(['placeholder' => $model->generateAttributeLabel('username')]); ?>
+                                ->label(false)->textInput(['placeholder' => Yii::t('app','FLoginUserName')]); ?>
                         </div>
                         <div class="form-group">
                             <label class="control-label"
-                                   for="input-password"><?= $model->generateAttributeLabel('password') ?></label>
+                                   for="input-password"><?= Yii::t('app','FLoginPassword') ?></label>
                             <?= $form->field($model, 'password')
-                                ->label(false)->passwordInput(['placeholder' => $model->generateAttributeLabel('password')]); ?>
+                                ->label(false)->passwordInput(['placeholder' => Yii::t('app','FLoginPassword')]); ?>
                             <div class="forget-password"><a
                                     href="index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
                                     ?</a></div>

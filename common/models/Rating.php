@@ -45,7 +45,7 @@ class Rating extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'rating' => Yii::t('app', 'Rating'),
-            'description' => Yii::t('app', 'Description'),
+            'description' => Yii::t('app', 'RatingDescription'),
         ];
     }
 

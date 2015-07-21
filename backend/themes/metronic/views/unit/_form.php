@@ -61,7 +61,7 @@ use kartik\alert\Alert;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter unit of product..')]) ?>
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter unit of product')]) ?>
                     </div>
                 </div>
                 <div class="form-actions">

@@ -9,7 +9,7 @@ use kartik\alert\Alert;
 /* @var $searchModel common\models\SeasonSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Seasons');
+$this->title = Yii::t('app', 'Season');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -79,14 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;{delete}&nbsp;{details}',
-            'buttons' => [
-                'details' => function($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-                        'title' => Yii::t('app', 'View all product in season'),
-                    ]);
-                }
-            ],
+            'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
         ],
     ];
 
@@ -117,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Create Season', ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app','Create Season'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

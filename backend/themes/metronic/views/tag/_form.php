@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 
-    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['unit/index'], ['class' => 'btn btn-default btn-circle']) ?>
+    <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['tag/index'], ['class' => 'btn btn-default btn-circle']) ?>
 
     <?php if ($model->isNewRecord): ?>
         <?= Html::submitButton('<i class="fa fa-check-circle"></i> ' . Yii::t('app', 'Save &amp; Continue'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'next']) ?>
@@ -60,7 +60,7 @@ use yii\widgets\ActiveForm;
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter tag name..')]) ?>
+                        <?= $form->field($model, 'name')->textInput(['maxlength' => 45, 'placeholder' => Yii::t('app', 'Enter tag name')]) ?>
                     </div>
                 </div>
                 <div class="form-actions">
