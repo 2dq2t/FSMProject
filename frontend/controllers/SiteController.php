@@ -247,7 +247,25 @@ class SiteController extends Controller
         $products = $command->queryAll();
         return $this->render('search', ['products' => $products]);
     }
-
+    public function actionDynamicNavbar(){
+        $json = array();
+        if (Yii::$app->request->post()) {
+            $data = Yii::$app->request->post();
+            $width = json_decode($data['screenwidth']);
+            if($width < 980) {
+                $json = Yii::$app->Category->category();
+            }
+            else{
+                $menu[0] = "test";
+                $menu[1] = "test";
+                array_push($json,$menu);
+            }
+        }
+        if (Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return [json_encode($json)];
+        }
+    }
     public function actionCategory()
     {
         if (Yii::$app->request->isGet) {
@@ -265,13 +283,13 @@ class SiteController extends Controller
                     else
                         $order = SORT_DESC;
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
                     $countQuery = clone $category_product_query;
                     $pages = new Pagination(['totalCount' => $countQuery->count()]);
                     $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();
                 } else {
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
                     $countQuery = clone $category_product_query;
                     $pages = new Pagination(['totalCount' => $countQuery->count()]);
                     $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();

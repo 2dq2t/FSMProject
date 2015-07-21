@@ -21,7 +21,30 @@ function getURLVar(key) {
 		}
 	}
 }
+$(window).resize(function() {
+    $(document).ready(function() {
+        var width = $(window).width();
+        //This is ajax code which will send width to your php page in the screenWidth variable
 
+        $.ajax({
+            url: "index.php?r=site/dynamic-navbar", //this will be your php page
+            type: 'post',
+            data: 'screenwidth=' + width,
+            dataType: 'json',
+            success: function (json) {
+                var json = $.parseJSON(json);
+                if(width>980){
+                    var navbar = document.getElementById("navbar");
+                    $demo = ('<li><a href="test">'+json[0][0]+'</a></li>'  );
+                    navbar.createElement('li');
+
+                }
+
+                console.log(json);
+            }
+        });
+    });
+});
 $(document).ready(function() {
 	// Adding the clear Fix
 	cols1 = $('#column-right, #column-left').length;

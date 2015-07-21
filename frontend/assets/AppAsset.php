@@ -19,8 +19,8 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'js/font-awesome/css/font-awesome.min.css',
-        'http://fonts.googleapis.com/css?family=Open+Sans:400,700',
-        'http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700&subset=vietnamese',
+        'stylesheet/css_family_vietnamese.css',
+        'stylesheet/css_family.css',
         'stylesheet/stylesheet.css',
         'stylesheet/megnor/carousel.css',
         'stylesheet/megnor/custom.css',
@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
         'stylesheet/search.css',
         'js/jquery/owl-carousel/owl.carousel.css',
         'js/jquery/owl-carousel/owl.transitions.css',
+        'js/jquery/owl-carousel/owl.theme.css',
         'js/jquery/magnific/magnific-popup.css',
         'js/jquery/raty/jquery.raty.css',
     ];
