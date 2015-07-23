@@ -30,12 +30,12 @@ require('_header.php');
                 <legend><?= Yii::t('app', 'PasswordLabel') ?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
                     <label class="col-sm-2 control-label"
-                           for="input-fullname"><?= $model->generateAttributeLabel('password') ?></label>
+                           for="input-fullname"><?= Yii::t('app','PasswordLabel') ?></label>
 
                     <div class="col-sm-10">
                         <?= $form->field($model, 'password', [
                             'showLabels' => false
-                        ])->passwordInput(['placeholder' => $model->generateAttributeLabel('password')]); ?>
+                        ])->passwordInput(['placeholder' => Yii::t('app','PasswordLabel')]); ?>
                     </div>
                 </div>
             </fieldset>
