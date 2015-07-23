@@ -15,21 +15,25 @@ $gridColumns = [
     ['class' => 'kartik\grid\SerialColumn'],
     [
         'attribute' => 'name',
+        'label' => Yii::t('app', 'PermissionName'),
     ],
     [
         'attribute' => 'description',
+        'label' => Yii::t('app', 'PermissionDescription'),
     ],
 //    [
 //        'attribute' => 'ruleName',
 //    ],
     [
         'attribute' => 'createdAt',
+        'label' => Yii::t('app', 'Permission Created At'),
         'value' => function ($data) {
             return date('m/d/Y', $data->createdAt);
         },
     ],
     [
         'attribute' => 'updatedAt',
+        'label' => Yii::t('app', 'Permission Updated At'),
         'value' => function ($data) {
             return date('m/d/Y', $data->updatedAt);
         },
@@ -90,6 +94,6 @@ $gridColumns = [
     'panel' => [
         'type' => GridView::TYPE_PRIMARY,
         'heading' => $label,
-        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create ' . $label), ['create', 'type' => $type], ['class' => 'btn btn-success']),
+        'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Creates')." ". $label, ['create', 'type' => $type], ['class' => 'btn btn-success']),
     ],
 ]); ?>

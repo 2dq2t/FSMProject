@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', 'Roles'),
-                'content' => $this->render('_gridview', ['data' => $roles,'id' => 'roles', 'label' => 'Roles', 'type' => \yii\rbac\Item::TYPE_ROLE]),
+                'content' => $this->render('_gridview', ['data' => $roles,'id' => 'roles', 'label' => Yii::t('app', 'Roles'), 'type' => \yii\rbac\Item::TYPE_ROLE]),
             ],
         ],
         'encodeLabels'=>false
