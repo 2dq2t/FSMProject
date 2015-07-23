@@ -68,8 +68,8 @@ class TagController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Tag has been saved.'),
-                    'title' => Yii::t('app', 'Add Tag')
+                    'message' => Yii::t('app', 'Tag_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Tag')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -82,8 +82,8 @@ class TagController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag has been saved.'),
-                    'title' => Yii::t('app', 'Add Tag')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Tag')
                 ]);
                 return $this->render('create', [
                     'model' => $model,
@@ -112,7 +112,7 @@ class TagController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Tag has been updated.'),
+                    'message' => Yii::t('app', 'Tag_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
                 return $this->redirect(['index']);
@@ -121,7 +121,7 @@ class TagController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag has been updated.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
                 return $this->render('update', [
@@ -149,7 +149,7 @@ class TagController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Tag has been deleted.'),
+            'message' => Yii::t('app', 'Tag_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Tag')
         ]);
 

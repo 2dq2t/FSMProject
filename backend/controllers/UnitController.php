@@ -121,8 +121,8 @@ class UnitController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Unit Record has been saved.'),
-                    'title' => Yii::t('app', 'Add Unit')
+                    'message' => Yii::t('app', 'Unit_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Unit')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -135,8 +135,8 @@ class UnitController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit Record has been saved.'),
-                    'title' => Yii::t('app', 'Add Unit')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Unit')
                 ]);
                 return $this->render('create', [
                     'model' => $model,
@@ -165,7 +165,7 @@ class UnitController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Unit Record has been updated.'),
+                    'message' => Yii::t('app', 'Unit_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Unit')
                 ]);
                 return $this->redirect(['index']);
@@ -174,7 +174,7 @@ class UnitController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit Record has been updated.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Unit')
                 ]);
 
@@ -205,7 +205,7 @@ class UnitController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Unit Record has been deleted.'),
+            'message' => Yii::t('app', 'Unit_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Unit')
         ]);
 

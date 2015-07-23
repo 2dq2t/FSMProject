@@ -69,8 +69,8 @@ class OrderStatusController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Order Status has been saved.'),
-                    'title' => Yii::t('app', 'Add Order Status')
+                    'message' => Yii::t('app', 'OrderStatus_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Order Status')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -83,8 +83,8 @@ class OrderStatusController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order Status has been save error.'),
-                    'title' => Yii::t('app', 'Add Order Status')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'OrderStatus_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Order Status')
                 ]);
 
                 return $this->render('create', [
@@ -114,7 +114,7 @@ class OrderStatusController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Order Status has been edited.'),
+                    'message' => Yii::t('app', 'OrderStatus_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Order Status')
                 ]);
                 return $this->redirect(['index']);
@@ -123,7 +123,7 @@ class OrderStatusController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order Status has been edited.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'OrderStatus_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Order Status')
                 ]);
 
@@ -152,7 +152,7 @@ class OrderStatusController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-plus',
-            'message' => Yii::t('app', 'Order Status has been deleted.'),
+            'message' => Yii::t('app', 'OrderStatus_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Order Status')
         ]);
 

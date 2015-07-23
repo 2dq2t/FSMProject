@@ -119,8 +119,8 @@ class CategoryController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Category Record has been saved.'),
-                    'title' => Yii::t('app', 'Add Category')
+                    'message' => Yii::t('app', 'Category_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Category')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -133,8 +133,8 @@ class CategoryController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category Record saved error.'),
-                    'title' => Yii::t('app', 'Add Category')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Category')
                 ]);
 
                 return $this->render('create', [
@@ -164,7 +164,7 @@ class CategoryController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Category has been edited.'),
+                    'message' => Yii::t('app', 'Category_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Category')
                 ]);
                 return $this->redirect(['index']);
@@ -173,7 +173,7 @@ class CategoryController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category has been edited.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Category')
                 ]);
 
@@ -204,7 +204,7 @@ class CategoryController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Category Record has been deleted.'),
+            'message' => Yii::t('app', 'Category_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Category')
         ]);
 

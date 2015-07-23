@@ -125,8 +125,8 @@ class OfferController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Offer has been add.'),
-                    'title' => Yii::t('app', 'Add Offer')
+                    'message' => Yii::t('app', 'Offer_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Offer')
                 ]);
                 return $this->redirect(['index']);
             } else {
@@ -142,8 +142,8 @@ class OfferController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Create Offer error. ',
-                    'title' => Yii::t('app', 'Add Offer')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Offer_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Offer')
                 ]);
 
                 return $this->render('create', [
@@ -180,7 +180,7 @@ class OfferController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Offer has been edited.'),
+                    'message' => Yii::t('app', 'Offer_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Offer')
                 ]);
                 return $this->redirect(['index']);
@@ -197,7 +197,7 @@ class OfferController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Update Offer error. ',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Offer_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Offer')
                 ]);
 
@@ -229,7 +229,7 @@ class OfferController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-plus',
-            'message' => Yii::t('app', 'Offer has been deleted.'),
+            'message' => Yii::t('app', 'Offer_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Offer')
         ]);
 

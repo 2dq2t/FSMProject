@@ -133,8 +133,8 @@ class SlideShowController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Slide show has been saved.'),
-                    'title' => Yii::t('app', 'Add Slide show'),
+                    'message' => Yii::t('app', 'SlideShow_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create SlideShow'),
                 ]);
 
                 switch (Yii::$app->request->post('action', 'save')) {
@@ -149,8 +149,8 @@ class SlideShowController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not be save slide show. Please try again later.'),
-                    'title' => Yii::t('app', 'Add Slide show'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'SlideShow_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create SlideShow'),
                 ]);
 
                 return $this->render('create', [
@@ -197,8 +197,8 @@ class SlideShowController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Slide show has been edited.'),
-                    'title' => Yii::t('app', 'Edit Slide show'),
+                    'message' => Yii::t('app', 'SlideShow_Update_Success_Msg'),
+                    'title' => Yii::t('app', 'Update SlideShow'),
                 ]);
 
                 return $this->redirect(['index']);
@@ -207,8 +207,8 @@ class SlideShowController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Slide show has been edited.'),
-                    'title' => Yii::t('app', 'Edit Slide show'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'SlideShow_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update SlideShow'),
                 ]);
 
                 return $this->render('update', [
@@ -238,8 +238,8 @@ class SlideShowController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-pencil',
-            'message' => Yii::t('app', 'Slide show has been deleted.'),
-            'title' => Yii::t('app', 'Delete Slide show'),
+            'message' => Yii::t('app', 'SlideShow_Delete_Success_Msg'),
+            'title' => Yii::t('app', 'Delete SlideShow'),
         ]);
 
         return $this->redirect(['index']);

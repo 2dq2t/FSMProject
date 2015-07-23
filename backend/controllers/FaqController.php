@@ -121,8 +121,8 @@ class FaqController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Faq has been saved.'),
-                    'title' => Yii::t('app', 'Add Faq')
+                    'message' => Yii::t('app', 'FAQs_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create FAQs')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -135,8 +135,8 @@ class FaqController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) :  Yii::t('app', 'Faq added error.'),
-                    'title' => Yii::t('app', 'Add Faq')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) :  Yii::t('app', 'FAQs_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create FAQs')
                 ]);
 
                 return $this->render('create', [
@@ -166,8 +166,8 @@ class FaqController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Faq has been edited.'),
-                    'title' => Yii::t('app', 'Update Faq')
+                    'message' => Yii::t('app', 'FAQs_Update_Success_Msg'),
+                    'title' => Yii::t('app', 'Update FAQs')
                 ]);
                 return $this->redirect(['index']);
             } else {
@@ -175,8 +175,8 @@ class FaqController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Faq has been edited error.'),
-                    'title' => Yii::t('app', 'Update Faq')
+                    'message' => Yii::t('app', 'FAQs_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update FAQs')
                 ]);
 
                 return $this->render('update', [
@@ -206,8 +206,8 @@ class FaqController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Faq has been deleted.'),
-            'title' => Yii::t('app', 'Delete Faq')
+            'message' => Yii::t('app', 'FAQs_Delete_Success_Msg'),
+            'title' => Yii::t('app', 'Delete FAQs')
         ]);
 
         return $this->redirect(['index']);

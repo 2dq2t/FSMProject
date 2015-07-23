@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn'],
         [
             'attribute' => 'path',
-            'label' => 'Image',
+            'label' => Yii::t('app','Images'),
             'value' => function(\common\models\SlideShow $model) {
                 if(file_exists('../../frontend/web/uploads/slideshow/'. $model->id . '/' . $model->path)) {
                     return Html::img('../../frontend/web/uploads/slideshow/' . $model->id . '/' . $model->path, ['class' => 'img-thumbnail img-responsive center-block']);

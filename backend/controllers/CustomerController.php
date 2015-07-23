@@ -176,8 +176,8 @@ class CustomerController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'User has been saved.'),
-                            'title' => Yii::t('app', 'Add User'),
+                            'message' => Yii::t('app', 'Customer_Add_Success_Msg'),
+                            'title' => Yii::t('app', 'Create Customer'),
                         ]);
 
                         switch (Yii::$app->request->post('action', 'save')) {
@@ -201,8 +201,8 @@ class CustomerController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save a user',
-                            'title' => Yii::t('app', 'Add User'),
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Customer_Add_Error_Msg'),
+                            'title' => Yii::t('app', 'Create Customer'),
                         ]);
 
                         $model->password = null;
@@ -230,8 +230,8 @@ class CustomerController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a user'),
-                    'title' => Yii::t('app', 'Add User'),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Customer_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Customer'),
                 ]);
 
                 $model->password = null;
@@ -336,8 +336,8 @@ class CustomerController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
-                            'message' => Yii::t('app', 'User has been edited.'),
-                            'title' => Yii::t('app', 'Edit User'),
+                            'message' => Yii::t('app', 'Customer_Update_Success_Msg'),
+                            'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
                         return $this->redirect(['index']);
@@ -356,8 +356,8 @@ class CustomerController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-pencil',
-                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not be save a user'),
-                            'title' => Yii::t('app', 'Edit User'),
+                            'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Customer_Update_Error_Msg'),
+                            'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
                         return $this->render('update', [
@@ -383,8 +383,8 @@ class CustomerController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a user.'),
-                    'title' => Yii::t('app', 'Edit User'),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Customer_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update Customer'),
                 ]);
 
                 return $this->render('update', [
@@ -422,11 +422,11 @@ class CustomerController extends Controller
         $customer->save();
 
         Yii::$app->getSession()->setFlash('success', [
-            'type' => 'error',
+            'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => 'User has been deleted.',
-            'title' => Yii::t('app', 'Delete User'),
+            'message' => Yii::t('app','Customer_Delete_Success_Msg'),
+            'title' => Yii::t('app', 'Delete Customer'),
         ]);
 
 

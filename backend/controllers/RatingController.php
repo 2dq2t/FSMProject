@@ -101,8 +101,8 @@ class RatingController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Rating has been saved.'),
-                    'title' => Yii::t('app', 'Add Rating'),
+                    'message' => Yii::t('app', 'Rating_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Rating'),
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -115,8 +115,8 @@ class RatingController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Could not be save rating. Please try again later.'),
-                    'title' => Yii::t('app', 'Add Rating'),
+                    'message' => Yii::t('app', 'Rating_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Rating'),
                 ]);
 
                 return $this->render('create', [
@@ -147,7 +147,7 @@ class RatingController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Rating has been edited.'),
+                    'message' => Yii::t('app', 'Rating_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
                 return $this->redirect(['index']);
@@ -156,7 +156,7 @@ class RatingController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating has been edited.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
 
@@ -185,7 +185,7 @@ class RatingController extends Controller
             'type' => 'success',
             'duration' => 5000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Rating has been deleted.'),
+            'message' => Yii::t('app', 'Rating_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Rating'),
         ]);
 

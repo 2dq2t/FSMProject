@@ -125,8 +125,8 @@ class VoucherController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Voucher has been saved.'),
-                    'title' => Yii::t('app', 'Add Voucher')
+                    'message' => Yii::t('app', 'Voucher_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Voucher')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -147,8 +147,8 @@ class VoucherController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Add Voucher errors. '),
-                    'title' => Yii::t('app', 'Add Voucher')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Voucher_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Voucher')
                 ]);
 
                 return $this->render('create', [
@@ -194,7 +194,7 @@ class VoucherController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Voucher has been edited.'),
+                    'message' => Yii::t('app', 'Voucher_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Voucher')
                 ]);
                 return $this->redirect(['index']);
@@ -211,7 +211,7 @@ class VoucherController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update Voucher errors. '),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Voucher_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Voucher')
                 ]);
 
@@ -244,7 +244,7 @@ class VoucherController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Voucher has been deleted.'),
+            'message' => Yii::t('app', 'Voucher_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Voucher')
         ]);
 

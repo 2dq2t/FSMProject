@@ -219,8 +219,8 @@ class ProductController extends Controller
                         'type' => 'success',
                         'duration' => 3000,
                         'icon' => 'fa fa-plus',
-                        'message' => Yii::t('app', 'Product Record has been saved.'),
-                        'title' => Yii::t('app', 'Add Product'),
+                        'message' => Yii::t('app', 'Product_Add_Success_Msg'),
+                        'title' => Yii::t('app', 'Create Product'),
                     ]);
 
                     switch (Yii::$app->request->post('action', 'save')) {
@@ -237,8 +237,8 @@ class ProductController extends Controller
                         'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product. Please try again'),
-                        'title' => Yii::t('app', 'Add Product'),
+                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Product_Add_Error_Msg'),
+                        'title' => Yii::t('app', 'Create Product'),
                     ]);
 
                     return $this->render('create', [
@@ -254,8 +254,8 @@ class ProductController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save product. Please try again'),
-                    'title' => Yii::t('app', 'Add Product'),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Product'),
                 ]);
 
                 return $this->render('create', [
@@ -396,8 +396,8 @@ class ProductController extends Controller
                         'type' => 'success',
                         'duration' => 0,
                         'icon' => 'fa fa-pencil',
-                        'message' => Yii::t('app', 'Product Record has been edited.'),
-                        'title' => Yii::t('app', 'Edit Product'),
+                        'message' => Yii::t('app', 'Product_Update_Success_Msg'),
+                        'title' => Yii::t('app', 'Update Product'),
                     ]);
 
                     return $this->redirect(['index']);
@@ -411,8 +411,8 @@ class ProductController extends Controller
                         'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product. Please try again'),
-                        'title' => Yii::t('app', 'Edit Product'),
+                        'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Product_Update_Error_Msg'),
+                        'title' => Yii::t('app', 'Update Product'),
                     ]);
 
                     return $this->render('create', [
@@ -431,8 +431,8 @@ class ProductController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save product. Please try again'),
-                    'title' => Yii::t('app', 'Edit Product'),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update Product'),
                 ]);
 
                 return $this->render('update', [
@@ -467,7 +467,7 @@ class ProductController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Product Record has been deleted.'),
+            'message' => Yii::t('app', 'Product_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Product')
         ]);
 

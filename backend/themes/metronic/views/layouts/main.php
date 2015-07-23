@@ -274,13 +274,13 @@ AppAsset::register($this);
                         <!--CUSTOMER-->
                         <li class="<?= active('customer', '') ? 'active open' : '' ?>">
                             <a href="javascript:;">
-                                <i class="icon-user"></i>
+                                <i class="icon-users"></i>
                                 <span class="title"><?= Yii::t('app', 'Customer')?></span>
                                 <span class="arrow <?= active('customer', '') ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
                                 <li class="<?= active('customer', 'guest') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Guest'), ['guest/index']) ?>
+                                    <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Guest'), ['guest/index']) ?>
                                 </li>
                                 <li class="<?= active('customer', 'customer') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Customers'), ['customer/index']) ?>

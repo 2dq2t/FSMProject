@@ -70,8 +70,8 @@ class GuestController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Customer Record has been saved.'),
-                    'title' => Yii::t('app', 'Add Customer')
+                    'message' => Yii::t('app', 'Guest_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Guest')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -84,8 +84,8 @@ class GuestController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? $model->getFirstErrors() : Yii::t('app', 'Customer Record has been save error.'),
-                    'title' => Yii::t('app', 'Add Customer')
+                    'message' => current($model->getFirstErrors()) ? $model->getFirstErrors() : Yii::t('app', 'Guest_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Guest')
                 ]);
                 return $this->render('create', [
                     'model' => $model,
@@ -115,8 +115,8 @@ class GuestController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Customer has been edited.'),
-                    'title' => Yii::t('app', 'Update Customer')
+                    'message' => Yii::t('app', 'Guest_Update_Success_Msg'),
+                    'title' => Yii::t('app', 'Update Guest')
                 ]);
 
                 return $this->redirect(['index']);
@@ -125,8 +125,8 @@ class GuestController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Customer has been edit error.'),
-                    'title' => Yii::t('app', 'Update Customer')
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update Guest')
                 ]);
 
                 return $this->render('update', [
@@ -154,8 +154,8 @@ class GuestController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Customer has been deleted.'),
-            'title' => Yii::t('app', 'Delete Customer')
+            'message' => Yii::t('app', 'Guest_Delete_Success_Msg'),
+            'title' => Yii::t('app', 'Delete Guest')
         ]);
 
         return $this->redirect(['index']);

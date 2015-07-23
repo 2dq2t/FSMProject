@@ -177,8 +177,8 @@ class EmployeeController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Employee has been saved.'),
-                            'title' => Yii::t('app', 'Add Employee'),
+                            'message' => Yii::t('app', 'Employee_Add_Success_Msg'),
+                            'title' => Yii::t('app', 'Create Employee'),
                         ]);
 
                         switch (Yii::$app->request->post('action', 'save')) {
@@ -205,8 +205,8 @@ class EmployeeController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Could not save a employee.'),
-                            'title' => Yii::t('app', 'Add Employee'),
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'),
+                            'title' => Yii::t('app', 'Create Employee'),
                         ]);
 
                         $model->password = null;
@@ -233,8 +233,8 @@ class EmployeeController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not be save a employee.'),
-                    'title' => Yii::t('app', 'Add Employee'),
+                    'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Employee_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Employee'),
                 ]);
 
                 $model->password = null;
@@ -345,8 +345,8 @@ class EmployeeController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Employee has been saved.'),
-                            'title' => Yii::t('app', 'Edit Employee'),
+                            'message' => Yii::t('app', 'Employee_Update_Success_Msg'),
+                            'title' => Yii::t('app', 'Update Employee'),
                         ]);
 
                         switch (Yii::$app->request->post('action', 'save')) {
@@ -369,17 +369,17 @@ class EmployeeController extends Controller
                         }
 
                         // get errors
-                        Yii::$app->getSession()->setFlash('success', [
+                        Yii::$app->getSession()->setFlash('error', [
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Could not be save a employee'),
-                            'title' => Yii::t('app', 'Add Employee'),
+                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'),
+                            'title' => Yii::t('app', 'Update Employee'),
                         ]);
 
                         $model->password = null;
 
-                        return $this->render('create', [
+                        return $this->render('update', [
                             'model' => $model,
                             'address' => $address,
                             'city' => $city,
@@ -403,13 +403,13 @@ class EmployeeController extends Controller
                         'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : Yii::t('app', 'Could not be save a employee'),
-                        'title' => Yii::t('app', 'Add Employee'),
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) : Yii::t('app', 'Employee_Update_Error_Msg'),
+                        'title' => Yii::t('app', 'Update Employee'),
                     ]);
 
                     $model->password = null;
 
-                    return $this->render('create', [
+                    return $this->render('update', [
                         'model' => $model,
                         'address' => $address,
                         'city' => $city,
@@ -464,15 +464,15 @@ class EmployeeController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Employee has been deleted.'),
+                    'message' => Yii::t('app', 'Employee_Delete_Success_Msg'),
                     'title' => Yii::t('app', 'Delete Employee'),
                 ]);
             } else {
-                Yii::$app->getSession()->setFlash('success', [
+                Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Could not delete employee. Please try again.'),
+                    'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Employee_Delete_Error_Msg'),
                     'title' => Yii::t('app', 'Delete Employee'),
                 ]);
             }
@@ -481,7 +481,7 @@ class EmployeeController extends Controller
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'You can\'t delete yourself.'),
+                'message' => Yii::t('app', 'Employee_Delete_Error_Msg'),
                 'title' => Yii::t('app', 'Delete Employee'),
             ]);
         }

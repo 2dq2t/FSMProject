@@ -134,8 +134,8 @@ class SeasonController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Season Record has been saved.'),
-                    'title' => Yii::t('app', 'Add Season')
+                    'message' => Yii::t('app', 'Season_Add_Success_Msg'),
+                    'title' => Yii::t('app', 'Create Season')
                 ]);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
@@ -156,8 +156,8 @@ class SeasonController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-plus',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season. Please try again.',
-                    'title' => Yii::t('app', 'Add Season'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Season_Add_Error_Msg'),
+                    'title' => Yii::t('app', 'Create Season'),
                 ]);
 
                 return $this->render('create', [
@@ -199,7 +199,7 @@ class SeasonController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Season Record has been updated.'),
+                    'message' => Yii::t('app', 'Season_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Season')
                 ]);
                 return $this->redirect(['index']);
@@ -216,8 +216,8 @@ class SeasonController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : 'Could not be save the season',
-                    'title' => Yii::t('app', 'Edit Season'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Season_Update_Error_Msg'),
+                    'title' => Yii::t('app', 'Update Season'),
                 ]);
 
                 return $this->render('update', [
@@ -249,7 +249,7 @@ class SeasonController extends Controller
             'type' => 'success',
             'duration' => 3000,
             'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Season Record has been deleted.'),
+            'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
             'title' => Yii::t('app', 'Delete Season')
         ]);
 
