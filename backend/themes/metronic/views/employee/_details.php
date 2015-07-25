@@ -35,7 +35,7 @@ $attributes = [
     [
         'attribute'=>'dob',
         'format'=>'raw',
-        'value'=>date('m/d/Y', $model->dob),
+        'value'=>date('d/m/Y', $model->dob),
         'displayOnly'=>true
     ],
     [
@@ -53,7 +53,7 @@ $attributes = [
     [
         'attribute'=>'start_date',
         'format'=>'raw',
-        'value'=>date('m/d/Y', $model->start_date),
+        'value'=>date('d/m/Y', $model->start_date),
         'displayOnly'=>true
     ],
     [

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\Rating;
 use common\models\RatingSearch;
@@ -52,12 +53,13 @@ class RatingController extends Controller
 
             // load model like any single model validation
             if ($model->load($post)) {
-                if($model->validate()) {
-                    // can save model or do something before saving model
-                    $model->save();
+                $oldModel = $model->oldAttributes;
+                if($model->save()) {
                     $message = '';
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Rating'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
                 $output = '';
 
@@ -104,6 +106,7 @@ class RatingController extends Controller
                     'message' => Yii::t('app', 'Rating_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Rating'),
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Rating success'), Yii::$app->getUser()->id);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -118,6 +121,8 @@ class RatingController extends Controller
                     'message' => Yii::t('app', 'Rating_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Rating'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save rating.'), Yii::$app->getUser()->id);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -142,6 +147,7 @@ class RatingController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $oldModel = $model->oldAttributes;
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -150,6 +156,7 @@ class RatingController extends Controller
                     'message' => Yii::t('app', 'Rating_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Rating success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -159,6 +166,8 @@ class RatingController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating has been edit error.'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -180,6 +189,8 @@ class RatingController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        Logger::log(Logger::INFO, Yii::t('app', 'Delete rating success'), Yii::$app->getUser()->id);
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => 'success',

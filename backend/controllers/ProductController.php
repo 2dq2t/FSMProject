@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use common\models\Image;
 use common\models\ProductSeason;
 use common\models\ProductTag;
@@ -75,6 +76,7 @@ class ProductController extends Controller
 
                 $output = '';
                 $message = '';
+                $oldModel = $model->oldAttributes;
 
                 if(isset($posted['active']) && $model->validate() && $model->save()) {
                     if ($posted['active'] == 1) {
@@ -87,14 +89,18 @@ class ProductController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Product'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+
                 } else if (isset($posted['quantity_in_stock']) && $model->validate()) {
                     if ($quantity > $posted['quantity_in_stock']) {
                         $message = Yii::t('app', 'Quantity must be greater than ' . $quantity);
                     } else {
                         $model->save();
                     }
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Product'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Product error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -151,6 +157,7 @@ class ProductController extends Controller
 
             try {
                 if ($model->save()) {
+                    $errors = [];
                     if ($file) {
                         $images = '';
                         foreach ($file as $image) {
@@ -173,10 +180,15 @@ class ProductController extends Controller
                             $images .= $imageName . $image->extension . '###';
 
                             $productImages->product_image = $images;
-                            $productImages->save();
-
-                            $image->saveAs($dir . '/' . $imageName);
-                            $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
+                            if($productImages->save())
+                            {
+                                $image->saveAs($dir . '/' . $imageName);
+                                $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add product image success'), Yii::$app->getUser()->id);
+                            } else {
+                                $errors[] = current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add product image error:'). current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image'), Yii::$app->getUser()->id);
+                            }
                         }
                     }
 
@@ -188,7 +200,11 @@ class ProductController extends Controller
                         $product_seasons->product_id = $model->id;
                         $product_seasons->season_id = $product_season;
 
-                        $product_seasons->save();
+                        if(!$product_seasons->save()) {
+                            $errors[] = current($product_seasons->getFirstErrors()) ? current($product_seasons->getFirstErrors()) : Yii::t('app', 'Could not save product season.');
+                            Logger::log(Logger::ERROR, Yii::t('app', 'Add Product season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product season.'), Yii::$app->getUser()->id);
+                        }
+                        Logger::log(Logger::INFO, Yii::t('app', 'Add Product season success'), Yii::$app->getUser()->id);
                     }
 
                     if (empty($model->product_tags)) {
@@ -200,17 +216,51 @@ class ProductController extends Controller
                         if (Tag::find()->where(['id' => $product_tag])->exists()) {
                             $product_tags->tag_id = $product_tag;
                             $product_tags->product_id = $model->id;
-                            $product_tags->save();
+                            if (!$product_tags->save())
+                            {
+                                $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->getUser()->id);
+                            }
+                            Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->getUser()->id);
+
                         } else {
                             // save if tag do not exists
                             $tag = new Tag();
                             $tag->name = $product_tag;
-                            $tag->save();
-
-                            $product_tags->tag_id = $tag->id;
-                            $product_tags->product_id = $model->id;
-                            $product_tags->save();
+                            if ($tag->save()) {
+                                $product_tags->tag_id = $tag->id;
+                                $product_tags->product_id = $model->id;
+                                if (!$product_tags->save())
+                                {
+                                    $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                    Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->getUser()->id);
+                                }
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->getUser()->id);
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->getUser()->id);
+                            } else {
+                                $errors[] = current($tag->getFirstErrors()) ? current($tag->getFirstErrors()) : Yii::t('app', 'Could not add tag');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save tags.'), Yii::$app->getUser()->id);
+                            }
                         }
+                    }
+
+                    if (!empty($errors)) {
+                        if ($transaction->getIsActive()) {
+                            $transaction->rollBack();
+                        }
+
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => 'error',
+                            'duration' => 0,
+                            'icon' => 'fa fa-plus',
+                            'message' => $errors[0],
+                            'title' => Yii::t('app', 'Create Product'),
+                        ]);
+
+                        return $this->render('create', [
+                            'model' => $model,
+                            'productImages' => $productImages
+                        ]);
                     }
 
                     $transaction->commit();
@@ -240,7 +290,7 @@ class ProductController extends Controller
                         'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Product_Add_Error_Msg'),
                         'title' => Yii::t('app', 'Create Product'),
                     ]);
-
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product.'), Yii::$app->getUser()->id);
                     return $this->render('create', [
                         'model' => $model,
                         'productImages' => $productImages
@@ -257,6 +307,8 @@ class ProductController extends Controller
                     'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Product'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'), Yii::$app->getUser()->id);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -293,6 +345,7 @@ class ProductController extends Controller
         $model->price = number_format($model->price, 0, '', ' ');
 
         if ($model->load(Yii::$app->request->post())) {
+            $oldModel = $model->oldAttributes;
             $model->price = preg_replace('/\s/', '', $model->price);
             $file = UploadedFile::getInstances($productImages, 'product_image');
 
@@ -300,7 +353,7 @@ class ProductController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($model->save()) {
-
+                    $errors = [];
                     if ($file) {
                         foreach ($images as $image) {
                             $image->delete();
@@ -329,10 +382,15 @@ class ProductController extends Controller
                             $images .= $imageName . $image->extension . '###';
 
                             $productImages->product_image = $images;
-                            $productImages->save();
-
-                            $image->saveAs($dir . '/' . $imageName);
-                            $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
+                            if($productImages->save())
+                            {
+                                $image->saveAs($dir . '/' . $imageName);
+                                $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add product image success'), Yii::$app->getUser()->id);
+                            } else {
+                                $errors[] = current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add product image error:'). current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image'), Yii::$app->getUser()->id);
+                            }
                         }
                     }
 
@@ -353,7 +411,11 @@ class ProductController extends Controller
                         $product_season = new ProductSeason();
                         $product_season->season_id = $season;
                         $product_season->product_id = $model->id;
-                        $product_season->save();
+                        if(!$product_season->save()) {
+                            $errors[] = current($product_season->getFirstErrors()) ? current($product_season->getFirstErrors()) : Yii::t('app', 'Could not save product season.');
+                            Logger::log(Logger::ERROR, Yii::t('app', 'Add Product season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product season.'), Yii::$app->getUser()->id);
+                        }
+                        Logger::log(Logger::INFO, Yii::t('app', 'Add Product season success'), Yii::$app->getUser()->id);
                     }
 
                     if (empty($model->product_tags)) {
@@ -376,18 +438,54 @@ class ProductController extends Controller
                             $product_tag = new ProductTag();
                             $product_tag->tag_id = $tag;
                             $product_tag->product_id = $model->id;
-                            $product_tag->save();
+                            if (!$product_tag->save())
+                            {
+                                $errors[] = current($product_tag->getFirstErrors()) ? current($product_tag->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->getUser()->id);
+                            }
+                            Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->getUser()->id);
+
                         } else {
                             // save if tag do not exists
                             $tags = new Tag();
                             $tags->name = $tag;
-                            $tags->save();
-
-                            $product_tag = new ProductTag();
-                            $product_tag->tag_id = $tags->id;
-                            $product_tag->product_id = $model->id;
-                            $product_tag->save();
+                            if ($tags->save()) {
+                                $product_tag = new ProductTag();
+                                $product_tag->tag_id = $tags->id;
+                                $product_tag->product_id = $model->id;
+                                if (!$product_tag->save())
+                                {
+                                    $errors[] = current($product_tag->getFirstErrors()) ? current($product_tag->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                    Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->getUser()->id);
+                                }
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->getUser()->id);
+                                Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->getUser()->id);
+                            } else {
+                                $errors[] = current($tags->getFirstErrors()) ? current($tags->getFirstErrors()) : Yii::t('app', 'Could not add tag');
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Add Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save tags.'), Yii::$app->getUser()->id);
+                            }
                         }
+                    }
+
+                    if (!empty($errors)) {
+                        if ($transaction->getIsActive()) {
+                            $transaction->rollBack();
+                        }
+
+                        Yii::$app->getSession()->setFlash('error', [
+                            'type' => 'error',
+                            'duration' => 0,
+                            'icon' => 'fa fa-plus',
+                            'message' => $errors[0],
+                            'title' => Yii::t('app', 'Update Product'),
+                        ]);
+
+                        return $this->render('create', [
+                            'model' => $model,
+                            'productImages' => $productImages,
+                            'images' => $images,
+                            'product_seasons' => $product_seasons
+                        ]);
                     }
 
                     $transaction->commit();
@@ -415,6 +513,8 @@ class ProductController extends Controller
                         'title' => Yii::t('app', 'Update Product'),
                     ]);
 
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Product error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Product_Update_Error_Msg'), Yii::$app->getUser()->id);
+
                     return $this->render('create', [
                         'model' => $model,
                         'productImages' => $productImages,
@@ -434,6 +534,7 @@ class ProductController extends Controller
                     'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Product'),
                 ]);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Product error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Update_Error_Msg'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -461,15 +562,25 @@ class ProductController extends Controller
     {
         $product = $this->findModel($id);
         $product->active = Product::STATUS_INACTIVE;
-        $product->save();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Product_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Product')
-        ]);
+        if ($product->save()) {
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete product success'), Yii::$app->getUser()->id);
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'Product_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete Product')
+            ]);
+        } else {
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete product error: ') . current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Product delete error.'), Yii::$app->getUser()->id);
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Could not delete this product.'),
+                'title' => Yii::t('app', 'Delete Product')
+            ]);
+        }
 
         return $this->redirect(['index']);
     }

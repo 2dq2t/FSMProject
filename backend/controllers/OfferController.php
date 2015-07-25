@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\Offer;
 use common\models\OfferSearch;
@@ -65,6 +66,7 @@ class OfferController extends Controller
 
                 $output = '';
                 $message = '';
+                $oldModel = $model->oldAttributes;
 
                 if($model->save() && isset($posted['active'])) {
                     if ($posted['active'] == 1) {
@@ -77,8 +79,10 @@ class OfferController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Category'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -115,11 +119,13 @@ class OfferController extends Controller
     {
         $model = new Offer();
 
-
         if ($model->load(Yii::$app->request->post())) {
-            $model->start_date = strtotime($model->start_date);
-            $model->end_date = strtotime($model->end_date);
+            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+            $model->end_date = date_create_from_format('d/m/Y', $model->end_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->end_date)->format('m'), date_create_from_format('d/m/Y', $model->end_date)->format('d'), date_create_from_format('d/m/Y', $model->end_date)->format('y')) : time();
 
+            $oldModel = $model->oldAttributes;
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -128,14 +134,15 @@ class OfferController extends Controller
                     'message' => Yii::t('app', 'Offer_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Offer')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Offer success'), Yii::$app->getUser()->id);
                 return $this->redirect(['index']);
             } else {
                 if ($model->start_date != '') {
-                    $model->start_date = date('m/d/Y', $model->start_date);
+                    $model->start_date = date('d/m/Y', $model->start_date);
                 }
 
                 if($model->end_date != '') {
-                    $model->end_date = date('m/d/Y', $model->end_date);
+                    $model->end_date = date('d/m/Y', $model->end_date);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -145,6 +152,8 @@ class OfferController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Offer_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Offer')
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Offer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Offer Record saved error.'), Yii::$app->getUser()->id);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -168,13 +177,16 @@ class OfferController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->start_date = date('m/d/Y', $model->start_date);
-        $model->end_date = date('m/d/Y', $model->end_date);
+        $model->start_date = date('d/m/Y', $model->start_date);
+        $model->end_date = date('d/m/Y', $model->end_date);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->start_date = strtotime($model->start_date);
-            $model->end_date = strtotime($model->end_date);
+            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+            $model->end_date = date_create_from_format('d/m/Y', $model->end_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->end_date)->format('m'), date_create_from_format('d/m/Y', $model->end_date)->format('d'), date_create_from_format('d/m/Y', $model->end_date)->format('y')) : time();
 
+            $oldModel = $model->oldAttributes;
             if ( $model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -183,14 +195,15 @@ class OfferController extends Controller
                     'message' => Yii::t('app', 'Offer_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Offer')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Offer success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 if($model->start_date != '') {
-                    $model->start_date = date('m/d/Y', $model->start_date);
+                    $model->start_date = date('d/m/Y', $model->start_date);
                 }
 
                 if($model->end_date != '') {
-                    $model->end_date = date('m/d/Y', $model->end_date);
+                    $model->end_date = date('d/m/Y', $model->end_date);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -200,6 +213,8 @@ class OfferController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Offer_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Offer')
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Offer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Offer has been edit error.'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -223,15 +238,25 @@ class OfferController extends Controller
     {
         $offer = $this->findModel($id);
         $offer->active = Offer::STATUS_INACTIVE;
-        $offer->save();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-plus',
-            'message' => Yii::t('app', 'Offer_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Offer')
-        ]);
+        if ($offer->save()) {
+            Logger::log(Logger::INFO, Yii::t('app', 'Offer_Delete_Success_Msg'), Yii::$app->getUser()->id);
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'Offer_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete Offer')
+            ]);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Could not delete this offer. Please try again.'),
+                'title' => Yii::t('app', 'Delete Offer')
+            ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete offer error: ') . current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Offer delete error.'), Yii::$app->getUser()->id);
+        }
 
         return $this->redirect(['index']);
     }

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use common\models\ProductSeason;
 use Yii;
 use common\models\Season;
@@ -62,6 +63,8 @@ class SeasonController extends Controller
             $posted = current($_POST['Season']);
             $post['Season'] = $posted;
 
+            $oldModel = $model->oldAttributes;
+
             // load model like any single model validation
             if ($model->load($post)) {
 
@@ -79,8 +82,11 @@ class SeasonController extends Controller
                     $output = \yii\helpers\Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Season'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -118,16 +124,19 @@ class SeasonController extends Controller
         $model = new Season();
 
         if ($model->from) {
-            $model->from = date('m/d/Y', $model->from);
+            $model->from = date('d/m/Y', $model->from);
         }
 
         if ($model->to) {
-            $model->to = date('m/d/Y', $model->to);
+            $model->to = date('d/m/Y', $model->to);
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->from = strtotime($model->from);
-            $model->to = strtotime($model->to);
+
+            $model->from = date_create_from_format('d/m/Y', $model->from) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->from)->format('m'), date_create_from_format('d/m/Y', $model->from)->format('d'), date_create_from_format('d/m/Y', $model->from)->format('y')) : time();
+            $model->to = date_create_from_format('d/m/Y', $model->to) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->to)->format('m'), date_create_from_format('d/m/Y', $model->to)->format('d'), date_create_from_format('d/m/Y', $model->to)->format('y')) : time();
 
             if($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
@@ -137,6 +146,7 @@ class SeasonController extends Controller
                     'message' => Yii::t('app', 'Season_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Season')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Season success'), Yii::$app->getUser()->id);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -145,11 +155,11 @@ class SeasonController extends Controller
                 }
             } else {
                 if ($model->from) {
-                    $model->from = date('m/d/Y', $model->from);
+                    $model->from = date('d/m/Y', $model->from);
                 }
 
                 if ($model->to) {
-                    $model->to = date('m/d/Y', $model->to);
+                    $model->to = date('d/m/Y', $model->to);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -160,6 +170,7 @@ class SeasonController extends Controller
                     'title' => Yii::t('app', 'Create Season'),
                 ]);
 
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save season.'), Yii::$app->getUser()->id);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -182,17 +193,20 @@ class SeasonController extends Controller
         $model = $this->findModel($id);
 
         if ($model->from) {
-            $model->from = date('m/d/Y', $model->from);
+            $model->from = date('d/m/Y', $model->from);
         }
 
         if ($model->to) {
-            $model->to = date('m/d/Y', $model->to);
+            $model->to = date('d/m/Y', $model->to);
         }
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->from = strtotime($model->from);
-            $model->to = strtotime($model->to);
+            $oldModel = $model->oldAttributes;
+            $model->from = date_create_from_format('d/m/Y', $model->from) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->from)->format('m'), date_create_from_format('d/m/Y', $model->from)->format('d'), date_create_from_format('d/m/Y', $model->from)->format('y')) : time();
+            $model->to = date_create_from_format('d/m/Y', $model->to) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->to)->format('m'), date_create_from_format('d/m/Y', $model->to)->format('d'), date_create_from_format('d/m/Y', $model->to)->format('y')) : time();
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
@@ -202,14 +216,17 @@ class SeasonController extends Controller
                     'message' => Yii::t('app', 'Season_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Season')
                 ]);
+
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Season success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+
                 return $this->redirect(['index']);
             } else {
                 if ($model->from) {
-                    $model->from = date('m/d/Y', $model->from);
+                    $model->from = date('d/m/Y', $model->from);
                 }
 
                 if ($model->to) {
-                    $model->to = date('m/d/Y', $model->to);
+                    $model->to = date('d/m/Y', $model->to);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -219,6 +236,8 @@ class SeasonController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Season_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Season'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Season has been edit error.'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -243,15 +262,25 @@ class SeasonController extends Controller
 
         $season = $this->findModel($id);
         $season->active = Season::STATUS_INACTIVE;
-        $season->save();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Season')
-        ]);
+        if ($season->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete Season')
+            ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete season success'), Yii::$app->getUser()->id);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Could not delete this category. Please try again.'),
+                'title' => Yii::t('app', 'Delete Season')
+            ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete season error: ') . current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Season delete error.'), Yii::$app->getUser()->id);
+        }
 
         return $this->redirect(['index']);
     }

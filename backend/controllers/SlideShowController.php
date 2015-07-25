@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\SlideShow;
 use common\models\SlideShowSearch;
@@ -62,6 +63,7 @@ class SlideShowController extends Controller
 
                 $output = '';
                 $message = '';
+                $oldModel = $model->oldAttributes;
 
                 if($model->save() && isset($posted['active'])) {
                     if ($posted['active'] == 1) {
@@ -74,8 +76,10 @@ class SlideShowController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Slide show'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Slide show error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -137,6 +141,8 @@ class SlideShowController extends Controller
                     'title' => Yii::t('app', 'Create SlideShow'),
                 ]);
 
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Slide show success'), Yii::$app->getUser()->id);
+
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -152,6 +158,8 @@ class SlideShowController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'SlideShow_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create SlideShow'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Slide show error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save slide show.'), Yii::$app->getUser()->id);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -184,6 +192,7 @@ class SlideShowController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
+            $oldModel = $model->oldAttributes;
             if ($model->save()) {
                 if ($path) {
                     // directory to save image in local
@@ -201,6 +210,8 @@ class SlideShowController extends Controller
                     'title' => Yii::t('app', 'Update SlideShow'),
                 ]);
 
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Slide show success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -210,6 +221,8 @@ class SlideShowController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'SlideShow_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update SlideShow'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Slide show error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Slide show has been edit error.'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -232,15 +245,25 @@ class SlideShowController extends Controller
     {
         $slideshow = $this->findModel($id);
         $slideshow->active = SlideShow::STATUS_INACTIVE;
-        $slideshow->save();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-pencil',
-            'message' => Yii::t('app', 'SlideShow_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete SlideShow'),
-        ]);
+        if ($slideshow->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'SlideShow_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete SlideShow'),
+            ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete slide show success'), Yii::$app->getUser()->id);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Could not delete this slide show. Please try again'),
+                'title' => Yii::t('app', 'Delete SlideShow'),
+            ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete slide show error: ') . current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Slide show delete error.'), Yii::$app->getUser()->id);
+        }
 
         return $this->redirect(['index']);
     }

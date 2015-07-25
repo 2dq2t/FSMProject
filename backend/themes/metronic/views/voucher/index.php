@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'start_date',
             'width' => '16%',
+            'format' => ['date', 'php:d/m/Y'],
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
                 'removeButton' => false,
@@ -57,13 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pluginOptions' => [
                     'allowClear' => true,
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd'
+                    'format' => 'dd/mm/yyyy'
                 ],
             ],
         ],
         [
             'attribute' => 'end_date',
             'width' => '16%',
+            'format' => ['date', 'php:d/m/Y'],
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [
                 'removeButton' => false,
@@ -71,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pluginOptions' => [
                     'allowClear' => true,
                     'autoclose' => true,
-                    'format' => 'yyyy-mm-dd'
+                    'format' => 'dd/mm/yyyy'
                 ],
             ],
         ],

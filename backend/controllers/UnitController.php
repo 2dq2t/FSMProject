@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\Unit;
 use common\models\UnitSearch;
@@ -59,6 +60,7 @@ class UnitController extends Controller
             $post = [];
             $posted = current($_POST['Unit']);
             $post['Unit'] = $posted;
+            $oldModel = $model->oldAttributes;
 
             // load model like any single model validation
             if ($model->load($post)) {
@@ -77,8 +79,10 @@ class UnitController extends Controller
                     $output = \yii\helpers\Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Unit'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Unit error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -124,6 +128,7 @@ class UnitController extends Controller
                     'message' => Yii::t('app', 'Unit_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Unit')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Unit success'), Yii::$app->getUser()->id);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -138,6 +143,7 @@ class UnitController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Unit')
                 ]);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Unit error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Add_Error_Msg'), Yii::$app->getUser()->id);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -160,6 +166,7 @@ class UnitController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) ) {
+            $oldModel = $model->oldAttributes;
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -168,6 +175,7 @@ class UnitController extends Controller
                     'message' => Yii::t('app', 'Unit_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Unit')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Unit_Update_Success_Msg'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -177,6 +185,8 @@ class UnitController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Unit')
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Unit error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Unit_Update_Error_Msg'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -199,15 +209,26 @@ class UnitController extends Controller
     {
         $unit = $this->findModel($id);
         $unit->active = Unit::STATUS_INACTIVE;
-        $unit->save();
+        if ($unit->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'Unit_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete Unit')
+            ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Unit_Delete_Success_Msg'), Yii::$app->getUser()->id);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Could not delete this unit. Please try again'),
+                'title' => Yii::t('app', 'Delete Unit')
+            ]);
 
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Unit_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Unit')
-        ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete unit error: ') . current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Unit delete error.'), Yii::$app->getUser()->id);
+        }
 
         return $this->redirect(['index']);
     }

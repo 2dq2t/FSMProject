@@ -58,16 +58,16 @@ class VoucherSearch extends Voucher
         $query->andFilterWhere([
             'id' => $this->id,
             'discount' => $this->discount,
-//            'start_date' => $this->start_date,
-//            'end_date' => $this->end_date,
+            'start_date' => date_create_from_format('d/m/Y', $this->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $this->start_date)->format('m'), date_create_from_format('d/m/Y', $this->start_date)->format('d'), date_create_from_format('d/m/Y', $this->start_date)->format('y')) :$this->start_date,
+            'end_date' => date_create_from_format('d/m/Y', $this->end_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $this->end_date)->format('m'), date_create_from_format('d/m/Y', $this->end_date)->format('d'), date_create_from_format('d/m/Y', $this->end_date)->format('y')) : $this->end_date,
             'active' => $this->active,
             'order_id' => $this->order_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'start_date', strtotime($this->start_date)])
-            ->andFilterWhere(['like', 'end_date', strtotime($this->end_date)]);
+            ->andFilterWhere(['like', 'code', $this->code]);
 
         return $dataProvider;
     }

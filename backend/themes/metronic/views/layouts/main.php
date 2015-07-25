@@ -43,6 +43,7 @@ AppAsset::register($this);
         <link href="metronic/assets/admin/css/layout.css" rel="stylesheet" type="text/css"/>
         <link id="style_color" href="metronic/assets/admin/css/themes/light.css" rel="stylesheet" type="text/css"/>
         <link href="metronic/assets/admin/css/custom.css" rel="stylesheet" type="text/css"/>
+		<link href="metronic/assets/pages/css/prettify.css" rel="stylesheet" type="text/css"/>
         <!-- END THEME STYLES -->
         <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <link rel="shortcut icon" href="favicon.ico"/>
@@ -140,7 +141,8 @@ AppAsset::register($this);
                 ],
                 'settings' => [
                     'backup',
-                    'i18n'
+                    'i18n',
+                    'log'
                 ]
             ];
 
@@ -303,6 +305,9 @@ AppAsset::register($this);
                                 <li class="<?= active('settings', 'backup') ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-layers"></i> ' . Yii::t('app', 'Backup'), ['backup/index']) ?>
                                 </li>
+                                <li class="<?= active('settings', 'log') ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Log'), ['log/index']) ?>
+                                </li>
                             </ul>
                         </li>
                         <!--END SETTING-->
@@ -378,7 +383,7 @@ AppAsset::register($this);
         </div>
         <!-- END FOOTER -->
         </body>
-    <?php
+        <?php
     } else {
         ?>
         <body class="login">
@@ -408,6 +413,7 @@ AppAsset::register($this);
 
     <?php $this->endBody() ?>
 
+
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
     <!-- BEGIN CORE PLUGINS -->
     <!--[if lt IE 9]>
@@ -431,11 +437,18 @@ AppAsset::register($this);
     <script src="metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
     <!-- END CORE PLUGINS -->
+<!--    <link href="http://www.wprunner.com/wp-content/themes/wprunner-v2/assets/css/prettify.css" rel="stylesheet">-->
+    <script src="metronic/assets/pages/scripts/prettify.js"></script>
     <script src="metronic/assets/global/scripts/metronic.js" type="text/javascript"></script>
     <script src="metronic/assets/admin/scripts/layout.js" type="text/javascript"></script>
     <script src="metronic/assets/pages/scripts/login.js" type="text/javascript"></script>
     <!--<script src="metronic/assets/admin/scripts/demo.js" type="text/javascript"></script>-->
-    <script>
+    <script type="text/javascript">
+        !function ($) {
+            $(function(){
+                window.prettyPrint && prettyPrint()
+            })
+        }(window.jQuery)
         jQuery(document).ready(function() {
             Metronic.init(); // init metronic core components
             Layout.init(); // init current layout

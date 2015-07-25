@@ -57,9 +57,11 @@ class EmployeeSearch extends Employee
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'dob' => $this->dob,
+            'dob' => date_create_from_format('d/m/Y', $this->dob) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $this->dob)->format('m'), date_create_from_format('d/m/Y', $this->dob)->format('d'), date_create_from_format('d/m/Y', $this->dob)->format('y')): $this->dob,
             'phone_number' => $this->phone_number,
-            'start_date' => $this->start_date,
+            'start_date' => date_create_from_format('d/m/Y', $this->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $this->start_date)->format('m'), date_create_from_format('d/m/Y', $this->start_date)->format('d'), date_create_from_format('d/m/Y', $this->start_date)->format('y')) : $this->start_date,
             'status' => $this->status,
             'address_id' => $this->address_id,
         ]);

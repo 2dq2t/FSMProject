@@ -59,7 +59,7 @@ $attributes = [
     [
         'attribute'=>'updated_at',
         'format'=>'raw',
-        'value'=> date('m/d/Y H:i:s', $model->updated_at),
+        'value'=> $model->updated_at ? date('m/d/Y H:i:s', $model->updated_at) : Yii::t('app', 'Not set'),
         'displayOnly'=>true
     ],
     [

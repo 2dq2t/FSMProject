@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\Guest;
 use common\models\GuestSearch;
@@ -66,6 +67,7 @@ class GuestController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Guest success'), Yii::$app->getUser()->id);
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
                     'duration' => 3000,
@@ -80,6 +82,7 @@ class GuestController extends Controller
                         return $this->redirect(['index']);
                 }
             } else {
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest Record saved error.'), Yii::$app->getUser()->id);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -110,6 +113,7 @@ class GuestController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $oldModel = $model->oldAttributes;
             if($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -119,8 +123,10 @@ class GuestController extends Controller
                     'title' => Yii::t('app', 'Update Guest')
                 ]);
 
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Guest success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest has been edit error.'), Yii::$app->getUser()->id);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -146,20 +152,20 @@ class GuestController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+//    public function actionDelete($id)
+//    {
 //        $this->findModel($id)->delete();
 
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Guest_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Guest')
-        ]);
-
-        return $this->redirect(['index']);
-    }
+//        Yii::$app->getSession()->setFlash('success', [
+//            'type' => 'success',
+//            'duration' => 3000,
+//            'icon' => 'fa fa-trash-o',
+//            'message' => Yii::t('app', 'Guest_Delete_Success_Msg'),
+//            'title' => Yii::t('app', 'Delete Guest')
+//        ]);
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Guest model based on its primary key value.

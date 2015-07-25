@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
@@ -42,10 +43,6 @@ class I18nController extends \yii\web\Controller
                 $basePath = \Yii::getAlias($translation->basePath);
                 $rdi = new \RecursiveDirectoryIterator($basePath, \RecursiveDirectoryIterator::SKIP_DOTS);
 
-//                echo "<pre>";
-//                var_dump(\Yii::$app->i18n->translations); return;
-//                echo "</pre>";
-//
                 foreach (new \RecursiveIteratorIterator($rdi, \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
                     $fileName = $file->getRealpath();
                     if (pathinfo($fileName, PATHINFO_EXTENSION) == 'php') {
@@ -82,6 +79,8 @@ class I18nController extends \yii\web\Controller
                 'title' => Yii::t('app', 'Update message')
             ]);
 
+            Logger::log(Logger::WARNING, Yii::t('app', 'File "{file}" is not writable.', ['file' => $aliases[$id]]), Yii::$app->getUser()->id);
+
             return $this->redirect(['index']);
         }
 
@@ -96,6 +95,8 @@ class I18nController extends \yii\web\Controller
                 'message' => Yii::t('app', 'Cannot read messages'),
                 'title' => Yii::t('app', 'Update message')
             ]);
+
+            Logger::log(Logger::WARNING, Yii::t('app', 'Cannot read messages'), Yii::$app->getUser()->id);
         }
 
         if (Yii::$app->request->isPost && !is_null(Yii::$app->request->post('messages'))) {
@@ -123,6 +124,7 @@ class I18nController extends \yii\web\Controller
                     }
                     file_put_contents($aliases[$id], "<?php\n\nreturn " . var_export($data, true) . ";\n");
                     Yii::$app->session->setFlash('success', Yii::t('app', 'Messages has been saved'));
+                    Logger::log(Logger::INFO, Yii::t('app', 'Save i18n messages: Messages has been saved'), Yii::$app->getUser()->id);
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => 'success',
                         'duration' => 3000,
@@ -143,6 +145,8 @@ class I18nController extends \yii\web\Controller
                         'message' => Yii::t('app', 'Cannot save messages'),
                         'title' => Yii::t('app', 'Update message')
                     ]);
+
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Save i18n messages error: Cannot save messages'), Yii::$app->getUser()->id);
 
                     return $this->render(
                         'update',

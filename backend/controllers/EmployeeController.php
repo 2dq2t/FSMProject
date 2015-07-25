@@ -2,10 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use common\models\Address;
 use common\models\City;
 use common\models\District;
-use kartik\alert\Alert;
 use Yii;
 use backend\models\Employee;
 use backend\models\EmployeeSearch;
@@ -69,6 +69,7 @@ class EmployeeController extends Controller
 
                 $output = '';
                 $message = '';
+                $oldModel = $model->oldAttributes;
 
                 if($model->save() && isset($posted['status'])) {
                     if ($posted['status'] == 1) {
@@ -81,8 +82,10 @@ class EmployeeController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update employee success'), Yii::$app->getUser()->id,$oldModel, $model->attributes);
                 } else {
                     $message = $model->validate();
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update employee error: ') . current($model->getFirstErrors())? current($model->getFirstErrors()):'', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -142,8 +145,10 @@ class EmployeeController extends Controller
                         $model->image = Yii::$app->security->generateRandomString().".{$ext}";
                     }
 
-                    $model->dob = strtotime($model->dob);
-                    $model->start_date = strtotime($model->start_date);
+                    $model->dob = date_create_from_format('d/m/Y', $model->dob) ?
+                        mktime(null,null,null, date_create_from_format('d/m/Y', $model->dob)->format('m'), date_create_from_format('d/m/Y', $model->dob)->format('d'), date_create_from_format('d/m/Y', $model->dob)->format('y')) : time();
+                    $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                        mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
 
                     $model->address_id = $address->id;
                     $errors = [];
@@ -193,11 +198,11 @@ class EmployeeController extends Controller
                         }
 
                         if ($model->dob != '') {
-                            $model->dob = date('m/d/Y', $model->dob);
+                            $model->dob = date('d/m/Y', $model->dob);
                         }
 
                         if($model->start_date != '') {
-                            $model->start_date = date('m/d/Y', $model->start_date);
+                            $model->start_date = date('d/m/Y', $model->start_date);
                         }
 
                         // get errors
@@ -223,11 +228,11 @@ class EmployeeController extends Controller
                     $transaction->rollBack();
                 }
                 if ($model->dob != '') {
-                    $model->dob = date('m/d/Y', $model->dob);
+                    $model->dob = date('d/m/Y', $model->dob);
                 }
 
                 if($model->start_date != '') {
-                    $model->start_date = date('m/d/Y', $model->start_date);
+                    $model->start_date = date('d/m/Y', $model->start_date);
                 }
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
@@ -269,8 +274,8 @@ class EmployeeController extends Controller
         $model->scenario = 'adminEdit';
 
         $model->password = null;
-        $model->dob = date('m/d/Y', $model->dob);
-        $model->start_date = date('m/d/Y', $model->start_date);
+        $model->dob = date('d/m/Y', $model->dob);
+        $model->start_date = date('d/m/Y', $model->start_date);
 
         $prePostAssignments = Yii::$app->getAuthManager()->getAssignments($id);
         $model->assignments = ArrayHelper::map($prePostAssignments, 'roleName', 'roleName');
@@ -286,8 +291,10 @@ class EmployeeController extends Controller
                 $model->image = $model->oldAttributes['image'];
             }
 
-            $model->dob = strtotime($model->dob);
-            $model->start_date = strtotime($model->start_date);
+            $model->dob = date_create_from_format('d/m/Y', $model->dob) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->dob)->format('m'), date_create_from_format('d/m/Y', $model->dob)->format('d'), date_create_from_format('d/m/Y', $model->dob)->format('y')) : time();
+            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
 
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
@@ -361,11 +368,11 @@ class EmployeeController extends Controller
                         }
 
                         if ($model->dob != '') {
-                            $model->dob = date('m/d/Y', $model->dob);
+                            $model->dob = date('d/m/Y', $model->dob);
                         }
 
                         if($model->start_date != '') {
-                            $model->start_date = date('m/d/Y', $model->start_date);
+                            $model->start_date = date('d/m/Y', $model->start_date);
                         }
 
                         // get errors
@@ -379,7 +386,7 @@ class EmployeeController extends Controller
 
                         $model->password = null;
 
-                        return $this->render('update', [
+                        return $this->render('create', [
                             'model' => $model,
                             'address' => $address,
                             'city' => $city,
@@ -391,11 +398,11 @@ class EmployeeController extends Controller
                         $transaction->rollBack();
                     }
                     if ($model->dob != '') {
-                        $model->dob = date('m/d/Y', $model->dob);
+                        $model->dob = date('d/m/Y', $model->dob);
                     }
 
                     if($model->start_date != '') {
-                        $model->start_date = date('m/d/Y', $model->start_date);
+                        $model->start_date = date('d/m/Y', $model->start_date);
                     }
 
                     // get errors
@@ -463,7 +470,7 @@ class EmployeeController extends Controller
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
                     'duration' => 3000,
-                    'icon' => 'fa fa-plus',
+                    'icon' => 'fa fa-trash-o',
                     'message' => Yii::t('app', 'Employee_Delete_Success_Msg'),
                     'title' => Yii::t('app', 'Delete Employee'),
                 ]);
@@ -471,7 +478,7 @@ class EmployeeController extends Controller
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
-                    'icon' => 'fa fa-plus',
+                    'icon' => 'fa fa-trash-o',
                     'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Employee_Delete_Error_Msg'),
                     'title' => Yii::t('app', 'Delete Employee'),
                 ]);

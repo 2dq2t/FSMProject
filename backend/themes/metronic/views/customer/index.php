@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'dob',
             'value' => function ($model) {
-                return date('m/d/Y', $model->dob);
+                return date('d/m/Y', $model->dob);
             },
             'width' => '20%',
             'filterType' => GridView::FILTER_DATE,
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'created_at',
             'width' => '23%',
             'value' => function ($model) {
-                return date('m/d/Y', $model->created_at);
+                return date('d/m/Y', $model->created_at);
             },
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [

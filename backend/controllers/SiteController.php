@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\components\Logger;
 use backend\models\PasswordResetRequestForm;
 use backend\models\ResetPasswordForm;
 use Yii;
@@ -75,6 +76,7 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            Logger::log(Logger::INFO, Yii::t('app', 'Login success'), Yii::$app->getUser()->id);
             return $this->goBack();
         } else {
             return $this->render('login', [
@@ -85,8 +87,9 @@ class SiteController extends Controller
 
     public function actionLogout()
     {
+        $userId = Yii::$app->getUser()->id;
         Yii::$app->user->logout();
-
+        Logger::log(Logger::INFO, Yii::t('app', 'Logout success'), $userId);
         return $this->goHome();
     }
 
@@ -98,9 +101,12 @@ class SiteController extends Controller
             if ($model->sendEmail()) {
                 Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Check your email for further instructions.'));
 
+                Logger::log(Logger::INFO, Yii::t('app', 'Request reset password'), $model->email);
+
                 return $this->goHome();
             } else {
                 Yii::$app->getSession()->setFlash('error', Yii::t('app', 'Sorry, we are unable to reset password for email provided.'));
+                Logger::log(Logger::INFO, Yii::t('app', 'Unable send reset password email'), $model->email);
             }
         }
 
@@ -119,7 +125,7 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('app', 'New password was saved.'));
-
+            Logger::log(Logger::INFO, Yii::t('app', 'New password was saved'), '');
             return $this->goHome();
         }
 

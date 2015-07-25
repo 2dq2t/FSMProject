@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use Yii;
 use common\models\Tag;
 use common\models\TagSearch;
@@ -71,6 +72,7 @@ class TagController extends Controller
                     'message' => Yii::t('app', 'Tag_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Tag')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Tag_Add_Success_Msg'), Yii::$app->getUser()->id);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -85,6 +87,7 @@ class TagController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Tag')
                 ]);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'), Yii::$app->getUser()->id);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -107,6 +110,7 @@ class TagController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $oldModel = $model->oldAttributes;
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
@@ -115,6 +119,7 @@ class TagController extends Controller
                     'message' => Yii::t('app', 'Tag_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Tag success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -124,6 +129,7 @@ class TagController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'), Yii::$app->getUser()->id);
                 return $this->render('update', [
                     'model' => $model,
                 ]);
@@ -141,20 +147,20 @@ class TagController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Tag_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Tag')
-        ]);
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $this->findModel($id)->delete();
+//
+//        Yii::$app->getSession()->setFlash('success', [
+//            'type' => 'success',
+//            'duration' => 3000,
+//            'icon' => 'fa fa-trash-o',
+//            'message' => Yii::t('app', 'Tag_Delete_Success_Msg'),
+//            'title' => Yii::t('app', 'Delete Tag')
+//        ]);
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Tag model based on its primary key value.

@@ -14,7 +14,7 @@ if(Yii::$app->session->getFlash('error')) {
 }
 ?>
 
-<div class="backup-default-index">
+<div class="backup-index">
     <div class="row">
         <div class="col-md-12">
             <?= $this->render ( '_list',  [

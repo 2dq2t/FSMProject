@@ -23,13 +23,13 @@ $attributes = [
     [
         'attribute'=>'start_date',
         'format'=>'raw',
-        'value'=>$model->start_date,
+        'value'=>date('d/m/Y', $model->start_date),
         'displayOnly'=>true
     ],
     [
         'attribute'=>'end_date',
         'format'=>'raw',
-        'value'=>$model->end_date,
+        'value'=>date('d/m/Y', $model->end_date),
         'displayOnly'=>true
     ],
     [

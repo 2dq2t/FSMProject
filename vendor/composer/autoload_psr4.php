@@ -59,4 +59,5 @@ return array(
     'devgroup\\jsoneditor\\' => array($vendorDir . '/devgroup/yii2-jsoneditor'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Zelenin\\yii\\widgets\\Summernote\\' => array($vendorDir . '/zelenin/yii2-summernote-widget'),
+	'duallistbox\\duallistbox\\' => array($vendorDir . '/duallistbox/yii2-dual-listbox')
 );

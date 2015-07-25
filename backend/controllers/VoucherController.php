@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use kartik\alert\Alert;
 use Yii;
 use common\models\Voucher;
@@ -66,6 +67,7 @@ class VoucherController extends Controller
 
                 $output = '';
                 $message = '';
+                $oldModel = $model->oldAttributes;
 
                 if($model->save() && isset($posted['active'])) {
                     if ($posted['active'] == 1) {
@@ -78,8 +80,10 @@ class VoucherController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Voucher success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Voucher error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -117,8 +121,10 @@ class VoucherController extends Controller
         $model = new Voucher();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->start_date = strtotime($model->start_date);
-            $model->end_date = strtotime($model->end_date);
+            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+            $model->end_date = date_create_from_format('d/m/Y', $model->end_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->end_date)->format('m'), date_create_from_format('d/m/Y', $model->end_date)->format('d'), date_create_from_format('d/m/Y', $model->end_date)->format('y')) : time();
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
@@ -128,6 +134,7 @@ class VoucherController extends Controller
                     'message' => Yii::t('app', 'Voucher_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Voucher')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Voucher success'), Yii::$app->getUser()->id);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -136,11 +143,11 @@ class VoucherController extends Controller
                 }
             } else {
                 if ($model->start_date != '') {
-                    $model->start_date = date('m/d/Y', $model->start_date);
+                    $model->start_date = date('d/m/Y', $model->start_date);
                 }
 
                 if($model->end_date != '') {
-                    $model->end_date = date('m/d/Y', $model->end_date);
+                    $model->end_date = date('d/m/Y', $model->end_date);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -151,6 +158,7 @@ class VoucherController extends Controller
                     'title' => Yii::t('app', 'Create Voucher')
                 ]);
 
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Voucher error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Voucher_Add_Error_Msg'), Yii::$app->getUser()->id);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -158,11 +166,11 @@ class VoucherController extends Controller
 
         } else {
             if ($model->start_date != '') {
-                $model->start_date = date('m/d/Y', $model->start_date);
+                $model->start_date = date('d/m/Y', $model->start_date);
             }
 
             if($model->end_date != '') {
-                $model->end_date = date('m/d/Y', $model->end_date);
+                $model->end_date = date('d/m/Y', $model->end_date);
             }
 
             return $this->render('create', [
@@ -181,13 +189,16 @@ class VoucherController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->start_date = date('m/d/Y', $model->start_date);
-        $model->end_date = date('m/d/Y', $model->end_date);
+        $model->start_date = date('d/m/Y', $model->start_date);
+        $model->end_date = date('d/m/Y', $model->end_date);
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->start_date = strtotime($model->start_date);
-            $model->end_date = strtotime($model->end_date);
+            $oldModel = $model->oldAttributes;
+            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+            $model->end_date = date_create_from_format('d/m/Y', $model->end_date) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y', $model->end_date)->format('m'), date_create_from_format('d/m/Y', $model->end_date)->format('d'), date_create_from_format('d/m/Y', $model->end_date)->format('y')) : time();
 
             if ($model->save()) {
                 Yii::$app->getSession()->setFlash('success', [
@@ -197,14 +208,15 @@ class VoucherController extends Controller
                     'message' => Yii::t('app', 'Voucher_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Voucher')
                 ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Voucher success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 if ($model->start_date != '') {
-                    $model->start_date = date('m/d/Y', $model->start_date);
+                    $model->start_date = date('d/m/Y', $model->start_date);
                 }
 
                 if($model->end_date != '') {
-                    $model->end_date = date('m/d/Y', $model->end_date);
+                    $model->end_date = date('d/m/Y', $model->end_date);
                 }
 
                 Yii::$app->getSession()->setFlash('error', [
@@ -214,6 +226,8 @@ class VoucherController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Voucher_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Voucher')
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Voucher error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Voucher_Update_Error_Msg'), Yii::$app->getUser()->id);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -238,15 +252,25 @@ class VoucherController extends Controller
     {
         $voucher = $this->findModel($id);
         $voucher->active = Voucher::STATUS_INACTIVE;
-        $voucher->save();
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Voucher_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Voucher')
-        ]);
+        if ($voucher->save()) {
+            Yii::$app->getSession()->setFlash('success', [
+                'type' => 'success',
+                'duration' => 3000,
+                'icon' => 'fa fa-trash-o',
+                'message' => Yii::t('app', 'Voucher_Delete_Success_Msg'),
+                'title' => Yii::t('app', 'Delete Voucher')
+            ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Voucher_Delete_Success_Msg'), Yii::$app->getUser()->id);
+        } else {
+            Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-trash-o',
+                'message' => current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Could not delete this voucher. Please try again.'),
+                'title' => Yii::t('app', 'Delete Voucher')
+            ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete Voucher error: ') . current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Voucher delete error.'), Yii::$app->getUser()->id);
+        }
 
         return $this->redirect(['index']);
     }
