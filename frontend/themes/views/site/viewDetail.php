@@ -168,6 +168,7 @@ $this->title = $product_detail['name'];
                     </div>
                 </div>
                     <div id="slide" class="col-sm-12">
+                        <div class="component">
                         <div class="box">
                             <div class="box-heading"><?= Yii::t('app', 'ProductSameCatLabel') ?></div>
                             <div class="box-content">
@@ -242,6 +243,7 @@ $this->title = $product_detail['name'];
                                     <?php } ?>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
 

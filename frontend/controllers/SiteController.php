@@ -150,8 +150,12 @@ class SiteController extends Controller
             $season_from = date("m-d", $season_item['from']);
             $season_to = date("m-d", $season_item['to']);
             $today = date("m-d");
+            var_dump(date_create_from_format('m-d-Y', $season_item['from']));
+            echo $season_from;
+            echo $season_to;
+            echo $today;
             if ($season_from <= $today && $today <= $season_to) {
-                $product_id = ProductSeason::find()->where(['season_id' =>$season_item['id']])->all();
+                $product_id = ProductSeason::find()->where(['season_id' => $season_item['id']])->all();
                 if (!empty($product_id[0]['season_id'])) {
                     foreach ($product_id as $product_item) {
                         $product = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'id' => $product_item['product_id']])->one();
@@ -189,7 +193,8 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionAutoComplete($q) {
+    public function actionAutoComplete($q)
+    {
         $query = new Query();
         $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
             ->from('product')
@@ -199,19 +204,20 @@ class SiteController extends Controller
                     FROM image
                     GROUP BY product_id
                 ) AS i', 'i.product_id = product.id')
-            ->where('MATCH(product.name) AGAINST ("+' .mysql_real_escape_string($q). '*" IN BOOLEAN MODE) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+            ->where('MATCH(product.name) AGAINST ("+' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
             ->limit(10);
         $command = $query->createCommand();
         $products = $command->queryAll();
         $out = [];
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $out[] = $product;
         }
 
         echo json_encode($out);
     }
 
-    public function actionPrefetch() {
+    public function actionPrefetch()
+    {
         $query = new Query();
         $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
             ->from('product')
@@ -226,39 +232,132 @@ class SiteController extends Controller
         $command = $query->createCommand();
         $products = $command->queryAll();
         $out = [];
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $out[] = $product;
         }
 
         echo json_encode($out);
     }
 
-    public function actionSearch($q){
-        $query = new Query();
-        $query->select('product.name')
-            ->from('product')
-            ->join('INNER JOIN', 'category', 'product.category_id = category.id')
-            ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
-                'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
-                'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
-                'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
-                )');
-        $command = $query->createCommand();
-        $products = $command->queryAll();
-        return $this->render('search', ['products' => $products]);
+    public function actionSearch()
+    {
+        $search_product = null;
+        $q = null;
+        $pagination = null;
+        $search_with_description = null;
+        if (Yii::$app->request->isGet) {
+            if (empty($_GET['q']))
+                return $this->goHome();
+            else {
+                $q = $_GET['q'];
+                if (!(empty($_GET['sort']) && empty($_GET['order']))) {
+                    $sort = $_GET['sort'];
+                    $order = $_GET['order'];
+                    if ($order == 'ASC')
+                        $order = SORT_ASC;
+                    else
+                        $order = SORT_DESC;
+                    $query = (new Query())
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path'])
+                        ->from('product')
+                        ->join('INNER JOIN', 'image', 'product.id = image.product_id')
+                        ->join('INNER JOIN', 'category', 'product.category_id = category.id')
+                        ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                            'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                         )')
+                        ->groupBy('product.id')
+                        ->orderBy(['product.' . $sort => $order]);
+                    $countQuery = clone $query;
+                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                    $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+                    $search_with_description = 'checked';
+                } else {
+                    $query = (new Query())
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path'])
+                        ->from('product')
+                        ->innerJoin('image', 'product.id = image.product_id')
+                        ->innerJoin('category', 'product.category_id = category.id')
+                        ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                            'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                         )')
+                        ->groupBy('product.id');
+                    $countQuery = clone $query;
+                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                    $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+                    $search_with_description = 'checked';
+                }
+            }
+        }
+        if (Yii::$app->request->post()) {
+            if (empty($_POST['search-key']) && empty($_POST['search-option']))
+                return $this->goHome();
+
+            $q = $_POST['search-key'];
+            $search_option = $_POST['search-option'];
+            if (!empty($_POST['description'])) {
+                if ($search_option == 'all') {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                        'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                        'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                         )';
+                } elseif ($search_option == 'name') {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                        'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                         )';
+                } else {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                        'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                         )';
+                }
+                $search_with_description = 'checked';
+            } else {
+                if ($search_option == 'all') {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
+                        'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE))';
+                } elseif ($search_option == 'name') {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE))';
+                } else {
+                    $where_condition = 'category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
+                        'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE))';
+                }
+                $search_with_description = '';
+            }
+            $query = (new Query())
+                ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path'])
+                ->from('product')
+                ->join('INNER JOIN', 'image', 'product.id = image.product_id')
+                ->join('INNER JOIN', 'category', 'product.category_id = category.id')
+                ->where($where_condition)
+                ->groupBy('product.id');
+            $countQuery = clone $query;
+            $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+            $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+        }
+
+        return $this->render('search', ['products' => $search_product, 'pagination' => $pagination, 'q' => $q, 'search_with_description' => $search_with_description]);
     }
-    public function actionDynamicNavbar(){
+
+    public function actionDynamicNavbar()
+    {
         $json = array();
         if (Yii::$app->request->post()) {
             $data = Yii::$app->request->post();
             $width = json_decode($data['screenwidth']);
-            if($width < 980) {
+            if ($width < 980) {
                 $json = Yii::$app->Category->category();
-            }
-            else{
+            } else {
                 $menu[0] = "test";
                 $menu[1] = "test";
-                array_push($json,$menu);
+                array_push($json, $menu);
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -266,6 +365,7 @@ class SiteController extends Controller
             return [json_encode($json)];
         }
     }
+
     public function actionCategory()
     {
         if (Yii::$app->request->isGet) {
@@ -285,21 +385,21 @@ class SiteController extends Controller
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
                         , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
                     $countQuery = clone $category_product_query;
-                    $pages = new Pagination(['totalCount' => $countQuery->count()]);
-                    $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();
+                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                    $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
                 } else {
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
                         , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
                     $countQuery = clone $category_product_query;
-                    $pages = new Pagination(['totalCount' => $countQuery->count()]);
-                    $category_product = $category_product_query->offset($pages->offset)->limit($pages->limit)->all();
+                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                    $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
                 }
 
             }
 
 
             return $this->render('category', [
-                'category_name' => $category_name, 'category_product' => $category_product, 'pages' => $pages
+                'category_name' => $category_name, 'category_product' => $category_product, 'pagination' => $pagination
             ]);
         }
     }
@@ -372,8 +472,6 @@ class SiteController extends Controller
                     Yii::$app->session->set('product_session', $product_session);
                 }
             }
-            //reg JS facebook comment
-
 
 
             return $this->render('viewDetail', [
@@ -420,11 +518,11 @@ class SiteController extends Controller
                     $product_id = json_decode($post_data['product_id']);
                     $customer_id = Yii::$app->user->identity->getId();
                     WishList::findOne(['customer_id' => $customer_id, 'product_id' => $product_id])->delete();
-                    $json['success'] = Yii::t('app','RemoveWishListMsg01');
+                    $json['success'] = Yii::t('app', 'RemoveWishListMsg01');
                     $json['product_id'] = $product_id;
                     $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
                 } catch (\mysqli_sql_exception $ex) {
-                    $json['error'] = Yii::t('app','RemoveWishListMsg02');
+                    $json['error'] = Yii::t('app', 'RemoveWishListMsg02');
                 }
             }
         }
@@ -439,13 +537,13 @@ class SiteController extends Controller
         $json = array();
         if (Yii::$app->request->post()) {
             if (Yii::$app->user->isGuest)
-                $json['info'] = Yii::t('app','AddWishListMsg01');
+                $json['info'] = Yii::t('app', 'AddWishListMsg01');
             else {
                 $customer_id = Yii::$app->user->identity->getId();
                 $data = Yii::$app->request->post();
                 $product_id = json_decode($data['product_id']);
                 if (WishList::find()->where(['customer_id' => $customer_id, 'product_id' => $product_id])->exists()) {
-                    $json['info'] = Yii::t('app','AddWishListMsg02');
+                    $json['info'] = Yii::t('app', 'AddWishListMsg02');
                 } else {
                     //save to wish list
                     $wishList = new WishList();
@@ -453,11 +551,11 @@ class SiteController extends Controller
                     $wishList->product_id = $product_id;
                     $wishList->save();
                     $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
-                    $json['success'] = Yii::t('app','AddWishListMsg03');
+                    $json['success'] = Yii::t('app', 'AddWishListMsg03');
                 }
             }
         } else
-            $json['info'] = Yii::t('app','AddWishListMsg04');
+            $json['info'] = Yii::t('app', 'AddWishListMsg04');
         if (Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];
@@ -477,7 +575,7 @@ class SiteController extends Controller
                 $product_id = 0;
             }
             if ($product_id == 0) {
-                $json['error'] = Yii::t('app','AddtoCartMsg01');
+                $json['error'] = Yii::t('app', 'AddtoCartMsg01');
             } else {
                 if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
                     $total_price = 0;
@@ -496,7 +594,7 @@ class SiteController extends Controller
                     $total_product += $product_quantity;
                     if (count($product_cart) == 0) {
                         Yii::$app->session->set('product_cart', [$product]);
-                        $json['success'] = Yii::t('app','AddtoCartMsg02');
+                        $json['success'] = Yii::t('app', 'AddtoCartMsg02');
                         $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) . " VND";
                     } else {
                         foreach ($product_cart as $key => $item) {
@@ -515,7 +613,7 @@ class SiteController extends Controller
                         } else {
                             Yii::$app->session->set('product_cart', $product_cart);
                         }
-                        $json['success'] = Yii::t('app','AddtoCartMsg02');
+                        $json['success'] = Yii::t('app', 'AddtoCartMsg02');
                         $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
                     }
 
@@ -570,7 +668,7 @@ class SiteController extends Controller
                 $product_id = 0;
             }
             if ($product_id == 0) {
-                $json['error'] = Yii::t('app','RemoveCartMsg01');
+                $json['error'] = Yii::t('app', 'RemoveCartMsg01');
             } else {
                 $total_price = 0;
                 $total_product = 0;
@@ -586,7 +684,7 @@ class SiteController extends Controller
                     }
                 }
                 Yii::$app->session->set('product_cart', $product_cart);
-                $json['success'] = Yii::t('app','RemoveCartMsg02');
+                $json['success'] = Yii::t('app', 'RemoveCartMsg02');
                 $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
             }
         }
@@ -607,11 +705,11 @@ class SiteController extends Controller
             $voucher_start_date = date("d-m", $check_voucher['start_date']);
             $voucher_end_date = date("d-m", $check_voucher['end_date']);
             if ($check_voucher['active'] == 0) {
-                $json['error'] = Yii::t('app','InputVoucherMsg01');
+                $json['error'] = Yii::t('app', 'InputVoucherMsg01');
             } else if ($today < $voucher_start_date) {
-                $json['error'] = Yii::t('app','InputVoucherMsg02') . $voucher_start_date;
+                $json['error'] = Yii::t('app', 'InputVoucherMsg02') . $voucher_start_date;
             } else if ($today > $voucher_end_date) {
-                $json['error'] = Yii::t('app','InputVoucherMsg03') . $voucher_end_date;
+                $json['error'] = Yii::t('app', 'InputVoucherMsg03') . $voucher_end_date;
             } else {
                 $discount = $check_voucher['discount'];
             }
@@ -633,7 +731,7 @@ class SiteController extends Controller
         $json = array();
         if (Yii::$app->request->post()) {
             if (Yii::$app->user->isGuest)
-                $json['error'] = Yii::t('app','RatingProductMsg01');
+                $json['error'] = Yii::t('app', 'RatingProductMsg01');
             else {
                 $postData = Yii::$app->request->post();
                 if (isset($postData['product_id'])) {
@@ -642,9 +740,10 @@ class SiteController extends Controller
                     $product_id = 0;
                 }
                 $check_exist_rating = ProductRating::find()->where(['product_id' => $product_id, 'customer_id' => Yii::$app->user->identity->getId()])->one();
-                if (!empty($check_exist_rating['rating_id']))
-                    $json['error'] = Yii::t('app','RatingProductMsg02');
-                else {
+                if (!empty($check_exist_rating['rating_id'])) {
+
+                    $json['error'] = Yii::t('app', 'RatingProductMsg02');
+                } else {
                     if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
                         if (isset($postData['score'])) {
                             $score = $postData['score'];
@@ -656,14 +755,14 @@ class SiteController extends Controller
                         $product_rating->rating_id = $rating_info['id'];
                         $product_rating->customer_id = Yii::$app->user->identity->getId();
                         $product_rating->save();
-                        $json['success'] = Yii::t('app','RatingProductMsg03') . $score . Yii::t('app','RatingProductMsg04');
+                        $json['success'] = Yii::t('app', 'RatingProductMsg03') . $score . Yii::t('app', 'RatingProductMsg04');
                     } else {
-                        $json['error'] = Yii::t('app','RatingProductMsg05');
+                        $json['error'] = Yii::t('app', 'RatingProductMsg05');
                     }
                 }
             }
         } else {
-            $json['error'] = Yii::t('app','RatingProductMsg05');
+            $json['error'] = Yii::t('app', 'RatingProductMsg05');
         }
 
 
@@ -675,18 +774,18 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-            if (!\Yii::$app->user->isGuest) {
-                return $this->goHome();
-            }
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
 
-            $model = new LoginForm();
-            if ($model->load(Yii::$app->request->post()) && $model->login()) {
-                return $this->goHome();
-            } else {
-                return $this->render('login', [
-                    'model' => $model,
-                ]);
-            }
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goHome();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionLogout()

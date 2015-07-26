@@ -40,11 +40,15 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']]) ?>
                         <!--                            <input type="hidden" name="mode" value="product_name">-->
                         <div class="typeahead">
-                            <div class="u-posRelative">
-                                <input class="typeahead-hint" type="text" tabindex="-1" readonly>
-                                <input class="typeahead-input" id="search-input" type="text" name="q"
+                            <div  class="u-posRelative input-group">
+                                <input class="typeahead-hint " type="text" tabindex="-1" readonly>
+                                <input class="typeahead-input " id="search-input" type="text" name="q"
                                        placeholder="<?= Yii::t('app', 'SearchLabel') ?>">
+                                <span id="search-form" class="input-group-btn">
+                                     <button type="button" class="btn btn-default btn-lg"></button>
+                                 </span>
                                 <img class="typeahead-spinner" src="images/spinner.gif">
+
                             </div>
                             <div class="typeahead-menu"></div>
                         </div>
@@ -70,7 +74,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 
                     <div class="expandable"></div>
                 </div>
-                <ul class="main-navigation">
+                <ul id="navbar" class="main-navigation">
                     <?php $result = array();
                     $categories = Yii::$app->Category->category();
                     foreach ($categories as $item) {
@@ -119,7 +123,8 @@ $baseUrl = Yii::$app->request->baseUrl;
                                             <a href="#"><?= Yii::t('app', 'MyOrderLabel') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>" data-method="post"><?= Yii::t('app', 'LogoutLabel') ?></a>
+                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>"
+                                               data-method="post"><?= Yii::t('app', 'LogoutLabel') ?></a>
                                         </li>
                                     </ul>
                                 </li>

@@ -133,7 +133,7 @@ $this->title = Yii::t('app', 'CategoryTitle');
             <div class="pagination-wrapper">
                 <?php
                 echo \yii\widgets\LinkPager::widget([
-                    'pagination' => $pages,
+                    'pagination' => $pagination,
                 ]);
                 ?>
             </div>

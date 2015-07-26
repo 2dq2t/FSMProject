@@ -54,9 +54,11 @@ $(document).ready(function() {
     })
         .on('typeahead:asyncrequest', function() {
             $('.typeahead-spinner').show();
+            $('#search-form').hide();
         })
         .on('typeahead:asynccancel typeahead:asyncreceive', function() {
             $('.typeahead-spinner').hide();
+            $('#search-form').show();
         })
         .on('typeahead:selected', function(evt,data) {
             window.location.href = remoteHost + 'site/view-detail&product=' + data.product_name;

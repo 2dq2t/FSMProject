@@ -207,28 +207,8 @@ div.required .control-label:before {
 #logo {
 	margin: 0 0 10px 0;
 }
-/* search */
-#search {
-	background: url("../images/megnor/search_bg.jpg") repeat scroll 0 0 transparent;
-    border: 1px solid #eaeaea;
-    float: left;
-    height: 30px;
-    margin-top: 0;
-    padding: 4px;
-    width: 220px;
-    z-index: 15;
-}
-#search .input-lg {
-	 background: none repeat scroll 0 0 #ffffff;
-    border: 1px solid #dfdfdf;
-	border-radius: 3px;
-	-webkit-border-radius:3px;
-	-khtml-border-radius:3px;
-	-moz-border-radius:3px;
-    padding: 4px 30px 4px 5px;width: 220px;
-    
-}
-#search .btn-lg {
+
+#search-form .btn-lg {
 	background: url("../images/megnor/button-search.png") no-repeat scroll center center transparent;
     cursor: pointer;
     height: 29px;
@@ -2340,7 +2320,7 @@ font-size:18px;
 .header .header-right { float: none; text-align: center;  width: 100%;}
 .header .header-search{left:0; padding:0 15px;width:100%;top:20px;}
 #search,#search .input-lg{width:100%;}
-#search .input-group-btn{width:auto;}
+#search-form .input-group-btn{width:auto;}
 #top{top:264px;}
 .header .header-cart{float: none;left: 0; margin: 0 auto;  position: absolute;  right: 0; top: -22px; width: 100% !important;}
 .header { margin-bottom: 30px;}
@@ -2374,7 +2354,7 @@ font-size:18px;
 .product-search .sortcat ,.product-search .sortcat .form-control {  width: 100%;}
 #accordion #collapse-shipping .col-sm-10{float:left;}
 .product-layout.product-grid .right {  margin-bottom: 15px;}
-#search .btn-lg{right:3px;}
+#search-form .btn-lg{right:3px;}
 .main-slider .owl-carousel .owl-buttons div{opacity:1;}
 .productpage .product-right,.productpage .product-description{width:100%;padding:0 15px;}
 #content.productpage .reward{display:block !important;}

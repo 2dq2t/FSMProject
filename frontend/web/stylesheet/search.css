@@ -28,37 +28,34 @@
 /* Typeahead */
 
 .typeahead {
-    border: 1px solid #CCCCCC;
-    position: relative;
-    width: 100%;
-    height: auto;
-    text-align: left;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    background-color: #FFFFFF;
+    background: url("../images/megnor/search_bg.jpg") repeat scroll 0 0 transparent;
+    border: 1px solid #eaeaea;
+    float: left;
+    height: 40px;
+    margin-top: 0;
+    padding: 4px;
+    width: 230px;
+    z-index: 15;
 }
 
 .typeahead-spinner {
     position: absolute;
-    top: 7px;
-    right: 7px;
+    right:1px;
+    top:1px;
     display: none;
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 26px;
 }
 
 .typeahead-hint,
 .typeahead-input {
-    width: 100%;
-    padding: 5px 8px;
-    outline: medium none;
-    font-size: 24px;
-    line-height: 30px;
-    border: 2px solid #CCCCCC;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px;
+    -webkit-border-radius:3px;
+    -khtml-border-radius:3px;
+    -moz-border-radius:3px;
+    padding: 4px 30px 4px 5px;width: 220px;
 }
 
 .typeahead-hint {
