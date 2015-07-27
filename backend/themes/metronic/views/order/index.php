@@ -33,12 +33,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $gridColumns = [
-//        ['class' => 'kartik\grid\SerialColumn'],
+        [
+            'class'=>'kartik\grid\SerialColumn',
+            'header'=>'',
+        ],
+        [
+            'class'=>'kartik\grid\CheckboxColumn',
+        ],
+        [
+            'class'=>'kartik\grid\ExpandRowColumn',
+            'width'=>'50px',
+            'value'=>function ($model, $key, $index, $column) {
+                return GridView::ROW_COLLAPSED;
+            },
+            'detail'=>function ($model, $key, $index, $column) {
+                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
+            },
+            'headerOptions'=>['class'=>'kartik-sheet-style']
+        ],
         [
             'attribute' => 'order_id'
         ],
         [
-            'attribute' => 'customer_name',
+            'attribute' => 'full_name',
             'label' => Yii::t('app', 'Customer Name'),
             'width' => '20%',
             'filterType'=>GridView::FILTER_SELECT2,
@@ -49,35 +66,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer name')],
             'format'=>'raw'
         ],
-//        [
-//            'attribute' => 'order_date',
-//            'width' => '15%',
-//            'value' => function ($model) {
-//                return date('m/d/Y', $model->order_date);
-//            },
-//            'filterType' => GridView::FILTER_DATE,
-//            'filterWidgetOptions' => [
-//                'removeButton' => false,
-//                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-//                'pluginOptions' => [
-//                    'allowClear' => true,
-//                    'autoclose' => true,
-//                ],
-//            ],
-//        ],
         [
-            'attribute' => 'customer_phone_no',
-            'width' => '10%',
+            'attribute' => 'order_date',
+            'width' => '15%',
+            'value' => function ($model) {
+                return date('m/d/Y', $model->order_date);
+            },
+            'filterType' => GridView::FILTER_DATE,
+            'filterWidgetOptions' => [
+                'removeButton' => false,
+                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'autoclose' => true,
+                ],
+            ],
         ],
         [
-            'attribute' => 'product_name',
-//            'label' => Yii::t('app', 'Shipping address'),
-        ],
-        [
-            'attribute' => 'quantity'
-        ],
-        [
-            'attribute' => 'sell_price'
+            'attribute' => 'address',
+            'width' => '20%',
         ],
         [
             'attribute' => 'order_status_id',
@@ -115,11 +122,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'buttons' => [
                 'confirm' => function ($url, $model) {
                     return $model->order_status_id <> 2 && $model->order_status_id <> 4 ? Html::a('<span class="btn btn-sm btn-primary"><i class="fa fa-check"></i> ' . Yii::t('app', 'Confirm order') . '</span>',
-                        ['order/confirm', 'id' => $model->order_id],
-                        [
-                            'data-method' => 'post',
-                            'title' => Yii::t('app', 'Confirm'),
-                        ]). '&nbsp;<br/>' : '';
+                            ['order/confirm', 'id' => $model->order_id],
+                            [
+                                'data-method' => 'post',
+                                'title' => Yii::t('app', 'Confirm'),
+                            ]). '&nbsp;<br/>&nbsp;<br/>' : '';
                 },
                 'delivered' => function ($url, $model) {
                     return $model->order_status_id <> 3 && $model->order_status_id <> 1 && $model->order_status_id <> 4 ? Html::a('<span class="btn btn-sm btn-success"><i class="fa fa-check"></i> ' . Yii::t('app', 'Delivered order') . '</span>',

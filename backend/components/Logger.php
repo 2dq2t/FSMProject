@@ -133,7 +133,7 @@ class Logger {
             throw new RuntimeException(Yii::t('app', 'The file could not be opened. Check permissions.'));
         }
 
-        $changeValues = !empty($beforeChangeValues) && !empty($afterChangeValues) ? self::getInstance()->changeValues($beforeChangeValues, $afterChangeValues) : '';
+        $changeValues = !empty($beforeChangeValues) && !empty($afterChangeValues) ? self::getInstance()->changeValues($beforeChangeValues, $afterChangeValues) : [];
         $message = self::getInstance()->formatMessage($level, $message, $userId, $changeValues);
         self::write($message);
     }
