@@ -407,20 +407,33 @@ class SiteController extends Controller
     public function actionProductTag(){
         if(Yii::$app->request->isGet){
             if(!empty($_GET['tag'])){
-                $product_id = array();
-                $product_tag = array();
-                $tag_id = (new Query())->select(['id'])->from('tag')->where(['name'=>$_GET['tag']])->all();
-                foreach($tag_id as $item){
-                    $product_id_temp = (new Query())->select(['product_id'])->from('product_tag')->where(['tag_id'=>$item['id']])->one();
-                    array_push($product_id,$product_id_temp);
+                $list_id = array();
+                $tag_id = (new Query())->select(['id'])->from('tag')->where(['name'=>$_GET['tag']])->one();
+                $product_id = (new Query())->select(['product_id'])->from('product_tag')->where(['tag_id'=>$tag_id['id']])->all();
+                foreach($product_id as $key){
+                    array_push($list_id,$key['product_id']);
                 }
-                foreach($product_id as $id){
-                    $product = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $id])->one();
-                    array_push($product_tag,$product);
+                if (!(empty($_GET['sort']) && empty($_GET['order']))) {
+                    $sort = $_GET['sort'];
+                    $order = $_GET['order'];
+                    if ($order == 'ASC')
+                        $order = SORT_ASC;
+                    else
+                        $order = SORT_DESC;
+                    $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $list_id])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+
                 }
-                print_r($product_tag);
-                return $this->render('productTag',['product_tag'=>$product_tag]);
+                else {
+                    $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $list_id])->groupBy('product.id');
+                }
+
+                $countQuery = clone $product_tag_query;
+                $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                $product_tag = $product_tag_query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+                return $this->render('productTag',['product_tag'=>$product_tag,'pagination'=>$pagination]);
             }
         }
     }

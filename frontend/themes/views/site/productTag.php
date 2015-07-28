@@ -13,7 +13,7 @@ $this->title = Yii::t('app', 'CategoryTitle');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/product-tag&tag=" . $_GET['tag'] ?>"><?= $_GET['tag'] ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/product-tag&tag=" . $_GET['tag'] ?>">Tag: <?= $_GET['tag'] ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -26,14 +26,14 @@ $this->title = Yii::t('app', 'CategoryTitle');
             ?>
         </column>
         <div id="content" class="col-sm-9 categorypage">
-            <h2 class="page-title"><?= $_GET['tag'] ?></h2>
+
 
             <div class="row category_thumb">
                 <div class="col-sm-2 category_img"><img
                         src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/inner_banner-720x112.jpg"
                         alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
             </div>
-
+            <h2 class="page-title">Tag: <?= $_GET['tag'] ?></h2>
             <div class="category_filter">
                 <div class="col-md-4 btn-list-grid">
                     <div class="btn-group">
@@ -131,6 +131,11 @@ $this->title = Yii::t('app', 'CategoryTitle');
                 <?php } ?>
             </div>
             <div class="pagination-wrapper">
+                <?php
+                echo \yii\widgets\LinkPager::widget([
+                    'pagination' => $pagination,
+                ]);
+                ?>
             </div>
         </div>
     </div>
