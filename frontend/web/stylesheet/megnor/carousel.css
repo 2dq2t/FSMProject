@@ -19,7 +19,7 @@
 	display: none;
 	position: relative;
 	-webkit-transform: translate3d(0px, 0px, 0px);
-	-webkit-perspective: 1000;
+	-webkit-perspective: 1000px;
 }
 .product-carousel .slider-wrapper-outer{
 	overflow: hidden;

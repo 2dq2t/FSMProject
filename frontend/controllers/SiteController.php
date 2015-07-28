@@ -8,6 +8,7 @@ use common\models\Image;
 use common\models\Product;
 use common\models\ProductRating;
 use common\models\ProductSeason;
+use common\models\ProductTag;
 use common\models\Rating;
 use common\models\Season;
 use common\models\Voucher;
@@ -403,7 +404,26 @@ class SiteController extends Controller
             ]);
         }
     }
-
+    public function actionProductTag(){
+        if(Yii::$app->request->isGet){
+            if(!empty($_GET['tag'])){
+                $product_id = array();
+                $product_tag = array();
+                $tag_id = (new Query())->select(['id'])->from('tag')->where(['name'=>$_GET['tag']])->all();
+                foreach($tag_id as $item){
+                    $product_id_temp = (new Query())->select(['product_id'])->from('product_tag')->where(['tag_id'=>$item['id']])->one();
+                    array_push($product_id,$product_id_temp);
+                }
+                foreach($product_id as $id){
+                    $product = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $id])->one();
+                    array_push($product_tag,$product);
+                }
+                print_r($product_tag);
+                return $this->render('productTag',['product_tag'=>$product_tag]);
+            }
+        }
+    }
     public function actionViewDetail()
     {
         if (Yii::$app->request->isGet) {
@@ -510,20 +530,16 @@ class SiteController extends Controller
     {
         $json = array();
         if (Yii::$app->request->post()) {
-            if (Yii::$app->user->isGuest) {
-                return $this->goHome();
-            } else {
-                try {
-                    $post_data = Yii::$app->request->post();
-                    $product_id = json_decode($post_data['product_id']);
-                    $customer_id = Yii::$app->user->identity->getId();
-                    WishList::findOne(['customer_id' => $customer_id, 'product_id' => $product_id])->delete();
-                    $json['success'] = Yii::t('app', 'RemoveWishListMsg01');
-                    $json['product_id'] = $product_id;
-                    $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
-                } catch (\mysqli_sql_exception $ex) {
-                    $json['error'] = Yii::t('app', 'RemoveWishListMsg02');
-                }
+            try {
+                $post_data = Yii::$app->request->post();
+                $product_id = json_decode($post_data['product_id']);
+                $customer_id = Yii::$app->user->identity->getId();
+                WishList::findOne(['customer_id' => $customer_id, 'product_id' => $product_id])->delete();
+                $json['success'] = Yii::t('app', 'RemoveWishListMsg01');
+                $json['product_id'] = $product_id;
+                $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
+            } catch (\mysqli_sql_exception $ex) {
+                $json['error'] = Yii::t('app', 'RemoveWishListMsg02');
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -546,12 +562,17 @@ class SiteController extends Controller
                     $json['info'] = Yii::t('app', 'AddWishListMsg02');
                 } else {
                     //save to wish list
-                    $wishList = new WishList();
-                    $wishList->customer_id = $customer_id;
-                    $wishList->product_id = $product_id;
-                    $wishList->save();
-                    $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
-                    $json['success'] = Yii::t('app', 'AddWishListMsg03');
+                    try {
+                        $wishList = new WishList();
+                        $wishList->customer_id = $customer_id;
+                        $wishList->product_id = $product_id;
+                        $wishList->save();
+                        $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
+                        $json['success'] = Yii::t('app', 'AddWishListMsg03');
+                    }catch (\yii\db\Exception $ex){
+                        $json['info'] ="Lỗi kết nối! bạn vui lòng thử lại sau ít phút";
+                    }
+
                 }
             }
         } else
@@ -625,11 +646,6 @@ class SiteController extends Controller
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];
         }
-    }
-
-    public function actionCartInfo()
-    {
-        return $this->renderPartial('cartInfo');
     }
 
     public function actionViewCart()
@@ -723,10 +739,31 @@ class SiteController extends Controller
 
     public function actionCheckout()
     {
-        return $this->render('checkout');
+        $personal_info = null;
+        $address = null;
+        $district = null;
+        $city = null;
+        if(!Yii::$app->user->isGuest){
+            $customer = (new Query())->select(['guest_id','address_id'])->from('customer')->where(['id'=>Yii::$app->user->identity->getId()])->one();
+            if(!empty($customer['guest_id'])){
+                $personal_info = (new Query())->select(['full_name','email','phone_number'])->from('guest')->where(['id'=>$customer['guest_id']])->one();
+                $address_id = $customer['address_id'];
+                if(!empty($address_id)){
+                    $address = (new Query())->select(['detail','district_id'])->from('address')->where(['id'=>$address_id])->one();
+                    $district = (new Query())->select(['name','city_id'])->from('district')->where(['id'=>$address['district_id']])->one();
+                    $city = (new Query())->select(['name'])->from('city')->where(['id'=>$district['city_id']])->one();
+                }
+            }
+        }
+        return $this->render('checkout',[
+            'personal_info'=>$personal_info,
+            'address'=>$address['detail'],
+            'district'=>$district['name'],
+            'city'=>$city,
+        ]);
     }
 
-    public function actionRate()
+    public function actionRating()
     {
         $json = array();
         if (Yii::$app->request->post()) {
@@ -750,12 +787,16 @@ class SiteController extends Controller
                         } else
                             $score = 5;
                         $rating_info = Rating::find()->where(['rating' => $score])->one();
-                        $product_rating = new ProductRating();
-                        $product_rating->product_id = $product_id;
-                        $product_rating->rating_id = $rating_info['id'];
-                        $product_rating->customer_id = Yii::$app->user->identity->getId();
-                        $product_rating->save();
-                        $json['success'] = Yii::t('app', 'RatingProductMsg03') . $score . Yii::t('app', 'RatingProductMsg04');
+                        try {
+                            $product_rating = new ProductRating();
+                            $product_rating->product_id = $product_id;
+                            $product_rating->rating_id = $rating_info['id'];
+                            $product_rating->customer_id = Yii::$app->user->identity->getId();
+                            $product_rating->save();
+                            $json['success'] = Yii::t('app', 'RatingProductMsg03') . $score . Yii::t('app', 'RatingProductMsg04');
+                        }catch (\yii\db\Exception $connection){
+                            $json['error'] = "Lỗi kết nối! bạn vui lòng thử lại sau ít phút";
+                        }
                     } else {
                         $json['error'] = Yii::t('app', 'RatingProductMsg05');
                     }

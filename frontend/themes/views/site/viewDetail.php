@@ -167,103 +167,99 @@ $this->title = $product_detail['name'];
                         </div>
                     </div>
                 </div>
-                    <div id="slide" class="col-sm-12">
-                        <div class="component">
-                        <div class="box">
-                            <div class="box-heading"><?= Yii::t('app', 'ProductSameCatLabel') ?></div>
-                            <div class="box-content">
-                                <div class="customNavigation">
-                                    <a class="prev">&nbsp;</a>
-                                    <a class="next">&nbsp;</a>
-                                </div>
+                <div id="slide" class="col-sm-12">
+                    <div class="box">
+                        <div class="box-heading"><?= Yii::t('app', 'ProductSameCatLabel') ?></div>
+                        <div class="box-content">
+                            <div class="customNavigation">
+                                <a class="prev">&nbsp;</a>
+                                <a class="next">&nbsp;</a>
+                            </div>
 
-                                <div class="box-product product-carousel " id="featured-carousel">
+                            <div class="box-product product-carousel" id="category-carousel">
 
-                                    <?php foreach ($products_same_category as $product) { ?>
-                                        <div class="slider-item">
-                                            <div class="product-block product-thumb transition">
-                                                <div class="product-block-inner ">
-                                                    <div class="image">
-                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
-                                                                src="<?= $product['product_image'] ?>"
-                                                                alt="<?= $product['product_name'] ?>"
-                                                                title="<?= $product['product_name'] ?>"
-                                                                class="img-responsive"/></a>
-                                                        <?php
-                                                        if (isset($product['product_offer']) && $product['product_offer'] > 0)
-                                                            echo "<span class='saleicon sale'>" . Yii::t('app', 'SaleLabel') . "</span>";
+                                <?php foreach ($products_same_category as $product) { ?>
+                                    <div class="slider-item">
+                                        <div class="product-block product-thumb transition">
+                                            <div class="product-block-inner ">
+                                                <div class="image">
+                                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                                            src="<?= $product['product_image'] ?>"
+                                                            alt="<?= $product['product_name'] ?>"
+                                                            title="<?= $product['product_name'] ?>"
+                                                            class="img-responsive"/></a>
+                                                    <?php
+                                                    if (isset($product['product_offer']) && $product['product_offer'] > 0)
+                                                        echo "<span class='saleicon sale'>" . Yii::t('app', 'SaleLabel') . "</span>";
 
-                                                        if (isset($product['product_rating']) && $product['product_rating'] > 0) {
-                                                            echo "<div class='rating' >";
-                                                            for ($i = 0; $i < 5; $i++) {
-                                                                if ($i < $product['product_rating']) {
-                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
-                                                                } else
-                                                                    echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
-                                                            }
-                                                            echo "</div >";
+                                                    if (isset($product['product_rating']) && $product['product_rating'] > 0) {
+                                                        echo "<div class='rating' >";
+                                                        for ($i = 0; $i < 5; $i++) {
+                                                            if ($i < $product['product_rating']) {
+                                                                echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                                            } else
+                                                                echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
                                                         }
-                                                        ?>
+                                                        echo "</div >";
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="product-details">
+                                                    <div class="caption">
+                                                        <h4>
+                                                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                               title="<?= $product['product_name'] ?>">
+                                                                <?= $product['product_name'] ?></a>
+                                                        </h4>
+
+                                                        <div class="price">
+                                                            <?php
+                                                            if (!empty($product['product_offer'])) {
+                                                                echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                                $new_price = $product['product_price'] * (100 / $product['product_offer']);
+                                                                echo "<span class='price-new'>" . number_format($new_price) . " VND</span>";
+                                                                echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                            } else {
+                                                                echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
+                                                                echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                            }
+                                                            ?>
+                                                        </div>
                                                     </div>
-                                                    <div class="product-details">
-                                                        <div class="caption">
-                                                            <h4>
-                                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                                   title="<?= $product['product_name'] ?>">
-                                                                    <?= $product['product_name'] ?></a>
-                                                            </h4>
 
-                                                            <div class="price">
-                                                                <?php
-                                                                if (!empty($product['product_offer'])) {
-                                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                    $new_price = $product['product_price'] * (100 / $product['product_offer']);
-                                                                    echo "<span class='price-new'>" . number_format($new_price) . " VND</span>";
-                                                                    echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                } else {
-                                                                    echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
-                                                                    echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                }
-                                                                ?>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="button-group">
-                                                            <button type="button"
-                                                                    title="<?= Yii::t('app', 'AddToCartLabel') ?>"
-                                                                    class="addtocart"
-                                                                    onclick="cart.add('<?= $product['product_id'] ?>');">
-                                                                <span><?= Yii::t('app', 'AddToCartLabel') ?></span>
-                                                            </button>
-                                                        </div>
+                                                    <div class="button-group">
+                                                        <button type="button"
+                                                                title="<?= Yii::t('app', 'AddToCartLabel') ?>"
+                                                                class="addtocart"
+                                                                onclick="cart.add('<?= $product['product_id'] ?>');">
+                                                            <span><?= Yii::t('app', 'AddToCartLabel') ?></span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php } ?>
-                                </div>
+                                    </div>
+                                <?php } ?>
                             </div>
                         </div>
-                        </div>
                     </div>
+                </div>
 
                 <div class="product-tag col-sm-12"><b><?= Yii::t('app', 'TagLabel') ?>:</b>
                     <?php
                     if (!empty($product_tag[0]['name'])) {
                         foreach ($product_tag as $tag) {
                             if ($tag === end($product_tag)) {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/search&amp;tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=site/product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                             } else {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/search&amp;tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=site/product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                                 echo ", ";
                             }
                         }
                     } ?>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -343,7 +339,7 @@ $this->title = $product_detail['name'];
             click: function (score, evt) {
                 var product_id = document.getElementById('product_id').value;
                 $.ajax({
-                    url: 'index.php?r=site/rate',
+                    url: 'index.php?r=site/rating',
                     type: 'post',
                     data: {score: score, product_id: product_id},
                     dataType: 'json',
