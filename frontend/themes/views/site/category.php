@@ -78,6 +78,16 @@ $this->title = Yii::t('app', 'CategoryTitle');
                                     <?php
                                     if (isset($product['product_offer']) && $product['product_offer'] > 0)
                                         echo "<span class='saleicon sale'>" . Yii::t('app', 'SaleLabel') . "</span>";
+                                    if (isset($product['product_rating']) && $product['product_rating'] > 0) {
+                                        echo "<div class='rating' >";
+                                        for ($i = 0; $i < 5; $i++) {
+                                            if ($i < $product['product_rating']) {
+                                                echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                            } else
+                                                echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
+                                        }
+                                        echo "</div >";
+                                    }
                                     ?>
                                 </div>
                                 <div class="product-details">

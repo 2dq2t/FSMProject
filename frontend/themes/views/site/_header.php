@@ -68,7 +68,22 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- ======= Menu Code START ========= -->
         <!-- Opencart 3 level Category Menu-->
         <div class="container">
-            <div id="menu" class="main-menu">
+
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    var width = $(window).width();
+                    //This is ajax code which will send width to your php page in the screenWidth variable
+                    if(width >980){
+                        document.getElementById("menu").style.display = 'none';
+                        document.getElementById("menu2").style.display = '';
+                    }
+                    else{
+                        document.getElementById("menu").style.display = '';
+                        document.getElementById("menu2").style.display = 'none';
+                    }
+                });
+            </script>
+            <div id="menu" class="main-menu" style="display: none;">
 
                 <div class="nav-responsive"><span><?= Yii::t('app', 'CategoryLabel') ?></span>
 
@@ -98,7 +113,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                     <?php endforeach; ?>
                 </ul>
             </div>
-            <div id="menu2" class="main-menu">
+            <div id="menu2" class="main-menu" style="display: none;">
 
                 <div class="nav-responsive"><span><?= Yii::t('app', 'CategoryLabel') ?></span>
 
@@ -117,20 +132,6 @@ $baseUrl = Yii::$app->request->baseUrl;
                     </li>
                 </ul>
             </div>
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    var width = $(window).width();
-                    //This is ajax code which will send width to your php page in the screenWidth variable
-                    if(width >980){
-                        document.getElementById("menu").style.display = 'none';
-                        document.getElementById("menu2").style.display = '';
-                    }
-                    else{
-                        document.getElementById("menu").style.display = '';
-                        document.getElementById("menu2").style.display = 'none';
-                    }
-                });
-            </script>
             <nav id="top">
                 <div class="container">
                     <div id="top-links" class="nav">
