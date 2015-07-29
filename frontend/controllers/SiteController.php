@@ -151,13 +151,9 @@ class SiteController extends Controller
         $season = Season::find()->all();
         $season_id = null;
         foreach ($season as $season_item) {
-            $season_from = date("m-d", $season_item['from']);
-            $season_to = date("m-d", $season_item['to']);
+            $season_from = date("d-m", $season_item['from']);
+            $season_to = date("d-m", $season_item['to']);
             $today = date("m-d");
-           /* var_dump(date_create_from_format('m-d-Y', $season_item['from']));
-            echo $season_from;
-            echo $season_to;
-            echo $today;*/
             if ($season_from <= $today && $today <= $season_to) {
                 $product_id = ProductSeason::find()->where(['season_id' => $season_item['id']])->all();
                 if (!empty($product_id[0]['season_id'])) {
@@ -515,7 +511,7 @@ class SiteController extends Controller
             $product_session_id = Yii::$app->session->get('product_session');
             $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'
                 , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $product_session_id])->groupBy('product.id')->all();
-            print_r($product_session_id);
+
             return $this->render('wishList', [
                 'wish_list_product' => $wish_list_product,
                 'product_session' => $product_session,

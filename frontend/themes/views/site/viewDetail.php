@@ -6,7 +6,7 @@
  * Time: 10:41 CH
  */
 $baseUrl = Yii::$app->request->baseUrl;
-$this->title = $product_detail['name'];
+$this->title = ucwords($product_detail['name']);
 ?>
 <?php require('_header.php');
 ?>
@@ -129,8 +129,8 @@ $this->title = $product_detail['name'];
                         <div class="form-group quntity">
                             <label class="control-label" for="input-quantity"><?= Yii::t('app', 'QuantityLabelMin') ?>
                                 :</label>
-                            <input type="text" name="quantity" value="1" size="2" id="input-quantity"
-                                   class="form-control"/>
+                            <input type="number" min="1" name="quantity" value="1" size="2" id="input-quantity"
+                                   class="form-control" style="max-width: 45px"/>
                             <input type="hidden" id="product_id" name="product_id"
                                    value="<?php echo $product_detail['id'] ?>"/>
 

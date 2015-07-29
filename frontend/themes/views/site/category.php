@@ -5,7 +5,7 @@
  * Date: 27/05/2015
  * Time: 3:09 CH
  */
-$this->title = Yii::t('app', 'CategoryTitle');
+$this->title = ucwords(Yii::t('app', 'CategoryTitle'));
 ?>
 <?php require('_header.php');
 ?>

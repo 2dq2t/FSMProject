@@ -6,7 +6,7 @@
  * Time: 10:41 CH
  */
 $baseUrl = Yii::$app->request->baseUrl;
-$this->title = "Thanh toán";
+$this->title = "Thanh Toán";
 ?>
 <?php
 $cart_info = Yii::$app->Header->cartInfo();

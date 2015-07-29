@@ -106,11 +106,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                 </div>
                 <ul id="navbar" class="main-navigation">
                         <li>
-                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/index" ?>">Trang chủ</a>
-
-                            <ul>
-
-                            </ul>
+                            <a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home icon-3x"></i> Trang chủ</a>
                         </li>
                     <li>
                         <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product="?>">Rau theo mùa</a>
