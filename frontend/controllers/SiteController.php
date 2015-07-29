@@ -350,26 +350,6 @@ class SiteController extends Controller
         return $this->render('search', ['products' => $search_product, 'pagination' => $pagination, 'q' => $q, 'search_with_description' => $search_with_description]);
     }
 
-    public function actionDynamicNavbar()
-    {
-        $json = array();
-        if (Yii::$app->request->post()) {
-            $data = Yii::$app->request->post();
-            $width = json_decode($data['screenwidth']);
-            if ($width < 980) {
-                $json = Yii::$app->Category->category();
-            } else {
-                $menu[0] = "test";
-                $menu[1] = "test";
-                array_push($json, $menu);
-            }
-        }
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
-        }
-    }
-
     public function actionCategory()
     {
         if (Yii::$app->request->isGet) {
@@ -387,18 +367,19 @@ class SiteController extends Controller
                     else
                         $order = SORT_DESC;
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
-                    $countQuery = clone $category_product_query;
-                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
-                    $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
+                        , 'product.tax as product_tax', 'image.resize_path as image_path','rating.rating as product_rating'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+
                 } else {
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
                         , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
-                    $countQuery = clone $category_product_query;
-                    $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
-                    $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
                 }
-
+                $countQuery = clone $category_product_query;
+                $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
+                foreach($category_product as $key=>$item){
+                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $category_product[$key]['product_rating'] = $rating_average;
+                }
             }
 
 
@@ -435,6 +416,10 @@ class SiteController extends Controller
                 $countQuery = clone $product_tag_query;
                 $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
                 $product_tag = $product_tag_query->offset($pagination->offset)->limit($pagination->limit)->all();
+                foreach($product_tag as $key=>$item){
+                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $product_tag[$key]['product_rating'] = $rating_average;
+                }
 
                 return $this->render('productTag',['product_tag'=>$product_tag,'pagination'=>$pagination]);
             }
@@ -487,19 +472,13 @@ class SiteController extends Controller
             }
             //set product recent view
             $flag = true;
-            $product['product_id'] = $product_detail['id'];
-            $product['product_name'] = $product_detail['name'];
-            $product['product_price'] = $product_detail['price'];
-            $product['product_rating'] = $rating_average;
-            $product['product_offer'] = $product_offer;
-            $product['product_image'] = $product_image_detail[0]['path'];
-            $product['product_tax'] = $product_detail['tax'];
+            $product = $product_detail['id'];
             $product_session = Yii::$app->session->get('product_session');
             if (count($product_session) == 0) {
                 Yii::$app->session->set('product_session', [$product]);
             } else {
                 foreach ($product_session as $item) {
-                    if (($item['product_id'] == $product['product_id'])) {
+                    if (($item == $product)) {
                         $flag = false;
                     }
                 }
@@ -534,7 +513,10 @@ class SiteController extends Controller
                 $product_detail['product_unit'] = Yii::$app->CommonFunction->getProductUnit($item['product_id']);
                 array_push($wish_list_product, $product_detail);
             }
-            $product_session = Yii::$app->session->get('product_session');
+            $product_session_id = Yii::$app->session->get('product_session');
+            $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'
+                , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $product_session_id])->groupBy('product.id')->all();
+            print_r($product_session_id);
             return $this->render('wishList', [
                 'wish_list_product' => $wish_list_product,
                 'product_session' => $product_session,

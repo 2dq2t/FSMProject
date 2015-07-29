@@ -33,13 +33,6 @@ AppAsset::register($this);
 </head>
 <body class="common-home layout-2 left-col">
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=369040309965950";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
 <?php $this->beginBody() ?>
 <?php
 $baseUrl = Yii::$app->request->baseUrl;

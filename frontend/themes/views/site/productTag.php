@@ -98,14 +98,11 @@ $this->title = Yii::t('app', 'CategoryTitle');
 
                                             <h4>
                                                 <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                   title="<?= $product['product_name'] ?>">
-                                                    <?= $product['product_name'] ?>                </a>
+                                                   title="<?=ucwords($product['product_name']) ?>">
+                                                    <?= ucwords($product['product_name']) ?>
+                                                </a>
                                             </h4>
-
-
                                             <div class="desc"><?= $product['product_intro'] ?></div>
-
-
                                             <div class="compare-wishlist">
                                                 <div class="wishlist-btn">
                                                     <button type="button" class="wishlist" title="Add to Wish List"

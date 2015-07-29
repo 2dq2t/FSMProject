@@ -66,23 +66,8 @@ $baseUrl = Yii::$app->request->baseUrl;
 <nav class="nav-container" role="navigation">
     <div class="nav-inner">
         <!-- ======= Menu Code START ========= -->
-        <!-- Opencart 3 level Category Menu-->
         <div class="container">
 
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    var width = $(window).width();
-                    //This is ajax code which will send width to your php page in the screenWidth variable
-                    if(width >980){
-                        document.getElementById("menu").style.display = 'none';
-                        document.getElementById("menu2").style.display = '';
-                    }
-                    else{
-                        document.getElementById("menu").style.display = '';
-                        document.getElementById("menu2").style.display = 'none';
-                    }
-                });
-            </script>
             <div id="menu" class="main-menu" style="display: none;">
 
                 <div class="nav-responsive"><span><?= Yii::t('app', 'CategoryLabel') ?></span>
@@ -100,12 +85,12 @@ $baseUrl = Yii::$app->request->baseUrl;
                     ?>
                     <?php foreach (array_keys($result) as $category): ?>
                         <li>
-                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= $category ?></a>
+                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= ucfirst($category) ?></a>
 
                             <ul>
                                 <?php foreach ($result[$category] as $key) { ?>
                                     <li>
-                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $key ?>"><?= $key ?></a>
+                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $key ?>"><?= ucfirst($key) ?></a>
                                     </li>
                                 <?php }; ?>
                             </ul>

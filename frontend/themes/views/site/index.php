@@ -132,8 +132,8 @@ require('_header.php');
                                                         <div class="caption">
                                                             <h4>
                                                                 <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                                   title="<?= $product['product_name'] ?>">
-                                                                    <?= $product['product_name'] ?></a>
+                                                                   title="<?= ucwords($product['product_name']) ?>">
+                                                                    <?= ucwords($product['product_name']) ?></a>
                                                             </h4>
 
                                                             <div class="price">
@@ -209,8 +209,8 @@ require('_header.php');
                                                         <div class="caption">
                                                             <h4>
                                                                 <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                                   title="<?= $product['product_name'] ?>">
-                                                                    <?= $product['product_name'] ?></a>
+                                                                   title="<?= ucwords($product['product_name']) ?>">
+                                                                    <?= ucwords($product['product_name']) ?></a>
                                                             </h4>
 
                                                             <div class="price">

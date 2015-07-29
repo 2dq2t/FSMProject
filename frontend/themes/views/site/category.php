@@ -13,7 +13,7 @@ $this->title = Yii::t('app', 'CategoryTitle');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"><?= $category_name ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"><?= ucwords($category_name) ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -96,13 +96,12 @@ $this->title = Yii::t('app', 'CategoryTitle');
 
                                             <h4>
                                                 <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                   title="<?= $product['product_name'] ?>">
-                                                    <?= $product['product_name'] ?>                </a>
+                                                   title="<?= ucwords($product['product_name']) ?>">
+                                                    <?= ucwords($product['product_name']) ?>
+                                                </a>
                                             </h4>
 
-
                                             <div class="desc"><?= $product['product_intro'] ?></div>
-
 
                                             <div class="compare-wishlist">
                                                 <div class="wishlist-btn">

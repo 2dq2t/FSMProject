@@ -10,11 +10,21 @@ $this->title = $product_detail['name'];
 ?>
 <?php require('_header.php');
 ?>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.3&appId=369040309965950";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo $baseUrl . 'index.php?r=site/view-detail&product=' . $product_detail['name'] ?>"><?php echo $product_detail['name'] ?></a>
+            <a href="<?php echo $baseUrl . 'index.php?r=site/view-detail&product=' . $product_detail['name'] ?>"><?php echo ucwords($product_detail['name']) ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -27,7 +37,8 @@ $this->title = $product_detail['name'];
             ?>
         </column>
         <div id="content" class="productpage col-sm-9">
-            <div class="row">
+            <div class="row view-detail">
+                <span class="latest_default_width" style="display:none; visibility:hidden"></span>
                 <div class="col-sm-6 product-left">
                     <div class="product-info">
                         <ul class="left product-image thumbnails">
@@ -68,7 +79,7 @@ $this->title = $product_detail['name'];
                 </div>
 
                 <div class="col-sm-6 product-right">
-                    <h3 class="product-title"><?php echo $product_detail['name'] ?> </h3>
+                    <h3 class="product-title"><?php echo ucwords($product_detail['name']); ?> </h3>
                     <ul class="list-unstyled">
                         <li><span><?= Yii::t('app', 'ProductCode') ?>: </span><?php echo $product_detail['barcode'] ?>
                         </li>
@@ -208,8 +219,8 @@ $this->title = $product_detail['name'];
                                                     <div class="caption">
                                                         <h4>
                                                             <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                               title="<?= $product['product_name'] ?>">
-                                                                <?= $product['product_name'] ?></a>
+                                                               title="<?= ucwords($product['product_name']) ?>">
+                                                                <?= ucwords($product['product_name']) ?></a>
                                                         </h4>
 
                                                         <div class="price">

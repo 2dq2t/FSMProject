@@ -64,7 +64,7 @@ require('_header.php');
                                         title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                             </td>
                             <td class="text-center"><a
-                                    href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= $product['product_name'] ?></a>
+                                    href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                                 <br/>
                                 <small><?= Yii::t('app', 'QuantityLabel') ?>
                                     : <?php if ($product['product_quantity'] - $product['product_sold'] > 0) echo $product['product_quantity'] - $product['product_sold'];
@@ -74,7 +74,7 @@ require('_header.php');
                             <td class="text-center"><?= $product['product_unit'] ?></td>
                             <td class="text-right"><?php
                                 if (!empty($product['product_offer'])) {
-                                    $new_price = $product['product_price'] * (100 / $product['product_offer']);
+                                    $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'], $product['product_offer']);
                                     echo number_format($new_price) . " " . Yii::t('app', 'VNDLabel');
                                 } else
                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
@@ -142,8 +142,8 @@ require('_header.php');
                                                 <div class="caption">
                                                     <h4>
                                                         <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                           title="<?= $product['product_name'] ?>">
-                                                            <?= $product['product_name'] ?></a>
+                                                           title="<?= ucwords($product['product_name']) ?>">
+                                                            <?= ucwords($product['product_name']) ?></a>
                                                     </h4>
 
                                                     <div class="price">

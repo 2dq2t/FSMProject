@@ -75,7 +75,7 @@ require('_header.php');
                                                 title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                                     </td>
                                     <td class="text-left"><a
-                                            href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= $product['product_name'] ?></a>
+                                            href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                                         <br/>
                                     </td>
                                     <td class="text-left">
