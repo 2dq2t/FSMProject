@@ -2,6 +2,8 @@
 namespace frontend\controllers;
 
 use common\models\Category;
+use common\models\City;
+use common\models\District;
 use common\models\Guest;
 use common\models\Customer;
 use common\models\Image;
@@ -23,6 +25,7 @@ use yii\base\InvalidParamException;
 use yii\data\Pagination;
 use yii\db\Expression;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -151,10 +154,10 @@ class SiteController extends Controller
             $season_from = date("m-d", $season_item['from']);
             $season_to = date("m-d", $season_item['to']);
             $today = date("m-d");
-            var_dump(date_create_from_format('m-d-Y', $season_item['from']));
+           /* var_dump(date_create_from_format('m-d-Y', $season_item['from']));
             echo $season_from;
             echo $season_to;
-            echo $today;
+            echo $today;*/
             if ($season_from <= $today && $today <= $season_to) {
                 $product_id = ProductSeason::find()->where(['season_id' => $season_item['id']])->all();
                 if (!empty($product_id[0]['season_id'])) {
@@ -661,6 +664,11 @@ class SiteController extends Controller
         }
     }
 
+    public function actionCartInfo()
+    {
+        return $this->renderPartial('cartInfo');
+    }
+
     public function actionViewCart()
     {
         $cart_info = Yii::$app->Header->cartInfo();
@@ -768,11 +776,19 @@ class SiteController extends Controller
                 }
             }
         }
+        $modelCity = new City();
+        $modelDistrict = new District();
+        $city = City::find()->all();
+        $district = District::find()->all();
+        $listCity = ArrayHelper::map($city,'id','name');
+        $listDistrict = ArrayHelper::map($district,'id','name');
         return $this->render('checkout',[
             'personal_info'=>$personal_info,
             'address'=>$address['detail'],
-            'district'=>$district['name'],
-            'city'=>$city,
+            'listCity'=>$listCity,
+            'listDistrict'=>$listDistrict,
+            'modelDistrict'=>$modelDistrict,
+            'modelCity'=>$modelCity,
         ]);
     }
 

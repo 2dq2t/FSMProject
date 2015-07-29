@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     var engine, remoteHost, template;
 
     $.support.cors = true;
@@ -8,12 +8,12 @@ $(document).ready(function() {
     template = Handlebars.compile($("#result-template").html());
 
     engine = new Bloodhound({
-        identify: function(o) {
+        identify: function (o) {
             return o.product_name;
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('product_name'),
-        dupDetector: function(a, b) {
+        dupDetector: function (a, b) {
             return a.product_name === b.product_name;
         },
         prefetch: remoteHost + '/site/prefetch',
@@ -52,15 +52,15 @@ $(document).ready(function() {
             suggestion: template
         }
     })
-        .on('typeahead:asyncrequest', function() {
+        .on('typeahead:asyncrequest', function () {
             $('.typeahead-spinner').show();
             $('#search-form').hide();
         })
-        .on('typeahead:asynccancel typeahead:asyncreceive', function() {
+        .on('typeahead:asynccancel typeahead:asyncreceive', function () {
             $('.typeahead-spinner').hide();
             $('#search-form').show();
         })
-        .on('typeahead:selected', function(evt,data) {
+        .on('typeahead:selected', function (evt, data) {
             window.location.href = remoteHost + 'site/view-detail&product=' + data.product_name;
         });
 

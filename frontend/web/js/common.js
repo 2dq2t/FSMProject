@@ -25,7 +25,14 @@ $(window).resize(function() {
     $(document).ready(function() {
         var width = $(window).width();
         //This is ajax code which will send width to your php page in the screenWidth variable
-
+        if(width >980){
+            document.getElementById("menu").style.display = 'none';
+            document.getElementById("menu2").style.display = '';
+        }
+        else{
+            document.getElementById("menu").style.display = '';
+            document.getElementById("menu2").style.display = 'none';
+        }
         $.ajax({
             url: "index.php?r=site/dynamic-navbar", //this will be your php page
             type: 'post',
@@ -33,10 +40,7 @@ $(window).resize(function() {
             dataType: 'json',
             success: function (json) {
                 var json = $.parseJSON(json);
-                if(width>980){
-                    var navbar = document.getElementById("navbar");
-                    $demo = ('<li><a href="test">'+json[0][0]+'</a></li>'  );
-                    navbar.createElement('li');
+                if(width>980){;
 
                 }
 
@@ -45,6 +49,7 @@ $(window).resize(function() {
         });
     });
 });
+
 $(document).ready(function() {
 	// Adding the clear Fix
 	cols1 = $('#column-right, #column-left').length;

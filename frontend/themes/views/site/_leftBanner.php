@@ -9,7 +9,7 @@
 <div id="banner0" class="banner">
     <div class="item">
         <a href="#"><img
-                src="images/data/leftbanner.png"
+                src="images/data/leftbanner.jpg"
                 alt="Left Banner" class="img-responsive"/></a>
     </div>
 </div>

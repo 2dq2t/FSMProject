@@ -98,6 +98,39 @@ $baseUrl = Yii::$app->request->baseUrl;
                     <?php endforeach; ?>
                 </ul>
             </div>
+            <div id="menu2" class="main-menu">
+
+                <div class="nav-responsive"><span><?= Yii::t('app', 'CategoryLabel') ?></span>
+
+                    <div class="expandable"></div>
+                </div>
+                <ul id="navbar" class="main-navigation">
+                        <li>
+                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/index" ?>">Trang chủ</a>
+
+                            <ul>
+
+                            </ul>
+                        </li>
+                    <li>
+                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product="?>">Rau theo mùa</a>
+                    </li>
+                </ul>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    var width = $(window).width();
+                    //This is ajax code which will send width to your php page in the screenWidth variable
+                    if(width >980){
+                        document.getElementById("menu").style.display = 'none';
+                        document.getElementById("menu2").style.display = '';
+                    }
+                    else{
+                        document.getElementById("menu").style.display = '';
+                        document.getElementById("menu2").style.display = 'none';
+                    }
+                });
+            </script>
             <nav id="top">
                 <div class="container">
                     <div id="top-links" class="nav">

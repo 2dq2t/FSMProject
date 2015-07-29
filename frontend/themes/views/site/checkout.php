@@ -90,6 +90,7 @@ require('_header.php');
                     </div>
                     <div class="panel-collapse collapse in" id="collapse-payment-address" style="height: auto;">
                         <div class="panel-body">
+                            <?php $form = \yii\widgets\ActiveForm::begin();?>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <fieldset id="account">
@@ -121,13 +122,17 @@ require('_header.php');
                                         </div>
                                         <div class="form-group required">
                                             <label class="control-label" for="input-payment-city">Quận/Huyện</label>
-                                            <input type="text" name="city" value="" placeholder="City"
-                                                   id="input-payment-city" class="form-control">
+                                            <?php echo $form->field($modelDistrict,'id')->dropDownList($listDistrict,
+                                                                                                        ['prompt'=>'Choose one...'],
+                                                                                                        ['options' => [ 2 => ['selected ' => true]]]
+                                                                                                        )->label(false);?>
                                         </div>
                                         <div class="form-group required">
                                             <label class="control-label" for="input-payment-postcode">Thành Phố</label>
-                                            <input type="text" name="postcode" value="" placeholder="Post Code"
-                                                   id="input-payment-postcode" class="form-control">
+                                            <?php echo $form->field($modelCity,'id')->dropDownList($listCity,
+                                                ['prompt'=>'Choose one...'],
+                                                ['options' => [ 1 => ['selected ' => true]]]
+                                            )->label(false);?>
                                         </div>
 
                                     </fieldset>
@@ -200,10 +205,12 @@ require('_header.php');
 
                             <div class="buttons">
                                 <div class="pull-right">
-                                    <input type="button" value="Continue" id="button-guest"
+                                    <input type="submit" value="Continue" id="button-guest"
                                            data-loading-text="Loading..." class="btn btn-primary">
                                 </div>
                             </div>
+
+                            <?php \yii\widgets\ActiveForm::end()?>
                         </div>
                     </div>
                 </div>

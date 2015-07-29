@@ -9,7 +9,7 @@ $baseUrl = Yii::$app->request->baseUrl;
 <?php
 require('_header.php');
 ?>
-<div class="container content-inner">
+
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
         <?php
         echo Alert::widget([
@@ -22,30 +22,32 @@ require('_header.php');
         ]);
         ?>
     <?php endforeach; ?>
+<div class="container content-inner">
     <div class="row content-subinner">
         <div class="content-top">
             <div id="content">
                 <div class="main-slider">
                     <div id="spinner"></div>
-                    <div id="slideshow0" class="owl-carousel" style="opacity: 1;">
+                    <div id="slideShow" class="owl-carousel" style="opacity: 1;">
                         <?php foreach ($slide_show as $slide_show) {
                             echo "<div class='item'>";
                             if (!empty($slide_show['product_name'])) {
                                 echo "<a href='" . Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $slide_show['product_name'] . "'><img
                                     src='uploads/slideshow/" . $slide_show['slide_show_id'] . "/" . $slide_show['slide_show_path'] . "'
                                     alt='" . $slide_show['product_name'] . "' class='img-responsive'/></a>";
+                                echo "</div> ";
                             } else {
                                 echo "<a href='#'><img
                                     src='uploads/slideshow/" . $slide_show['slide_show_id'] . "/" . $slide_show['slide_show_path'] . "'
                                     alt='" . $slide_show['product_name'] . "' class='img-responsive'/></a>";
+                                echo "</div> ";
                             }
-                            echo "</div> ";
-                        }
-                        ?>
+
+                        }?>
                     </div>
                 </div>
                 <script type="text/javascript">
-                    $('#slideshow0').owlCarousel({
+                    $('#slideShow').owlCarousel({
                         items: 6,
                         autoPlay: 3000,
                         singleItem: true,
@@ -70,7 +72,7 @@ require('_header.php');
                 <div id="banner2" class="banner">
                     <div class="item">
                         <a href="#"><img
-                                src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/topbanner2-250x196.jpg"
+                                src="images/data/topbanner2.jpg"
                                 alt="Topbanner2" class="img-responsive"/></a>
                     </div>
                 </div>
@@ -247,14 +249,14 @@ require('_header.php');
                         <div id="banner3" class="banner">
                             <div class="item">
                                 <a href="#"><img
-                                        src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/subbanner1-289x49.png"
+                                        src="images/data/subbanner1-289x49.png"
                                         alt="subbanner1" class="img-responsive"/></a>
                             </div>
                         </div>
                         <div id="banner4" class="banner">
                             <div class="item">
                                 <a href="#"><img
-                                        src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/subbanner2-289x49.png"
+                                        src="images/data/subbanner2-289x49.png"
                                         alt="subbanner2" class="img-responsive"/></a>
                             </div>
                         </div>

@@ -26,14 +26,12 @@ $this->title = Yii::t('app', 'CategoryTitle');
             ?>
         </column>
         <div id="content" class="col-sm-9 categorypage">
-            <h2 class="page-title"><?= $category_name ?></h2>
 
             <div class="row category_thumb">
                 <div class="col-sm-2 category_img"><img
-                        src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/inner_banner-720x112.jpg"
+                        src="images/data/inner-banner.jpg"
                         alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
             </div>
-
             <div class="category_filter">
                 <div class="col-md-4 btn-list-grid">
                     <div class="btn-group">

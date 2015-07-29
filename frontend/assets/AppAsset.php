@@ -28,7 +28,6 @@ class AppAsset extends AssetBundle
         'stylesheet/search.css',
         'js/jquery/owl-carousel/owl.carousel.css',
         'js/jquery/owl-carousel/owl.transitions.css',
-        'js/jquery/owl-carousel/owl.theme.css',
         'js/jquery/magnific/magnific-popup.css',
         'js/jquery/raty/jquery.raty.css',
     ];

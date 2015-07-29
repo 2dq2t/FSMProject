@@ -30,7 +30,7 @@ $this->title = Yii::t('app', 'CategoryTitle');
 
             <div class="row category_thumb">
                 <div class="col-sm-2 category_img"><img
-                        src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/inner_banner-720x112.jpg"
+                        src="images/data/inner-banner.jpg"
                         alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
             </div>
             <h2 class="page-title">Tag: <?= $_GET['tag'] ?></h2>
