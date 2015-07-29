@@ -30,7 +30,7 @@ require('_header.php');
                     <div id="spinner"></div>
                     <div id="slideShow" class="owl-carousel" style="opacity: 1;">
                         <?php
-                        if (!empty($slide_show['product_name'])) {
+                        if (!empty($slide_show)) {
                             foreach ($slide_show as $slide_show) {
                                 echo "<div class='item'>";
                                 echo "<a href='" . Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $slide_show['product_name'] . "'><img
