@@ -29,20 +29,20 @@ require('_header.php');
                 <div class="main-slider">
                     <div id="spinner"></div>
                     <div id="slideShow" class="owl-carousel" style="opacity: 1;">
-                        <?php foreach ($slide_show as $slide_show) {
-                            echo "<div class='item'>";
-                            if (!empty($slide_show['product_name'])) {
+                        <?php
+                        if (!empty($slide_show['product_name'])) {
+                            foreach ($slide_show as $slide_show) {
+                                echo "<div class='item'>";
                                 echo "<a href='" . Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $slide_show['product_name'] . "'><img
                                     src='uploads/slideshow/" . $slide_show['slide_show_id'] . "/" . $slide_show['slide_show_path'] . "'
                                     alt='" . $slide_show['product_name'] . "' class='img-responsive'/></a>";
                                 echo "</div> ";
-                            } else {
-                                echo "<a href='#'><img
-                                    src='uploads/slideshow/" . $slide_show['slide_show_id'] . "/" . $slide_show['slide_show_path'] . "'
-                                    alt='" . $slide_show['product_name'] . "' class='img-responsive'/></a>";
-                                echo "</div> ";
                             }
-
+                        }else {
+                            echo "<div class='item'>";
+                            echo "<a href='#'><img
+                                    src='images/data/no-slide-available.png'class='img-responsive'/></a>";
+                            echo "</div> ";
                         }?>
                     </div>
                 </div>
