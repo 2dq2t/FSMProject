@@ -155,7 +155,7 @@ $this->title = $product_detail['name'];
                     </div>
 
                     <!-- Like Facebook Button -->
-                    <div class="fb-like" data-href="<?php echo "localhost/" . Yii::$app->request->getUrl(); ?>"
+                    <div class="fb-like" data-href="<?php echo  Yii::$app->request->getUrl(); ?>"
                          data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
                     <!-- Like Facebook Button END -->
 

@@ -730,7 +730,7 @@
     click        : undefined,
     half         : false,
     halfShow     : true,
-    hints        : ['tồi', 'kém', 'bình thường', 'tốt', 'rất tốt'],
+    hints        : ['Tồi', 'Kém', 'Bình Thường', 'Tốt', 'Rất Tốt'],
     iconRange    : undefined,
     mouseout     : undefined,
     mouseover    : undefined,

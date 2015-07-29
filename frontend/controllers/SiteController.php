@@ -457,15 +457,15 @@ class SiteController extends Controller
             foreach ($products_category as $item) {
                 if (!($item['product_id'] == $product_detail['id'])) {
                     //get product image
-                    $product_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
-                    $item['product_image'] = $product_image;
+                    $product_category_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
+                    $item['product_image'] = $product_category_image;
                     //get product offer
-                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                    $item['product_offer'] = $product_offer;
+                    $product_category_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $item['product_offer'] = $product_category_offer;
 
                     //Get rating average
-                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
-                    $item['product_rating'] = $rating_average;
+                    $rating_category_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $item['product_rating'] = $rating_category_average;
 
                     array_push($products_same_category, $item);
                 }
@@ -487,7 +487,6 @@ class SiteController extends Controller
                     Yii::$app->session->set('product_session', $product_session);
                 }
             }
-
 
             return $this->render('viewDetail', [
                 'product_detail' => $product_detail, 'product_image_detail' => $product_image_detail,
