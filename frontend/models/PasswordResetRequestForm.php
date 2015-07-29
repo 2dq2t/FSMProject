@@ -24,7 +24,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'email'],
             ['email', 'exist',
                 'targetClass' => '\common\models\Guest',
-                'message' => 'There is no user with such email.'
+                'message' => \Yii::t('app','RequestPasswordResetMsg03')
             ],
         ];
     }
