@@ -161,7 +161,7 @@ class Customer extends ActiveRecord implements IdentityInterface
         return null;
     }
 
-    public function UpdateCustomer($customerId){
+    public function updateCustomer($customerId){
         if($this->validate()){
             $customer = Customer::findOne($customerId);
             $customer->username = $this->username;
@@ -177,7 +177,7 @@ class Customer extends ActiveRecord implements IdentityInterface
         return null;
     }
 
-    public function ChangePassword($customerId){
+    public function changePassword($customerId){
         if($this->validate()){
             $customer = Customer::findOne($customerId);
             $customer->setPassword($this->new_password);
@@ -233,7 +233,7 @@ class Customer extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => 1,
+            'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -303,6 +303,6 @@ class Customer extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => 1]);
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 }

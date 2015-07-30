@@ -95,7 +95,7 @@ class CustomerController extends Controller
                     }
 
                     $modelCustomer->guest_id = $modelGuest->id;
-                    if ($modelCustomer->UpdateCustomer($id)) {
+                    if ($modelCustomer->updateCustomer($id)) {
                         if ($avatar) {
                             // directory to save image in local
                             $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
@@ -192,7 +192,7 @@ class CustomerController extends Controller
         if ($modelCustomer->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($modelCustomer->ChangePassword($id)) {
+                if ($modelCustomer->changePassword($id)) {
                     $transaction->commit();
 
                     Yii::$app->getSession()->setFlash('successful', [
