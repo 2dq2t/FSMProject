@@ -45,8 +45,8 @@ $this->title = ucwords($product_detail['name']);
 
                             <!-- Megnor Cloud-Zoom Image Effect Start -->
                             <?php
-                            if (!empty($product_image_detail[0]['resize_path']))
-                                echo "<li class='image'><a class='thumbnail' href='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "'><img src='" . $product_image_detail[0]['resize_path'] . "' title='" . $product_detail['name'] . "' alt='" . $product_detail['name'] . "' /></a></li>";
+                            if (!empty($product_image_detail[0]['path']))
+                                echo "<li class='image'><a class='thumbnail' href='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "'><img src='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "' alt='" . $product_detail['name'] . "' /></a></li>";
                             ?>
 
                             <div class="additional-carousel">

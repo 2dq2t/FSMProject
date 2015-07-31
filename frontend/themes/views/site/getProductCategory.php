@@ -47,18 +47,19 @@ $this->title = ucwords(Yii::t('app', 'CategoryTitle'));
                             <label class="control-label" for="input-sort"><?= Yii::t('app', 'SortByLabel') ?></label>
                         </div>
                         <div class="col-md-3 text-right sort">
-                            <select id="input-sort" class="form-control" onchange="location = this.value;">
+                            <select name="input-sort" class="form-control" onchange="location = this.value;">
                                 <option
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"
-                                    selected="selected"><?= Yii::t('app', 'DefaultLabel') ?></option>
-                                <option
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
-                                <option
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
-                                <option
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
-                                <option
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                                    <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
+                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=site/get-product-category&category=" . $category_name ?>"><?= Yii::t('app', 'DefaultLabel') ?>
+                                </option>
+                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
                             </select>
                         </div>
                     </div>

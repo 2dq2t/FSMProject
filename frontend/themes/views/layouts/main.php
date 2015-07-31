@@ -30,6 +30,7 @@ AppAsset::register($this);
     <script src="<?= Yii::$app->request->baseUrl."/js/bootstrap/bootstrap.min.js"?>"></script>
     <script src="<?= Yii::$app->request->baseUrl."/js/jquery/owl-carousel/owl.carousel.min.js"?>"></script>
     <script src="<?= Yii::$app->request->baseUrl."/js/common.js"?>"></script>
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png">
 </head>
 <body class="common-home layout-2 left-col">
 <div id="fb-root"></div>

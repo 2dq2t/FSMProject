@@ -72,21 +72,19 @@ function LangCurDropDown(selector,subsel){
 				$(selector).removeClass('active');
 		}, 3000);
 	});
-	
+
 	$(subsel).hover(function() {
 		setTimeout(function() {
 			if (!main_block.isHoveringOver() && !sub_ul.isHoveringOver())
 				$(subsel).stop(true, true).slideUp(450);
 		}, 3000);
-	});	
+	});
 }
 
 
 $(document).ready(function(){
 
 	LangCurDropDown('.myaccount','.myaccount-menu');
-	LangCurDropDown('#currency','.currency-menu');
-	LangCurDropDown('#language','.language-menu');
 	LangCurDropDown('#cart','.cart-menu');
 
 });
@@ -189,12 +187,12 @@ $(document).ready(function(){productCarouselAutoSet();});
 function productListAutoSet() { 
 	$("#content .product-grid").each(function(){
 		var objectID = $(this).attr('id');
-		if(objectID.length > 0){
+		if( objectID.length > 0){
 			if(widthClassOptions[objectID.replace('-grid','')])
 				var myDefClass= widthClassOptions[objectID.replace('-grid','')];
 		}else{
 			var myDefClass= 'grid_default_width';
-		}	
+		}
 		$(this).smartColumnsRows({
 			defWidthClss : myDefClass,
 			subElement   : '.product-items',
@@ -243,9 +241,6 @@ function LangCurDropDown(selector,subsel){
 }
 
 $(document).ready(function(){
-
-	LangCurDropDown('#currency','.currency_div');
-	LangCurDropDown('#language','.language_div');
 
 	$('.nav-responsive').click(function() {
         $('.responsive-menu .main-navigation').slideToggle();
