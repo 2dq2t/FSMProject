@@ -2303,7 +2303,8 @@ font-size:18px;
 .header-top .pull-left{float:none;display:inline-block;}
 .header .header-right { float: none; text-align: center;  width: 100%;}
 .header .header-search{left:0; padding:0 15px;width:100%;top:20px;}
-#search,#search .input-lg{width:100%;}
+#search,#search .typeahead .input-lg{width:100%!important;}
+.typeahead,.typeahead-input,.typeahead-hint{width: 100%!important;}
 #search-form .input-group-btn{width:auto;}
 #top{top:264px;}
 .header .header-cart{float: none;left: 0; margin: 0 auto;  position: absolute;  right: 0; top: -22px; width: 100% !important;}

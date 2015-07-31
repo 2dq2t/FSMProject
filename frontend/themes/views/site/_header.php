@@ -36,13 +36,13 @@ $baseUrl = Yii::$app->request->baseUrl;
                     </div>
                 </script>
                 <div class="header-right">
-                    <div class="col-sm-5 header-search">
+                    <div  class="col-sm-5 header-search">
                         <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']]) ?>
                         <!--                            <input type="hidden" name="mode" value="product_name">-->
                         <div class="typeahead">
-                            <div  class="u-posRelative input-group">
+                            <div id="search" class="u-posRelative input-group">
                                 <input class="typeahead-hint " type="text" tabindex="-1" readonly>
-                                <input class="typeahead-input " id="search-input" type="text" name="q"
+                                <input class="typeahead-input input-lg" id="search-input" type="text" name="q"
                                        placeholder="<?= Yii::t('app', 'SearchLabel') ?>">
                                 <span id="search-form" class="input-group-btn">
                                      <button type="button" class="btn btn-default btn-lg"></button>
