@@ -9,8 +9,8 @@ $config = [
         'CommonFunction'=>[
             'class'=>'frontend\components\CommonFunction',
         ],
-        'BestSeller'=>[
-            'class'=>'frontend\components\BestSeller',
+        'ProductBestSeller'=>[
+            'class'=>'frontend\components\ProductBestSeller',
         ],
         'Category'=>[
             'class'=>'frontend\components\Category',

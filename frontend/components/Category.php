@@ -10,7 +10,7 @@ use Yii;
 use yii\base\Component;
 use yii\db\Query;
 class Category extends Component{
-    public function category(){
+    public function getCategory(){
         //get category in
         $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
             ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => 1])->all();

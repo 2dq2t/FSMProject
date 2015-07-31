@@ -7,14 +7,6 @@
  */
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title = Yii::t('app', 'ShoppingCartLabel');
-?>
-<?php
-$cart_info = Yii::$app->Header->cartInfo();
-$total_product = $cart_info['total_product'];
-$total_price = $cart_info['total_price'];
-$product_in_cart = $cart_info['product_in_cart']
-?>
-<?php
 require('_header.php');
 ?>
 <div class="container content-inner">
@@ -37,7 +29,7 @@ require('_header.php');
         <div id="content" class="col-sm-9">
             <h1 id="wish_list"
                 class="page-title"><?= Yii::t('app', 'ShoppingCartLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                    $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
+                    $number_product = Yii::$app->Header->getNumberProductWishList(Yii::$app->user->identity->getId());
                     echo " (" . $number_product . ")";
                 } ?>
             </h1>

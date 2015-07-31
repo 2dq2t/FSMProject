@@ -30,48 +30,58 @@ $this->title = Yii::t('app', 'RegisterLabel');
             <fieldset id="information">
                 <legend><?= Yii::t('app', 'PersonalInfoLabel') ?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label"
+                           for="input-email"><?= Yii::t('app','Full Name') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelGuest, 'full_name', [
-                            'showLabels' => true
-                        ])->textInput(['placeholder' => $modelGuest->getAttributeLabel('full_name')]); ?>
+                            'showLabels' => false,
+                        ])->textInput(['placeholder' => Yii::t('app','Full Name')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label"
+                           for="input-telephone"><?= Yii::t('app','Email') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelGuest, 'email', [
-                            'showLabels' => true
-                        ])->textInput(['placeholder' => $modelGuest->getAttributeLabel('email')]); ?>
+                            'showLabels' => false
+                        ])->textInput(['placeholder' => Yii::t('app','Email')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label"
+                           for="input-fax"><?= Yii::t('app','Phone Number') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelGuest, 'phone_number', [
-                            'showLabels' => true
-                        ])->textInput(['placeholder' => $modelGuest->getAttributeLabel('phone_number')]); ?>
+                            'showLabels' => false
+                        ])->textInput(['placeholder' => Yii::t('app','Phone Number')]); ?>
                     </div>
                 </div>
             </fieldset>
             <fieldset id="password" class="register">
                 <legend><?= Yii::t('app', 'AccountLabel') ?></legend>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label"
+                           for="input-lastname"><?= Yii::t('app','Customer Username') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelCustomer, 'username', [
-                            'showLabels' => true
-                        ])->textInput(['placeholder' => $modelCustomer->getAttributeLabel('username')]); ?>
+                            'showLabels' => false
+                        ])->textInput(['placeholder' => Yii::t('app','Customer Username')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= Yii::t('app','Customer Password') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelCustomer, 'password', [
-                            'showLabels' => true
-                        ])->passwordInput(['placeholder' => $modelCustomer->getAttributeLabel('password')]); ?>
+                            'showLabels' => false
+                        ])->passwordInput(['placeholder'=> Yii::t('app','Customer Password')]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
-                    <div class="col-sm-12">
+                    <label class="col-sm-2 control-label" for="input-lastname"><?= Yii::t('app','Customer Re_Confirm Password') ?></label>
+                    <div class="col-sm-8">
                         <?= $form->field($modelCustomer, 're_password', [
-                            'showLabels' => true
-                        ])->passwordInput(['placeholder' => $modelCustomer->getAttributeLabel('re_password')]); ?>
+                            'showLabels' => false
+                        ])->passwordInput(['placeholder'=> Yii::t('app','Customer Re_Confirm Password')]); ?>
                     </div>
                 </div>
             </fieldset>

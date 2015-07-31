@@ -56,7 +56,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <?php \yii\widgets\ActiveForm::end(); ?>
                     </div>
                     <div class="col-sm-3 header-cart">
-                        <?php require('cartInfo.php'); ?>
+                        <?php require('getCartInfo.php'); ?>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                 </div>
                 <ul id="navbar" class="main-navigation">
                     <?php $result = array();
-                    $categories = Yii::$app->Category->category();
+                    $categories = Yii::$app->Category->getCategory();
                     foreach ($categories as $item) {
                         $cat_name = $item['categoryname'];
                         $product_name = $item['productname'];
@@ -85,7 +85,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                     ?>
                     <?php foreach (array_keys($result) as $category): ?>
                         <li>
-                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= ucfirst($category) ?></a>
+                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category ?>"><?= ucfirst($category) ?></a>
 
                             <ul>
                                 <?php foreach ($result[$category] as $key) { ?>
@@ -144,10 +144,10 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     </ul>
                                 </li>
 
-                                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/wish-list"; ?>"
+                                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/get-wish-list"; ?>"
                                        id="wishlist-total"
                                        title="Danh mục yêu thích (0)"> <span><?= Yii::t('app', 'WishListLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                                                $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
+                                                $number_product = Yii::$app->Header->getNumberProductWishList(Yii::$app->user->identity->getId());
                                                 echo " (" . $number_product . ")";
                                             } ?></span></a></li>
                             <?php endif; ?>

@@ -10,7 +10,6 @@ use common\models\Image;
 use common\models\Product;
 use common\models\ProductRating;
 use common\models\ProductSeason;
-use common\models\ProductTag;
 use common\models\Rating;
 use common\models\Season;
 use common\models\Voucher;
@@ -19,11 +18,9 @@ use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\ContactForm;
 use yii\base\Exception;
 use yii\base\InvalidParamException;
 use yii\data\Pagination;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -31,7 +28,6 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use kartik\alert\Alert;
-use yii\web\Session;
 
 /**
  * Site controller
@@ -108,7 +104,7 @@ class SiteController extends Controller
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $new_product_from_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                 $new_product_from_system[$key]['product_rating'] = $rating_average;
 
                 foreach ($new_product_from_tag as $new_product_key => $new_product_item) {
@@ -124,7 +120,7 @@ class SiteController extends Controller
                         $new_product_from_tag[$new_product_key]['product_offer'] = $product_offer;
 
                         //Get rating average
-                        $rating_average = Yii::$app->CommonFunction->productRating($new_product_item['product_id']);
+                        $rating_average = Yii::$app->CommonFunction->getProductRating($new_product_item['product_id']);
                         $new_product_from_tag[$new_product_key]['product_rating'] = $rating_average;
                     }
                 }
@@ -138,7 +134,7 @@ class SiteController extends Controller
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $new_product_from_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                 $new_product_from_system[$key]['product_rating'] = $rating_average;
             }
         }
@@ -168,7 +164,7 @@ class SiteController extends Controller
                             $product['product_offer'] = $product_offer;
 
                             //Get rating average
-                            $rating_average = Yii::$app->CommonFunction->productRating($product_item['product_id']);
+                            $rating_average = Yii::$app->CommonFunction->getProductRating($product_item['product_id']);
                             $product['product_rating'] = $rating_average;
 
                             array_push($product_season, $product);
@@ -346,7 +342,7 @@ class SiteController extends Controller
         return $this->render('search', ['products' => $search_product, 'pagination' => $pagination, 'q' => $q, 'search_with_description' => $search_with_description]);
     }
 
-    public function actionCategory()
+    public function actionGetProductCategory()
     {
         if (Yii::$app->request->isGet) {
 
@@ -373,18 +369,18 @@ class SiteController extends Controller
                 $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
                 $category_product = $category_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
                 foreach($category_product as $key=>$item){
-                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                     $category_product[$key]['product_rating'] = $rating_average;
                 }
             }
 
 
-            return $this->render('category', [
+            return $this->render('getProductCategory', [
                 'category_name' => $category_name, 'category_product' => $category_product, 'pagination' => $pagination
             ]);
         }
     }
-    public function actionProductTag(){
+    public function actionGetProductTag(){
         if(Yii::$app->request->isGet){
             if(!empty($_GET['tag'])){
                 $list_id = array();
@@ -413,11 +409,11 @@ class SiteController extends Controller
                 $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
                 $product_tag = $product_tag_query->offset($pagination->offset)->limit($pagination->limit)->all();
                 foreach($product_tag as $key=>$item){
-                    $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                     $product_tag[$key]['product_rating'] = $rating_average;
                 }
 
-                return $this->render('productTag',['product_tag'=>$product_tag,'pagination'=>$pagination]);
+                return $this->render('getProductTag',['product_tag'=>$product_tag,'pagination'=>$pagination]);
             }
         }
     }
@@ -433,7 +429,7 @@ class SiteController extends Controller
             $product_detail = Product::find()->where(['name' => $productName])->one();
 
             //Get rating average
-            $rating_average = Yii::$app->CommonFunction->productRating($product_detail['id']);
+            $rating_average = Yii::$app->CommonFunction->getProductRating($product_detail['id']);
 
             //get product offer
             $product_offer = Yii::$app->CommonFunction->getProductOffer($product_detail['id']);
@@ -460,7 +456,7 @@ class SiteController extends Controller
                     $item['product_offer'] = $product_category_offer;
 
                     //Get rating average
-                    $rating_category_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                    $rating_category_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                     $item['product_rating'] = $rating_category_average;
 
                     array_push($products_same_category, $item);
@@ -493,7 +489,7 @@ class SiteController extends Controller
         }
     }
 
-    public function actionWishList()
+    public function actionGetWishList()
     {
         if (Yii::$app->user->isGuest)
             return $this->goHome();
@@ -512,7 +508,7 @@ class SiteController extends Controller
             $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'
                 , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $product_session_id])->groupBy('product.id')->all();
 
-            return $this->render('wishList', [
+            return $this->render('getWishList', [
                 'wish_list_product' => $wish_list_product,
                 'product_session' => $product_session,
             ]);
@@ -604,7 +600,7 @@ class SiteController extends Controller
                     $product['product_quantity'] = $product_quantity;
                     $product_price = (new Query())->select('price')->from('product')->where(['id' => $product_id])->one();
                     $product_offer = Yii::$app->CommonFunction->getProductOffer($product_id);
-                    $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer) * $product_quantity;
+                    $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $product_quantity;
                     $total_product += $product_quantity;
                     if (count($product_cart) == 0) {
                         Yii::$app->session->set('product_cart', [$product]);
@@ -614,7 +610,7 @@ class SiteController extends Controller
                         foreach ($product_cart as $key => $item) {
                             $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
                             $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                            $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                            $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
                             $total_product += $item['product_quantity'];
                             if (($item['product_id'] == $product['product_id'])) {
                                 $product_cart[$key]['product_quantity'] = $item['product_quantity'] + $product_quantity;
@@ -641,14 +637,14 @@ class SiteController extends Controller
         }
     }
 
-    public function actionCartInfo()
+    public function actionGetCartInfo()
     {
-        return $this->renderPartial('cartInfo');
+        return $this->renderPartial('getCartInfo');
     }
 
     public function actionViewCart()
     {
-        $cart_info = Yii::$app->Header->cartInfo();
+        $cart_info = Yii::$app->Header->getCartInfo();
         return $this->render('viewCart', ['cart_info' => $cart_info]);
     }
 
@@ -693,7 +689,7 @@ class SiteController extends Controller
                     } else {
                         $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
                         $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                        $total_price += Yii::$app->CommonFunction->productPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                        $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
                         $total_product += $item['product_quantity'];
                     }
                 }

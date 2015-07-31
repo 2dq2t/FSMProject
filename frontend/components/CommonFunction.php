@@ -1,5 +1,6 @@
 <?php
 namespace frontend\components;
+
 use common\models\ProductRating;
 use common\models\Rating;
 use Yii;
@@ -12,8 +13,10 @@ use yii\db\Query;
  * Date: 06/06/2015
  * Time: 1:23 SA
  */
-class CommonFunction extends Component{
-   public function custom_shuffle($my_array = array()) {
+class CommonFunction extends Component
+{
+    public function custom_shuffle($my_array = array())
+    {
         $copy = array();
         while (count($my_array)) {
             // takes a rand array elements by its key
@@ -25,13 +28,15 @@ class CommonFunction extends Component{
         }
         return $copy;
     }
-    public function productRating($product_id){
+
+    public function getProductRating($product_id)
+    {
         $rating_id = (new Query())->select('rating_id')->from('product_rating')->where(['product_id' => $product_id])->all();
         $total_score = 0;
         $count_rating = 0;
         foreach ($rating_id as $rating) {
             $count_rating++;
-            $score =(new Query())->select('rating')->from('rating') ->where(['id' => $rating['rating_id']])->one();
+            $score = (new Query())->select('rating')->from('rating')->where(['id' => $rating['rating_id']])->one();
             $total_score += $score['rating'];
         }
         if ($total_score > 0 && $count_rating > 0) {
@@ -41,37 +46,38 @@ class CommonFunction extends Component{
         return $rating_average;
     }
 
-    public function getProductOneImage($product_id){
-        $product_image = (new Query())->select('resize_path')->from('image')->where(['product_id' =>$product_id])->one();
+    public function getProductOneImage($product_id)
+    {
+        $product_image = (new Query())->select('resize_path')->from('image')->where(['product_id' => $product_id])->one();
         return $product_image['resize_path'];
     }
 
-    public function getProductOffer($product_id){
-        $offer = (new Query())->select('discount,start_date,end_date')->from('offer')->where(['active'=>1,'product_id'=>$product_id])->one();
+    public function getProductOffer($product_id)
+    {
+        $offer = (new Query())->select('discount,start_date,end_date')->from('offer')->where(['active' => 1, 'product_id' => $product_id])->one();
         $today = date("d-m-Y");
-        $offer_start_date = date("d-m-Y",$offer['start_date']);
-        $offer_end_date = date("d-m-Y",$offer['end_date']);
-        if($offer_start_date <= $today && $today <= $offer_end_date) {
+        $offer_start_date = date("d-m-Y", $offer['start_date']);
+        $offer_end_date = date("d-m-Y", $offer['end_date']);
+        if ($offer_start_date <= $today && $today <= $offer_end_date) {
             $product_offer = $offer['discount'];
-        }
-        else
-            $product_offer=0;
+        } else
+            $product_offer = 0;
         return $product_offer;
     }
-    public function getProductUnit($product_id){
-        $unit_id = (new Query())->select('unit_id')->from('product')->where(['id'=>$product_id])->one();
-        $product_unit = (new Query())->select('name')->from('unit')->where(['id'=>$unit_id['unit_id']])->one();
+
+    public function getProductUnit($product_id)
+    {
+        $unit_id = (new Query())->select('unit_id')->from('product')->where(['id' => $product_id])->one();
+        $product_unit = (new Query())->select('name')->from('unit')->where(['id' => $unit_id['unit_id']])->one();
 
         return $product_unit['name'];
     }
-    public function productPrice($product_price,$product_offer){
-        if($product_offer != 0)
-            return $product_price - ($product_price*($product_offer/100));
+
+    public function getProductPrice($product_price, $product_offer)
+    {
+        if ($product_offer != 0)
+            return $product_price - ($product_price * ($product_offer / 100));
         else
             return $product_price;
-    }
-    public function sellingPrice($product_price,$product_offer){
-        $selling_price = $product_price - ($product_price*($product_offer/100));
-        return $selling_price;
     }
 }

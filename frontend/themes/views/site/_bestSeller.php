@@ -13,7 +13,7 @@
 
         <div class="box-product product-grid" id="bestseller-grid">
             <?php
-            $best_seller = Yii::$app->BestSeller->bestSeller();
+            $best_seller = Yii::$app->ProductBestSeller->getProductBestSeller();
             $count = 0;
             foreach ($best_seller as $product) {
                 $count++;
@@ -58,10 +58,8 @@
                                             echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                             $new_price = $product['product_price'] - $product['product_offer'];
                                             echo "<span class='price-new'>" . number_format($new_price) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                            echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                         } else {
                                             echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
-                                            echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                         }
                                         ?>
                                     </div>

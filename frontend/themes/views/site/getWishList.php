@@ -31,7 +31,7 @@ require('_header.php');
         <div id="content" class="col-sm-9">
             <h1 id="wish_list"
                 class="page-title"><?= Yii::t('app', 'WishListLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                    $number_product = Yii::$app->Header->numberProductWishList(Yii::$app->user->identity->getId());
+                    $number_product = Yii::$app->Header->getNumberProductWishList(Yii::$app->user->identity->getId());
                     echo " (" . $number_product . ")";
                 } ?>
             </h1>
@@ -74,7 +74,7 @@ require('_header.php');
                             <td class="text-center"><?= $product['product_unit'] ?></td>
                             <td class="text-right"><?php
                                 if (!empty($product['product_offer'])) {
-                                    $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'], $product['product_offer']);
+                                    $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
                                     echo number_format($new_price) . " " . Yii::t('app', 'VNDLabel');
                                 } else
                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
@@ -152,10 +152,8 @@ require('_header.php');
                                                             echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                             $new_price = $product['product_price'] * (100 / $product['product_offer']);
                                                             echo "<span class='price-new'>" . number_format($new_price) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                            echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                         } else {
                                                             echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
-                                                            echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                         }
                                                         ?>
                                                     </div>

@@ -109,19 +109,16 @@ $this->title = ucwords($product_detail['name']);
                             echo "<li>";
                         } else {
                             echo "<li class='price-normal''>";
-                            echo "<h2 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . "</h2>";
+                            echo "<h1 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . "</h1>";
                             echo "</li>";
                         }
                         if (!empty($product_offer)) {
-                            $price_offer = Yii::$app->CommonFunction->sellingPrice($product_detail['price'], $product_offer);;
+                            $price_offer = Yii::$app->CommonFunction->getProductPrice($product_detail['price'], $product_offer);;
                             echo "<li>";
-                            echo "<h2 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') . "</h2>";
+                            echo "<h1 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') . "</h1>";
                             echo "<li>";
                         }
                         ?>
-                        <li class="tax price-tax"><?= Yii::t('app', 'TaxLabel') ?>:<span
-                                class="price-tax"><?php echo number_format($product_detail['tax']) . " " . Yii::t('app', 'VNDLabel') ?></span>
-                        </li>
                         <br/>
                     </ul>
                     <div id="product">
@@ -229,10 +226,8 @@ $this->title = ucwords($product_detail['name']);
                                                                 echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                                 $new_price = $product['product_price'] * (100 / $product['product_offer']);
                                                                 echo "<span class='price-new'>" . number_format($new_price) . " VND</span>";
-                                                                echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                             } else {
                                                                 echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
-                                                                echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                             }
                                                             ?>
                                                         </div>
@@ -261,9 +256,9 @@ $this->title = ucwords($product_detail['name']);
                     if (!empty($product_tag[0]['name'])) {
                         foreach ($product_tag as $tag) {
                             if ($tag === end($product_tag)) {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=site/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                             } else {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=site/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                                 echo ", ";
                             }
                         }

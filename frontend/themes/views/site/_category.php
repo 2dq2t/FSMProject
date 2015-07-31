@@ -11,7 +11,7 @@
     <div class="box-content ">
         <ul class="box-category treeview-list treeview">
             <?php
-            $categories = Yii::$app->Category->category();
+            $categories = Yii::$app->Category->getCategory();
             $result = array();
             foreach ($categories as $item) {
                 $cat_name = $item['categoryname'];
@@ -21,7 +21,7 @@
             ?>
             <?php foreach (array_keys($result) as $category): ?>
                 <li>
-                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category ?>"><?= ucfirst($category) ?></a>
+                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category ?>"><?= ucfirst($category) ?></a>
                     <ul>
                         <?php foreach ($result[$category] as $key) { ?>
                             <li>

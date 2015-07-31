@@ -9,12 +9,6 @@ $baseUrl = Yii::$app->request->baseUrl;
 $this->title = "Thanh Toán";
 ?>
 <?php
-$cart_info = Yii::$app->Header->cartInfo();
-$total_product = $cart_info['total_product'];
-$total_price = $cart_info['total_price'];
-$product_in_cart = $cart_info['product_in_cart']
-?>
-<?php
 require('_header.php');
 ?>
 <div class="container content-inner">

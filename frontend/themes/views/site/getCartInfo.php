@@ -8,7 +8,7 @@
 $baseUrl = Yii::$app->request->baseUrl;
 ?>
 <?php
-$cart_info = Yii::$app->Header->cartInfo();
+$cart_info = Yii::$app->Header->getCartInfo();
 $total_product = $cart_info['total_product'];
 $total_price = $cart_info['total_price'];
 $product_in_cart = $cart_info['product_in_cart'];

@@ -140,7 +140,7 @@ require('_header.php');
                                                                 <?php
                                                                 if (!empty($product['product_offer'])) {
                                                                     echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                    $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'], $product['product_offer']);
+                                                                    $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
                                                                     echo "<span class='price-new'>" . number_format($new_price) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                                     echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . number_format($product['product_tax']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                                 } else {
@@ -216,13 +216,11 @@ require('_header.php');
                                                             <div class="price">
                                                                 <?php
                                                                 if (!empty($product['product_offer'])) {
-                                                                    echo "<span class='price-old'>" . $product['product_price'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                    $new_price = Yii::$app->CommonFunction->sellingPrice($product['product_price'], $product['product_offer']);
-                                                                    echo "<span class='price-new'>" . $new_price . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                    echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . $product['product_tax'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                                    $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
+                                                                    echo "<span class='price-new'>" . number_format($new_price) . Yii::t('app', 'VNDLabel') . "</span>";
                                                                 } else {
-                                                                    echo $product['product_price'] . " " . Yii::t('app', 'VNDLabel');
-                                                                    echo "<span class='price-tax'>" . Yii::t('app', 'TaxLabel') . ": " . $product['product_tax'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                                    echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
                                                                 }
                                                                 ?>
                                                             </div>

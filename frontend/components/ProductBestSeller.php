@@ -9,9 +9,9 @@ use yii\db\Query;
  * Date: 06/06/2015
  * Time: 12:10 CH
  */
-class BestSeller extends Component
+class ProductBestSeller extends Component
 {
-    public function bestSeller()
+    public function getProductBestSeller()
     {
         //get bestseller product
         $best_seller_on_tag = array();
@@ -30,7 +30,7 @@ class BestSeller extends Component
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $best_seller_on_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                 $best_seller_on_system[$key]['product_rating'] = $rating_average;
 
                 foreach ($best_seller_on_tag as $best_seller_key => $best_seller_item) {
@@ -46,7 +46,7 @@ class BestSeller extends Component
                         $best_seller_on_tag[$best_seller_key]['product_offer'] = $product_offer;
 
                         //Get rating average
-                        $rating_average = Yii::$app->CommonFunction->productRating($best_seller_item['product_id']);
+                        $rating_average = Yii::$app->CommonFunction->getProductRating($best_seller_item['product_id']);
                         $best_seller_on_tag[$best_seller_key]['product_rating'] = $rating_average;
                     }
                 }
@@ -60,7 +60,7 @@ class BestSeller extends Component
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                 $best_seller_on_system[$key]['product_offer'] = $product_offer;
                 //Get rating average
-                $rating_average = Yii::$app->CommonFunction->productRating($item['product_id']);
+                $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                 $best_seller_on_system[$key]['product_rating'] = $rating_average;
             }
         }
