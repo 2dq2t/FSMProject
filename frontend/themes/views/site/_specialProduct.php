@@ -7,7 +7,7 @@
  */
 ?>
 <div class="box">
-    <div class="box-heading"><?= Yii::t('app', 'SaleLabel') ?></div>
+    <div class="box-heading"><?= Yii::t('app', 'SaleCategoryLabel') ?></div>
     <div class="box-content">
 
 

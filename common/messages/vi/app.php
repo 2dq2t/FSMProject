@@ -52,6 +52,7 @@ tiện lợi hơn. Hãy trở thành một khách hàng của Fresh Garden để
 Garden',
   'RegisterNotice02' => 'Tôi đã đọc và đồng ý với điều khoản sử dụng của ',
   'SaleLabel' => 'Sale',
+   'SaleCategoryLabel'=>'Giảm giá',
   'SearchLabel' => 'Tìm Kiếm',
   'SeasonProductLabel' => 'Mùa này có gì?',
   'ShoppingCartLabel' => 'Giỏ Hàng',
