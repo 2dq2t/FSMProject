@@ -289,6 +289,12 @@ class SiteController extends Controller
                     $countQuery = clone $query;
                     $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
                     $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+                    foreach ($search_product as $key => $item) {
+                        $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
+                        $search_product[$key]['product_rating'] = $rating_average;
+                        $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                        $search_product[$key]['product_offer'] = $product_offer;
+                    }
                     $search_with_description = 'checked';
                 }
             }
@@ -342,6 +348,12 @@ class SiteController extends Controller
             $countQuery = clone $query;
             $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
             $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+            foreach ($search_product as $key => $item) {
+                $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
+                $search_product[$key]['product_rating'] = $rating_average;
+                $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                $search_product[$key]['product_offer'] = $product_offer;
+            }
         }
 
         return $this->render('search', ['products' => $search_product, 'pagination' => $pagination, 'q' => $q, 'search_with_description' => $search_with_description]);
@@ -376,6 +388,8 @@ class SiteController extends Controller
                 foreach ($category_product as $key => $item) {
                     $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                     $category_product[$key]['product_rating'] = $rating_average;
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $category_product[$key]['product_offer'] = $product_offer;
                 }
             }
 
@@ -417,6 +431,8 @@ class SiteController extends Controller
                 foreach ($product_tag as $key => $item) {
                     $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
                     $product_tag[$key]['product_rating'] = $rating_average;
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $product_tag[$key]['product_offer'] = $product_offer;
                 }
 
                 return $this->render('getProductTag', ['product_tag' => $product_tag, 'pagination' => $pagination]);

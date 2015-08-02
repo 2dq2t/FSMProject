@@ -49,8 +49,8 @@ class CommonFunction extends Component
 
     public function getProductOneImage($product_id)
     {
-        $product_image = (new Query())->select('resize_path')->from('image')->where(['product_id' => $product_id])->one();
-        return $product_image['resize_path'];
+        $product_image = (new Query())->select('path')->from('image')->where(['product_id' => $product_id])->one();
+        return $product_image['path'];
     }
 
     public function getProductOffer($product_id)

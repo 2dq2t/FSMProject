@@ -105,6 +105,16 @@ require('_header.php');
                                     <?php
                                     if (isset($product['product_offer']) && $product['product_offer'] > 0)
                                         echo "<span class='saleicon sale'>" . Yii::t('app', 'SaleLabel') . "</span>";
+                                    if (isset($product['product_rating']) && $product['product_rating'] > 0) {
+                                        echo "<div class='rating' >";
+                                        for ($i = 0; $i < 5; $i++) {
+                                            if ($i < $product['product_rating']) {
+                                                echo "<span class='fa fa-stack' ><i class='fa fa-star fa-stack-2x'' ></i ></span >";
+                                            } else
+                                                echo "<span class='fa fa-stack' ><i class='fa fa-star off fa-stack-2x' ></i ></span >";
+                                        }
+                                        echo "</div >";
+                                    }
                                     ?>
                                 </div>
                                 <div class="product-details">
@@ -132,9 +142,10 @@ require('_header.php');
 
                                             <div class="price">
                                                 <?php
-                                                if (isset($product['product_offer'])) {
-                                                    $new_price = $product['product_price'] * (100 / $product['product_offer']);
-                                                    echo number_format($new_price) . " " . Yii::t('app', 'VNDLabel');
+                                                if (!empty($product['product_offer'])) {
+                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                    $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
+                                                    echo "<span class='price-new'>" . number_format($new_price) . Yii::t('app', 'VNDLabel') . "</span>";
                                                 } else
                                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') ?>
                                                 <span

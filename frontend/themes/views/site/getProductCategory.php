@@ -115,10 +115,10 @@ $this->title = ucwords(Yii::t('app', 'CategoryTitle'));
 
                                             <div class="price">
                                                 <?php
-                                                if (isset($product['product_offer'])) {
-                                                    echo "<span class='price-old'>" . $product['product_price'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                if (!empty($product['product_offer'])) {
+                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                     $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
-                                                    echo "<span class='price-new'>" . $new_price . Yii::t('app', 'VNDLabel') . "</span>";
+                                                    echo "<span class='price-new'>" . number_format($new_price) . Yii::t('app', 'VNDLabel') . "</span>";
                                                 } else
                                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') ?>
                                             </div>
