@@ -495,7 +495,9 @@ class SiteController extends Controller
             ]);
         }
     }
+    public function actionGetProductSeason(){
 
+    }
     public function actionGetWishList()
     {
         if (Yii::$app->user->isGuest)
@@ -723,14 +725,15 @@ class SiteController extends Controller
             $voucher = $post_data['voucher'];
             $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
             $json['info'] = $voucher;
-            $today = date("d/m/Y");
+            $today = date_create_from_format('d/m/Y',  date("d/m/Y")) ?
+                mktime(null,null,null, date_create_from_format('d/m/Y',  date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('y')) : time();
             $voucher_start_date = date("d/m/Y", $check_voucher['start_date']);
             $voucher_end_date = date("d/m/Y", $check_voucher['end_date']);
             if (empty($check_voucher)) {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg04');
-            } else if ($today < $voucher_start_date) {
+            } else if ($today < $check_voucher['start_date']) {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg02') . $voucher_start_date;
-            } else if ($today > $voucher_end_date) {
+            } else if ($today > $check_voucher['end_date']) {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg03') . $voucher_end_date;
             }
             elseif(!empty($check_voucher['order_id'])){
@@ -1027,8 +1030,9 @@ class SiteController extends Controller
                         }
                         if(!empty($_POST['voucher'])){
                             if( Yii::$app->CommonFunction->checkVoucher($_POST['voucher'])) {
+                                echo Yii::$app->CommonFunction->checkVoucher($_POST['voucher']);
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
-                                $voucher->order_id = $order_id;
+                                $voucher->order_id = $order_id['id'];
                                 $voucher->update();
                             }
                         }

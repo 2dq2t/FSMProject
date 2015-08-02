@@ -111,14 +111,13 @@ class CommonFunction extends Component
 
         $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
         $json['info'] = $voucher;
-        $today = date("d/m/Y");
-        $voucher_start_date = date("d/m/Y", $check_voucher['start_date']);
-        $voucher_end_date = date("d/m/Y", $check_voucher['end_date']);
+        $today = date_create_from_format('d/m/Y',  date("d/m/Y")) ?
+            mktime(null,null,null, date_create_from_format('d/m/Y',  date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('y')) : time();
         if(empty($check_voucher)){
             return false;
-        } else if ($today < $voucher_start_date) {
+        } else if ($today < $check_voucher['start_date']) {
             return false;
-        } else if ($today > $voucher_end_date) {
+        } else if ($today > $check_voucher['end_date']) {
             return false;
         }elseif(!empty($check_voucher['order_id'])){
             return false;
