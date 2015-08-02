@@ -126,7 +126,7 @@ $this->title = ucwords($product_detail['name']);
                         <div class="form-group quntity">
                             <label class="control-label" for="input-quantity"><?= Yii::t('app', 'QuantityLabelMin') ?>
                                 :</label>
-                            <input type="number" min="1" name="quantity" value="1" size="2" id="input-quantity"
+                            <input type="text" name="quantity" value="1" size="2" id="input-quantity"
                                    class="form-control" style="max-width: 45px"/>
                             <input type="hidden" id="product_id" name="product_id"
                                    value="<?php echo $product_detail['id'] ?>"/>
@@ -274,7 +274,7 @@ $this->title = ucwords($product_detail['name']);
         $.ajax({
             url: 'index.php?r=site/add-to-cart',
             type: 'post',
-            data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+            data: $('#product input[type=\'text\'], #product input[type=\'hidden\']'),
             dataType: 'json',
             beforeSend: function () {
                 $('#button-cart').button('loading');
@@ -284,37 +284,23 @@ $this->title = ucwords($product_detail['name']);
             },
             success: function (json) {
                 $('.alert, .text-danger').remove();
-                $('.form-group').removeClass('has-error');
-                var json = $.parseJSON(json)
+                var json = $.parseJSON(json);
                 if (json['error']) {
-                    if (json['error']['option']) {
-                        for (i in json['error']['option']) {
-                            var element = $('#input-option' + i.replace('_', '-'));
-
-                            if (element.parent().hasClass('input-group')) {
-                                element.parent().before('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-                            } else {
-                                element.before('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-                            }
-                        }
-                    }
-
-                    if (json['error']['recurring']) {
-                        $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
-                    }
-
-                    // Highlight any found errors
-                    $('.text-danger').parent().addClass('has-error');
+                    $('.breadcrumb').after('<div class="alert alert-danger">' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('html, body').animate({scrollTop: 0}, 'slow');
+                    setTimeout(function () {
+                        $('.alert').remove();
+                    }, 2000);
                 }
-
                 if (json['success']) {
                     $('.breadcrumb').after('<div class="alert alert-success">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                     //
                     $('#cart-total').html(json['total']);
 
-                    $('html, body').animate({scrollTop: 0}, 'slow');
 
-                    $('#cart > ul').load('index.php?r=site/cart-info ul li');
+                    $('#cart > ul').load('index.php?r=site/get-cart-info ul li');
+
+                    $('html, body').animate({scrollTop: 0}, 'slow');
 
                     setTimeout(function () {
                         $('.alert').remove();
@@ -362,7 +348,7 @@ $this->title = ucwords($product_detail['name']);
                         }
 
                         if (json['error']) {
-                            $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            $('#content').parent().before('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                             setTimeout(function () {
                                 $('.alert').remove();
                             }, 2000);

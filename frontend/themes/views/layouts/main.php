@@ -94,22 +94,9 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <div class="column">
                             <div class="social_block"><h5>Follow us</h5>
                                 <ul>
-                                    <li class="facebook"><a href="#">Facebook</a></li>
+                                    <li class="facebook"><a href="https://www.facebook.com/freshgarden2015">Facebook</a></li>
                                     <li class="twitter"><a href="#">Twitter</a></li>
                                     <li class="rss"><a href="#">RSS</a></li>
-                                </ul>
-                            </div>
-                            <div class="paiement_logo_block"><h5>Payment Block</h5>
-                                <ul>
-                                    <li class="payment_1"><a href=""><img alt=""
-                                                                          src="http://opencart-demos.org/OPC05/OPC050107/image/catalog/paymenticon1.jpg"></a>
-                                    </li>
-                                    <li class="payment_2"><a href=""><img alt=""
-                                                                          src="http://opencart-demos.org/OPC05/OPC050107/image/catalog/paymenticon2.jpg"></a>
-                                    </li>
-                                    <li class="payment_3"><a href=""><img alt=""
-                                                                          src="http://opencart-demos.org/OPC05/OPC050107/image/catalog/paymenticon3.jpg"></a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>

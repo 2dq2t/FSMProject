@@ -160,9 +160,12 @@ var cart = {
                 var json = $.parseJSON(json);
 				$('#cart > button').button('reset');
 
-				if (json['redirect']) {
-					location = json['redirect'];
-				}
+                if (json['error']) {
+                    $('.breadcrumb').after('<div class="alert alert-danger">' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    setTimeout(function () {
+                        $('.alert').remove();
+                    }, 2000);
+                }
 
 				if (json['success']) {
 					$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
@@ -171,7 +174,7 @@ var cart = {
 
 					$('html, body').animate({ scrollTop: 0 }, 'slow');
 
-					$('#cart > ul').load('index.php?r=site/cart-info ul li');
+					$('#cart > ul').load('index.php?r=site/get-cart-info ul li');
 
                     setTimeout(function() {
                         $('.alert').remove();
@@ -198,7 +201,7 @@ var cart = {
 				if (getURLVar('r') == 'site/view-cart') {
 					location = 'index.php?r=site/view-cart';
 				} else {
-					$('#cart > ul').load('index.php?r=site/cart-info ul li');
+					$('#cart > ul').load('index.php?r=site/get-cart-info ul li');
 				}
 			}
 		});
@@ -224,7 +227,7 @@ var wishlist = {
 				}
 
 				if (json['info']) {
-					$('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+					$('#content').parent().before('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 				}
                 setTimeout(function() {
                     $('.alert').remove();
@@ -258,7 +261,7 @@ var wishlist = {
                 }
 
                 if (json['error']) {
-                    $('#content').parent().before('<div class="alert alert-info"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    $('#content').parent().before('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                     setTimeout(function() {
                         $('.alert').remove();
                     }, 2000);
