@@ -520,14 +520,15 @@ class SiteController extends Controller
             return $this->goHome();
         else {
             $customer_id = Yii::$app->user->identity->getId();
-            $product_id = (new Query())->select('product_id')->from('wish_list')->where(['customer_id' => $customer_id])->all();
+            $product_list = (new Query())->select('product_id')->from('wish_list')->where(['customer_id' => $customer_id])->all();
             $wish_list_product = array();
-            foreach ($product_id as $item) {
-                $product_detail = (new Query())->select(['id as product_id', 'name as product_name', 'quantity_in_stock as product_quantity', 'tax as product_tax', 'sold as product_sold', 'price as product_price'])->from('product')->where(['active' => 1, 'id' => $item['product_id']])->one();
-                $product_detail['product_image'] = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
-                $product_detail['product_offer'] = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                $product_detail['product_unit'] = Yii::$app->CommonFunction->getProductUnit($item['product_id']);
-                array_push($wish_list_product, $product_detail);
+            foreach ($product_list as $item) {
+                $product_detail = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.quantity_in_stock as product_quantity', 'product.tax as product_tax', 'product.sold as product_sold', 'product.price as product_price','image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $item['product_id']])->one();
+                if(!empty($product_detail['product_id'])) {
+                    $product_detail['product_offer'] = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $product_detail['product_unit'] = Yii::$app->CommonFunction->getProductUnit($item['product_id']);
+                    array_push($wish_list_product, $product_detail);
+                }
             }
             $product_session_id = Yii::$app->session->get('product_session');
             $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'

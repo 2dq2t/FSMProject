@@ -7,6 +7,7 @@
  */
 namespace frontend\components;
 
+use common\models\Product;
 use common\models\WishList;
 use Yii;
 use yii\base\Component;
@@ -17,8 +18,15 @@ class Header extends Component
 
     public function  getNumberProductWishList($customer_id)
     {
-        $number_product = WishList::find()->where(['customer_id' => $customer_id])->count();
-        return $number_product;
+        $wish_list_product = WishList::find()->where(['customer_id' => $customer_id])->all();
+        $count = 0;
+        foreach($wish_list_product as $item){
+            $product = Product::find()->where(['id'=>$item['product_id'],'active'=>1])->one();
+            if(!empty($product['id'])){
+                $count++;
+            }
+        }
+        return $count;
     }
 
     public function getCartInfo()
