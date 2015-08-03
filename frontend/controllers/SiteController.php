@@ -442,78 +442,80 @@ class SiteController extends Controller
 
     public function actionViewDetail()
     {
-        if (Yii::$app->request->isGet) {
 
-            if (empty($_GET['product']))
-                return $this->goHome();
-            $productName = $_GET['product'];
 
-            //Get product detail
-            $product_detail = Product::find()->where(['name' => $productName])->one();
+        if (empty($_GET['product']))
+            return $this->goHome();
+        $productName = $_GET['product'];
 
-            //Get rating average
-            $rating_average = Yii::$app->CommonFunction->getProductRating($product_detail['id']);
+        //Get product detail
+        $product_detail = Product::find()->where(['name' => $productName])->one();
 
-            //get product offer
-            $product_offer = Yii::$app->CommonFunction->getProductOffer($product_detail['id']);
+        //Get rating average
+        $rating_average = Yii::$app->CommonFunction->getProductRating($product_detail['id']);
 
-            //get product image
-            $product_image_detail = Image::find()->where(['product_id' => $product_detail['id']])->all();
+        //get product offer
+        $product_offer = Yii::$app->CommonFunction->getProductOffer($product_detail['id']);
 
-            //get product unit
-            $product_unit = (new Query())->select('name')->from('unit')->where(['id' => $product_detail['unit_id']])->one();
+        //get product image
+        $product_image_detail = Image::find()->where(['product_id' => $product_detail['id']])->all();
 
-            //get product tag
-            $product_tag = (new Query())->select('name')->from('tag')->innerJoin('product_tag', 'tag.id = product_tag.tag_id')->where(['product_tag.product_id' => $product_detail['id']])->all();
+        //get product unit
+        $product_unit = (new Query())->select('name')->from('unit')->where(['id' => $product_detail['unit_id']])->one();
 
-            //get product in same category
-            $products_same_category = array();
-            $products_category = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'category_id' => $product_detail['category_id']])->all();
-            foreach ($products_category as $item) {
-                if (!($item['product_id'] == $product_detail['id'])) {
-                    //get product image
-                    $product_category_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
-                    $item['product_image'] = $product_category_image;
-                    //get product offer
-                    $product_category_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                    $item['product_offer'] = $product_category_offer;
+        //get product tag
+        $product_tag = (new Query())->select('name')->from('tag')->innerJoin('product_tag', 'tag.id = product_tag.tag_id')->where(['product_tag.product_id' => $product_detail['id']])->all();
 
-                    //Get rating average
-                    $rating_category_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
-                    $item['product_rating'] = $rating_category_average;
+        //get product in same category
+        $products_same_category = array();
+        $products_category = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'category_id' => $product_detail['category_id']])->all();
+        foreach ($products_category as $item) {
+            if (!($item['product_id'] == $product_detail['id'])) {
+                //get product image
+                $product_category_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
+                $item['product_image'] = $product_category_image;
+                //get product offer
+                $product_category_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                $item['product_offer'] = $product_category_offer;
 
-                    array_push($products_same_category, $item);
-                }
+                //Get rating average
+                $rating_category_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
+                $item['product_rating'] = $rating_category_average;
+
+                array_push($products_same_category, $item);
             }
-            //set product recent view
-            $flag = true;
-            $product = $product_detail['id'];
-            $product_session = Yii::$app->session->get('product_session');
-            if (count($product_session) == 0) {
-                Yii::$app->session->set('product_session', [$product]);
-            } else {
-                foreach ($product_session as $item) {
-                    if (($item == $product)) {
-                        $flag = false;
-                    }
-                }
-                if ($flag) {
-                    array_push($product_session, $product);
-                    Yii::$app->session->set('product_session', $product_session);
-                }
-            }
-
-            return $this->render('viewDetail', [
-                'product_detail' => $product_detail, 'product_image_detail' => $product_image_detail,
-                'product_offer' => $product_offer, 'rating_average' => $rating_average,
-                'product_unit' => $product_unit, 'product_tag' => $product_tag,
-                'products_same_category' => $products_same_category,
-            ]);
         }
+        //set product recent view
+        $flag = true;
+        $product = $product_detail['id'];
+        $product_session = Yii::$app->session->get('product_session');
+        if (count($product_session) == 0) {
+            Yii::$app->session->set('product_session', [$product]);
+        } else {
+            foreach ($product_session as $item) {
+                if (($item == $product)) {
+                    $flag = false;
+                }
+            }
+            if ($flag) {
+                array_push($product_session, $product);
+                Yii::$app->session->set('product_session', $product_session);
+            }
+        }
+
+        return $this->render('viewDetail', [
+            'product_detail' => $product_detail, 'product_image_detail' => $product_image_detail,
+            'product_offer' => $product_offer, 'rating_average' => $rating_average,
+            'product_unit' => $product_unit, 'product_tag' => $product_tag,
+            'products_same_category' => $products_same_category,
+        ]);
     }
-    public function actionGetProductSeason(){
+
+    public function actionGetProductSeason()
+    {
 
     }
+
     public function actionGetWishList()
     {
         if (Yii::$app->user->isGuest)
@@ -523,8 +525,8 @@ class SiteController extends Controller
             $product_list = (new Query())->select('product_id')->from('wish_list')->where(['customer_id' => $customer_id])->all();
             $wish_list_product = array();
             foreach ($product_list as $item) {
-                $product_detail = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.quantity_in_stock as product_quantity', 'product.tax as product_tax', 'product.sold as product_sold', 'product.price as product_price','image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $item['product_id']])->one();
-                if(!empty($product_detail['product_id'])) {
+                $product_detail = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.quantity_in_stock as product_quantity', 'product.tax as product_tax', 'product.sold as product_sold', 'product.price as product_price', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $item['product_id']])->one();
+                if (!empty($product_detail['product_id'])) {
                     $product_detail['product_offer'] = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                     $product_detail['product_unit'] = Yii::$app->CommonFunction->getProductUnit($item['product_id']);
                     array_push($wish_list_product, $product_detail);
@@ -556,7 +558,8 @@ class SiteController extends Controller
             } catch (\mysqli_sql_exception $ex) {
                 $json['error'] = Yii::t('app', 'RemoveWishListMsg02');
             }
-        }
+        } else
+            $json['info'] = Yii::t('app', 'RemoveWishListMsg04');
         if (Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];
@@ -568,13 +571,13 @@ class SiteController extends Controller
         $json = array();
         if (Yii::$app->request->post()) {
             if (Yii::$app->user->isGuest)
-                $json['info'] = Yii::t('app', 'AddWishListMsg01');
+                $json['error'] = Yii::t('app', 'AddWishListMsg01');
             else {
                 $customer_id = Yii::$app->user->identity->getId();
                 $data = Yii::$app->request->post();
                 $product_id = json_decode($data['product_id']);
                 if (WishList::find()->where(['customer_id' => $customer_id, 'product_id' => $product_id])->exists()) {
-                    $json['info'] = Yii::t('app', 'AddWishListMsg02');
+                    $json['error'] = Yii::t('app', 'AddWishListMsg02');
                 } else {
                     //save to wish list
                     try {
@@ -585,13 +588,13 @@ class SiteController extends Controller
                         $json['total'] = WishList::find()->where(['customer_id' => $customer_id])->count();
                         $json['success'] = Yii::t('app', 'AddWishListMsg03');
                     } catch (\yii\db\Exception $ex) {
-                        $json['info'] = "Lỗi kết nối! bạn vui lòng thử lại sau ít phút";
+                        $json['error'] = Yii::t('app', 'DbError');
                     }
 
                 }
             }
         } else
-            $json['info'] = Yii::t('app', 'AddWishListMsg04');
+            $json['error'] = Yii::t('app', 'AddWishListMsg04');
         if (Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [json_encode($json)];
@@ -674,7 +677,7 @@ class SiteController extends Controller
 
     public function actionViewCart()
     {
-        $cart_info = Yii::$app->Header->getCartInfo();
+        $cart_info = Yii::$app->HeaderInfo->getCartInfo();
         return $this->render('viewCart', ['cart_info' => $cart_info]);
     }
 
@@ -742,8 +745,8 @@ class SiteController extends Controller
             $voucher = $post_data['voucher'];
             $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
             $json['info'] = $voucher;
-            $today = date_create_from_format('d/m/Y',  date("d/m/Y")) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y',  date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y',  date("d/m/Y"))->format('y')) : time();
+            $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
+                mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
             $voucher_start_date = date("d/m/Y", $check_voucher['start_date']);
             $voucher_end_date = date("d/m/Y", $check_voucher['end_date']);
             if (empty($check_voucher)) {
@@ -752,11 +755,9 @@ class SiteController extends Controller
                 $json['error'] = Yii::t('app', 'InputVoucherMsg02') . $voucher_start_date;
             } else if ($today > $check_voucher['end_date']) {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg03') . $voucher_end_date;
-            }
-            elseif(!empty($check_voucher['order_id'])){
+            } elseif (!empty($check_voucher['order_id'])) {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg05');
-            }
-            else if ($check_voucher['active'] == 1) {
+            } else if ($check_voucher['active'] == 1) {
                 $discount = $check_voucher['discount'];
                 $json['success'] = "Bạn được giảm giá " . $discount . "% cho mã giảm giá: " . $voucher . ".</br>Số tiền bạn phải trả còn lại: " . number_format(Yii::$app->CommonFunction->getTotalPriceWithVoucher($discount)) . "đ";
             } else {
@@ -990,7 +991,7 @@ class SiteController extends Controller
                             $address_data = $_POST['Address'];
                             $address_id = (new Query())->select(['address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
                             echo $address_id['address_id'];
-                            $update_customer_address = Address::find()->where(['id'=>$address_id['address_id']])->one();
+                            $update_customer_address = Address::find()->where(['id' => $address_id['address_id']])->one();
                             print_r($update_customer_address);
                             $update_customer_address->detail = $address_data['detail'];
                             $update_customer_address->district_id = $address_data['district_id'];
@@ -1001,20 +1002,20 @@ class SiteController extends Controller
                         $product_cart = Yii::$app->session->get('product_cart');
                         $total_net_amount = 0;
                         $total_tax_amount = 0;
-                        foreach($product_cart as $item){
-                            $product_price_tax = (new Query())->select(['price','tax'])->from('product')->where(['id' => $item['product_id']])->one();
+                        foreach ($product_cart as $item) {
+                            $product_price_tax = (new Query())->select(['price', 'tax'])->from('product')->where(['id' => $item['product_id']])->one();
                             $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                             $product_selling_price = Yii::$app->CommonFunction->getProductPrice($product_price_tax['price'], $product_offer) * $item['product_quantity'];
-                            $total_net_amount +=Yii::$app->CommonFunction->getNetAmount($product_selling_price,$product_price_tax['tax'],$item['product_quantity']);
-                            $total_tax_amount += Yii::$app->CommonFunction->getTaxAmount($product_selling_price,$product_price_tax['tax'],$item['product_quantity']);
+                            $total_net_amount += Yii::$app->CommonFunction->getNetAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
+                            $total_tax_amount += Yii::$app->CommonFunction->getTaxAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
 
                         }
-                        $customer_info = (new Query())->select(['guest_id','address_id'])->from('customer')->where(['id'=>Yii::$app->user->identity->getId()])->one();
+                        $customer_info = (new Query())->select(['guest_id', 'address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
                         $order_date = strtotime(date("m/d/Y"));
                         $checkout_info = $_POST['CheckoutInfo'];
                         $receiving_date = strtotime(date($checkout_info['receiving_date']));
                         $note = $checkout_info['note'];
-                        if(empty($note))
+                        if (empty($note))
                             $note = 'null';
                         $order = new Order();
                         $order->order_date = $order_date;
@@ -1028,10 +1029,10 @@ class SiteController extends Controller
                         $order->address_id = $customer_info['address_id'];
 
                         $order->save();
-                        $order_id = (new Query())->select(['id'])->from('order')->where(['order_date'=>$order_date,'receiving_date'=>$receiving_date,
-                            'tax_amount'=>$total_tax_amount,'net_amount'=>$total_net_amount,'description'=>$note,
-                            'guest_id'=>$customer_info['guest_id'],'address_id'=>$customer_info['address_id']])->one();
-                        foreach($product_cart as $item){
+                        $order_id = (new Query())->select(['id'])->from('order')->where(['order_date' => $order_date, 'receiving_date' => $receiving_date,
+                            'tax_amount' => $total_tax_amount, 'net_amount' => $total_net_amount, 'description' => $note,
+                            'guest_id' => $customer_info['guest_id'], 'address_id' => $customer_info['address_id']])->one();
+                        foreach ($product_cart as $item) {
                             $product_price = (new Query())->select(['price'])->from('product')->where(['id' => $item['product_id']])->one();
                             $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                             $product_quantity = $item['product_quantity'];
@@ -1045,8 +1046,8 @@ class SiteController extends Controller
                             $order_details->discount = $product_offer;
                             $order_details->save();
                         }
-                        if(!empty($_POST['voucher'])){
-                            if( Yii::$app->CommonFunction->checkVoucher($_POST['voucher'])) {
+                        if (!empty($_POST['voucher'])) {
+                            if (Yii::$app->CommonFunction->checkVoucher($_POST['voucher'])) {
                                 echo Yii::$app->CommonFunction->checkVoucher($_POST['voucher']);
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
                                 $voucher->order_id = $order_id['id'];
@@ -1092,7 +1093,7 @@ class SiteController extends Controller
             $address = Address::find()->where(['id' => $order['address_id']])->one();
             $district = District::find()->where(['id' => $address['district_id']])->one();
             $city = City::find()->where(['id' => $district['city_id']])->one();
-            return $this->render('getCheckoutResult', ['order' => $order,'customer_info' => $customer_info,
+            return $this->render('getCheckoutResult', ['order' => $order, 'customer_info' => $customer_info,
                 'address' => $address, 'district' => $district, 'city' => $city,
             ]);
         }
@@ -1134,7 +1135,7 @@ class SiteController extends Controller
                             $json['error'] = "Lỗi kết nối! bạn vui lòng thử lại sau ít phút";
                         }
                     } else {
-                        $json['error'] = Yii::t('app', 'RatingProductMsg05');
+                        $json['error'] = Yii::t('app', 'DbError');
                     }
                 }
             }

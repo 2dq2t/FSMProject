@@ -226,8 +226,8 @@ var wishlist = {
                     }, 2000);
 				}
 
-				if (json['info']) {
-					$('#content').parent().before('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> ' + json['info'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				if (json['error']) {
+					$('#content').parent().before('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 				}
                 setTimeout(function() {
                     $('.alert').remove();

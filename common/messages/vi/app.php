@@ -440,4 +440,5 @@ kiệm chi phí mua hàng.',
     'CheckoutResult FailMessage'=>'Có lỗi xảy ra trong quá trình đặt hàng, xin vui lòng liên hệ chúng tôi để biết thêm chi tiết.',
     'CheckoutResult SuccessTitle'=>'Đặt hàng thành công',
     'CheckoutResult FailTitle'=>'Đặt hàng không thành công',
+    'DbError'=>'Lỗi kết nối! Vui lòng thử lại sau ít phút hoặc liên hệ chúng tôi để biết thêm chi tiết',
 );

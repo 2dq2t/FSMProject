@@ -147,7 +147,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                 <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/get-wish-list"; ?>"
                                        id="wishlist-total"
                                        title="Danh mục yêu thích (0)"> <span><?= Yii::t('app', 'WishListLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                                                $number_product = Yii::$app->Header->getNumberProductWishList(Yii::$app->user->identity->getId());
+                                                $number_product = Yii::$app->HeaderInfo->getNumberProductWishList(Yii::$app->user->identity->getId());
                                                 echo " (" . $number_product . ")";
                                             } ?></span></a></li>
                             <?php endif; ?>

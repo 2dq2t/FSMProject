@@ -13,7 +13,7 @@ use Yii;
 use yii\base\Component;
 use yii\db\Query;
 
-class Header extends Component
+class HeaderInfo extends Component
 {
 
     public function  getNumberProductWishList($customer_id)

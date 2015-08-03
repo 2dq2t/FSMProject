@@ -18,8 +18,8 @@ $config = [
         'SpecialProduct'=>[
             'class'=>'frontend\components\SpecialProduct',
         ],
-        'Header'=>[
-            'class'=>'frontend\components\Header',
+        'HeaderInfo'=>[
+            'class'=>'frontend\components\HeaderInfo',
         ],
     ],
 ];

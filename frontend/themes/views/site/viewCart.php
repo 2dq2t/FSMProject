@@ -29,7 +29,7 @@ require('_header.php');
         <div id="content" class="col-sm-9">
             <h1 id="wish_list"
                 class="page-title"><?= Yii::t('app', 'ShoppingCartLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                    $number_product = Yii::$app->Header->getNumberProductWishList(Yii::$app->user->identity->getId());
+                    $number_product = Yii::$app->HeaderInfo->getNumberProductWishList(Yii::$app->user->identity->getId());
                     echo " (" . $number_product . ")";
                 } ?>
             </h1>
