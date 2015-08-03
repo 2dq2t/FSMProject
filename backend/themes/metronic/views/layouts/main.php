@@ -31,8 +31,6 @@ AppAsset::register($this);
         <link href="metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<!--        <link href="metronic/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">-->
-<!--        <link href="metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>-->
         <!-- END GLOBAL MANDATORY STYLES -->
         <!-- BEGIN PAGE LEVEL STYLES -->
         <link href="metronic/assets/pages/css/login.css" rel="stylesheet" type="text/css"/>
@@ -43,7 +41,7 @@ AppAsset::register($this);
         <link href="metronic/assets/admin/css/layout.css" rel="stylesheet" type="text/css"/>
         <link id="style_color" href="metronic/assets/admin/css/themes/light.css" rel="stylesheet" type="text/css"/>
         <link href="metronic/assets/admin/css/custom.css" rel="stylesheet" type="text/css"/>
-		<link href="metronic/assets/pages/css/prettify.css" rel="stylesheet" type="text/css"/>
+        <link href="metronic/assets/pages/css/prettify.css" rel="stylesheet" type="text/css"/>
         <!-- END THEME STYLES -->
         <script src="metronic/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <link rel="shortcut icon" href="favicon.ico"/>
@@ -110,55 +108,21 @@ AppAsset::register($this);
         </div>
         <!-- END HEADER -->
         <?php
-        function active($catalog, $value = '') {
-            $cataloguae = [
-                'marketing' => [
-                    'faq',
-                    'voucher',
-                    'offer',
-                    'mail',
-                    'slideshow',
-                ],
-                'business' => [
-                    'category',
-                    'unit',
-                    'season',
-                    'tag',
-                    'rating',
-                    'product',
-                ],
-                'sale' => [
-                    'order',
-                    'orderstatus',
-                ],
-                'employee' => [
-                    'employee',
-                    'authitem',
-                ],
-                'customer' => [
-                    'guest',
-                    'customer',
-                ],
-                'settings' => [
-                    'backup',
-                    'i18n',
-                    'log'
-                ]
-            ];
 
-            $controller = Yii::$app->controller->id;
-
-            if($value == '') {
-                if(array_key_exists($catalog, $cataloguae) && in_array($controller, $cataloguae[$catalog])) {
-                    return true;
-                }
-                return false;
-            } else {
-                if($value == $controller && in_array($value, $cataloguae[$catalog])){
-                    return true;
-                }
-                return false;
+        function isActive($routes = array())
+        {
+            $routeCurrent = '';
+            if (Yii::$app->controller->module !== null) {
+                $routeCurrent .= sprintf('%s/', Yii::$app->controller->module->id);
             }
+            $routeCurrent .= sprintf('%s/%s', Yii::$app->controller->id, Yii::$app->controller->action->id);
+            foreach ($routes as $route) {
+                $pattern = sprintf('~%s~', preg_quote($route));
+                if (preg_match($pattern, $routeCurrent)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         ?>
@@ -181,26 +145,38 @@ AppAsset::register($this);
                         </li>
 
                         <!--MARKETING-->
-                        <li class="<?= active('marketing', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive([
+                            'faq',
+                            'voucher',
+                            'offer',
+                            'slideshow',
+                            'mail'
+                        ]) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-bar-chart"></i>
                                 <span class="title"><?= Yii::t('app', 'Marketing')?></span>
-                                <span class="arrow <?= active('marketing', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive([
+                                    'faq',
+                                    'voucher',
+                                    'offer',
+                                    'slideshow',
+                                    'mail'
+                                ]) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('marketing', 'faq') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['faq']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-support"></i> ' . Yii::t('app', 'FAQs'), ['faq/index']) ?>
                                 </li>
-                                <li class="<?= active('marketing', 'voucher') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['voucher']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-wallet"></i> ' . Yii::t('app', 'Voucher'), ['voucher/index']) ?>
                                 </li>
-                                <li class="<?= active('marketing', 'offer') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['offer']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-share-alt"></i> ' . Yii::t('app', 'Product Offer'), ['offer/index']) ?>
                                 </li>
-                                <li class="<?= active('marketing', 'slideshow') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['slideshow']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-crop"></i> ' . Yii::t('app', 'Slide Shows'), ['slideshow/index']) ?>
                                 </li>
-                                <li class="<?= active('marketing', 'mail') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['mail']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['mail/index']) ?>
                                 </li>
                             </ul>
@@ -208,29 +184,43 @@ AppAsset::register($this);
                         <!--END MARKETING-->
 
                         <!--BUSINESS-->
-                        <li class="<?= active('business', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive([
+                            'category',
+                            'unit',
+                            'season',
+                            'tag',
+                            'rating',
+                            'product'
+                        ]) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-present"></i>
                                 <span class="title"><?= Yii::t('app', 'Business')?></span>
-                                <span class="arrow <?= active('business', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive([
+                                    'category',
+                                    'unit',
+                                    'season',
+                                    'tag',
+                                    'rating',
+                                    'product'
+                                ]) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('business', 'category') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['category']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Categories'), ['category/index']) ?>
                                 </li>
-                                <li class="<?= active('business', 'unit') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['unit']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-list"></i> ' . Yii::t('app', 'Unit'), ['unit/index']) ?>
                                 </li>
-                                <li class="<?= active('business', 'season') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['season']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-grid"></i> ' . Yii::t('app', 'Season'), ['season/index']) ?>
                                 </li>
-                                <li class="<?= active('business', 'tag') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['tag']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-pin"></i> ' . Yii::t('app', 'Tags'), ['tag/index']) ?>
                                 </li>
-                                <li class="<?= active('business', 'rating') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['rating']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-star"></i> ' . Yii::t('app', 'Rating'), ['rating/index']) ?>
                                 </li>
-                                <li class="<?= active('business', 'product') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['product']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-handbag"></i> ' . Yii::t('app', 'Product'), ['product/index']) ?>
                                 </li>
                             </ul>
@@ -238,17 +228,17 @@ AppAsset::register($this);
                         <!--END BUSINESS-->
 
                         <!--SALE-->
-                        <li class="<?= active('sale', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive(['order', 'orderstatus']) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-basket"></i>
                                 <span class="title"><?= Yii::t('app', 'Sale')?></span>
-                                <span class="arrow <?= active('sale', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive(['order', 'orderstatus']) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('sale', 'order') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['order']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Order'), ['order/index']) ?>
                                 </li>
-                                <li class="<?= active('sale', 'orderstatus') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['orderstatus']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Order Status'), ['orderstatus/index']) ?>
                                 </li>
                             </ul>
@@ -256,35 +246,73 @@ AppAsset::register($this);
                         <!--END SALE-->
 
                         <!--EMPLOYEE-->
-                        <li class="<?= active('employee', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive( [
+                            'employee',
+                            'assignment',
+                            'role',
+                            'permission',
+                            'route'
+                        ]) ? 'active' : ''?>">
                             <a href="javascript:;">
                                 <i class="icon-user"></i>
                                 <span class="title"><?= Yii::t('app', 'Employee')?></span>
-                                <span class="arrow <?= active('employee', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive([
+                                    'employee',
+                                    'assignment',
+                                    'role',
+                                    'permission',
+                                    'route']) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('employee', 'employee') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['employee']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'EmployeeInfo'), ['employee/index']) ?>
                                 </li>
-                                <li class="<?= active('employee', 'authitem') ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-energy"></i> ' . Yii::t('app', 'Permissions'), ['authitem/index']) ?>
+                                <li class="<?= isActive([
+                                    'assignment',
+                                    'role',
+                                    'permission',
+                                    'route'
+                                ]) ? 'active' : ''?>">
+                                    <a href="javascript:;">
+                                        <i class="icon-energy"></i> <?= Yii::t('app', 'Authentication')?> <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="<?= isActive(['assignment/index']) ? 'active' : '' ?>">
+                                            <?= HtmL::a('<i class="icon-login"></i> ' . Yii::t('app', 'Assignment'), ['assignment/index']) ?>
+                                        </li>
+                                        <li class="<?= isActive(['role']) ? 'active' : '' ?>">
+                                            <?= HtmL::a('<i class="icon-users"></i> ' . Yii::t('app', 'Role'), ['role/index']) ?>
+                                        </li>
+                                        <li class="<?= isActive(['permission']) ? 'active' : '' ?>">
+                                            <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Permissions'), ['permission/index']) ?>
+                                        </li>
+                                        <li class="<?= isActive(['route']) ? 'active' : '' ?>">
+                                            <?= HtmL::a('<i class="icon-reload"></i> ' . Yii::t('app', 'Route'), ['route/index']) ?>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
                         <!--END EMPLOYEE-->
 
                         <!--CUSTOMER-->
-                        <li class="<?= active('customer', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive([
+                            'customer',
+                            'guest'
+                        ]) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-users"></i>
                                 <span class="title"><?= Yii::t('app', 'Customer')?></span>
-                                <span class="arrow <?= active('customer', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive([
+                                    'customer',
+                                    'guest'
+                                ]) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('customer', 'guest') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['guest']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Guest'), ['guest/index']) ?>
                                 </li>
-                                <li class="<?= active('customer', 'customer') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['customer']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Customers'), ['customer/index']) ?>
                                 </li>
                             </ul>
@@ -292,20 +320,28 @@ AppAsset::register($this);
                         <!--END CUSTOMER-->
 
                         <!--SETTING-->
-                        <li class="<?= active('settings', '') ? 'active open' : '' ?>">
+                        <li class="<?= isActive([
+                            'i18n',
+                            'backup',
+                            'log'
+                        ]) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-settings"></i>
                                 <span class="title"><?= Yii::t('app', 'Settings')?></span>
-                                <span class="arrow <?= active('setting', '') ? 'open' : '' ?>"></span>
+                                <span class="arrow <?= isActive([
+                                    'i18n',
+                                    'backup',
+                                    'log'
+                                ]) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="<?= active('settings', 'i18n') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['i18n']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-globe"></i> ' . Yii::t('app', 'I18n'), ['i18n/index']) ?>
                                 </li>
-                                <li class="<?= active('settings', 'backup') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['backup']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-layers"></i> ' . Yii::t('app', 'Backup'), ['backup/index']) ?>
                                 </li>
-                                <li class="<?= active('settings', 'log') ? 'active' : '' ?>">
+                                <li class="<?= isActive(['log']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Log'), ['log/index']) ?>
                                 </li>
                             </ul>
@@ -433,14 +469,12 @@ AppAsset::register($this);
     <script src="metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
     <script src="metronic/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<!--    <script src="metronic/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>-->
-<!--    <script src="metronic/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>-->
-<!--    <script src="metronic/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>-->
     <!-- END CORE PLUGINS -->
-<!--    <link href="http://www.wprunner.com/wp-content/themes/wprunner-v2/assets/css/prettify.css" rel="stylesheet">-->
+    <!--    <link href="http://www.wprunner.com/wp-content/themes/wprunner-v2/assets/css/prettify.css" rel="stylesheet">-->
     <script src="metronic/assets/pages/scripts/prettify.js"></script>
     <script src="metronic/assets/global/scripts/metronic.js" type="text/javascript"></script>
     <script src="metronic/assets/admin/scripts/layout.js" type="text/javascript"></script>
+    <script src="metronic/assets/admin/scripts/yii.admin.js" type="text/javascript"></script>
     <script src="metronic/assets/pages/scripts/login.js" type="text/javascript"></script>
     <!--<script src="metronic/assets/admin/scripts/demo.js" type="text/javascript"></script>-->
     <script type="text/javascript">
@@ -453,7 +487,6 @@ AppAsset::register($this);
             Metronic.init(); // init metronic core components
             Layout.init(); // init current layout
             Login.init();
-            $("input[name='quantity']").TouchSpin();
         });
     </script>
     <!-- END JAVASCRIPTS -->

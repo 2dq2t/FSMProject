@@ -3,7 +3,9 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\Json;
 use yii\rbac\Item;
+use yii\web\Application;
 
 /**
  * This is the model class for table "auth_item".
@@ -15,6 +17,7 @@ use yii\rbac\Item;
  * @property string $data
  * @property integer $created_at
  * @property integer $updated_at
+ * @property Item $item
  *
  * @property AuthAssignment[] $authAssignments
  * @property AuthRule $ruleName
@@ -22,9 +25,22 @@ use yii\rbac\Item;
  */
 class AuthItem extends \yii\db\ActiveRecord
 {
-    public $oldname;
-    public $children = [];
-    private $errorMessage = '';
+    /**
+     * @var Item
+     */
+    private $_item;
+
+    /**
+     * This hold the old name of item
+     * @var string
+     */
+    public $oldName;
+    /**
+     * @var $error
+     */
+    public $items = [];
+
+    private $errorMessage;
     /**
      * @inheritdoc
      */
@@ -44,16 +60,20 @@ class AuthItem extends \yii\db\ActiveRecord
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
             [['name'], 'check'],
-            [['oldname', 'children'], 'safe']
+            [['rule_name'], 'in',
+                'range' => array_keys(Yii::$app->authManager->getRules()),
+                'message' => Yii::t('app', 'Rule not exists')],
+            [['oldName'], 'safe'],
+            [['items'], 'safe']
         ];
     }
 
     public function check($attribute, $params)
     {
-        if (((strlen($this->oldname) == 0) || ($this->oldname != $this->name)) &&
-            ((\Yii::$app->getAuthManager()->getRole($this->$attribute) !== null) ||
-                \Yii::$app->getAuthManager()->getPermission($this->$attribute) !== null)) {
-            $this->addError($attribute, 'Duplicate Item "'.$this->$attribute.'"');
+        $authManager = Yii::$app->authManager;
+        if ((strlen($this->oldName) == 0 || $this->oldName != $this->name) && ($authManager->getRole($this->name) !== null || $authManager->getPermission($this->name) !== null)) {
+            $this->addError($attribute, Yii::t('yii', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
+            $this->errors = Yii::t('yii', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]);
         }
     }
 
@@ -63,14 +83,13 @@ class AuthItem extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('app', 'PermissionName'),
-            'type' => Yii::t('app', 'PermissionType'),
-            'description' => Yii::t('app', 'PermissionDescription'),
-            'rule_name' => Yii::t('app', 'Permission Rule Name'),
-            'data' => Yii::t('app', 'Permission Data'),
-            'created_at' => Yii::t('app', 'Permission Created At'),
-            'updated_at' => Yii::t('app', 'Permission Updated At'),
-            'children' => Yii::t('app','PermissionChildren'),
+            'name' => Yii::t('app', 'Name'),
+            'type' => Yii::t('app', 'Type'),
+            'description' => Yii::t('app', 'Description'),
+            'rule_name' => Yii::t('app', 'Rule Name'),
+            'data' => Yii::t('app', 'Data'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At')
         ];
     }
 
@@ -98,6 +117,71 @@ class AuthItem extends \yii\db\ActiveRecord
         return $this->hasMany(AuthItemChild::className(), ['child' => 'name']);
     }
 
+    /**
+     * Check if is new record.
+     * @return boolean
+     */
+    public function getIsNewRecord()
+    {
+        return empty($this->oldAttributes);
+    }
+
+    /**
+     * Find role
+     * @param string $id
+     * @return null|\self
+     */
+    public static function findRole($id)
+    {
+        $item = Yii::$app->authManager->getRole($id);
+        if ($item !== null) {
+            return new self($item);
+        }
+
+        return null;
+    }
+
+    /**
+     * Save role to [[\yii\rbac\authManager]]
+     * @return boolean
+     */
+    public function saveRole()
+    {
+        if ($this->validate()) {
+            $manager = Yii::$app->authManager;
+            if ($this->_item === null) {
+                if ($this->type == Item::TYPE_ROLE) {
+                    $this->_item = $manager->createRole($this->name);
+                } else {
+                    $this->_item = $manager->createPermission($this->name);
+                }
+                $isNew = true;
+            } else {
+                $isNew = false;
+                $oldName = $this->_item->name;
+            }
+            $this->_item->name = $this->name;
+            $this->_item->description = !empty($this->description) ? $this->description : null;
+            $this->_item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
+            $this->_item->data = $this->data === null || $this->data === '' ? null : Json::decode($this->data);
+            if ($isNew) {
+                $this->_item->createdAt = time();
+                $manager->add($this->_item);
+            } else {
+                $this->_item->updatedAt = time();
+                $manager->update($oldName, $this->_item);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @var Item $item
+     */
+
     public function createItem()
     {
         $item = new Item(
@@ -108,8 +192,9 @@ class AuthItem extends \yii\db\ActiveRecord
                 'ruleName' => trim($this->rule_name) ? trim($this->rule_name) : null,
             ]
         );
+
         Yii::$app->getAuthManager()->add($item);
-        foreach ($this->children as $value) {
+        foreach ($this->items as $value) {
 
             try {
                 Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
@@ -130,17 +215,17 @@ class AuthItem extends \yii\db\ActiveRecord
         $item->type = $this->type;
         $item->description = $this->description;
         $item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
-        Yii::$app->getAuthManager()->update($this->oldname, $item);
+        Yii::$app->getAuthManager()->update($this->oldName, $item);
         $children = Yii::$app->getAuthManager()->getChildren($item->name);
         foreach ($children as $value) {
-            $key = array_search($value->name, $this->children);
+            $key = array_search($value->name, $this->items);
             if ($key === false) {
                 Yii::$app->getAuthManager()->removeChild($item, $value);
             } else {
-                unset($this->children[$key]);
+                unset($this->items[$key]);
             }
         }
-        foreach ($this->children as $value) {
+        foreach ($this->items as $value) {
             try {
                 Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
             } catch (\Exception $ex) {

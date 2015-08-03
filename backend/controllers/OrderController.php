@@ -38,6 +38,9 @@ class OrderController extends Controller
                     'cancel' => ['post']
                 ],
             ],
+//            'access' => [
+//                'class' => \backend\components\AccessControl::className()
+//            ],
         ];
     }
 

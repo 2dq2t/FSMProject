@@ -2,19 +2,20 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\VoucherSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel backend\models\AuthItemSearch */
+/* @var $model backend\models\\AuthItem*/
 
-$this->title = Yii::t('app', 'Voucher');
+$this->title = Yii::t('app', 'Permission');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
+
         echo lavrentiev\yii2toastr\Toastr::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
@@ -30,95 +31,62 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 <?php endforeach; ?>
 
-<div class="voucher-index">
+<div class="permission-index">
 
     <?php
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
-//        [
-//            'attribute' => 'name',
-//            'width' => '15%',
-//        ],
         [
-            'attribute' => 'code',
-            'width' => '25%',
+            'attribute' => 'name',
+            'label' => Yii::t('app', 'PermissionName'),
         ],
         [
-            'attribute' => 'discount',
-            'width' => '15%',
+            'attribute' => 'description',
+            'label' => Yii::t('app', 'PermissionDescription'),
         ],
         [
-            'attribute' => 'start_date',
-            'width' => '16%',
-            'format' => ['date', 'php:d/m/Y'],
-            'filterType' => GridView::FILTER_DATE,
-            'filterWidgetOptions' => [
-                'removeButton' => false,
-                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'autoclose' => true,
-                    'format' => 'dd/mm/yyyy'
-                ],
-            ],
-        ],
-        [
-            'attribute' => 'end_date',
-            'width' => '16%',
-            'format' => ['date', 'php:d/m/Y'],
-            'filterType' => GridView::FILTER_DATE,
-            'filterWidgetOptions' => [
-                'removeButton' => false,
-                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'autoclose' => true,
-                    'format' => 'dd/mm/yyyy'
-                ],
-            ],
-        ],
-        [
-            'attribute' => 'order_id',
-        ],
-        [
-            'class' => \kartik\grid\EditableColumn::className(),
-            'attribute' => 'active',
-            'width' => '12%',
-            'editableOptions' => [
-                'data' => [
-                    0 =>  Yii::t('app', 'Inactive'),
-                    1 =>  Yii::t('app', 'Active'),
-                ],
-                'inputType' => 'dropDownList',
-                'placement' => 'left'
-            ],
-            'filter' => [
-                0 =>  Yii::t('app', 'Inactive'),
-                1 =>  Yii::t('app', 'Active'),
-            ],
-            'format' => 'raw',
-            'value' => function (\common\models\Voucher $model) {
-                if ($model === null || $model->active === null) {
-                    return null;
-                }
-                if ($model->active === 1) {
-                    $label_class = 'label-success';
-                    $value = 'Active';
-                } else {
-                    $value = 'Inactive';
-                    $label_class = 'label-default';
-                }
-                return \yii\helpers\Html::tag(
-                    'span',
-                    Yii::t('app', $value),
-                    ['class' => "label $label_class"]
-                );
+            'attribute' => 'created_at',
+            'label' => Yii::t('app', 'Permission Created At'),
+            'value' => function ($data) {
+                return date('d/m/Y', $data->created_at);
             },
+            'width' => '20%',
+            'filterType' => GridView::FILTER_DATE,
+            'filterWidgetOptions' => [
+                'removeButton' => false,
+                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'autoclose' => true,
+                    'endDate' => '+1d',
+                ],
+            ],
+        ],
+        [
+            'attribute' => 'updated_at',
+            'label' => Yii::t('app', 'Permission Updated At'),
+            'value' => function ($data) {
+                return date('d/m/Y', $data->updated_at);
+            },
+            'width' => '20%',
+            'filterType' => GridView::FILTER_DATE,
+            'filterWidgetOptions' => [
+                'removeButton' => false,
+                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'autoclose' => true,
+                    'endDate' => '+1d',
+                ],
+            ],
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'width' => '10%',
-            'template' => '{update}&nbsp;&nbsp;&nbsp;&nbsp;{delete}',
+            'urlCreator' => function ($action, $model, $key, $index) {
+                $params = ['id' => $model->name];
+                $params[0] = $this->context->id ? $this->context->id . '/' . $action : $action;
+                return \yii\helpers\Url::toRoute($params);
+            },
         ],
     ];
 
@@ -131,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'containerOptions' => ['style'=>'overflow: auto'],
         'toolbar' =>  [
             ['content'=>
-                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['voucher/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
+                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['permission/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
             ],
             '{toggleData}',
             '{export}',
@@ -151,8 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'resizableColumns' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
-            'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>'. Yii::t('app','Create Voucher'), ['create'], ['class' => 'btn btn-success']),
+            'heading' => '',
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '. Yii::t('app', 'Create Permission'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

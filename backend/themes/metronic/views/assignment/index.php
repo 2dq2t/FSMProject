@@ -2,15 +2,15 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\alert\Alert;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\OrderStatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModel backend\models\AssignmentSearch */
 
-$this->title = Yii::t('app', 'Order Status');
+$this->title = Yii::t('app', 'Assignments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
@@ -29,36 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 <?php endforeach; ?>
 
-<div class="session-index">
+<div class="assignment-index">
 
     <?php
-
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
-
         [
-//            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'name',
-//            'editableOptions' => [
-//                'inputType' => \kartik\editable\Editable::INPUT_TEXT
-//            ]
-        ],
-        [
-//            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'comment',
-//            'editableOptions' => [
-//                'inputType' => \kartik\editable\Editable::INPUT_TEXT
-//            ]
+            'class' => 'kartik\grid\DataColumn',
+            'attribute' => $usernameField,
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
-            'buttons' => [
-                'update' => function ($url,$model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-pencil"></span>', $url, ['id' => 'modalLink', 'onclick'=>'javascript:void(0)', 'value'=>$url]);
-                },
-            ],
+            'template'=>'{view}'
         ],
     ];
 
@@ -71,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'containerOptions' => ['style'=>'overflow: auto'],
         'toolbar' =>  [
             ['content'=>
-                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['orderstatus/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
+                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['assignment/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
             ],
             '{toggleData}',
             '{export}',
@@ -92,7 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i>' . Yii::t('app', 'Create Order Status'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>
 

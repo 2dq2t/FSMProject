@@ -124,6 +124,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'pjax' => true,
         'pjaxSettings'=>[
             'neverTimeout'=>true,
+            'options' => [
+                'enablePushState' => false
+            ],
         ],
         'bordered' => true,
         'striped' => false,
