@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
+use backend\components\ParserDateTime;
 use common\models\Address;
 use common\models\City;
 use common\models\District;
@@ -82,10 +83,10 @@ class EmployeeController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update employee success'), Yii::$app->getUser()->id,$oldModel, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update employee success'), Yii::$app->user->identity->email,$oldModel, $model->attributes);
                 } else {
                     $message = $model->validate();
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update employee error: ') . current($model->getFirstErrors())? current($model->getFirstErrors()):'', Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update employee error: ') . current($model->getFirstErrors())? current($model->getFirstErrors()):'', Yii::$app->user->identity->email);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -145,10 +146,8 @@ class EmployeeController extends Controller
                         $model->image = Yii::$app->security->generateRandomString().".{$ext}";
                     }
 
-                    $model->dob = date_create_from_format('d/m/Y', $model->dob) ?
-                        mktime(null,null,null, date_create_from_format('d/m/Y', $model->dob)->format('m'), date_create_from_format('d/m/Y', $model->dob)->format('d'), date_create_from_format('d/m/Y', $model->dob)->format('y')) : time();
-                    $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
-                        mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+                    $model->dob = ParserDateTime::parseToTimestamp($model->dob);
+                    $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);
 
                     $model->address_id = $address->id;
                     $errors = [];
@@ -291,10 +290,8 @@ class EmployeeController extends Controller
                 $model->image = $model->oldAttributes['image'];
             }
 
-            $model->dob = date_create_from_format('d/m/Y', $model->dob) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $model->dob)->format('m'), date_create_from_format('d/m/Y', $model->dob)->format('d'), date_create_from_format('d/m/Y', $model->dob)->format('y')) : time();
-            $model->start_date = date_create_from_format('d/m/Y', $model->start_date) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $model->start_date)->format('m'), date_create_from_format('d/m/Y', $model->start_date)->format('d'), date_create_from_format('d/m/Y', $model->start_date)->format('y')) : time();
+            $model->dob = ParserDateTime::parseToTimestamp($model->dob);
+            $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);
 
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();

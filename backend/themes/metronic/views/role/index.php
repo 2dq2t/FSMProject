@@ -70,16 +70,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 return date('d/m/Y', $data->updated_at);
             },
             'width' => '20%',
-            'filterType' => GridView::FILTER_DATE,
-            'filterWidgetOptions' => [
-                'removeButton' => false,
-                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'autoclose' => true,
-                    'endDate' => '+1d',
-                ],
-            ],
+            'filter'=>false
+//            'filterType' => GridView::FILTER_DATE,
+//            'filterWidgetOptions' => [
+//                'removeButton' => false,
+//                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+//                'pluginOptions' => [
+//                    'allowClear' => true,
+//                    'autoclose' => true,
+//                    'endDate' => '+1d',
+//                ],
+//            ],
         ],
         [
             'class' => 'kartik\grid\ActionColumn',

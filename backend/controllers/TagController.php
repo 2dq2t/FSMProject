@@ -72,7 +72,7 @@ class TagController extends Controller
                     'message' => Yii::t('app', 'Tag_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Tag')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Tag_Add_Success_Msg'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Tag_Add_Success_Msg'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -87,7 +87,7 @@ class TagController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Tag')
                 ]);
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Add_Error_Msg'), Yii::$app->user->identity->email);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -119,7 +119,7 @@ class TagController extends Controller
                     'message' => Yii::t('app', 'Tag_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Tag success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Tag success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -129,7 +129,7 @@ class TagController extends Controller
                     'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Tag')
                 ]);
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Tag_Update_Error_Msg'), Yii::$app->user->identity->email);
                 return $this->render('update', [
                     'model' => $model,
                 ]);

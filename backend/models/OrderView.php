@@ -10,6 +10,8 @@ use Yii;
  * @property string $order_id
  * @property string $order_date
  * @property string $receiving_date
+ * @property double $shipping_fee
+ * @property string $description
  * @property string $full_name
  * @property string $email
  * @property string $phone_number
@@ -26,9 +28,9 @@ class OrderView extends \yii\db\ActiveRecord
         return 'order_view';
     }
 
-//    public static function primaryKey(){
-//        return ['order_id'];
-//    }
+    public static function primaryKey(){
+        return ['order_id'];
+    }
 
     /**
      * @inheritdoc
@@ -37,9 +39,10 @@ class OrderView extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'order_date', 'receiving_date', 'order_status_id'], 'integer'],
-            [['order_date', 'receiving_date', 'full_name', 'email', 'phone_number', 'address'], 'required'],
+            [['order_date', 'receiving_date', 'shipping_fee', 'description', 'full_name', 'email', 'phone_number', 'address'], 'required'],
+            [['shipping_fee'], 'number'],
             [['address'], 'string'],
-            [['full_name', 'email'], 'string', 'max' => 255],
+            [['description', 'full_name', 'email'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 15]
         ];
     }
@@ -53,6 +56,8 @@ class OrderView extends \yii\db\ActiveRecord
             'order_id' => Yii::t('app', 'Order ID'),
             'order_date' => Yii::t('app', 'Order Date'),
             'receiving_date' => Yii::t('app', 'Receiving Date'),
+            'shipping_fee' => Yii::t('app', 'Shipping Fee'),
+            'description' => Yii::t('app', 'Description'),
             'full_name' => Yii::t('app', 'Full Name'),
             'email' => Yii::t('app', 'Email'),
             'phone_number' => Yii::t('app', 'Phone Number'),

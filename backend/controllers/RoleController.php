@@ -42,7 +42,8 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AuthItemSearch(['type' => Item::TYPE_ROLE]);
+        $searchModel = new AuthItemSearch();
+        $searchModel->type = Item::TYPE_ROLE;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
@@ -300,7 +301,7 @@ class RoleController extends Controller
                 $child = $child ? : $manager->getPermission($role);
                 try {
                     $manager->addChild($parent, $child);
-                    Logger::log(Logger::INFO, Yii::t('app', "Assign router '{router}' to role '{parent}' success", ['router' => $child, 'parent' => $id]), Yii::$app->getUser()->id);
+                    Logger::log(Logger::INFO, Yii::t('app', "Assign router '{router}' to role '{parent}' success", ['router' => $child, 'parent' => $id]), Yii::$app->user->identity->email);
                 } catch (\Exception $e) {
                     $error[] = $e->getMessage();
                 }

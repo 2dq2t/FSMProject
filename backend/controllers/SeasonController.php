@@ -83,10 +83,10 @@ class SeasonController extends Controller
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
 
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update Season'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Season'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->user->identity->email);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -146,7 +146,7 @@ class SeasonController extends Controller
                     'message' => Yii::t('app', 'Season_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Season')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Add Season success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Season success'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -170,7 +170,7 @@ class SeasonController extends Controller
                     'title' => Yii::t('app', 'Create Season'),
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save season.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save season.'), Yii::$app->user->identity->email);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -217,7 +217,7 @@ class SeasonController extends Controller
                     'title' => Yii::t('app', 'Update Season')
                 ]);
 
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Season success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Season success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
 
                 return $this->redirect(['index']);
             } else {
@@ -237,7 +237,7 @@ class SeasonController extends Controller
                     'title' => Yii::t('app', 'Update Season'),
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Season has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Season error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Season has been edit error.'), Yii::$app->user->identity->email);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -270,7 +270,7 @@ class SeasonController extends Controller
                 'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
                 'title' => Yii::t('app', 'Delete Season')
             ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete season success'), Yii::$app->getUser()->id);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete season success'), Yii::$app->user->identity->email);
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
@@ -279,7 +279,7 @@ class SeasonController extends Controller
                 'message' => current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Could not delete this category. Please try again.'),
                 'title' => Yii::t('app', 'Delete Season')
             ]);
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete season error: ') . current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Season delete error.'), Yii::$app->getUser()->id);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete season error: ') . current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Season delete error.'), Yii::$app->user->identity->email);
         }
 
         return $this->redirect(['index']);

@@ -117,7 +117,7 @@ AppAsset::register($this);
             }
             $routeCurrent .= sprintf('%s/%s', Yii::$app->controller->id, Yii::$app->controller->action->id);
             foreach ($routes as $route) {
-                $pattern = sprintf('~%s~', preg_quote($route));
+                $pattern = sprintf('~\b%s\b~', preg_quote($route));
                 if (preg_match($pattern, $routeCurrent)) {
                     return true;
                 }
@@ -137,11 +137,8 @@ AppAsset::register($this);
                 <div class="page-sidebar navbar-collapse collapse">
                     <!-- BEGIN SIDEBAR MENU -->
                     <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                        <li class="start ">
-                            <a href="index.html">
-                                <i class="icon-home"></i>
-                                <span class="title"><?= Yii::t('app', 'Dashboard')?></span>
-                            </a>
+                        <li class="start <?= isActive(['site/index']) ? 'active' : ''?>">
+                            <?= HtmL::a("<i class='icon-home'></i> <span class='title'>" .Yii::t('app', 'Dashboard'). "</span>" , Yii::$app->homeUrl) ?>
                         </li>
 
                         <!--MARKETING-->
@@ -355,28 +352,6 @@ AppAsset::register($this);
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <div class="page-content">
-                    <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-                    <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                    <h4 class="modal-title">Modal title</h4>
-                                </div>
-                                <div class="modal-body">
-                                    Widget settings form goes here
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn blue">Save changes</button>
-                                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
-                    <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
                     <!-- BEGIN PAGE HEADER-->
                     <!-- BEGIN PAGE HEAD -->
                     <div class="page-head">

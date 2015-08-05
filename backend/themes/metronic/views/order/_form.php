@@ -207,12 +207,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <!--/row-->
                         <h3 class="form-section"><?= Yii::t('app', 'Product')?></h3>
                         <script type="text/javascript">
-                            var products_added = [];
-
-                            var old_value = -1;
-                            function setOldValue(id) {
-                                old_value = id.find('option:selected').val();
-                            }
 
                             function getProductData(id) {
                                 var select_id = id.attr('id');
@@ -220,36 +214,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                                 var selected_value = parseInt(id.find('option:selected').val());
 
-                                // if select change value
-//                            if(selected_value != old_value) {
-//                                console.log("o1: " + old_value);
-//                                console.log("sle: " + selected_value);
-//                                console.log(products_added.indexOf(selected_value));
-//                                if (products_added.indexOf(selected_value) != -1) {
-//                                    console.log("dasdsa");
-//                                    var index = products_added.indexOf(selected_value);
-//                                    products_added.splice(index, 1);
-//                                }
-//
-//                                console.log(products_added);
-//
-//                                clear(i);
-//                            }
-
-                                // if has a selected value in products added array
-//                            if ($.inArray(selected_value, products_added) !== -1) {
-//                                clear(i);
-//                                alert("You already select this product. Please again!");
-//                                return;
-//                            }
-//
-//                            if (selected_value) {
-//                                // if not add value to products_added array
-//                                products_added.push(selected_value);
-//                            }
-
                                 if(selected_value) {
+                                    var selected = [];
+                                    $("#datatable_reviews tbody tr").each(function () {
+                                        var ss = parseInt($(this).find("td:nth-child(2)").find('select').val(), 10);
+
+                                        if ($.inArray(ss, selected) > -1) {
+                                            console.log("inArr: " + ss);
+                                            $(this).find('td>button.remove-item').click();
+                                        }
+                                        selected.push(ss);
+                                    });
                                     $.post( "index.php?r=order/get-product-info&id=" + selected_value, function( product_info ) {
+                                        clear(id);
                                         var product_infos = JSON.parse(product_info);
                                         $("#product-" + i +"-price").text(product_infos["price"]);
                                         $("#product-" + i +"-unit").text(product_infos["unit"]);
@@ -262,18 +239,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         image.src = "../../frontend/web/" + product_infos["image"];
                                         imageParent.appendChild(image);
                                     });
-                                } else {
-                                    var index = products_added.indexOf(selected_value);
-                                    if (index > -1) {
-                                        products_added.splice(index, 1);
-                                    }
                                 }
                             }
 
                             function clear(id) {
                                 var select_id = id.attr('id');
                                 var i=select_id.substring(select_id.indexOf("-")+1,select_id.lastIndexOf("-"));
-                                id.select2('val', '');
+//                                $(id.preventDefault();
                                 $("#product-" + i +"-image").text("");
                                 $("#product-" + i +"-price").text("");
                                 $("#product-" + i +"-unit").text("");
@@ -287,9 +259,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 var select_id = $(item).find('select').attr('id');
                                 $(item).find('select').value = '';
                                 clear($(item).find('select'));
-                                $('#' + select_id).on('select2:selecting', function() {
-                                    setOldValue($(this));
-                                });
 
                                 $('#' + select_id).change(function(){
                                     getProductData($(item).find('select'));
@@ -373,9 +342,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                                     "change" => "function() {
                                                             getProductData($(this));
                                                         }",
-                                                                    "select2:selecting" => "function() {
-                                                            setOldValue($(this));
-                                                        }",
                                                                 ]
                                                             ])->label(false)?>
                                                         </div>
@@ -440,8 +406,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                                             <?php if ($order_item->product_id) {?>
                                                 <script type="text/javascript">
-                                                    //                                                    document.getElementById("orderdetail-<?php //echo $i; ?>//-quantity").style.display = 'none';
-                                                    //document.getElementById("orderdetail-'. $i .'-quantity").parentNode.removeAttribute("style");
                                                     products_added.push("<?php echo $order_item->product_id ?>");
                                                 </script>
                                             <?php }?>

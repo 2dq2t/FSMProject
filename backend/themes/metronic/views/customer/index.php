@@ -87,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 }
                 if ($model->gender === 'Male') {
-                    $value = 'Male';
+                    $value = Yii::t('app', 'Male');
                 } else if ($model->gender === 'Female') {
-                    $value = 'Female';
+                    $value = Yii::t('app', 'Female');
                 } else {
-                    $value = 'Other';
+                    $value = Yii::t('app', 'Other');
                 }
                 return \yii\helpers\Html::tag(
                     'span',

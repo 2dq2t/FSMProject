@@ -105,10 +105,10 @@ class AssignmentController extends Controller
                     $item = $manager->getRole($name);
 //                    $item = $item ? : $manager->getPermission($name);
                     $manager->assign($item, $id);
-                    Logger::log(Logger::INFO, Yii::t('app', 'Assign role to user success. User assign: ') . $id, Yii::$app->getUser()->id);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Assign role to user success. User assign: ') . $id, Yii::$app->user->identity->email);
                 } catch (\Exception $exc) {
                     $error[] = $exc->getMessage();
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Could not assign role: ') . $exc->getMessage(), Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Could not assign role: ') . $exc->getMessage(), Yii::$app->user->identity->email);
                 }
             }
         } else {
@@ -117,10 +117,10 @@ class AssignmentController extends Controller
                     $item = $manager->getRole($name);
 //                    $item = $item ? : $manager->getPermission($name);
                     $manager->revoke($item, $id);
-                    Logger::log(Logger::INFO, Yii::t('app', 'Revoke role success to user: ') . $id, Yii::$app->getUser()->id);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Revoke role success to user: ') . $id, Yii::$app->user->identity->email);
                 } catch (\Exception $exc) {
                     $error[] = $exc->getMessage();
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Could not revoke role: ') . $exc->getMessage(), Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Could not revoke role: ') . $exc->getMessage(), Yii::$app->user->identity->email);
                 }
             }
         }

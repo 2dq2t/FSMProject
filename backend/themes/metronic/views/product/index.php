@@ -34,17 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
-//        [
-//            'class'=>'kartik\grid\ExpandRowColumn',
-//            'width'=>'50px',
-//            'value'=>function ($model, $key, $index, $column) {
-//                return GridView::ROW_COLLAPSED;
-//            },
-//            'detail'=>function ($model, $key, $index, $column) {
-//                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
-//            },
-//            'headerOptions'=>['class'=>'kartik-sheet-style']
-//        ],
+        [
+            'class'=>'kartik\grid\ExpandRowColumn',
+            'width'=>'50px',
+            'value'=>function ($model, $key, $index, $column) {
+                return GridView::ROW_COLLAPSED;
+            },
+            'detail'=>function ($model, $key, $index, $column) {
+                return Yii::$app->controller->renderPartial('_details', ['model'=>$model]);
+            },
+            'headerOptions'=>['class'=>'kartik-sheet-style']
+        ],
         [
             'attribute' => 'name',
             'value'=>function ($model, $key, $index, $widget) {

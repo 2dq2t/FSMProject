@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -57,18 +58,16 @@ class EmployeeSearch extends Employee
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'dob' => date_create_from_format('d/m/Y', $this->dob) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->dob)->format('m'), date_create_from_format('d/m/Y', $this->dob)->format('d'), date_create_from_format('d/m/Y', $this->dob)->format('y')): $this->dob,
+            'dob' => ParserDateTime::parseToTimestamp($this->dob) ? ParserDateTime::parseToTimestamp($this->dob) : $this->dob,
             'phone_number' => $this->phone_number,
-            'start_date' => date_create_from_format('d/m/Y', $this->start_date) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->start_date)->format('m'), date_create_from_format('d/m/Y', $this->start_date)->format('d'), date_create_from_format('d/m/Y', $this->start_date)->format('y')) : $this->start_date,
+            'start_date' => ParserDateTime::parseToTimestamp($this->start_date) ? ParserDateTime::parseToTimestamp($this->start_date) : $this->start_date,
             'status' => $this->status,
             'address_id' => $this->address_id,
         ]);
 
         $query->andFilterWhere(['like', 'full_name', $this->full_name])
             ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'gender', $this->gender])
+            ->andFilterWhere(['=', 'gender', $this->gender])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'image', $this->image])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])

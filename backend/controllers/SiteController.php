@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
+use backend\components\ParserDateTime;
 use backend\models\PasswordResetRequestForm;
 use backend\models\ResetPasswordForm;
 use Yii;
@@ -60,6 +61,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        echo "<pre>";
+        var_dump(date('ss',-1022914800));
+        var_dump(ParserDateTime::parseToTimestamp('04/08/2015'));
+        var_dump(date('d/m/Y', 1438662790));
+//        var_dump(date('m', ParserDateTime::getTimeStamp()));
+//        var_dump(ParserDateTime::parseTimestampToDate(1431363600));
+//        var_dump(ParserDateTime::parseToTimestamp('12/05/2015'));
+        return;
         if(Yii::$app->user->isGuest) {
             return $this->renderPartial('login');
         } else {

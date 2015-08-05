@@ -62,15 +62,15 @@ $attributes = [
     [
         'attribute'=>'create_date',
         'format'=>'raw',
-        'value'=>date('m/d/Y', $model->create_date),
+        'value'=>date('d/m/Y', $model->create_date),
         'displayOnly'=>true
     ],
-    [
-        'attribute'=>'tag',
-        'format'=>'raw',
-        'value'=>$model->tag,
-        'displayOnly'=>true
-    ],
+//    [
+//        'attribute'=>'tag',
+//        'format'=>'raw',
+//        'value'=>$model->tag,
+//        'displayOnly'=>true
+//    ],
     [
         'attribute'=>'description',
         'format'=>'raw',

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -57,21 +58,19 @@ class CustomerSearch extends Customer
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'dob' => date_create_from_format('d/m/Y', $this->dob) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->dob)->format('m'), date_create_from_format('d/m/Y', $this->dob)->format('d'), date_create_from_format('d/m/Y', $this->dob)->format('y')) : $this->dob,
-            'created_at' => date_create_from_format('d/m/Y', $this->created_at) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->created_at)->format('m'), date_create_from_format('d/m/Y', $this->created_at)->format('d'), date_create_from_format('d/m/Y', $this->created_at)->format('y')) : $this->created_at,
+            'dob' => ParserDateTime::parseToTimestamp($this->dob) ?
+                ParserDateTime::parseToTimestamp($this->dob) : $this->dob,
+            'created_at' => ParserDateTime::parseToTimestamp($this->created_at) ?
+                ParserDateTime::parseToTimestamp($this->created_at) : $this->created_at,
             'updated_at' => $this->updated_at,
             'status' => $this->status,
             'address_id' => $this->address_id,
         ]);
 
-//        return var_dump(date('m/d/Y H:i:s',$this->dob));
-
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'avatar', $this->avatar])
-            ->andFilterWhere(['like', 'gender', $this->gender])
+            ->andFilterWhere(['=', 'gender', $this->gender])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token]);
 

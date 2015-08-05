@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -62,10 +63,8 @@ class OfferSearch extends Offer
             'id' => $this->id,
 //            'product_id' => $this->product_id,
             'discount' => $this->discount,
-            'start_date' => date_create_from_format('d/m/Y', $this->start_date) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->start_date)->format('m'), date_create_from_format('d/m/Y', $this->start_date)->format('d'), date_create_from_format('d/m/Y', $this->start_date)->format('y')) : $this->start_date,
-            'end_date' => date_create_from_format('d/m/Y', $this->end_date) ?
-                mktime(null,null,null, date_create_from_format('d/m/Y', $this->end_date)->format('m'), date_create_from_format('d/m/Y', $this->end_date)->format('d'), date_create_from_format('d/m/Y', $this->end_date)->format('y')) : $this->end_date,
+            'start_date' => ParserDateTime::parseToTimestamp($this->start_date) ? ParserDateTime::parseToTimestamp($this->start_date) : $this->start_date,
+            'end_date' => ParserDateTime::parseToTimestamp($this->end_date) ? ParserDateTime::parseToTimestamp($this->end_date) : $this->end_date,
             'offer.active' => $this->active,
         ]);
 

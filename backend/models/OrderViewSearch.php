@@ -18,8 +18,9 @@ class OrderViewSearch extends OrderView
     public function rules()
     {
         return [
-            [['order_id', 'order_date', 'receiving_date', 'order_status_id'], 'integer'],
-            [['full_name', 'email', 'phone_number', 'address'], 'safe'],
+            [['order_id', 'receiving_date', 'order_status_id'], 'integer'],
+            [['shipping_fee'], 'number'],
+            [['description', 'full_name', 'email', 'phone_number', 'address', 'order_date'], 'safe'],
         ];
     }
 
@@ -59,10 +60,12 @@ class OrderViewSearch extends OrderView
             'order_id' => $this->order_id,
             'order_date' => $this->order_date,
             'receiving_date' => $this->receiving_date,
+            'shipping_fee' => $this->shipping_fee,
             'order_status_id' => $this->order_status_id,
         ]);
 
-        $query->andFilterWhere(['like', 'full_name', $this->full_name])
+        $query->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'full_name', $this->full_name])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'phone_number', $this->phone_number])
             ->andFilterWhere(['like', 'address', $this->address]);

@@ -74,7 +74,7 @@ class OrderStatusController extends Controller
                     'title' => Yii::t('app', 'Create Order Status')
                 ]);
 
-                Logger::log(Logger::INFO, Yii::t('app', 'Add Order status success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Order status success'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -90,7 +90,7 @@ class OrderStatusController extends Controller
                     'title' => Yii::t('app', 'Create Order Status')
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add Order status error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order status Record saved error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Order status error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order status Record saved error.'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -123,7 +123,7 @@ class OrderStatusController extends Controller
                     'message' => Yii::t('app', 'OrderStatus_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Order Status')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Order status success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Order status success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -134,7 +134,7 @@ class OrderStatusController extends Controller
                     'title' => Yii::t('app', 'Update Order Status')
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Order status error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order status has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Order status error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Order status has been edit error.'), Yii::$app->user->identity->email);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -157,7 +157,7 @@ class OrderStatusController extends Controller
     {
         $this->findModel($id)->delete();
 
-        Logger::log(Logger::INFO, Yii::t('app', 'OrderStatus_Delete_Success_Msg'), Yii::$app->getUser()->id);
+        Logger::log(Logger::INFO, Yii::t('app', 'OrderStatus_Delete_Success_Msg'), Yii::$app->user->identity->email);
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => 'success',

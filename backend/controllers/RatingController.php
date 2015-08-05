@@ -56,10 +56,10 @@ class RatingController extends Controller
                 $oldModel = $model->oldAttributes;
                 if($model->save()) {
                     $message = '';
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update Rating'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Rating'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->user->identity->email);
                 }
                 $output = '';
 
@@ -106,7 +106,7 @@ class RatingController extends Controller
                     'message' => Yii::t('app', 'Rating_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Rating'),
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Add Rating success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Rating success'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -122,7 +122,7 @@ class RatingController extends Controller
                     'title' => Yii::t('app', 'Create Rating'),
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save rating.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save rating.'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -156,7 +156,7 @@ class RatingController extends Controller
                     'message' => Yii::t('app', 'Rating_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Rating success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Rating success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -167,7 +167,7 @@ class RatingController extends Controller
                     'title' => Yii::t('app', 'Update Rating'),
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Rating error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Rating has been edit error.'), Yii::$app->user->identity->email);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -190,7 +190,7 @@ class RatingController extends Controller
     {
         $this->findModel($id)->delete();
 
-        Logger::log(Logger::INFO, Yii::t('app', 'Delete rating success'), Yii::$app->getUser()->id);
+        Logger::log(Logger::INFO, Yii::t('app', 'Delete rating success'), Yii::$app->user->identity->email);
 
         Yii::$app->getSession()->setFlash('success', [
             'type' => 'success',

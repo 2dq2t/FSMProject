@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
+use backend\components\ParserDateTime;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
@@ -85,11 +86,11 @@ class CustomerController extends Controller
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
 
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update Customer'), Yii::$app->getUser()->id, $model->oldAttributes, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Customer'), Yii::$app->user->identity->email, $model->oldAttributes, $model->attributes);
 
                 } else {
                     $message = $model->errors;
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Customer') . ' ' . current($model->getFirstErrors()), Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Customer') . ' ' . current($model->getFirstErrors()), Yii::$app->user->identity->email);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -152,9 +153,8 @@ class CustomerController extends Controller
                         $model->avatar = Yii::$app->security->generateRandomString().".{$ext}";
                     }
 
-                    $model->created_at = time();
-                    $model->dob = $model->dob && date_create_from_format('d/m/Y', $model->dob) ?
-                        mktime(null,null,null, date_create_from_format('d/m/Y', $model->dob)->format('m'), date_create_from_format('d/m/Y', $model->dob)->format('d'), date_create_from_format('d/m/Y', $model->dob)->format('y')) : time();
+                    $model->created_at = ParserDateTime::getTimeStamp();
+                    $model->dob = ParserDateTime::parseToTimestamp($model->dob);
                     $model->address_id = $address->id;
                     $model->guest_id = $guest->id;
                     if ($model->save()) {
@@ -177,9 +177,9 @@ class CustomerController extends Controller
                             'title' => Yii::t('app', 'Create Customer'),
                         ]);
 
-                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer address success'), Yii::$app->getUser()->id);
-                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer guest success'), Yii::$app->getUser()->id);
-                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer success'), Yii::$app->getUser()->id);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer address success'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer guest success'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create customer success'), Yii::$app->user->identity->email);
 
                         switch (Yii::$app->request->post('action', 'save')) {
                             case 'next':
@@ -208,7 +208,7 @@ class CustomerController extends Controller
 
                         $model->password = null;
 
-                        Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->getUser()->id);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->user->identity->email);
 
                         return $this->render('create', [
                             'model' => $model,
@@ -230,7 +230,7 @@ class CustomerController extends Controller
 
                     $model->password = null;
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors())  ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors())  ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->user->identity->email);
 
                     return $this->render('create', [
                         'model' => $model,
@@ -260,7 +260,7 @@ class CustomerController extends Controller
 
                 $model->password = null;
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Create customer error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not add cusomer'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Create customer error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not add cusomer'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -295,11 +295,7 @@ class CustomerController extends Controller
         $district = District::find()->where(['id' => $address->district_id])->one();
         $city = City::find()->where(['id'=>$district->city_id])->one();
 
-        if ($model->dob) {
-            $model->dob = date('d/m/Y', $model->dob);
-        } else {
-            $model->dob = NULL;
-        }
+
 
         // Load all file from post to model
         if ($model->load(Yii::$app->request->post())
@@ -330,9 +326,7 @@ class CustomerController extends Controller
                         $model->avatar = $model->oldAttributes['avatar'];
                     }
 
-                    $model->dob = $model->dob && date_create_from_format('d/m/Y', Yii::$app->request->post('Customer')['dob']) ?
-                        mktime(null,null,null, date_create_from_format('d/m/Y', Yii::$app->request->post('Customer')['dob'])->format('m'), date_create_from_format('d/m/Y', Yii::$app->request->post('Customer')['dob'])->format('d'), date_create_from_format('d/m/Y', Yii::$app->request->post('Customer')['dob'])->format('y')) : $model->oldAttributes['dob'];
-
+                    $model->dob = ParserDateTime::parseToTimestamp(Yii::$app->request->post('Customer')['dob']);
 
                     if (Yii::$app->request->post('Customer')['password'] === '') {
                         $model->password = $model->oldAttributes['password'];
@@ -340,7 +334,7 @@ class CustomerController extends Controller
 
                     $model->gender = Yii::$app->request->post('Customer')['gender'] ? Yii::$app->request->post('Customer')['gender'] : $model->oldAttributes['gender'];
 
-                    $model->updated_at = time();
+                    $model->updated_at = ParserDateTime::getTimeStamp();
 
                     if ($model->save()) {
 
@@ -362,9 +356,9 @@ class CustomerController extends Controller
                             'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
-                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer address success'), Yii::$app->getUser()->id, $oldAddress, $address->attributes);
-                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer guest success'), Yii::$app->getUser()->id, $oldGuest, $guest->attributes);
-                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer address success'), Yii::$app->user->identity->email, $oldAddress, $address->attributes);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer guest success'), Yii::$app->user->identity->email, $oldGuest, $guest->attributes);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Update customer success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
 
                         return $this->redirect(['index']);
                     } else {
@@ -386,7 +380,7 @@ class CustomerController extends Controller
                             'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
-                        Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->getUser()->id);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->user->identity->email);
 
                         return $this->render('update', [
                             'model' => $model,
@@ -398,6 +392,12 @@ class CustomerController extends Controller
                 } else {
                     $transaction->rollBack();
 
+                    if ($model->dob) {
+                        $model->dob = date('d/m/Y', $model->dob);
+                    } else {
+                        $model->dob = NULL;
+                    }
+
                     Yii::$app->getSession()->setFlash('error', [
                         'type' => 'error',
                         'duration' => 0,
@@ -406,7 +406,7 @@ class CustomerController extends Controller
                         'title' => Yii::t('app', 'Update Customer'),
                     ]);
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors()) ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors()) ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->user->identity->email);
 
                     return $this->render('update', [
                         'model' => $model,
@@ -434,7 +434,7 @@ class CustomerController extends Controller
                     'title' => Yii::t('app', 'Update Customer'),
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: '). $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Update Customer error'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: '). $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Update Customer error'), Yii::$app->user->identity->email);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -444,6 +444,11 @@ class CustomerController extends Controller
                 ]);
             }
         } else {
+            if ($model->dob) {
+                $model->dob = date('d/m/Y', $model->dob);
+            } else {
+                $model->dob = NULL;
+            }
 
             return $this->render('update', [
                 'model' => $model,
@@ -473,7 +478,7 @@ class CustomerController extends Controller
                 'title' => Yii::t('app', 'Delete Customer'),
             ]);
 
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete cutomer success'), Yii::$app->getUser()->id);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete cutomer success'), Yii::$app->user->identity->email);
 
         } else {
             Yii::$app->getSession()->setFlash('error', [
@@ -484,7 +489,7 @@ class CustomerController extends Controller
                 'title' => Yii::t('app', 'Delete Customer'),
             ]);
 
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete customer error: ') . current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app', 'Could not delete customer'),Yii::$app->getUser()->id);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete customer error: ') . current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app', 'Could not delete customer'),Yii::$app->user->identity->email);
         }
 
 

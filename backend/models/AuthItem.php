@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 use yii\helpers\Json;
 use yii\rbac\Item;
@@ -188,8 +189,9 @@ class AuthItem extends \yii\db\ActiveRecord
             [
                 'name' => $this->name,
                 'type' => $this->type,
-                'description' => $this->description,
+                'description' => !empty(trim($this->description)) ? trim($this->description) : null,
                 'ruleName' => trim($this->rule_name) ? trim($this->rule_name) : null,
+                'createdAt' => ParserDateTime::getTimeStamp()
             ]
         );
 
@@ -213,7 +215,7 @@ class AuthItem extends \yii\db\ActiveRecord
         $item = new Item();
         $item->name = $this->name;
         $item->type = $this->type;
-        $item->description = $this->description;
+        $item->description = !empty(trim($this->description)) ? trim($this->description) : null;
         $item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
         Yii::$app->getAuthManager()->update($this->oldName, $item);
         $children = Yii::$app->getAuthManager()->getChildren($item->name);

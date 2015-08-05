@@ -75,10 +75,10 @@ class CategoryController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update Category success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update Category success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->user->identity->email);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -128,7 +128,7 @@ class CategoryController extends Controller
                     'message' => Yii::t('app', 'Category_Add_Success_Msg.'),
                     'title' => Yii::t('app', 'Create Category')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Add Category success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Category success'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -144,7 +144,7 @@ class CategoryController extends Controller
                     'title' => Yii::t('app', 'Create Category')
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save category.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save category.'), Yii::$app->user->identity->email);
                 return $this->render('create', [
                     'model' => $model,
                 ]);
@@ -176,7 +176,7 @@ class CategoryController extends Controller
                     'message' => Yii::t('app', 'Category_Update_Success_Msg.'),
                     'title' => Yii::t('app', 'Update Category')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Category success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Category success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
                 Yii::$app->getSession()->setFlash('error', [
@@ -187,7 +187,7 @@ class CategoryController extends Controller
                     'title' => Yii::t('app', 'Update Category')
                 ]);
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category has been edit error.'), Yii::$app->user->identity->email);
 
                 return $this->render('update', [
                     'model' => $model,
@@ -211,7 +211,7 @@ class CategoryController extends Controller
         $category = $this->findModel($id);
         $category->active = Category::STATUS_INACTIVE;
         if($category->save()){
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete category success'), Yii::$app->getUser()->id);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete category success'), Yii::$app->user->identity->email);
             Yii::$app->getSession()->setFlash('success', [
                 'type' => 'success',
                 'duration' => 3000,
@@ -220,7 +220,7 @@ class CategoryController extends Controller
                 'title' => Yii::t('app', 'Delete Category')
             ]);
         } else {
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete category error: ') . current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'), Yii::$app->getUser()->id);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete category error: ') . current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'), Yii::$app->user->identity->email);
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
                 'duration' => 0,

@@ -2,14 +2,18 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
+use backend\components\ParserDateTime;
 use backend\models\Model;
 use backend\models\OrderStatus;
+use backend\models\OrderView;
 use backend\models\OrderViewSearch;
 use common\models\Address;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
 use common\models\Image;
+use common\models\Offer;
 use common\models\OrderDetails;
 use common\models\Product;
 use common\models\Unit;
@@ -35,7 +39,8 @@ class OrderController extends Controller
                     'delete' => ['post'],
                     'confirm' => ['post'],
                     'delivered' => ['post'],
-                    'cancel' => ['post']
+                    'cancel' => ['post'],
+                    'invoice-print' => ['post']
                 ],
             ],
 //            'access' => [
@@ -85,9 +90,6 @@ class OrderController extends Controller
         $city = new City();
         $order_details = [new OrderDetails()];
 
-//        $model->order_date = date('m/d/Y', $model->order_date);
-//        $model->receiving_date = date('m/d/Y', $model->receiving_date);
-
         // load post data to model
         if ($model->load(Yii::$app->request->post()) &&
             $guest->load(Yii::$app->request->post()) &&
@@ -106,34 +108,47 @@ class OrderController extends Controller
                     $model->guest_id = $guest->id;
 
                     // convert string date time to timestamp
-                    $model->order_date = strtotime($model->order_date);
-                    $model->receiving_date = strtotime($model->receiving_date);
+                    $model->order_date = ParserDateTime::parseToTimestamp($model->order_date);
+                    $model->receiving_date = ParserDateTime::parseToTimestamp($model->receiving_date);
 
                     // count tax amount and net amount
                     $net_amount = 0;
                     $tax_amount = 0;
 
                     foreach ($order_details as $order_detail) {
-                        $net_amount += Product::find()->where(['id' => $order_detail->product_id])->one()['price']
-                            * $order_detail->quantity;
-                        $tax_amount += Product::find()->where(['id' => $order_detail->product_id])->one()['price']
-                            * $order_detail->quantity * (1-Product::find()->where(['id' => $order_detail->product_id])->one()['tax']);
+                        $product_tax = Product::find()->where(['id' => $order_detail->product_id])->one()['tax'];
+                        $product_price = Product::find()->where(['id' => $order_detail->product_id])->one()['price'];
+
+                        $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
+                        $today = date("d-m-Y");
+                        $offer_start_date = date("d-m-Y", $offer['start_date']);
+                        $offer_end_date = date("d-m-Y", $offer['end_date']);
+                        if ($offer_start_date <= $today && $today <= $offer_end_date) {
+                            $product_offer = $offer['discount'];
+                        } else {
+                            $product_offer = 0;
+                        }
+
+                        $product_price = $product_price * (1 - $product_offer / 100);
+
+                        $net_amount += $order_detail->quantity * ($product_price - ($product_price * ($product_tax/100)));
+                        $tax_amount += $order_detail->quantity * $product_price * $product_tax/100;
                     }
 
                     $model->net_amount = $net_amount;
                     $model->tax_amount = $tax_amount;
 
                     // set field value for each order_detail
-                    foreach($order_details as $i => $order_detail){
-                        $product = Product::find()->where(['id' => $order_detail['product_id']])->one();
-                        $order_detail['product_image'] = Image::find()->select('path')->where(['product_id' => $order_detail['product_id']])->one()['path'];
-                        $unit_id = $product['unit_id'];
-                        $order_detail['product_unit'] = Unit::find()->select('name')->where(['active' => 1, 'id' => $unit_id])->one()['name'];
-                        $order_detail['sell_price'] = $product['price'];
-                        $order_detail['product_total'] = $order_detail['quantity'] * $product['price'];
-                        $order_detail['max_quantity'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['quantity_in_stock'] - Product::find()->where(['id' => $order_detail['product_id']])->one()['sold'];
-                        $order_detail['tax'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['tax'];
-                    }
+//                    foreach($order_details as $i => $order_detail){
+//                        $product = Product::find()->where(['id' => $order_detail['product_id']])->one();
+//                        $order_detail['product_image'] = Image::find()->select('path')->where(['product_id' => $order_detail['product_id']])->one()['path'];
+//                        $unit_id = $product['unit_id'];
+//                        $order_detail['product_unit'] = Unit::find()->select('name')->where(['active' => 1, 'id' => $unit_id])->one()['name'];
+//                        $order_detail['sell_price'] = $product['price'];
+//                        $order_detail['product_total'] = $order_detail['quantity'] * $product['price'];
+//                        $order_detail['max_quantity'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['quantity_in_stock'] - Product::find()->where(['id' => $order_detail['product_id']])->one()['sold'];
+//                        $order_detail['tax'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['tax'];
+//                    }
 
                     $errors = [];
                     if ($model->save()) {
@@ -157,9 +172,19 @@ class OrderController extends Controller
 
                                 $product_id[] = $order_detail->product_id;
 
+                                $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
+                                $today = date("d-m-Y");
+                                $offer_start_date = date("d-m-Y", $offer['start_date']);
+                                $offer_end_date = date("d-m-Y", $offer['end_date']);
+                                if ($offer_start_date <= $today && $today <= $offer_end_date) {
+                                    $product_offer = $offer['discount'];
+                                } else {
+                                    $product_offer = 0;
+                                }
+
                                 $order_detail->order_id = $model->id;
                                 $order_detail->sell_price = Product::find()->where(['id' => $order_detail->product_id])->one()['price'];
-                                $order_detail->discount = 1;
+                                $order_detail->discount = $product_offer;
 
 
                                 if (! ($flag = $order_detail->save())) {
@@ -180,6 +205,11 @@ class OrderController extends Controller
                                 'message' => Yii::t('app', 'Add Order successful.'),
                                 'title' => Yii::t('app', 'Add Order'),
                             ]);
+
+                            Logger::log(Logger::INFO, Yii::t('app', 'Create address success.'), Yii::$app->user->identity->email);
+                            Logger::log(Logger::INFO, Yii::t('app', 'Create guest success.'), Yii::$app->user->identity->email);
+                            Logger::log(Logger::INFO, Yii::t('app', 'Create order success.'), Yii::$app->user->identity->email);
+                            Logger::log(Logger::INFO, Yii::t('app', 'Create order details success.'), Yii::$app->user->identity->email);
 
                             switch (Yii::$app->request->post('action', 'save')) {
                                 case 'next':
@@ -207,6 +237,8 @@ class OrderController extends Controller
                                 'message' => !empty($errors) ? $errors[0] : current($model->getFirstErrors()),
                                 'title' => Yii::t('app', 'Add Order'),
                             ]);
+
+                            Logger::log(Logger::ERROR, Yii::t('app', 'Create order errors:') .!empty($errors) ? $errors[0] : current($model->getFirstErrors()) , Yii::$app->user->identity->email);
 
                             return $this->render('create', [
                                 'model' => $model,
@@ -237,6 +269,8 @@ class OrderController extends Controller
                             'title' => Yii::t('app', 'Add Order'),
                         ]);
 
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Create order errors:') .!empty($errors) ? $errors[0] : current($model->getFirstErrors()) , Yii::$app->user->identity->email);
+
                         return $this->render('create', [
                             'model' => $model,
                             'guest' => $guest,
@@ -254,9 +288,11 @@ class OrderController extends Controller
                         'type' => 'error',
                         'duration' => 0,
                         'icon' => 'fa fa-plus',
-                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || 'Could not be save the address or guest.',
+                        'message' => current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || Yii::t('app', 'Could not be save the address or guest.'),
                         'title' => Yii::t('app', 'Add Order'),
                     ]);
+
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Create address or guest errors:') .current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || Yii::t('app', 'Could not be save the address or guest.') , Yii::$app->user->identity->email);
 
                     return $this->render('create', [
                         'model' => $model,
@@ -286,6 +322,8 @@ class OrderController extends Controller
                     'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save order.Please try again.'),
                     'title' => Yii::t('app', 'Add Order'),
                 ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Create order errors: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not save order.Please try again.'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -318,14 +356,17 @@ class OrderController extends Controller
                 'message' => Yii::t('app', 'Confirm order successful!'),
                 'title' => Yii::t('app', 'Confirm Order'),
             ]);
+
+            Logger::log(Logger::INFO, Yii::t('app', 'Confirm order successful.'), Yii::$app->user->identity->email);
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Confirm oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Confirm oder failure. Please try again later.'),
                 'title' => Yii::t('app', 'Confirm Order'),
             ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Confirm order errors:') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Confirm oder failure. Please try again later.'), Yii::$app->user->identity->email);
         }
 
         return $this->redirect(['index']);
@@ -343,6 +384,7 @@ class OrderController extends Controller
                 'message' => Yii::t('app', 'Delivered order successful!'),
                 'title' => Yii::t('app', 'Delivered Order'),
             ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delivered order successful.'), Yii::$app->user->identity->email);
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
@@ -351,6 +393,7 @@ class OrderController extends Controller
                 'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder failure. Please try again later/'),
                 'title' => Yii::t('app', 'Delivered Order'),
             ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delivered order confirm errors:'). current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder confirm failure. Please try again later.'), Yii::$app->user->identity->email);
         }
 
         return $this->redirect(['index']);
@@ -368,17 +411,56 @@ class OrderController extends Controller
                 'message' => Yii::t('app', 'Cancel order successful!'),
                 'title' => Yii::t('app', 'Cancel Order'),
             ]);
+            Logger::log(Logger::INFO, Yii::t('app', 'Cancel order successful.'), Yii::$app->user->identity->email);
         } else {
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Cancel oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Cancel oder failure. Please try again later.'),
                 'title' => Yii::t('app', 'Cancel Order'),
             ]);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Cancel order errors:'). current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Cancel oder failure. Please try again later.'), Yii::$app->user->identity->email);
         }
 
         return $this->redirect(['index']);
+    }
+
+    public function actionUpdateDescription($order_id)
+    {
+        if (Yii::$app->request->post()) {
+            $model = $this->findModel($order_id);
+            $model->description = Yii::$app->request->post('OrderView')['description'];
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-check',
+                    'message' => Yii::t('app', 'Cancel order successful!'),
+                    'title' => Yii::t('app', 'Update order description'),
+                ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update order description successful.'), Yii::$app->user->identity->email);
+            } else {
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-check',
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update oder description failure. Please try again later.'),
+                    'title' => Yii::t('app', 'Update order description'),
+                ]);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update order description errors:'). current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update oder description failure. Please try again later.'), Yii::$app->user->identity->email);
+            }
+
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionInvoicePrint()
+    {
+        if (Yii::$app->request->post()) {
+
+            return $this->renderPartial('_invoice');
+        }
     }
 
     /**

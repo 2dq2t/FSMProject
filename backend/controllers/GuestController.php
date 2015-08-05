@@ -67,7 +67,7 @@ class GuestController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Logger::log(Logger::INFO, Yii::t('app', 'Add Guest success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add Guest success'), Yii::$app->user->identity->email);
                 Yii::$app->getSession()->setFlash('success', [
                     'type' => 'success',
                     'duration' => 3000,
@@ -82,7 +82,7 @@ class GuestController extends Controller
                         return $this->redirect(['index']);
                 }
             } else {
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest Record saved error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest Record saved error.'), Yii::$app->user->identity->email);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -123,10 +123,10 @@ class GuestController extends Controller
                     'title' => Yii::t('app', 'Update Guest')
                 ]);
 
-                Logger::log(Logger::INFO, Yii::t('app', 'Update Guest success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update Guest success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Guest error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Guest has been edit error.'), Yii::$app->user->identity->email);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,

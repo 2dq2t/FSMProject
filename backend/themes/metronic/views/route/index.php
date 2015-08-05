@@ -39,9 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-md-12">
                                 <div class="col-lg-5">
                                     <?= Yii::t('app', 'Avaliable') ?>:
-                                    <div class="input-group">
-                                    <input id="search-avaliable" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>">
-                                    <a href="#" id="btn-refresh" class="input-group-addon"><span class="glyphicon glyphicon-refresh"></span></a></div><br>
+                                    <input id="search-avaliable" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>"><br>
                                     <select id="list-avaliable" class="form-control" multiple size="20" style="width: 100%">
                                     </select>
                                 </div>

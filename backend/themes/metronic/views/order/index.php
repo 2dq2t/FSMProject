@@ -157,7 +157,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'containerOptions' => ['style'=>'overflow: auto'],
         'toolbar' =>  [
             ['content'=>
-                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['order/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
+                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['order/index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset Grid']).
+                Html::button('<i class="glyphicon glyphicon-print"></i> ' . Yii::t('app', 'Invoice'), ['class' => 'btn btn-success', 'id' => 'print_invoice', 'form' => 'invoice-print', 'type' => 'submit'])
             ],
             '{toggleData}',
             '{export}',
@@ -169,6 +170,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'enablePushState' => false
             ],
         ],
+        'options' => [
+            'id' => 'order-gridview'
+        ],
         'bordered' => true,
         'striped' => false,
         'condensed' => false,
@@ -178,8 +182,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => $this->title,
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success'])
         ],
     ]); ?>
+
+    <?php $form = \yii\widgets\ActiveForm::begin(['id' => 'invoice-print', 'options' => ['target'=> '_blank'], 'action' => ['order/invoice-print']]); ?>
+        <input type="hidden" name="ids" id="ids"/>
+    <?php \yii\widgets\ActiveForm::end(); ?>
+
+    <?php
+
+    $js = <<<SCRIPT
+        $("#print_invoice").click(function() {
+                var ids = $("#order-gridview").yiiGridView("getSelectedRows");
+
+                if (!$.isEmptyObject(ids)) {
+                    $('input[name=ids]').val(ids);
+                }
+        });
+SCRIPT;
+
+    $this->registerJs($js);
+
+    ?>
 
 </div>

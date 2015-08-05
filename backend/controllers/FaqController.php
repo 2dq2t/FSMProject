@@ -79,10 +79,10 @@ class FaqController extends Controller
                     $output = Html::tag(
                         'span', Yii::t('app', $value), ['class' => 'label ' . $label_class]
                     );
-                    Logger::log(Logger::INFO, Yii::t('app', 'Update FAQs success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Update FAQs success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 } else {
                     $message = $model->errors;
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update FAQs error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->getUser()->id);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update FAQs error') . ' ' . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : '', Yii::$app->user->identity->email);
                 }
 
                 $out = Json::encode(['output'=>$output, 'message'=>$message]);
@@ -129,7 +129,7 @@ class FaqController extends Controller
                     'message' => Yii::t('app', 'FAQs_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create FAQs')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Add FAQs success'), Yii::$app->getUser()->id);
+                Logger::log(Logger::INFO, Yii::t('app', 'Add FAQs success'), Yii::$app->user->identity->email);
                 switch (Yii::$app->request->post('action', 'save')) {
                     case 'next':
                         return $this->redirect(['create']);
@@ -137,7 +137,7 @@ class FaqController extends Controller
                         return $this->redirect(['index']);
                 }
             } else {
-                Logger::log(Logger::ERROR, Yii::t('app', 'Add FAQs error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'FAQs Record saved error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Add FAQs error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'FAQs Record saved error.'), Yii::$app->user->identity->email);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -177,10 +177,10 @@ class FaqController extends Controller
                     'message' => Yii::t('app', 'FAQs_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update FAQs')
                 ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Update FAQs success'), Yii::$app->getUser()->id, $oldModel, $model->attributes);
+                Logger::log(Logger::INFO, Yii::t('app', 'Update FAQs success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
                 return $this->redirect(['index']);
             } else {
-                Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'FAQs has been edit error.'), Yii::$app->getUser()->id);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Update Category error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'FAQs has been edit error.'), Yii::$app->user->identity->email);
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -211,7 +211,7 @@ class FaqController extends Controller
         $faq = $this->findModel($id);
         $faq->active = Faq::STATUS_INACTIVE;
         if ($faq->save()) {
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete faqs success'), Yii::$app->getUser()->id);
+            Logger::log(Logger::INFO, Yii::t('app', 'Delete faqs success'), Yii::$app->user->identity->email);
             Yii::$app->getSession()->setFlash('success', [
                 'type' => 'success',
                 'duration' => 3000,
@@ -220,7 +220,7 @@ class FaqController extends Controller
                 'title' => Yii::t('app', 'Delete FAQs')
             ]);
         } else {
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete faqs error: ') . current($faq->getFirstErrors()) ? current($faq->getFirstErrors()) : Yii::t('app', 'Faqs delete error.'), Yii::$app->getUser()->id);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete faqs error: ') . current($faq->getFirstErrors()) ? current($faq->getFirstErrors()) : Yii::t('app', 'Faqs delete error.'), Yii::$app->user->identity->email);
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
                 'duration' => 3000,
