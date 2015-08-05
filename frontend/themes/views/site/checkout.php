@@ -83,7 +83,7 @@ require('_header.php');
                                         <h2><?= Yii::t('app', 'Checkout Login') ?></h2>
 
                                         <p><?= Yii::t('app', 'Checkout ReturningCustomer') ?></p>
-
+                                        <?php if(!empty($modelLogin)):?>
                                         <?php $form = yii\bootstrap\ActiveForm::begin(['id' => 'form-login', 'method' => 'post']); ?>
                                         <div class="form-group">
                                             <label class="control-label"
@@ -102,7 +102,7 @@ require('_header.php');
                                         </div>
                                         <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>"
                                                class="btn btn-primary"/>
-                                        <?php yii\bootstrap\ActiveForm::end(); ?>
+                                        <?php yii\bootstrap\ActiveForm::end(); endif?>
                                     </div>
                                 <?php } else { ?>
                                     <div class="col-sm-12"> <?= Yii::t('app', 'Checkout Step1 Customer') ?></div>
@@ -116,9 +116,10 @@ require('_header.php');
                     <div class="panel-heading">
                         <h4 class="panel-title"><a href="#collapse-payment-address" data-toggle="collapse"
                                                    data-parent="#accordion"
-                                                   class="accordion-toggle"><?= Yii::t('app', 'Checkout Step2') ?> <i
-                                    class="fa fa-caret-down"></i></a></h4>
+                                                   class="accordion-toggle"><?= Yii::t('app', 'Checkout Step2') ?><?php if(empty($hideStep2)) echo "<i
+                                    class='fa fa-caret-down'></i>";?> </a></h4>
                     </div>
+                    <?php if(!empty($modelGuest)):?>
                     <div class="panel-collapse collapse <?php if (!empty($continueStep2)) echo $continueStep2; ?>"
                          id="collapse-payment-address" style="height: auto;">
                         <div class="panel-body">
@@ -362,6 +363,7 @@ require('_header.php');
                         </div>
                     </div>
                 </div>
+                <?php endif ?>
             </div>
         </div>
     </div>

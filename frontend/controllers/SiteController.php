@@ -24,10 +24,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use yii\base\Exception;
 use yii\base\InvalidParamException;
-use yii\base\Model;
 use yii\data\Pagination;
 use yii\db\Query;
-use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -558,12 +556,12 @@ class SiteController extends Controller
             } catch (\mysqli_sql_exception $ex) {
                 $json['error'] = Yii::t('app', 'RemoveWishListMsg02');
             }
-        } else
-            $json['info'] = Yii::t('app', 'RemoveWishListMsg04');
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
+        } else {
+            return $this->goHome();
         }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
     }
 
     public function actionAddWishList()
@@ -593,12 +591,11 @@ class SiteController extends Controller
 
                 }
             }
-        } else
-            $json['error'] = Yii::t('app', 'AddWishListMsg04');
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
+        } else {
+            return $this->goHome();
         }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
 
     }
 
@@ -661,13 +658,15 @@ class SiteController extends Controller
                     }
 
 
+                }else{
+                    $json['error'] = Yii::t('app', 'AddtoCartMsg05');
                 }
             }
+        } else {
+            return $this->goHome();
         }
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
-        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
     }
 
     public function actionGetCartInfo()
@@ -694,7 +693,6 @@ class SiteController extends Controller
                     }
                 }
             }
-            Yii::$app->session->set('product_cart', $product_cart);
             Yii::$app->session->set('product_cart', $product_cart);
             return $this->redirect('index.php?r=site/view-cart');
         }
@@ -730,11 +728,13 @@ class SiteController extends Controller
                 $json['success'] = Yii::t('app', 'RemoveCartMsg02');
                 $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
             }
+        } else {
+            return $this->goHome();
         }
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
-        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
+
     }
 
     public function actionCheckVoucher()
@@ -764,11 +764,11 @@ class SiteController extends Controller
                 $json['error'] = Yii::t('app', 'InputVoucherMsg01');
             }
 
+        } else {
+            return $this->goHome();
         }
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
-        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
     }
 
     public function actionCheckout()
@@ -779,9 +779,52 @@ class SiteController extends Controller
         } else {
             $modelLogin = new LoginForm();
             $modelCheckoutInfo = new CheckoutInfo();
-            if (Yii::$app->request->post() && !empty($_POST['account'])) {
+            if (Yii::$app->request->isGet) {
+                if (Yii::$app->user->isGuest) {
+                    $continueStep1 = ' in';
+                    $hideStep2 = 'hide';
+                    return $this->render('checkout', [
+                        'modelLogin' => $modelLogin,
+                        'continueStep1' => $continueStep1,
+                        'hideStep2'=>$hideStep2,
+                    ]);
+                } else {
+                    $customer = (new Query())->select(['guest_id', 'address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
+                    $modelGuest = Guest::find()->where(['id' => $customer['guest_id']])->one();
+                    $modelUpdatedAddress = Address::find()->where(['id' => $customer['address_id']])->one();
+                    if ($modelUpdatedAddress == null) {
+                        $modelAddress = new Address();
+                        $modelCity = new City();
+                        $modelDistrict = new District();
+                        $continueStep2 = ' in';
+
+                        return $this->render('checkout', [
+                            'modelGuest' => $modelGuest,
+                            'modelAddress' => $modelAddress,
+                            'modelDistrict' => $modelDistrict,
+                            'modelCity' => $modelCity,
+                            'continueStep2' => $continueStep2,
+                            'modelCheckoutInfo' => $modelCheckoutInfo,
+                        ]);
+                    } else {
+                        $modelUpdatedDistrict = District::find()->where(['id' => $modelUpdatedAddress->district_id])->one();
+                        $modelUpdatedCity = City::find()->where(['id' => $modelUpdatedDistrict->city_id])->one();
+                        $continueStep2 = ' in';
+
+                        return $this->render('checkout', [
+                            'modelGuest' => $modelGuest,
+                            'modelUpdatedAddress' => $modelUpdatedAddress,
+                            'modelUpdatedDistrict' => $modelUpdatedDistrict,
+                            'modelUpdatedCity' => $modelUpdatedCity,
+                            'continueStep2' => $continueStep2,
+                            'modelCheckoutInfo' => $modelCheckoutInfo,
+                        ]);
+                    }
+                }
+            }
+            else if (Yii::$app->request->post() && !empty($_POST['account'])) {
                 if ($_POST['account'] == 'register')
-                    return $this->actionRegister();
+                    return $this->redirect('index.php?r=site/register');
                 else {
                     $modelGuest = new Guest();
                     $modelAddress = new Address();
@@ -794,7 +837,6 @@ class SiteController extends Controller
                         'modelAddress' => $modelAddress,
                         'modelDistrict' => $modelDistrict,
                         'modelCity' => $modelCity,
-                        'modelLogin' => $modelLogin,
                         'modelCheckoutInfo' => $modelCheckoutInfo,
                         'continueStep2' => $continueStep2,
                     ]);
@@ -814,7 +856,6 @@ class SiteController extends Controller
                         'modelAddress' => $modelAddress,
                         'modelDistrict' => $modelDistrict,
                         'modelCity' => $modelCity,
-                        'modelLogin' => $modelLogin,
                         'continueStep2' => $continueStep2,
                         'modelCheckoutInfo' => $modelCheckoutInfo,
                     ]);
@@ -828,63 +869,11 @@ class SiteController extends Controller
                         'modelUpdatedAddress' => $modelUpdatedAddress,
                         'modelUpdatedDistrict' => $modelUpdatedDistrict,
                         'modelUpdatedCity' => $modelUpdatedCity,
-                        'modelLogin' => $modelLogin,
                         'continueStep2' => $continueStep2,
                         'modelCheckoutInfo' => $modelCheckoutInfo,
                     ]);
                 }
-            } else if (Yii::$app->request->isGet) {
-                if (Yii::$app->user->isGuest) {
-                    $modelGuest = new Guest();
-                    $modelAddress = new Address();
-                    $modelCity = new City();
-                    $modelDistrict = new District();
-                    $continueStep1 = ' in';
-                    return $this->render('checkout', [
-                        'modelGuest' => $modelGuest,
-                        'modelAddress' => $modelAddress,
-                        'modelDistrict' => $modelDistrict,
-                        'modelCity' => $modelCity,
-                        'modelLogin' => $modelLogin,
-                        'continueStep1' => $continueStep1,
-                        'modelCheckoutInfo' => $modelCheckoutInfo,
-                    ]);
-                } else {
-                    $customer = (new Query())->select(['guest_id', 'address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
-                    $modelGuest = Guest::find()->where(['id' => $customer['guest_id']])->one();
-                    $modelUpdatedAddress = Address::find()->where(['id' => $customer['address_id']])->one();
-                    if ($modelUpdatedAddress == null) {
-                        $modelAddress = new Address();
-                        $modelCity = new City();
-                        $modelDistrict = new District();
-                        $continueStep2 = ' in';
-
-                        return $this->render('checkout', [
-                            'modelGuest' => $modelGuest,
-                            'modelAddress' => $modelAddress,
-                            'modelDistrict' => $modelDistrict,
-                            'modelCity' => $modelCity,
-                            'modelLogin' => $modelLogin,
-                            'continueStep2' => $continueStep2,
-                            'modelCheckoutInfo' => $modelCheckoutInfo,
-                        ]);
-                    } else {
-                        $modelUpdatedDistrict = District::find()->where(['id' => $modelUpdatedAddress->district_id])->one();
-                        $modelUpdatedCity = City::find()->where(['id' => $modelUpdatedDistrict->city_id])->one();
-                        $continueStep2 = ' in';
-
-                        return $this->render('checkout', [
-                            'modelGuest' => $modelGuest,
-                            'modelUpdatedAddress' => $modelUpdatedAddress,
-                            'modelUpdatedDistrict' => $modelUpdatedDistrict,
-                            'modelUpdatedCity' => $modelUpdatedCity,
-                            'modelLogin' => $modelLogin,
-                            'continueStep2' => $continueStep2,
-                            'modelCheckoutInfo' => $modelCheckoutInfo,
-                        ]);
-                    }
-                }
-            } else {
+            }  else {
                 /* var_dump(Yii::$app->request->post());*/;
                 if (!empty($_POST['Guest'])) {
                     $transaction = Yii::$app->db->beginTransaction();
@@ -990,14 +979,10 @@ class SiteController extends Controller
                         if (!empty($_POST['updateAddress'])) {
                             $address_data = $_POST['Address'];
                             $address_id = (new Query())->select(['address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
-                            echo $address_id['address_id'];
                             $update_customer_address = Address::find()->where(['id' => $address_id['address_id']])->one();
-                            print_r($update_customer_address);
                             $update_customer_address->detail = $address_data['detail'];
                             $update_customer_address->district_id = $address_data['district_id'];
                             $update_customer_address->update();
-
-
                         }
                         $product_cart = Yii::$app->session->get('product_cart');
                         $total_net_amount = 0;
@@ -1140,14 +1125,10 @@ class SiteController extends Controller
                 }
             }
         } else {
-            $json['error'] = Yii::t('app', 'RatingProductMsg05');
+            return $this->goHome();
         }
-
-
-        if (Yii::$app->request->isAjax) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return [json_encode($json)];
-        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
     }
 
     public function actionLogin()
