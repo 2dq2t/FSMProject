@@ -3,8 +3,7 @@
 use kartik\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'ChangePassInfoLabel');
-require('_header.php');
-
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
 

@@ -6,7 +6,7 @@ $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>

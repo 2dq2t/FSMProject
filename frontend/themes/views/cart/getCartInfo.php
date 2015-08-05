@@ -58,9 +58,9 @@ $product_in_cart = $cart_info['product_in_cart'];
                         </tr>
                     </table>
                     <div class="text-right button-container">
-                        <a href="<?= $baseUrl . "/index.php?r=site/checkout" ?>"
+                        <a href="<?= $baseUrl . "/index.php?r=checkout/checkout" ?>"
                            class="checkout"><strong><?= Yii::t('app', 'CheckoutLabel') ?></strong></a>
-                        <a href="<?= $baseUrl . "/index.php?r=site/view-cart" ?>"
+                        <a href="<?= $baseUrl . "/index.php?r=cart/view-cart" ?>"
                            class="addtocart"><strong><?= Yii::t('app', 'ViewCartLabel') ?></strong></a>
                     </div>
                 </div>

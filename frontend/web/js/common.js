@@ -148,7 +148,7 @@ $(document).ready(function() {
 var cart = {
 	'add': function(product_id, quantity) {
 		$.ajax({
-			url: 'index.php?r=site/add-to-cart',
+			url: 'index.php?r=cart/add-to-cart',
 			type: 'post',
 			data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -174,7 +174,7 @@ var cart = {
 
 					$('html, body').animate({ scrollTop: 0 }, 'slow');
 
-					$('#cart > ul').load('index.php?r=site/get-cart-info ul li');
+					$('#cart > ul').load('index.php?r=cart/get-cart-info ul li');
 
                     setTimeout(function() {
                         $('.alert').remove();
@@ -185,7 +185,7 @@ var cart = {
 	},
 	'remove': function(product_id) {
 		$.ajax({
-			url: 'index.php?r=site/remove-from-cart',
+			url: 'index.php?r=cart/remove-from-cart',
 			type: 'post',
 			data: 'product_id=' + product_id,
 			dataType: 'json',
@@ -198,10 +198,10 @@ var cart = {
 
 				$('#cart-total').html(json['total']);
 
-				if (getURLVar('r') == 'site/view-cart') {
-					location = 'index.php?r=site/view-cart';
+				if (getURLVar('r') == 'cart/view-cart') {
+					location = 'index.php?r=cart/view-cart';
 				} else {
-					$('#cart > ul').load('index.php?r=site/get-cart-info ul li');
+					$('#cart > ul').load('index.php?r=cart/get-cart-info ul li');
 				}
 			}
 		});
@@ -211,7 +211,7 @@ var cart = {
 var wishlist = {
 	'add': function(product_id) {
 		$.ajax({
-			url: 'index.php?r=site/add-wish-list',
+			url: 'index.php?r=wish-list/add-wish-list',
 			type: 'post',
 			data: {product_id: product_id},
 			dataType: 'json',
@@ -239,7 +239,7 @@ var wishlist = {
 	},
 	'remove': function(product_id) {
         $.ajax({
-            url: 'index.php?r=site/remove-wish-list',
+            url: 'index.php?r=wish-list/remove-wish-list',
             type: 'post',
             data: {product_id: product_id},
             dataType: 'json',

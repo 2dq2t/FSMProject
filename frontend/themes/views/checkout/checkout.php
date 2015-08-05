@@ -13,27 +13,27 @@ $baseUrl = Yii::$app->request->baseUrl;
 $this->title = Yii::t('app', 'CheckoutLabel');
 ?>
 <?php
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/view-cart"; ?>"
+            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=cart/view-cart"; ?>"
                title="Danh mục yêu thích"><?= Yii::t('app', 'ShoppingCartLabel') ?></a>
         </li>
         <li>
-            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/checkout"; ?>"
+            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=checkout/checkout"; ?>"
                title="Danh mục yêu thích"><?= Yii::t('app', 'CheckoutLabel') ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">
@@ -97,7 +97,7 @@ require('_header.php');
                                             <?= $form->field($modelLogin, 'password')
                                                 ->label(false)->passwordInput(['placeholder' => Yii::t('app', 'FLoginPassword')]); ?>
                                             <div class="forget-password"><a
-                                                    href="index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
+                                                    href="../site/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
                                                     ?</a></div>
                                         </div>
                                         <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>"

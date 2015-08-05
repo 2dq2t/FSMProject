@@ -7,31 +7,33 @@
  */
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title = Yii::t('app', 'ShoppingCartLabel');
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/view-cart"; ?>"
+            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=cart/view-cart"; ?>"
                title="Giỏ hàng"><?= Yii::t('app', 'ShoppingCartLabel') ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
+            $total_product = $cart_info['total_product'];
+            $total_price = $cart_info['total_price'];
+            $product_in_cart = $cart_info['product_in_cart']
             ?>
         </column>
         <div id="content" class="col-sm-9">
             <h1 id="wish_list"
-                class="page-title"><?= Yii::t('app', 'ShoppingCartLabel') ?><?php if (!Yii::$app->user->isGuest) {
-                    $number_product = Yii::$app->HeaderInfo->getNumberProductWishList(Yii::$app->user->identity->getId());
-                    echo " (" . $number_product . ")";
-                } ?>
+                class="page-title"><?= Yii::t('app', 'ShoppingCartLabel') ?><?php
+                    echo " (" . $total_product . ")";
+                 ?>
             </h1>
             <?php if (empty($product_in_cart)) { ?>
                 <p><?= Yii::t('app', 'ShoppingCart_MSG01') ?></p>
@@ -41,8 +43,7 @@ require('_header.php');
                             class="btn btn-primary"><?= Yii::t('app', 'ContinueShoppingLabel') ?></a></div>
                 </div>
             <?php } else { ?>
-                <form action="<?= $baseUrl . "/index.php?r=site/update-cart" ?>"
-                      method="post" enctype="multipart/form-data">
+
 
                     <div class="table-responsive">
                         <table class="table table-bordered shopping-cart">
@@ -72,6 +73,8 @@ require('_header.php');
                                     </td>
                                     <td class="text-left">
                                         <div class="input-group btn-block" style="max-width: 200px;">
+                                            <form action="<?= $baseUrl . "/index.php?r=cart/update-cart" ?>"
+                                                  method="post" enctype="multipart/form-data">
                                             <input class="form-control" type="number" min="1"
                                                    name="update_cart[<?= $product['product_id'] ?>]"
                                                    value="<?= $product['product_quantity'] ?>">
@@ -89,6 +92,7 @@ require('_header.php');
                                                         class="fa fa-times-circle"></i>
                                                 </button>
                                             </span>
+                                            </form>
                                         </div>
                                     </td>
                                     <td class="text-right"><?php
@@ -103,7 +107,6 @@ require('_header.php');
                             </tbody>
                         </table>
                     </div>
-                </form>
 
 
                 <br>
@@ -125,7 +128,7 @@ require('_header.php');
                             href="<?= $baseUrl ?>"
                             class="btn btn-default"><?= Yii::t('app', 'ContinueShoppingLabel') ?></a></div>
                     <div class="pull-right"><a
-                            href="<?= $baseUrl . "/index.php?r=site/checkout" ?>"
+                            href="<?= $baseUrl . "/index.php?r=checkout/checkout" ?>"
                             class="btn btn-primary"><?= Yii::t('app', 'CheckoutLabel') ?></a></div>
                 </div>
             <?php } ?>

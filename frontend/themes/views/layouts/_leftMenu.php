@@ -10,11 +10,11 @@
     <div class="box">
         <div class="box-heading"><?=Yii::t('app','AccountLabel')?></div>
         <div class="list-group">
-            <a href="index.php?r=site/register"
+            <a href="../site/index.php?r=site/register"
                class="list-group-item"><?=Yii::t('app','RegisterLabel')?></a>
-            <a href="index.php?r=site/login"
+            <a href="../site/index.php?r=site/login"
                class="list-group-item"><?=Yii::t('app','LoginLabel')?></a>
-            <a href="index.php?r=site/request-password-reset"
+            <a href="../site/index.php?r=site/request-password-reset"
                class="list-group-item"><?=Yii::t('app','ForgottenPasswordLabel')?></a>
         </div>
     </div>

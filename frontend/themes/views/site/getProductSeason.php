@@ -6,8 +6,7 @@
  * Time: 3:09 CH
  */
 $this->title = ucwords(Yii::t('app', 'CategoryTitle'));
-?>
-<?php require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
@@ -19,10 +18,10 @@ $this->title = ucwords(Yii::t('app', 'CategoryTitle'));
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="col-sm-9 categorypage">
@@ -126,7 +125,7 @@ $this->title = ucwords(Yii::t('app', 'CategoryTitle'));
                                     </div>
                                     <div class="button-group">
                                         <button type="button" title="<?= Yii::t('app', 'AddToCartLabel') ?>"
-                                                class="addtocart" onclick="cart.add('31');">
+                                                class="addtocart" onclick="cart.add('<?= $product['product_id'] ?>');">
                                             <span><?= Yii::t('app', 'AddToCartLabel') ?></span></button>
 
                                     </div>

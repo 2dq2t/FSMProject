@@ -16,9 +16,9 @@ $(document).ready(function () {
         dupDetector: function (a, b) {
             return a.product_name === b.product_name;
         },
-        prefetch: remoteHost + '/site/prefetch',
+        prefetch: remoteHost + '/search/prefetch',
         remote: {
-            url: remoteHost + 'site/auto-complete&q=%QUERY',
+            url: remoteHost + 'search/auto-complete&q=%QUERY',
             wildcard: '%QUERY'
         }
     });

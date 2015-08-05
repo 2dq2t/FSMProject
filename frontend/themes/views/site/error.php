@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
-<?php require('_header.php');
+<?php echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <div class="row content-subinner">

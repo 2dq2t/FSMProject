@@ -37,7 +37,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                 </script>
                 <div class="header-right">
                     <div  class="col-sm-5 header-search">
-                        <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['site/search']]) ?>
+                        <?php \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => ['search/search-result']]) ?>
                         <!--                            <input type="hidden" name="mode" value="product_name">-->
                         <div class="typeahead">
                             <div id="search" class="u-posRelative input-group">
@@ -56,7 +56,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <?php \yii\widgets\ActiveForm::end(); ?>
                     </div>
                     <div class="col-sm-3 header-cart">
-                        <?php require('getCartInfo.php'); ?>
+                        <?php echo $this->render('/cart/getCartInfo'); ?>
                     </div>
                 </div>
             </div>
@@ -119,10 +119,10 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <ul class="list-inline">
                             <?php if (Yii::$app->user->isGuest): ?>
                                 <li>
-                                    <a href="index.php?r=site/register">Đăng Ký</a>
+                                    <a href="../web/index.php?r=site/register">Đăng Ký</a>
                                 </li>
                                 <li>
-                                    <a href="index.php?r=site/login">Đăng Nhập</a>
+                                    <a href="../web/index.php?r=site/login">Đăng Nhập</a>
                                 </li>
                             <?php else: ?>
                                 <li class="dropdown myaccount"><a
@@ -132,7 +132,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
+                                            <a href="../site/index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
                                         </li>
                                         <li>
                                             <a href="#"><?= Yii::t('app', 'MyOrderLabel') ?></a>
@@ -144,7 +144,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     </ul>
                                 </li>
 
-                                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/get-wish-list"; ?>"
+                                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=wish-list/get-wish-list"; ?>"
                                        id="wishlist-total"
                                        title="Danh mục yêu thích (0)"> <span><?= Yii::t('app', 'WishListLabel') ?><?php if (!Yii::$app->user->isGuest) {
                                                 $number_product = Yii::$app->HeaderInfo->getNumberProductWishList(Yii::$app->user->identity->getId());

@@ -6,23 +6,22 @@
  * Time: 3:09 CH
  */
 $this->title = Yii::t('app', 'ProductTagTitle');
-?>
-<?php require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/product-tag&tag=" . $_GET['tag'] ?>">Tag: <?php $tag = ''; if(isset($_GET['tag'])){ $tag =  $_GET['tag'];echo $tag;} ?> ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-tag&tag=" . $_GET['tag'] ?>">Tag: <?php $tag = ''; if(isset($_GET['tag'])){ $tag =  $_GET['tag'];echo $tag;} ?> ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="col-sm-9 categorypage">
@@ -126,7 +125,7 @@ $this->title = Yii::t('app', 'ProductTagTitle');
                                     </div>
                                     <div class="button-group">
                                         <button type="button" title="<?= Yii::t('app', 'AddToCartLabel') ?>"
-                                                class="addtocart" onclick="cart.add('31');">
+                                                class="addtocart" onclick="cart.add('<?= $product['product_id'] ?>');">
                                             <span><?= Yii::t('app', 'AddToCartLabel') ?></span></button>
 
                                     </div>

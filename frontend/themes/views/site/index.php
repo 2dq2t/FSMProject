@@ -5,9 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 $this->title = Yii::t('app', 'HomeTitle');
 $baseUrl = Yii::$app->request->baseUrl;
-?>
-<?php
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
@@ -84,10 +82,10 @@ require('_header.php');
                     <column id="column-left" class="col-sm-3 hidden-xs">
 
                         <?php
-                        require('_category.php');
-                        echo $this->render('_leftBanner');
-                        require('_specialProduct.php');
-                        require('_bestSeller.php');
+                        echo $this->render('/layouts/_category.php');
+                        echo $this->render('/layouts/_leftBanner');
+                        echo $this->render('/layouts/_specialProduct.php');
+                        echo $this->render('/layouts/_bestSeller.php');
                         ?>
 
                     </column>

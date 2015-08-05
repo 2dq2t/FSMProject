@@ -3,14 +3,12 @@
 use yii\bootstrap\ActiveForm;
 
 $this->title = Yii::t('app', 'LoginLabel');
-
-?>
-<?php require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
 
     <div class="row content-subinner">
-        <?php require('_leftMenu.php'); ?>
+        <?php echo $this->render('//layouts/_leftMenu.php'); ?>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
                 <li><a href="#"><i class="fa fa-home"></i></a></li>

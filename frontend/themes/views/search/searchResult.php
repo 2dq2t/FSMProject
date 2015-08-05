@@ -6,23 +6,23 @@
  * Time: 3:09 CH
  */
 $this->title = Yii::t('app', 'SearchTitle');
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=common/home"><i
+                <li><a href="<?=Yii::$app->request->baseUrl?>"><i
                             class="fa fa-home"></i></a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/search&amp;search=lu">Search</a>
+                <li><a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=search/search-result&q=".$q; ?>">Search</a>
                 </li>
             </ul>
             <h1 class="page-title">Search - <?php echo $q;?></h1>
@@ -75,16 +75,16 @@ require('_header.php');
                         <div class="col-md-3 text-right sort">
                             <select id="input-sort" class="form-control" onchange="location = this.value;">
                                 <option  <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
-                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=site/search&q=".$q ?>"><?= Yii::t('app', 'DefaultLabel') ?>
+                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q ?>"><?= Yii::t('app', 'DefaultLabel') ?>
                                 </option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=site/search&q=".$q. "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q. "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=site/search&q=".$q . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=site/search&q=".$q. "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q. "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=site/search&q=".$q . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
                             </select>
 
                         </div>

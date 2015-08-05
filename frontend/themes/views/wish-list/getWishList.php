@@ -7,25 +7,23 @@
  */
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title = Yii::t('app', 'WishListLabel');
-?>
-<?php
-require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=site/wish-list"; ?>"
+            <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=wish-list/get-wish-list"; ?>"
                title="<?= Yii::t('app', 'WishListLabel') ?>"><?= Yii::t('app', 'WishListLabel') ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="col-sm-9">

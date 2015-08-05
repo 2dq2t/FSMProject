@@ -7,8 +7,7 @@
  */
 $baseUrl = Yii::$app->request->baseUrl;
 $this->title = ucwords($product_detail['name']);
-?>
-<?php require('_header.php');
+echo $this->render('/layouts/_header');
 ?>
 <script>
     (function (d, s, id) {
@@ -22,7 +21,7 @@ $this->title = ucwords($product_detail['name']);
 </script>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
         <li>
             <a href="<?php echo $baseUrl . 'index.php?r=site/view-detail&product=' . $product_detail['name'] ?>"><?php echo ucwords($product_detail['name']) ?></a>
         </li>
@@ -30,10 +29,10 @@ $this->title = ucwords($product_detail['name']);
     <div class="row content-subinner">
         <column id="column-left" class="col-sm-3 hidden-xs">
             <?php
-            require('_category.php');
-            echo $this->render('_leftBanner');
-            require('_specialProduct.php');
-            require('_bestSeller.php');
+            echo $this->render('/layouts/_category.php');
+            echo $this->render('/layouts/_leftBanner');
+            echo $this->render('/layouts/_specialProduct.php');
+            echo $this->render('/layouts/_bestSeller.php');
             ?>
         </column>
         <div id="content" class="productpage col-sm-9">
@@ -272,7 +271,7 @@ $this->title = ucwords($product_detail['name']);
 <script type="text/javascript"><!--
     $('#button-cart').on('click', function () {
         $.ajax({
-            url: 'index.php?r=site/add-to-cart',
+            url: 'index.php?r=cart/add-to-cart',
             type: 'post',
             data: $('#product input[type=\'text\'], #product input[type=\'hidden\']'),
             dataType: 'json',
@@ -298,7 +297,7 @@ $this->title = ucwords($product_detail['name']);
                     $('#cart-total').html(json['total']);
 
 
-                    $('#cart > ul').load('index.php?r=site/get-cart-info ul li');
+                    $('#cart > ul').load('index.php?r=cart/get-cart-info ul li');
 
                     $('html, body').animate({scrollTop: 0}, 'slow');
 
