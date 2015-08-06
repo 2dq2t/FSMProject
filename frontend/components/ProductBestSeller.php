@@ -9,7 +9,7 @@ use yii\db\Query;
  * Date: 06/06/2015
  * Time: 12:10 CH
  */
-class ProductBestSeller extends Component
+class ProductBestSeller
 {
     public function getProductBestSeller()
     {

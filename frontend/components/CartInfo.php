@@ -12,7 +12,7 @@ use Yii;
 use yii\base\Component;
 use yii\db\Query;
 
-class CartInfo extends Component
+class CartInfo
 {
     public function getCartInfo()
     {

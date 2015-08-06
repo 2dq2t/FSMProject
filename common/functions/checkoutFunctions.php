@@ -10,7 +10,7 @@ use yii\base\Component;
 use yii\db\Query;
 use common\models\Voucher;
 
-class checkoutFunctions extends Component {
+class checkoutFunctions {
 
     public function getProductOffer($product_id)
     {

@@ -9,7 +9,7 @@ namespace frontend\components;
 use Yii;
 use yii\base\Component;
 use yii\db\Query;
-class SpecialProduct extends Component{
+class SpecialProduct{
     public function specialProduct(){
 
         //get special product - product has offer

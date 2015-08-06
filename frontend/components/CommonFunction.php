@@ -11,7 +11,7 @@ use yii\db\Query;
  * Date: 06/06/2015
  * Time: 1:23 SA
  */
-class CommonFunction extends Component
+class CommonFunction
 {
     public function custom_shuffle($my_array = array())
     {

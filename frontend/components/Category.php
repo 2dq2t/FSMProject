@@ -9,7 +9,7 @@ namespace frontend\components;
 use Yii;
 use yii\base\Component;
 use yii\db\Query;
-class Category extends Component{
+class Category{
     public function getCategory(){
         //get category in
          $categories =(new Query())->select(['category.name as categoryname', 'product.name as productname', 'product.id as productId'])
