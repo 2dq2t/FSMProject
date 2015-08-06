@@ -197,7 +197,7 @@ class Customer extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'Status' => 1]);
+        return static::findOne(['username' => $username, 'Status' => self::STATUS_ACTIVE]);
     }
 
     /**

@@ -1,29 +1,35 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: TuDA
+ * Date: 8/6/2015
+ * Time: 9:45 AM
+ */
 
 namespace frontend\controllers;
 
-use Yii;
+use common\models\Guest;
 use common\models\Customer;
 use common\models\Address;
 use common\models\District;
 use common\models\City;
-use common\models\Guest;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use Yii;
+use common\models\LoginForm;
+use yii\base\Exception;
 use yii\helpers\JSon;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
-use yii\base\Exception;
 use kartik\alert\Alert;
+use yii\web\NotFoundHttpException;
 
-/**
- * CustomerController implements the CRUD actions for Customer model.
- */
-class CustomerController extends Controller
-{
+class AccountController extends Controller{
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
@@ -50,6 +56,85 @@ class CustomerController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+        Customer Login
+     */
+    public function actionLogin()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goHome();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+        Customer Register
+     */
+    public function actionRegister()
+    {
+
+        $modelCustomer = new Customer();
+        $modelCustomer->scenario = 'addCustomer';
+        $modelGuest = new Guest();
+
+        if ($modelCustomer->load(Yii::$app->request->post())
+            && $modelGuest->load(Yii::$app->request->post())
+        ) {
+
+            //Begin transaction
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                //save guest to database
+                if ($modelGuest->save()) {
+                    $modelCustomer->guest_id = $modelGuest->id;
+
+                    if ($user = $modelCustomer->register()) {
+                        $transaction->commit();
+                        if (Yii::$app->getUser()->login($user)) {
+                            $this->goHome();
+                        }
+                    } else {
+                        return $this->render('register', [
+                            'modelCustomer' => $modelCustomer,
+                            'modelGuest' => $modelGuest,
+                        ]);
+                    }
+                } else {
+                    return $this->render('register', [
+                        'modelCustomer' => $modelCustomer,
+                        'modelGuest' => $modelGuest,
+                    ]);
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+            }
+        } else {
+            return $this->render('register', [
+                'modelCustomer' => $modelCustomer,
+                'modelGuest' => $modelGuest,
+            ]);
+        }
+
+    }
+
+    /**
+        Customer Logout
+     */
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
     }
 
     public function actionManageacc($id)

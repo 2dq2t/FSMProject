@@ -24,7 +24,7 @@ echo $this->render('/layouts/_header');
                         <p><strong><?= Yii::t('app', 'RegisterLabel') ?></strong></p>
 
                         <p><?= Yii::t('app', 'LoginNotice01') ?></p>
-                        <a href="index.php?r=site/register"
+                        <a href="../site/index.php?r=site/register"
                            class="btn btn-primary"><?= Yii::t('app', 'ContinueLabel') ?></a>
                     </div>
                 </div>
@@ -45,7 +45,7 @@ echo $this->render('/layouts/_header');
                             <?= $form->field($model, 'password')
                                 ->label(false)->passwordInput(['placeholder' => Yii::t('app','FLoginPassword')]); ?>
                             <div class="forget-password"><a
-                                    href="index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
+                                    href="../site/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
                                     ?</a></div>
                         </div>
                         <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>" class="btn btn-primary"/>

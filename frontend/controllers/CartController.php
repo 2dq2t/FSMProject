@@ -26,6 +26,8 @@ use kartik\alert\Alert;
 
 class CartController extends Controller{
 
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -103,7 +105,7 @@ class CartController extends Controller{
                     if (count($product_cart) == 0) {
                         Yii::$app->session->set('product_cart', [$product]);
                         $json['success'] = Yii::t('app', 'AddtoCartMsg02');
-                        $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) . " VND";
+                        $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
                     } else {
                         foreach ($product_cart as $key => $item) {
                             $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
@@ -122,7 +124,7 @@ class CartController extends Controller{
                             Yii::$app->session->set('product_cart', $product_cart);
                         }
                         $json['success'] = Yii::t('app', 'AddtoCartMsg02');
-                        $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) . " VND";
+                        $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
                     }
 
 

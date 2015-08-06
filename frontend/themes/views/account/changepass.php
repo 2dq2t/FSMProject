@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\alert\Alert;
 $this->title = Yii::t('app', 'ChangePassInfoLabel');
-require('../themes/views/site/_header.php');
+require('../themes/views/layouts/_header.php');
 ?>
 
 <div class="container content-inner">
@@ -24,8 +24,8 @@ require('../themes/views/site/_header.php');
         <?php require('_leftMenu.php'); ?>
         <ul class="breadcrumb">
             <li><a href="index.php"><i class="fa fa-home"></i></a></li>
-            <li><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a></li>
-            <li><a href="index.php?r=customer/changepass&id=<?= Yii::$app->user->identity->id;?>"><?= Yii::t('app', 'ChangePassInfoLabel') ?></a></li>
+            <li><a href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a></li>
+            <li><a href="index.php?r=account/changepass&id=<?= Yii::$app->user->identity->id;?>"><?= Yii::t('app', 'ChangePassInfoLabel') ?></a></li>
         </ul>
         <div id="content" class="col-sm-9">
             <?php $form = ActiveForm::begin([
@@ -53,7 +53,7 @@ require('../themes/views/site/_header.php');
                 </div>
             </fieldset>
             <div class="buttons clearfix">
-                <div class="pull-left"><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>" class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
+                <div class="pull-left"><a href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>" class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
                 <div class="pull-right">
                     <input type="submit" value="<?= Yii::t('app', 'SaveLabel') ?>" class="btn btn-primary" />
                 </div>

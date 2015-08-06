@@ -7,7 +7,7 @@ use kartik\alert\Alert;
 
 $this->title = Yii::t('app', 'ChangeAccInfoLabel');
 $baseUrl = Yii::$app->request->baseUrl;
-require('../themes/views/site/_header.php');
+require('../themes/views/layouts/_header.php');
 ?>
 
 <?php
@@ -36,10 +36,10 @@ if (isset($modelCustomer->avatar)) {
             <li><a href="index.php"><i
                         class="fa fa-home"></i></a></li>
             <li>
-                <a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a>
+                <a href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a>
             </li>
             <li>
-                <a href="index.php?r=customer/update&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'ChangeAccInfoLabel') ?></a>
+                <a href="index.php?r=account/update&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'ChangeAccInfoLabel') ?></a>
             </li>
         </ul>
         <div id="content" class="col-sm-9">
@@ -89,7 +89,7 @@ if (isset($modelCustomer->avatar)) {
                     <div class="col-sm-10">
                         <?= $form->field($modelCustomer, 'username', [
                             'showLabels' => false
-                        ])->textInput(['placeholder' => Yii::t('app','Customer Username')]); ?>
+                        ])->textInput(['placeholder' => Yii::t('app','Customer Username'), 'disabled' => true,]); ?>
                     </div>
                 </div>
                 <div class="form-group required" style="margin-bottom: 0px;">
@@ -146,7 +146,6 @@ if (isset($modelCustomer->avatar)) {
                                 'autoclose' => true,
                                 'endDate' => '+0d',
                                 'todayHighlight' => true,
-                                'format' => 'mm/dd/yyyy'
                             ],
                         ]); ?>
                     </div>
@@ -154,7 +153,7 @@ if (isset($modelCustomer->avatar)) {
             </fieldset>
             <div class="buttons clearfix">
                 <div class="pull-left"><a
-                        href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"
+                        href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>"
                         class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
                 <div class="pull-right">
                     <input type="submit" value="<?= Yii::t('app', 'SaveLabel') ?>" class="btn btn-primary"/>

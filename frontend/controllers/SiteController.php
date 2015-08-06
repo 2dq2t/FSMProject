@@ -444,29 +444,6 @@ class SiteController extends Controller
         return [json_encode($json)];
     }
 
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goHome();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
@@ -522,50 +499,4 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionRegister()
-    {
-
-        $modelCustomer = new Customer();
-        $modelCustomer->scenario = 'addCustomer';
-        $modelGuest = new Guest();
-
-        if ($modelCustomer->load(Yii::$app->request->post())
-            && $modelGuest->load(Yii::$app->request->post())
-        ) {
-
-            //Begin transaction
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                //save guest to database
-                if ($modelGuest->save()) {
-                    $modelCustomer->guest_id = $modelGuest->id;
-
-                    if ($user = $modelCustomer->register()) {
-                        $transaction->commit();
-                        if (Yii::$app->getUser()->login($user)) {
-                            $this->goHome();
-                        }
-                    } else {
-                        return $this->render('register', [
-                            'modelCustomer' => $modelCustomer,
-                            'modelGuest' => $modelGuest,
-                        ]);
-                    }
-                } else {
-                    return $this->render('register', [
-                        'modelCustomer' => $modelCustomer,
-                        'modelGuest' => $modelGuest,
-                    ]);
-                }
-            } catch (Exception $e) {
-                $transaction->rollBack();
-            }
-        } else {
-            return $this->render('register', [
-                'modelCustomer' => $modelCustomer,
-                'modelGuest' => $modelGuest,
-            ]);
-        }
-
-    }
 }

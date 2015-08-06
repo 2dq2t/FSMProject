@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\alert\Alert;
 $this->title = Yii::t('app', 'ChangeAddressInfoLabel');
-require('../themes/views/site/_header.php');
+require('../themes/views/layouts/_header.php');
 ?>
 <?php
 
@@ -33,8 +33,8 @@ if(isset($modelCustomer->avatar)) {
     <?php require('_leftMenu.php'); ?>
         <ul class="breadcrumb">
             <li><a href="index.php"><i class="fa fa-home"></i></a></li>
-            <li><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a></li>
-            <li><a href="index.php?r=customer/changeaddress&id=<?= Yii::$app->user->identity->id;?>"><?= Yii::t('app', 'ChangeAddressInfoLabel') ?></a></li>
+            <li><a href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'AccountLabel') ?></a></li>
+            <li><a href="index.php?r=account/changeaddress&id=<?= Yii::$app->user->identity->id;?>"><?= Yii::t('app', 'ChangeAddressInfoLabel') ?></a></li>
         </ul>
         <div id="content" class="col-sm-9">
             <?php $form = ActiveForm::begin([
@@ -70,7 +70,7 @@ if(isset($modelCustomer->avatar)) {
                                     [
                                         'prompt'=> Yii::t('app', '- Chọn Tỉnh / Thành phố -'),
                                         'onchange'=>'
-                                                $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( file ) {
+                                                $.post( "index.php?r=account/getdistrict&id="+$(this).val(), function( file ) {
                                                     $( "select#district-id" ).length = 0;
                                                     $( "select#district-id" ).html( file );
                                                     var event = new Event("change");
@@ -105,7 +105,7 @@ if(isset($modelCustomer->avatar)) {
                                     'pluginOptions'=>[
                                         'depends'=>[Html::getInputId($modelCity, 'id')],
                                         'placeholder'=>Yii::t('app', '- Chọn Quận / Huyện -'),
-                                        'url'=>\yii\helpers\Url::to(['/customer/getdistrict'])
+                                        'url'=>\yii\helpers\Url::to(['/account/getdistrict'])
                                     ]
                                 ])->label(false);
                             }
@@ -114,7 +114,7 @@ if(isset($modelCustomer->avatar)) {
                 </div>
             </fieldset>
             <div class="buttons clearfix">
-                <div class="pull-left"><a href="index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>" class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
+                <div class="pull-left"><a href="index.php?r=account/manageacc&id=<?= Yii::$app->user->identity->id; ?>" class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
                 <div class="pull-right">
                     <input type="submit" value="<?= Yii::t('app', 'SaveLabel') ?>" class="btn btn-primary" />
                 </div>

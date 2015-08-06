@@ -119,10 +119,10 @@ $baseUrl = Yii::$app->request->baseUrl;
                         <ul class="list-inline">
                             <?php if (Yii::$app->user->isGuest): ?>
                                 <li>
-                                    <a href="../web/index.php?r=site/register">Đăng Ký</a>
+                                    <a href="../web/index.php?r=account/register"><?=Yii::t('app','RegisterLabel')?></a>
                                 </li>
                                 <li>
-                                    <a href="../web/index.php?r=site/login">Đăng Nhập</a>
+                                    <a href="../web/index.php?r=account/login"><?=Yii::t('app','LoginLabel')?></a>
                                 </li>
                             <?php else: ?>
                                 <li class="dropdown myaccount"><a
@@ -132,13 +132,13 @@ $baseUrl = Yii::$app->request->baseUrl;
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>
-                                            <a href="../site/index.php?r=customer/manageacc&id=<?= Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
+                                            <a href="<?= $baseUrl."/index.php?r=account/manageacc&id=". Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
                                         </li>
                                         <li>
                                             <a href="#"><?= Yii::t('app', 'MyOrderLabel') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $baseUrl . "/index.php?r=site/logout" ?>"
+                                            <a href="<?= $baseUrl . "/index.php?r=account/logout" ?>"
                                                data-method="post"><?= Yii::t('app', 'LogoutLabel') ?></a>
                                         </li>
                                     </ul>
