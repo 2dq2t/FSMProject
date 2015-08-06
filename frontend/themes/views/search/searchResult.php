@@ -99,7 +99,7 @@ echo $this->render('/layouts/_header');
                         <div class="product-thumb product-block">
                             <div class="product-block-inner">
                                 <div class="image">
-                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                             src="<?= $product['image_path'] ?>" alt="<?= $product['product_name'] ?>"
                                             title="<?= $product['product_name'] ?>" class="img-responsive"/></a>
                                     <?php
@@ -122,7 +122,7 @@ echo $this->render('/layouts/_header');
                                         <div class="left">
 
                                             <h4>
-                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                    title="<?= ucwords($product['product_name']) ?>">
                                                     <?= ucwords($product['product_name']) ?>                </a>
                                             </h4>

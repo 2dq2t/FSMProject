@@ -324,7 +324,7 @@ echo $this->render('/layouts/_header');
                                                 });
                                                 $('#button-voucher').on('click', function () {
                                                     $.ajax({
-                                                        url: 'index.php?r=site/check-voucher',
+                                                        url: 'index.php?r=checkout/check-voucher',
                                                         type: 'post',
                                                         data: {voucher: $('#voucher input[type=\'text\']').val()},
                                                         dataType: 'json',

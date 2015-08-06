@@ -21,11 +21,11 @@
             ?>
             <?php foreach (array_keys($result) as $category): ?>
                 <li>
-                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category ?>"><?= ucfirst($category) ?></a>
+                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category ?>"><?= ucfirst($category) ?></a>
                     <ul>
                         <?php foreach ($result[$category] as $key) { ?>
                             <li>
-                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $key ?>"><?= ucfirst($key) ?></a>
+                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $key ?>"><?= ucfirst($key) ?></a>
                             </li>
                         <?php }; ?>
                     </ul>

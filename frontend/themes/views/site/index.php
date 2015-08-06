@@ -31,7 +31,7 @@ echo $this->render('/layouts/_header');
                         if (!empty($slide_show)) {
                             foreach ($slide_show as $slide_show) {
                                 echo "<div class='item'>";
-                                echo "<a href='" . Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $slide_show['product_name'] . "'><img
+                                echo "<a href='" . Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $slide_show['product_name'] . "'><img
                                     src='uploads/slideshow/" . $slide_show['slide_show_id'] . "/" . $slide_show['slide_show_path'] . "'
                                     alt='" . $slide_show['product_name'] . "' class='img-responsive'/></a>";
                                 echo "</div> ";
@@ -105,7 +105,7 @@ echo $this->render('/layouts/_header');
                                             <div class="product-block product-thumb transition">
                                                 <div class="product-block-inner ">
                                                     <div class="image">
-                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                                                 src="<?= $product['product_image'] ?>"
                                                                 alt="<?= $product['product_name'] ?>"
                                                                 title="<?= $product['product_name'] ?>"
@@ -129,7 +129,7 @@ echo $this->render('/layouts/_header');
                                                     <div class="product-details">
                                                         <div class="caption">
                                                             <h4>
-                                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                                    title="<?= ucwords($product['product_name']) ?>">
                                                                     <?= ucwords($product['product_name']) ?></a>
                                                             </h4>
@@ -182,7 +182,7 @@ echo $this->render('/layouts/_header');
                                             <div class="product-block product-thumb transition">
                                                 <div class="product-block-inner ">
                                                     <div class="image">
-                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                                                 src="<?= $product['product_image'] ?>"
                                                                 alt="<?= $product['product_name'] ?>"
                                                                 title="<?= $product['product_name'] ?>"
@@ -206,7 +206,7 @@ echo $this->render('/layouts/_header');
                                                     <div class="product-details">
                                                         <div class="caption">
                                                             <h4>
-                                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                                    title="<?= ucwords($product['product_name']) ?>">
                                                                     <?= ucwords($product['product_name']) ?></a>
                                                             </h4>

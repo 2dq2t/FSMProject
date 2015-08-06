@@ -23,7 +23,7 @@ echo $this->render('/layouts/_header');
     <ul class="breadcrumb">
         <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?php echo $baseUrl . 'index.php?r=site/view-detail&product=' . $product_detail['name'] ?>"><?php echo ucwords($product_detail['name']) ?></a>
+            <a href="<?php echo $baseUrl . 'index.php?r=product/view-detail&product=' . $product_detail['name'] ?>"><?php echo ucwords($product_detail['name']) ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -190,7 +190,7 @@ echo $this->render('/layouts/_header');
                                         <div class="product-block product-thumb transition">
                                             <div class="product-block-inner ">
                                                 <div class="image">
-                                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                                             src="<?= $product['product_image'] ?>"
                                                             alt="<?= $product['product_name'] ?>"
                                                             title="<?= $product['product_name'] ?>"
@@ -214,7 +214,7 @@ echo $this->render('/layouts/_header');
                                                 <div class="product-details">
                                                     <div class="caption">
                                                         <h4>
-                                                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                                title="<?= ucwords($product['product_name']) ?>">
                                                                 <?= ucwords($product['product_name']) ?></a>
                                                         </h4>
@@ -255,9 +255,9 @@ echo $this->render('/layouts/_header');
                     if (!empty($product_tag[0]['name'])) {
                         foreach ($product_tag as $tag) {
                             if ($tag === end($product_tag)) {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=product/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                             } else {
-                                echo "<a href='" . $baseUrl . "/index.php?r=site/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
+                                echo "<a href='" . $baseUrl . "/index.php?r=product/get-product-tag&tag=" . $tag['name'] . "'>" . $tag['name'] . "</a>";
                                 echo ", ";
                             }
                         }
@@ -330,7 +330,7 @@ echo $this->render('/layouts/_header');
             click: function (score, evt) {
                 var product_id = document.getElementById('product_id').value;
                 $.ajax({
-                    url: 'index.php?r=site/rating',
+                    url: 'index.php?r=product/rating',
                     type: 'post',
                     data: {score: score, product_id: product_id},
                     dataType: 'json',

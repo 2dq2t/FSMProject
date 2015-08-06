@@ -5,14 +5,14 @@
  * Date: 27/05/2015
  * Time: 3:09 CH
  */
-$this->title = ucwords(Yii::t('app', 'CategoryTitle'));
+$this->title = Yii::t('app', 'ProductTagTitle');
 echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name ?>"><?= ucwords($category_name) ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-tag&tag=" . $_GET['tag'] ?>">Tag: <?php $tag = ''; if(isset($_GET['tag'])){ $tag =  $_GET['tag'];echo $tag;} ?> ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -26,11 +26,13 @@ echo $this->render('/layouts/_header');
         </column>
         <div id="content" class="col-sm-9 categorypage">
 
+
             <div class="row category_thumb">
                 <div class="col-sm-2 category_img"><img
                         src="images/data/inner-banner.jpg"
                         alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
             </div>
+            <h2 class="page-title">Tag: <?= $tag ?></h2>
             <div class="category_filter">
                 <div class="col-md-4 btn-list-grid">
                     <div class="btn-group">
@@ -46,19 +48,19 @@ echo $this->render('/layouts/_header');
                             <label class="control-label" for="input-sort"><?= Yii::t('app', 'SortByLabel') ?></label>
                         </div>
                         <div class="col-md-3 text-right sort">
-                            <select name="input-sort" class="form-control" onchange="location = this.value;">
+                            <select id="input-sort" class="form-control" onchange="location = this.value;">
                                 <option
                                     <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
-                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=site/get-product-category&category=" . $category_name ?>"><?= Yii::t('app', 'DefaultLabel') ?>
+                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=product/get-product-category&tag=".$tag?>"><?= Yii::t('app', 'DefaultLabel') ?>
                                 </option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=product/get-product-category&tag=".$tag. "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=product/get-product-category&tag=".$tag. "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=product/get-product-category&tag=".$tag. "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=product/get-product-category&tag=".$tag . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
                             </select>
                         </div>
                     </div>
@@ -67,12 +69,12 @@ echo $this->render('/layouts/_header');
             </div>
 
             <div class="row productlist-grid">
-                <?php foreach ($category_product as $product) { ?>
+                <?php foreach ($product_tag as $product) { ?>
                     <div class="product-layout product-list col-xs-12">
                         <div class="product-thumb product-block">
                             <div class="product-block-inner">
                                 <div class="image">
-                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                             src="<?= $product['image_path'] ?>" alt="<?= $product['product_name'] ?>"
                                             title="<?= $product['product_name'] ?>" class="img-responsive"/></a>
                                     <?php
@@ -95,14 +97,12 @@ echo $this->render('/layouts/_header');
                                         <div class="left">
 
                                             <h4>
-                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
-                                                   title="<?= ucwords($product['product_name']) ?>">
+                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
+                                                   title="<?=ucwords($product['product_name']) ?>">
                                                     <?= ucwords($product['product_name']) ?>
                                                 </a>
                                             </h4>
-
                                             <div class="desc"><?= $product['product_intro'] ?></div>
-
                                             <div class="compare-wishlist">
                                                 <div class="wishlist-btn">
                                                     <button type="button" class="wishlist" title="Add to Wish List"
@@ -115,9 +115,9 @@ echo $this->render('/layouts/_header');
                                             <div class="price">
                                                 <?php
                                                 if (!empty($product['product_offer'])) {
-                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                    echo "<span class='price-old'>" . $product['product_price'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                     $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
-                                                    echo "<span class='price-new'>" . number_format($new_price) . Yii::t('app', 'VNDLabel') . "</span>";
+                                                    echo "<span class='price-new'>" . $new_price . Yii::t('app', 'VNDLabel') . "</span>";
                                                 } else
                                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') ?>
                                             </div>

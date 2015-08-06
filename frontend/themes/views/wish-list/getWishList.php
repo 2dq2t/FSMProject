@@ -56,13 +56,13 @@ echo $this->render('/layouts/_header');
                         <?php foreach ($wish_list_product as $product) { ?>
                         <tr id="<?= "product" . $product['product_id'] ?>">
                             <td class="text-center  col-sm-2 row-sm-2">
-                                <a href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                <a href="<?= $baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                         style="width: 94px;height: 94px"
                                         src="<?= $product['product_image'] ?>" alt="<?= $product['product_name'] ?>"
                                         title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                             </td>
                             <td class="text-center"><a
-                                    href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
+                                    href="<?= $baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                                 <br/>
                                 <small><?= Yii::t('app', 'QuantityLabel') ?>
                                     : <?php if ($product['product_quantity'] - $product['product_sold'] > 0) echo $product['product_quantity'] - $product['product_sold'];
@@ -115,7 +115,7 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block product-thumb transition">
                                         <div class="product-block-inner ">
                                             <div class="image">
-                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                                         src="<?= $product['product_image'] ?>"
                                                         alt="<?= $product['product_name'] ?>"
                                                         title="<?= $product['product_name'] ?>"
@@ -139,7 +139,7 @@ echo $this->render('/layouts/_header');
                                             <div class="product-details">
                                                 <div class="caption">
                                                     <h4>
-                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                            title="<?= ucwords($product['product_name']) ?>">
                                                             <?= ucwords($product['product_name']) ?></a>
                                                     </h4>

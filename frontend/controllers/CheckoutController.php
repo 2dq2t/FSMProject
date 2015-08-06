@@ -92,6 +92,7 @@ class CheckoutController extends Controller {
                         'modelDistrict' => $modelDistrict,
                         'modelCity' => $modelCity,
                         'modelCheckoutInfo' => $modelCheckoutInfo,
+                        'modelLogin' => $modelLogin,
                         'continueStep2' => $continueStep2,
                     ]);
                 }
@@ -336,6 +337,39 @@ class CheckoutController extends Controller {
                 'address' => $address, 'district' => $district, 'city' => $city,
             ]);
         }
+    }
 
+    public function actionCheckVoucher()
+    {
+        $json = array();
+        if (Yii::$app->request->post()) {
+            $post_data = Yii::$app->request->post();
+            $voucher = $post_data['voucher'];
+            $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
+            $json['info'] = $voucher;
+            $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
+                mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
+            $voucher_start_date = date("d/m/Y", $check_voucher['start_date']);
+            $voucher_end_date = date("d/m/Y", $check_voucher['end_date']);
+            if (empty($check_voucher)) {
+                $json['error'] = Yii::t('app', 'InputVoucherMsg04');
+            } else if ($today < $check_voucher['start_date']) {
+                $json['error'] = Yii::t('app', 'InputVoucherMsg02') . $voucher_start_date;
+            } else if ($today > $check_voucher['end_date']) {
+                $json['error'] = Yii::t('app', 'InputVoucherMsg03') . $voucher_end_date;
+            } elseif (!empty($check_voucher['order_id'])) {
+                $json['error'] = Yii::t('app', 'InputVoucherMsg05');
+            } else if ($check_voucher['active'] == 1) {
+                $discount = $check_voucher['discount'];
+                $json['success'] = "Bạn được giảm giá " . $discount . "% cho mã giảm giá: " . $voucher . ".</br>Số tiền bạn phải trả còn lại: " . number_format(Yii::$app->CommonFunction->getTotalPriceWithVoucher($discount)) . "đ";
+            } else {
+                $json['error'] = Yii::t('app', 'InputVoucherMsg01');
+            }
+
+        } else {
+            return $this->goHome();
+        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [json_encode($json)];
     }
 }

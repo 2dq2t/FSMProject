@@ -29,14 +29,14 @@ $product_in_cart = $cart_info['product_in_cart'];
                     <?php foreach ($product_in_cart as $product) { ?>
                         <tr>
                             <td class="text-center col-sm-1"><a
-                                    href="<?php echo $baseUrl . '/index.php?r=site/view-detail&product=' . $product['product_name'] ?>"><img
+                                    href="<?php echo $baseUrl . '/index.php?r=product/view-detail&product=' . $product['product_name'] ?>"><img
                                         style="width: 47px;height: 47px"
                                         src="<?php echo $product['product_image'] ?>"
                                         alt="<?= $product['product_name'] ?>" title="<?= $product['product_name'] ?>"
                                         class="img-thumbnail"/></a>
                             </td>
                             <td class="text-left"><a
-                                    href="<?php echo $baseUrl . '/index.php?r=site/view-detail&product=' . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
+                                    href="<?php echo $baseUrl . '/index.php?r=product/view-detail&product=' . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                             </td>
                             <td class="text-right">x <?= $product['product_quantity'] ?></td>
                             <td class="text-right"><?= number_format($product['product_price'] * $product['product_quantity']) ?></td>

@@ -12,7 +12,7 @@ echo $this->render('/layouts/_header');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/category&category=" . $category_name ?>"><?= ucwords($category_name) ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name ?>"><?= ucwords($category_name) ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -49,16 +49,16 @@ echo $this->render('/layouts/_header');
                             <select name="input-sort" class="form-control" onchange="location = this.value;">
                                 <option
                                     <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
-                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=site/get-product-category&category=" . $category_name ?>"><?= Yii::t('app', 'DefaultLabel') ?>
+                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=product/get-product-season"?>"><?= Yii::t('app', 'DefaultLabel') ?>
                                 </option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=site/get-product-category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
                             </select>
                         </div>
                     </div>
@@ -72,7 +72,7 @@ echo $this->render('/layouts/_header');
                         <div class="product-thumb product-block">
                             <div class="product-block-inner">
                                 <div class="image">
-                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                    <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                             src="<?= $product['image_path'] ?>" alt="<?= $product['product_name'] ?>"
                                             title="<?= $product['product_name'] ?>" class="img-responsive"/></a>
                                     <?php
@@ -95,7 +95,7 @@ echo $this->render('/layouts/_header');
                                         <div class="left">
 
                                             <h4>
-                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"
+                                                <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"
                                                    title="<?= ucwords($product['product_name']) ?>">
                                                     <?= ucwords($product['product_name']) ?>
                                                 </a>

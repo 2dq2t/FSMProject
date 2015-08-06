@@ -61,14 +61,14 @@ echo $this->render('/layouts/_header');
                             <?php foreach ($product_in_cart as $product) { ?>
                                 <tr id="<?= "product" . $product['product_id'] ?>">
                                     <td class="text-center  col-sm-2 row-sm-2">
-                                        <a href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><img
+                                        <a href="<?= $baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><img
                                                 style="width: 94px;height: 94px"
                                                 src="<?= $product['product_image'] ?>"
                                                 alt="<?= $product['product_name'] ?>"
                                                 title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
                                     </td>
                                     <td class="text-left"><a
-                                            href="<?= $baseUrl . "/index.php?r=site/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
+                                            href="<?= $baseUrl . "/index.php?r=product/view-detail&product=" . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                                         <br/>
                                     </td>
                                     <td class="text-left">
