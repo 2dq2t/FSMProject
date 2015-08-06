@@ -1,8 +1,6 @@
 <?php
 namespace frontend\components;
 
-use common\models\Product;
-use common\models\WishList;
 use Yii;
 use yii\base\Component;
 use yii\db\Query;
@@ -83,10 +81,10 @@ class CommonFunction extends Component
 
     public function  getNumberProductWishList($customer_id)
     {
-        $wish_list_product = WishList::find()->where(['customer_id' => $customer_id])->all();
+        $wish_list_product = (new Query())->select(['product_id'])->from('wish_list')->where(['customer_id' => $customer_id])->all();
         $count = 0;
         foreach($wish_list_product as $item){
-            $product = Product::find()->where(['id'=>$item['product_id'],'active'=>1])->one();
+            $product = (new Query())->select(['id'])->from('product')->where(['id'=>$item['product_id'],'active'=>1])->one();
             if(!empty($product['id'])){
                 $count++;
             }

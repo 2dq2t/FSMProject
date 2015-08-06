@@ -7,8 +7,7 @@
  */
 namespace frontend\components;
 
-use common\models\Product;
-use common\models\WishList;
+
 use Yii;
 use yii\base\Component;
 use yii\db\Query;
