@@ -81,6 +81,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        $json = ['tesst'];
+        var_dump(gettype([json_encode([$json])]));
         //get new product
         $new_product_from_tag = array();
         $tag_id = (new Query())->select('id')->from('tag')->where(['name' => 'new'])->one();

@@ -3,8 +3,6 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use backend\models\OrderStatus;
 
 /**
  * This is the model class for table "order".
@@ -18,11 +16,11 @@ use backend\models\OrderStatus;
  * @property string $description
  * @property string $guest_id
  * @property integer $order_status_id
- * @property string $address_id
+ * @property string $order_address_id
  *
- * @property Address $address
  * @property Guest $guest
- * @property \backend\models\OrderStatus $orderStatus
+ * @property OrderAddress $orderAddress
+ * @property OrderStatus $orderStatus
  * @property OrderDetails[] $orderDetails
  * @property Product[] $products
  * @property Voucher[] $vouchers
@@ -43,9 +41,8 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_date', 'receiving_date', 'shipping_fee', 'tax_amount', 'net_amount', 'description', 'guest_id', 'order_status_id', 'address_id'], 'required'],
-            [['tax_amount', 'guest_id', 'order_status_id', 'address_id'], 'integer'],
-            [['order_date', 'receiving_date'], 'safe'],
+            [['order_date', 'receiving_date', 'shipping_fee', 'tax_amount', 'net_amount', 'description', 'guest_id', 'order_status_id', 'order_address_id'], 'required'],
+            [['order_date', 'receiving_date', 'tax_amount', 'guest_id', 'order_status_id', 'order_address_id'], 'integer'],
             [['shipping_fee', 'net_amount'], 'number'],
             [['description'], 'string', 'max' => 255]
         ];
@@ -65,17 +62,9 @@ class Order extends \yii\db\ActiveRecord
             'net_amount' => Yii::t('app', 'Net Amount'),
             'description' => Yii::t('app', 'Description'),
             'guest_id' => Yii::t('app', 'Guest ID'),
-            'order_status_id' => Yii::t('app', 'Order Status'),
-            'address_id' => Yii::t('app', 'Address ID'),
+            'order_status_id' => Yii::t('app', 'Order Status ID'),
+            'order_address_id' => Yii::t('app', 'Order Address ID'),
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAddress()
-    {
-        return $this->hasOne(Address::className(), ['id' => 'address_id']);
     }
 
     /**
@@ -84,6 +73,14 @@ class Order extends \yii\db\ActiveRecord
     public function getGuest()
     {
         return $this->hasOne(Guest::className(), ['id' => 'guest_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderAddress()
+    {
+        return $this->hasOne(OrderAddress::className(), ['id' => 'order_address_id']);
     }
 
     /**

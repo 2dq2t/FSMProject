@@ -24,5 +24,8 @@ return [
                 'encryption' => 'tls',
             ],
         ],
+        'checkoutFunctions'=>[
+            'class'=>'common\functions\checkoutFunctions',
+        ],
     ],
 ];

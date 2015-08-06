@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 
+use common\models\OrderAddress;
 use kartik\alert\Alert;
 use yii\web\Controller;
 use yii;
@@ -141,24 +142,23 @@ class CheckoutController extends Controller {
                         $guest->save();
 
                         $address_data = $_POST['Address'];
-                        $guest_address = new Address();
-                        $guest_address->detail = $address_data['detail'];
-                        $guest_address->district_id = $address_data['district_id'];
-                        $guest_address->save();
+                        $order_address = new OrderAddress();
+                        $order_address->detail = $address_data['detail'];
+                        $order_address->district_id = $address_data['district_id'];
+                        $order_address->save();
 
                         $product_cart = Yii::$app->session->get('product_cart');
                         $total_net_amount = 0;
                         $total_tax_amount = 0;
                         foreach ($product_cart as $item) {
                             $product_price_tax = (new Query())->select(['price', 'tax'])->from('product')->where(['id' => $item['product_id']])->one();
-                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                            $product_selling_price = Yii::$app->CommonFunction->getProductPrice($product_price_tax['price'], $product_offer) * $item['product_quantity'];
-                            $total_net_amount += Yii::$app->CommonFunction->getNetAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
-                            $total_tax_amount += Yii::$app->CommonFunction->getTaxAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
+                            $product_offer = Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
+                            $product_selling_price = Yii::$app->checkoutFunctions->getProductPrice($product_price_tax['price'], $product_offer) * $item['product_quantity'];
+                            $total_net_amount += Yii::$app->checkoutFunctions->getNetAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
+                            $total_tax_amount += Yii::$app->checkoutFunctions->getTaxAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
 
                         }
-                        $guest_id = (new Query())->select(['id'])->from('guest')->where(['full_name' => $guest_data['full_name'], 'email' => $guest_data['email'], 'phone_number' => $guest_data['phone_number']])->one();
-                        $guest_address_id = (new Query())->select(['id'])->from('address')->where(['detail' => $address_data['detail'], 'district_id' => $address_data['district_id']])->one();
+
                         $order_date = strtotime(date("m/d/Y"));
                         $checkout_info = $_POST['CheckoutInfo'];
                         $receiving_date = strtotime(date($checkout_info['receiving_date']));
@@ -173,32 +173,30 @@ class CheckoutController extends Controller {
                         $order->tax_amount = $total_tax_amount;
                         $order->net_amount = $total_net_amount;
                         $order->description = $note;
-                        $order->guest_id = $guest_id['id'];
+                        $order->guest_id = $guest->id;
                         $order->order_status_id = 1;
-                        $order->address_id = $guest_address_id['id'];
+                        $order->order_address_id = $order_address->id;
 
                         $order->save();
-                        $order_id = (new Query())->select(['id'])->from('order')->where(['order_date' => $order_date, 'receiving_date' => $receiving_date,
-                            'tax_amount' => $total_tax_amount, 'net_amount' => $total_net_amount, 'description' => $note,
-                            'guest_id' => $guest_id['id'], 'address_id' => $guest_address_id['id']])->one();
+
                         foreach ($product_cart as $item) {
                             $product_price = (new Query())->select(['price'])->from('product')->where(['id' => $item['product_id']])->one();
-                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                            $product_offer = Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
                             $product_quantity = $item['product_quantity'];
                             $product_id = $item['product_id'];
 
                             $order_details = new OrderDetails();
                             $order_details->product_id = $product_id;
-                            $order_details->order_id = $order_id['id'];
+                            $order_details->order_id = $order->id;
                             $order_details->sell_price = $product_price['price'];
                             $order_details->quantity = $product_quantity;
                             $order_details->discount = $product_offer;
                             $order_details->save();
                         }
                         if (!empty($_POST['voucher'])) {
-                            if (Yii::$app->CommonFunction->checkVoucher($_POST['voucher'])) {
+                            if (Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher'])) {
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
-                                $voucher->order_id = $order_id['id'];
+                                $voucher->order_id = $order->id;
                                 $voucher->update();
                             }
                         }
@@ -212,7 +210,7 @@ class CheckoutController extends Controller {
                             'title' => Yii::t('app', 'CheckoutResult SuccessTitle'),
                         ]);
 
-                        return $this->actionGetCheckoutResult($order_id['id']);
+                        return $this->actionGetCheckoutResult($order->id);
 
                     } catch (\yii\db\Exception $ex) {
                         Yii::$app->getSession()->setFlash('failed', [
@@ -231,26 +229,33 @@ class CheckoutController extends Controller {
                 } else {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
+                        $address_data = $_POST['Address'];
                         if (!empty($_POST['updateAddress'])) {
-                            $address_data = $_POST['Address'];
                             $address_id = (new Query())->select(['address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
                             $update_customer_address = Address::find()->where(['id' => $address_id['address_id']])->one();
                             $update_customer_address->detail = $address_data['detail'];
                             $update_customer_address->district_id = $address_data['district_id'];
                             $update_customer_address->update();
                         }
+
+                        $order_address = new OrderAddress();
+                        $order_address->detail = $address_data['detail'];
+                        $order_address->district_id = $address_data['district_id'];
+                        $order_address->save();
+
                         $product_cart = Yii::$app->session->get('product_cart');
                         $total_net_amount = 0;
                         $total_tax_amount = 0;
                         foreach ($product_cart as $item) {
                             $product_price_tax = (new Query())->select(['price', 'tax'])->from('product')->where(['id' => $item['product_id']])->one();
-                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                            $product_selling_price = Yii::$app->CommonFunction->getProductPrice($product_price_tax['price'], $product_offer) * $item['product_quantity'];
-                            $total_net_amount += Yii::$app->CommonFunction->getNetAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
-                            $total_tax_amount += Yii::$app->CommonFunction->getTaxAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
+                            $product_offer = Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
+                            $product_selling_price = Yii::$app->checkoutFunctions->getProductPrice($product_price_tax['price'], $product_offer) * $item['product_quantity'];
+                            $total_net_amount += Yii::$app->checkoutFunctions->getNetAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
+                            $total_tax_amount += Yii::$app->checkoutFunctions->getTaxAmount($product_selling_price, $product_price_tax['tax'], $item['product_quantity']);
 
                         }
-                        $customer_info = (new Query())->select(['guest_id', 'address_id'])->from('customer')->where(['id' => Yii::$app->user->identity->getId()])->one();
+
+                        $guest_id = (new Query())->select(['guest_id'])->from('customer')->where(['id'=>Yii::$app->user->identity->getId()])->one();
                         $order_date = strtotime(date("m/d/Y"));
                         $checkout_info = $_POST['CheckoutInfo'];
                         $receiving_date = strtotime(date($checkout_info['receiving_date']));
@@ -264,33 +269,31 @@ class CheckoutController extends Controller {
                         $order->tax_amount = $total_tax_amount;
                         $order->net_amount = $total_net_amount;
                         $order->description = $note;
-                        $order->guest_id = $customer_info['guest_id'];
+                        $order->guest_id = $guest_id['guest_id'];
                         $order->order_status_id = 1;
-                        $order->address_id = $customer_info['address_id'];
+                        $order->order_address_id = $order_address->id;
 
                         $order->save();
-                        $order_id = (new Query())->select(['id'])->from('order')->where(['order_date' => $order_date, 'receiving_date' => $receiving_date,
-                            'tax_amount' => $total_tax_amount, 'net_amount' => $total_net_amount, 'description' => $note,
-                            'guest_id' => $customer_info['guest_id'], 'address_id' => $customer_info['address_id']])->one();
+
                         foreach ($product_cart as $item) {
                             $product_price = (new Query())->select(['price'])->from('product')->where(['id' => $item['product_id']])->one();
-                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                            $product_offer = Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
                             $product_quantity = $item['product_quantity'];
                             $product_id = $item['product_id'];
 
                             $order_details = new OrderDetails();
                             $order_details->product_id = $product_id;
-                            $order_details->order_id = $order_id['id'];
+                            $order_details->order_id = $order->id;
                             $order_details->sell_price = $product_price['price'];
                             $order_details->quantity = $product_quantity;
                             $order_details->discount = $product_offer;
                             $order_details->save();
                         }
                         if (!empty($_POST['voucher'])) {
-                            if (Yii::$app->CommonFunction->checkVoucher($_POST['voucher'])) {
-                                echo Yii::$app->CommonFunction->checkVoucher($_POST['voucher']);
+                            if (Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher'])) {
+                                echo Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher']);
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
-                                $voucher->order_id = $order_id['id'];
+                                $voucher->order_id =$order->id;
                                 $voucher->update();
                             }
                         }
@@ -303,7 +306,7 @@ class CheckoutController extends Controller {
                             'message' => Yii::t('app', 'CheckoutResult SuccessMessage'),
                             'title' => Yii::t('app', 'CheckoutResult SuccessTitle'),
                         ]);
-                        return $this->actionGetCheckoutResult($order_id['id']);
+                        return $this->actionGetCheckoutResult($order->id);
                     } catch (\yii\db\Exception $ex) {
                         Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
