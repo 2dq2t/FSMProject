@@ -13,22 +13,8 @@ use Yii;
 use yii\base\Component;
 use yii\db\Query;
 
-class HeaderInfo extends Component
+class CartInfo extends Component
 {
-
-    public function  getNumberProductWishList($customer_id)
-    {
-        $wish_list_product = WishList::find()->where(['customer_id' => $customer_id])->all();
-        $count = 0;
-        foreach($wish_list_product as $item){
-            $product = Product::find()->where(['id'=>$item['product_id'],'active'=>1])->one();
-            if(!empty($product['id'])){
-                $count++;
-            }
-        }
-        return $count;
-    }
-
     public function getCartInfo()
     {
         $product_cart = Yii::$app->session->get('product_cart');

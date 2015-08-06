@@ -8,20 +8,9 @@
 
 namespace frontend\controllers;
 
-
-use common\models\Product;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\db\Query;
 use Yii;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use yii\base\Exception;
-use yii\base\InvalidParamException;
-use yii\data\Pagination;
-use yii\web\BadRequestHttpException;
-use kartik\alert\Alert;
 
 
 class CartController extends Controller{
@@ -46,56 +35,50 @@ class CartController extends Controller{
             } elseif ($post_data['quantity'] <= 0) {
                 $json['error'] = Yii::t('app', 'AddtoCartMsg04');
             } else {
-                if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
-                    $total_price = 0;
-                    $total_product = 0;
-                    if (isset($post_data['quantity'])) {
-                        $product_quantity = $post_data['quantity'];
-                    } else {
-                        $product_quantity = 1;
-                    }
-                    $product_cart = Yii::$app->session->get('product_cart');
-                    $product['product_id'] = $product_id;
-                    $product['product_quantity'] = $product_quantity;
-                    $product_price = (new Query())->select('price')->from('product')->where(['id' => $product_id])->one();
-                    $product_offer = Yii::$app->CommonFunction->getProductOffer($product_id);
-                    $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $product_quantity;
-                    $total_product += $product_quantity;
-                    if (count($product_cart) == 0) {
-                        Yii::$app->session->set('product_cart', [$product]);
-                        $json['success'] = Yii::t('app', 'AddtoCartMsg02');
-                        $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
-                    } else {
-                        foreach ($product_cart as $key => $item) {
-                            $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
-                            $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                            $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
-                            $total_product += $item['product_quantity'];
-                            if (($item['product_id'] == $product['product_id'])) {
-                                $product_cart[$key]['product_quantity'] = $item['product_quantity'] + $product_quantity;
-                                $flag = false;
-                            }
+                $total_price = 0;
+                $total_product = 0;
+                if (isset($post_data['quantity'])) {
+                    $product_quantity = $post_data['quantity'];
+                } else {
+                    $product_quantity = 1;
+                }
+                $product_cart = Yii::$app->session->get('product_cart');
+                $product['product_id'] = $product_id;
+                $product['product_quantity'] = $product_quantity;
+                $product_price = (new Query())->select('price')->from('product')->where(['id' => $product_id])->one();
+                $product_offer = Yii::$app->CommonFunction->getProductOffer($product_id);
+                $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $product_quantity;
+                $total_product += $product_quantity;
+                if (count($product_cart) == 0) {
+                    Yii::$app->session->set('product_cart', [$product]);
+                    $json['success'] = Yii::t('app', 'AddtoCartMsg02');
+                    $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
+                } else {
+                    foreach ($product_cart as $key => $item) {
+                        $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
+                        $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                        $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                        $total_product += $item['product_quantity'];
+                        if (($item['product_id'] == $product['product_id'])) {
+                            $product_cart[$key]['product_quantity'] = $item['product_quantity'] + $product_quantity;
+                            $flag = false;
                         }
-                        if ($flag) {
-                            array_push($product_cart, $product);
-                            Yii::$app->session->set('product_cart', $product_cart);
-                        } else {
-                            Yii::$app->session->set('product_cart', $product_cart);
-                        }
-                        $json['success'] = Yii::t('app', 'AddtoCartMsg02');
-                        $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
                     }
-
-
-                }else{
-                    $json['error'] = Yii::t('app', 'AddtoCartMsg05');
+                    if ($flag) {
+                        array_push($product_cart, $product);
+                        Yii::$app->session->set('product_cart', $product_cart);
+                    } else {
+                        Yii::$app->session->set('product_cart', $product_cart);
+                    }
+                    $json['success'] = Yii::t('app', 'AddtoCartMsg02');
+                    $json['total'] = ($total_product) . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
                 }
             }
         } else {
             return $this->goHome();
         }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [json_encode($json)];
+        return json_encode($json);
     }
 
     public function actionGetCartInfo()
@@ -105,7 +88,7 @@ class CartController extends Controller{
 
     public function actionViewCart()
     {
-        $cart_info = Yii::$app->HeaderInfo->getCartInfo();
+        $cart_info = Yii::$app->CartInfo->getCartInfo();
         return $this->render('viewCart', ['cart_info' => $cart_info]);
     }
 
@@ -164,7 +147,7 @@ class CartController extends Controller{
         }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [json_encode($json)];
+        return json_encode($json);
 
     }
 }
