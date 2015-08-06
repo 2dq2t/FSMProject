@@ -13,6 +13,8 @@ use common\models\Customer;
 use common\models\Address;
 use common\models\District;
 use common\models\City;
+use frontend\models\PasswordResetRequestForm;
+use frontend\models\ResetPasswordForm;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -24,6 +26,8 @@ use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use kartik\alert\Alert;
 use yii\web\NotFoundHttpException;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
 
 class AccountController extends Controller{
 
@@ -141,7 +145,7 @@ class AccountController extends Controller{
     {
 
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/manageacc&id=' . Yii::$app->user->id . '');
+            return $this->redirect('index.php?r=account/manageacc&id=' . Yii::$app->user->id . '');
         }
         return $this->render('manageacc');
     }
@@ -155,7 +159,7 @@ class AccountController extends Controller{
     public function actionUpdate($id)
     {
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/update&id=' . Yii::$app->user->id . '');
+            return $this->redirect('index.php?r=account/update&id=' . Yii::$app->user->id . '');
         }
 
         $modelCustomer = $this->findModel($id);
@@ -287,7 +291,7 @@ class AccountController extends Controller{
     {
 
         if (Yii::$app->user->id != $id) {
-            return $this->redirect('index.php?r=customer/changepass&id=' . Yii::$app->user->id . '');
+            return $this->redirect('index.php?r=account/changepass&id=' . Yii::$app->user->id . '');
         }
 
         $modelCustomer = $this->findModel($id);
@@ -471,6 +475,61 @@ class AccountController extends Controller{
             }
             echo Json::encode(['output' => '', 'selected' => '']);
         }
+    }
+
+    public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->getSession()->setFlash('successful', [
+                    'type' => Alert::TYPE_SUCCESS,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'RequestPasswordResetMsg01'),
+                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
+                ]);
+
+                return $this->goHome();
+            } else {
+                Yii::$app->getSession()->setFlash('failed', [
+                    'type' => Alert::TYPE_DANGER,
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'RequestPasswordResetMsg02'),
+                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
+                ]);
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->getSession()->setFlash('successful', [
+                'type' => Alert::TYPE_SUCCESS,
+                'duration' => 3000,
+                'icon' => 'fa fa-plus',
+                'message' => Yii::t('app', 'ResetPasswordMsg01'),
+                'title' => Yii::t('app', 'ChangePassInfoLabel'),
+            ]);
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
     }
 
     /**

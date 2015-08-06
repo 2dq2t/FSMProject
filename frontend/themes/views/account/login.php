@@ -8,7 +8,7 @@ echo $this->render('/layouts/_header');
 <div class="container content-inner">
 
     <div class="row content-subinner">
-        <?php echo $this->render('//layouts/_leftMenu.php'); ?>
+        <?php echo $this->render('/layouts/_leftMenuForgetPassword.php'); ?>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
                 <li><a href="#"><i class="fa fa-home"></i></a></li>
@@ -45,7 +45,7 @@ echo $this->render('/layouts/_header');
                             <?= $form->field($model, 'password')
                                 ->label(false)->passwordInput(['placeholder' => Yii::t('app','FLoginPassword')]); ?>
                             <div class="forget-password"><a
-                                    href="../site/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
+                                    href="../web/index.php?r=account/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
                                     ?</a></div>
                         </div>
                         <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>" class="btn btn-primary"/>

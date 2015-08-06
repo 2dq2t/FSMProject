@@ -97,7 +97,7 @@ echo $this->render('/layouts/_header');
                                             <?= $form->field($modelLogin, 'password')
                                                 ->label(false)->passwordInput(['placeholder' => Yii::t('app', 'FLoginPassword')]); ?>
                                             <div class="forget-password"><a
-                                                    href="../site/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
+                                                    href="../web/index.php?r=account/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
                                                     ?</a></div>
                                         </div>
                                         <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>"
@@ -181,6 +181,21 @@ echo $this->render('/layouts/_header');
                                         <legend><?= Yii::t('app', 'Checkout Address') ?> </legend>
                                         <div class="form-group required">
                                             <label class="control-label"
+                                                   for="input-payment-address-1"><?= Yii::t('app', 'CustomerAddress') ?></label>
+                                            <?php
+                                            if (isset($modelUpdatedAddress)) {
+                                                echo $form->field($modelUpdatedAddress, 'detail', [
+                                                    'showLabels' => false
+                                                ])->textarea(['placeholder' => Yii::t('app', 'CustomerAddress')]);
+                                            } else {
+                                                echo $form->field($modelAddress, 'detail', [
+                                                    'showLabels' => false
+                                                ])->textarea(['placeholder' => Yii::t('app', 'CustomerAddress')]);
+                                            }
+                                            ?>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label"
                                                    for="input-payment-city"><?= Yii::t('app', 'CityLabel') ?></label>
                                             <?php
                                             if (isset($modelUpdatedAddress)) {
@@ -229,21 +244,6 @@ echo $this->render('/layouts/_header');
                                             }
                                             ?>
                                         </div>
-                                        <div class="form-group required">
-                                            <label class="control-label"
-                                                   for="input-payment-address-1"><?= Yii::t('app', 'CustomerAddress') ?></label>
-                                            <?php
-                                            if (isset($modelUpdatedAddress)) {
-                                                echo $form->field($modelUpdatedAddress, 'detail', [
-                                                    'showLabels' => false
-                                                ])->textarea(['placeholder' => Yii::t('app', 'CustomerAddress')]);
-                                            } else {
-                                                echo $form->field($modelAddress, 'detail', [
-                                                    'showLabels' => false
-                                                ])->textarea(['placeholder' => Yii::t('app', 'CustomerAddress')]);
-                                            }
-                                            ?>
-                                        </div>
                                     </fieldset>
                                 </div>
                             </div>
@@ -266,7 +266,6 @@ echo $this->render('/layouts/_header');
                                                         'endDate' => '+10d',
                                                         'startDate' => '-0d',
                                                         'todayHighlight' => true,
-                                                        'format' => 'mm/dd/yyyy'
                                                     ],
                                                 ]); ?>
                                             </div>

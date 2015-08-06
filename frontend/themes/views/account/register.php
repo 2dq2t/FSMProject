@@ -8,7 +8,7 @@ echo $this->render('/layouts/_header');
 <div class="container content-inner">
 
     <div class="row content-subinner">
-        <?php echo $this->render('//layouts/_leftMenu.php'); ?>
+        <?php echo $this->render('/layouts/_leftMenuForgetPassword.php'); ?>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
                 <li><a href="#"><i

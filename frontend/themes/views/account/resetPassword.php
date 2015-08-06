@@ -8,11 +8,11 @@ echo $this->render('/layouts/_header');
 <div class="container content-inner">
 
     <div class="row content-subinner">
-        <?php require('_leftMenuChangePass.php'); ?>
+        <?php echo $this->render('/layouts/_leftMenuChangePass.php'); ?>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
-                <li><a href="index.php"><i class="fa fa-home"></i></a></li>
-                <li><a href="index.php?r=customer/manageacc"><?= Yii::t('app', 'AccountLabel') ?></a></li>
+                <li><a href="../site/index.php"><i class="fa fa-home"></i></a></li>
+                <li><a href="../site/index.php?r=customer/manageacc"><?= Yii::t('app', 'AccountLabel') ?></a></li>
                 <li><a href="#"><?= Yii::t('app', 'ChangePassInfoLabel') ?></a></li>
             </ul>
 
