@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\base\NotSupportedException;
+use backend\components\ParserDateTime;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use Yii;
@@ -165,7 +166,7 @@ class Customer extends ActiveRecord implements IdentityInterface
         if($this->validate()){
             $customer = Customer::findOne($customerId);
             $customer->username = $this->username;
-            $customer->dob = strtotime($this->dob);
+            $customer->dob = ParserDateTime::parseToTimestamp(Yii::$app->request->post('Customer')['dob']);
             $customer->gender = $this->gender;
             $customer->updated_at = time();
             $customer->guest_id = $this->guest_id;
