@@ -36,6 +36,7 @@ class Customer extends ActiveRecord implements IdentityInterface
     public $re_password;
     public $new_password;
     public $re_new_password;
+    public $full_name;
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -103,91 +104,9 @@ class Customer extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAddress()
-    {
-        return $this->hasOne(Address::className(), ['id' => 'address_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGuest()
-    {
-        return $this->hasOne(Guest::className(), ['id' => 'guest_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductRatings()
-    {
-        return $this->hasMany(ProductRating::className(), ['customer_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWishLists()
-    {
-        return $this->hasMany(WishList::className(), ['customer_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('wish_list', ['customer_id' => 'id']);
-    }
-
     public function setPassword($password)
     {
         $this->password = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    public function register(){
-        if($this->validate()){
-            $customer = new Customer();
-            $customer->username = $this->username;
-            $customer->setPassword($this->password);
-            $customer->created_at = time();
-            $customer->guest_id = $this->guest_id;
-            if ($customer->save()) {
-                return $customer;
-            }
-        }
-        return null;
-    }
-
-    public function updateCustomer($customerId){
-        if($this->validate()){
-            $customer = Customer::findOne($customerId);
-            $customer->username = $this->username;
-            $customer->dob = ParserDateTime::parseToTimestamp(Yii::$app->request->post('Customer')['dob']);
-            $customer->gender = $this->gender;
-            $customer->updated_at = time();
-            $customer->guest_id = $this->guest_id;
-            $customer->avatar = $this->avatar;
-            if ($customer->save()) {
-                return $customer;
-            }
-        }
-        return null;
-    }
-
-    public function changePassword($customerId){
-        if($this->validate()){
-            $customer = Customer::findOne($customerId);
-            $customer->setPassword($this->new_password);
-
-            if($customer->save()){
-                return $customer;
-            }
-        }
-        return null;
     }
 
     /**
@@ -198,7 +117,7 @@ class Customer extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'Status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -304,6 +223,6 @@ class Customer extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::find()->select(['customer.id', 'customer.username', 'guest.full_name AS full_name'])->join('inner join','guest','customer.guest_id = guest.id')->where('customer.status = "'.self::STATUS_ACTIVE.'" and customer.id = "'.$id.'"')->one();
     }
 }

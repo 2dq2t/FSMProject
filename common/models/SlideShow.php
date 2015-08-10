@@ -57,12 +57,4 @@ class SlideShow extends \yii\db\ActiveRecord
             'product_id' => Yii::t('app', 'Product'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
 }

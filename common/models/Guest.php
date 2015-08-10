@@ -51,20 +51,4 @@ class Guest extends \yii\db\ActiveRecord
             'phone_number' => Yii::t('app', 'Phone Number'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomers()
-    {
-        return $this->hasMany(Customer::className(), ['guest_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrders()
-    {
-        return $this->hasMany(Order::className(), ['guest_id' => 'id']);
-    }
 }

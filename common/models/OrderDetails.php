@@ -57,20 +57,4 @@ class OrderDetails extends \yii\db\ActiveRecord
             'discount' => Yii::t('app', 'Discount'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrder()
-    {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
 }

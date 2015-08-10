@@ -44,20 +44,4 @@ class ProductTag extends \yii\db\ActiveRecord
             'product_id' => Yii::t('app', 'Product ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTag()
-    {
-        return $this->hasOne(Tag::className(), ['id' => 'tag_id']);
-    }
 }

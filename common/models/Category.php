@@ -49,12 +49,4 @@ class Category extends \yii\db\ActiveRecord
             'active' => Yii::t('app', 'CategoryActive'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['category_id' => 'id']);
-    }
 }

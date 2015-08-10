@@ -48,22 +48,6 @@ class District extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAddresses()
-    {
-        return $this->hasMany(Address::className(), ['district_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCity()
-    {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
-    }
-
     //function get file from District Table
     public static function getOptionsByDistrict($district_id){
         $data = static::find()->where(['city_id'=>$district_id])->select(['id','name'])->asArray()->all();

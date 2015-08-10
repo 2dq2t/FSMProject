@@ -52,12 +52,4 @@ class OrderStatus extends \yii\db\ActiveRecord
             'comment' => Yii::t('app', 'OrderStatusComment'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrders()
-    {
-        return $this->hasMany(Order::className(), ['order_status_id' => 'id']);
-    }
 }

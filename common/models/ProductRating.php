@@ -47,28 +47,4 @@ class ProductRating extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('app', 'Customer ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomer()
-    {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRating()
-    {
-        return $this->hasOne(Rating::className(), ['id' => 'rating_id']);
-    }
 }

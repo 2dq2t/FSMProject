@@ -49,12 +49,4 @@ class Unit extends \yii\db\ActiveRecord
             'active' => Yii::t('app', 'UnitActive'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['unit_id' => 'id']);
-    }
 }

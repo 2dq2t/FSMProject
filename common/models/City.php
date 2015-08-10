@@ -44,14 +44,6 @@ class City extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDistricts()
-    {
-        return $this->hasMany(District::className(), ['city_id' => 'id']);
-    }
-
     //function get file from City Table
     public static function getCity(){
         $data = static::find()->all();

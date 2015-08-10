@@ -49,12 +49,4 @@ class AuthRule extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthItems()
-    {
-        return $this->hasMany(AuthItem::className(), ['rule_name' => 'name']);
-    }
 }

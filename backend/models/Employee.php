@@ -86,15 +86,6 @@ class Employee extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAddress()
-    {
-        return $this->hasOne(Address::className(), ['id' => 'address_id']);
-    }
-
-
-    /**
      * @inheritdoc
      */
     public static function findIdentity($id)

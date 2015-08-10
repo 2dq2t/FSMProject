@@ -95,30 +95,6 @@ class AuthItem extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthAssignments()
-    {
-        return $this->hasMany(AuthAssignment::className(), ['item_name' => 'name']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRuleName()
-    {
-        return $this->hasOne(AuthRule::className(), ['name' => 'rule_name']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthItemChildren()
-    {
-        return $this->hasMany(AuthItemChild::className(), ['child' => 'name']);
-    }
-
-    /**
      * Check if is new record.
      * @return boolean
      */

@@ -45,7 +45,7 @@ echo $this->render('/layouts/_header');
                             <!-- Megnor Cloud-Zoom Image Effect Start -->
                             <?php
                             if (!empty($product_image_detail[0]['path']))
-                                echo "<li class='image'><a class='thumbnail' href='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "'><img src='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "' alt='" . $product_detail['name'] . "' /></a></li>";
+                                echo "<li class='image'><a class='thumbnail' style='height: 342px;' href='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "'><img src='" . $product_image_detail[0]['path'] . "' title='" . $product_detail['name'] . "' alt='" . $product_detail['name'] . "' width='320px;'  /></a></li>";
                             ?>
 
                             <div class="additional-carousel">

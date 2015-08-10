@@ -48,20 +48,4 @@ class Rating extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'RatingDescription'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductRatings()
-    {
-        return $this->hasMany(ProductRating::className(), ['rating_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_rating', ['rating_id' => 'id']);
-    }
 }

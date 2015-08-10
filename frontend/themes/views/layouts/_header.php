@@ -128,7 +128,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                 <li class="dropdown myaccount"><a
                                         href="#"
                                         title="My Account" class="dropdown-toggle"
-                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->username ?></span>
+                                        data-toggle="dropdown"><span><?= Yii::$app->user->identity->full_name ?></span>
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
                                         <li>

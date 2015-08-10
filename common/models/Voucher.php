@@ -60,12 +60,4 @@ class Voucher extends \yii\db\ActiveRecord
             'order_id' => Yii::t('app', 'Order ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrder()
-    {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
-    }
 }

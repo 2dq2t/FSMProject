@@ -49,36 +49,4 @@ class Address extends \yii\db\ActiveRecord
             'district_id' => Yii::t('app', 'DistrictLabel'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDistrict()
-    {
-        return $this->hasOne(District::className(), ['id' => 'district_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomers()
-    {
-        return $this->hasMany(Customer::className(), ['address_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEmployees()
-    {
-        return $this->hasMany(Employee::className(), ['address_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrders()
-    {
-        return $this->hasMany(Order::className(), ['address_id' => 'id']);
-    }
 }

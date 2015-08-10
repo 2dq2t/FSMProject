@@ -28,6 +28,7 @@ use kartik\alert\Alert;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use backend\components\ParserDateTime;
 
 class AccountController extends Controller{
 
@@ -101,10 +102,13 @@ class AccountController extends Controller{
                 //save guest to database
                 if ($modelGuest->save()) {
                     $modelCustomer->guest_id = $modelGuest->id;
+                    $modelCustomer->setPassword($modelCustomer->password);
+                    $modelCustomer->re_password = $modelCustomer->password;
+                    $modelCustomer->created_at = ParserDateTime::getTimeStamp();
 
-                    if ($user = $modelCustomer->register()) {
+                    if ($modelCustomer->save()) {
                         $transaction->commit();
-                        if (Yii::$app->getUser()->login($user)) {
+                        if (Yii::$app->getUser()->login($modelCustomer)) {
                             $this->goHome();
                         }
                     } else {
@@ -184,7 +188,10 @@ class AccountController extends Controller{
                     }
 
                     $modelCustomer->guest_id = $modelGuest->id;
-                    if ($modelCustomer->updateCustomer($id)) {
+                    $modelCustomer->dob = ParserDateTime::parseToTimestamp(Yii::$app->request->post('Customer')['dob']);
+                    $modelCustomer->gender = Yii::$app->request->post('Customer')['gender'] ? Yii::$app->request->post('Customer')['gender'] : $modelCustomer->oldAttributes['gender'];;
+                    $modelCustomer->updated_at = time();
+                    if ($modelCustomer->save()) {
                         if ($avatar) {
                             // directory to save image in local
                             $dir = Yii::getAlias('@frontend/web/uploads/users/avatar/' . $modelCustomer->id);
@@ -299,7 +306,8 @@ class AccountController extends Controller{
         if ($modelCustomer->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($modelCustomer->changePassword($id)) {
+                $modelCustomer->setPassword($modelCustomer->new_password);
+                if ($modelCustomer->save()) {
                     $transaction->commit();
 
                     Yii::$app->getSession()->setFlash('successful', [

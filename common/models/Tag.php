@@ -45,20 +45,4 @@ class Tag extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'TagName'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductTags()
-    {
-        return $this->hasMany(ProductTag::className(), ['tag_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_tag', ['tag_id' => 'id']);
-    }
 }

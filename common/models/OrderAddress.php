@@ -47,20 +47,4 @@ class OrderAddress extends \yii\db\ActiveRecord
             'district_id' => Yii::t('app', 'District ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrders()
-    {
-        return $this->hasMany(Order::className(), ['order_address_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDistrict()
-    {
-        return $this->hasOne(District::className(), ['id' => 'district_id']);
-    }
 }

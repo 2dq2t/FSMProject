@@ -44,20 +44,4 @@ class WishList extends \yii\db\ActiveRecord
             'product_id' => Yii::t('app', 'Product ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomer()
-    {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
 }

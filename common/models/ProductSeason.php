@@ -44,20 +44,4 @@ class ProductSeason extends \yii\db\ActiveRecord
             'season_id' => Yii::t('app', 'Season ID'),
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSeason()
-    {
-        return $this->hasOne(Season::className(), ['id' => 'season_id']);
-    }
 }
