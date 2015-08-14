@@ -39,7 +39,7 @@ class AccessControl extends ActionFilter
     /**
      * @var array List of action that not need to check access.
      */
-    public $allowActions = [];
+//    public $allowActions = [];
 
     /**
      * Get user
@@ -101,46 +101,46 @@ class AccessControl extends ActionFilter
     /**
      * @inheritdoc
      */
-    protected function isActive($action)
-    {
-        $uniqueId = $action->getUniqueId();
-        if ($uniqueId === Yii::$app->getErrorHandler()->errorAction) {
-            return false;
-        }
-
-        $user = $this->getUser();
-        if ($user->getIsGuest() && is_array($user->loginUrl) && isset($user->loginUrl[0]) && $uniqueId === trim($user->loginUrl[0], '/')) {
-            return false;
-        }
-
-        if ($this->owner instanceof Module) {
-            // convert action uniqueId into an ID relative to the module
-            $mid = $this->owner->getUniqueId();
-            $id = $uniqueId;
-            if ($mid !== '' && strpos($id, $mid . '/') === 0) {
-                $id = substr($id, strlen($mid) + 1);
-            }
-        } else {
-            $id = $action->id;
-        }
-
-        foreach ($this->allowActions as $route) {
-            if (substr($route, -1) === '*') {
-                $route = rtrim($route, "*");
-                if ($route === '' || strpos($id, $route) === 0) {
-                    return false;
-                }
-            } else {
-                if ($id === $route) {
-                    return false;
-                }
-            }
-        }
-
-        if ($action->controller->hasMethod('allowAction') && in_array($action->id, $action->controller->allowAction())) {
-            return false;
-        }
-
-        return true;
-    }
+//    protected function isActive($action)
+//    {
+//        $uniqueId = $action->getUniqueId();
+//        if ($uniqueId === Yii::$app->getErrorHandler()->errorAction) {
+//            return false;
+//        }
+//
+//        $user = $this->getUser();
+//        if ($user->getIsGuest() && is_array($user->loginUrl) && isset($user->loginUrl[0]) && $uniqueId === trim($user->loginUrl[0], '/')) {
+//            return false;
+//        }
+//
+//        if ($this->owner instanceof Module) {
+//            // convert action uniqueId into an ID relative to the module
+//            $mid = $this->owner->getUniqueId();
+//            $id = $uniqueId;
+//            if ($mid !== '' && strpos($id, $mid . '/') === 0) {
+//                $id = substr($id, strlen($mid) + 1);
+//            }
+//        } else {
+//            $id = $action->id;
+//        }
+//
+//        foreach ($this->allowActions as $route) {
+//            if (substr($route, -1) === '*') {
+//                $route = rtrim($route, "*");
+//                if ($route === '' || strpos($id, $route) === 0) {
+//                    return false;
+//                }
+//            } else {
+//                if ($id === $route) {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        if ($action->controller->hasMethod('allowAction') && in_array($action->id, $action->controller->allowAction())) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
 }

@@ -33,7 +33,7 @@ class Employee extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    public $assignments = [];
+    private $assignments = [];
     /**
      * @inheritdoc
      */
@@ -214,5 +214,13 @@ class Employee extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function getAssignments(){
+        return $this->assignments;
+    }
+
+    public function setAssignments($assignments) {
+        $this->assignments = $assignments;
     }
 }

@@ -17,6 +17,7 @@ use common\models\Offer;
 use common\models\OrderDetails;
 use common\models\Product;
 use common\models\Unit;
+use common\models\Voucher;
 use Yii;
 use common\models\Order;
 use yii\base\Exception;
@@ -81,6 +82,7 @@ class OrderController extends Controller
      * Creates a new Order model.
      * If creation is successful, the browser will be redirected to the 'index' page.
      * @return mixed
+     * @var $order_detail OrderDetails
      */
     public function actionCreate()
     {
@@ -96,15 +98,22 @@ class OrderController extends Controller
             $address->load(Yii::$app->request->post())) {
 
             // create multiple OrderDetails model for $order_details
-            $order_details = Model::createMultiple(OrderDetails::classname());
+            $order_details = [];
+            $order_detail = new OrderDetails();
+            $order_details_data = Yii::$app->request->post($order_detail->formName());
+            if ($order_details_data && is_array($order_details_data)) {
+                foreach ($order_details_data as $i => $item) {
+                    $order_details[] = new OrderDetails();
+                }
+            }
             // load data to each OrderDetails model
-            Model::loadMultiple($order_details, Yii::$app->request->post());
+            OrderDetails::loadMultiple($order_details, Yii::$app->request->post());
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
 
                 if($address->save() && $guest->save()) {
-                    $model->address_id = $address->id;
+                    $model->order_address_id = $address->id;
                     $model->guest_id = $guest->id;
 
                     // convert string date time to timestamp
@@ -152,72 +161,54 @@ class OrderController extends Controller
 
                     $errors = [];
                     if ($model->save()) {
-                        if ($flag = $model->save()) {
-                            $product_id = [];
-                            // Save each OrderDetails to database
-                            foreach ($order_details as $order_detail) {
-                                // check if product is unselected
-                                if (!$order_detail->product_id) {
-                                    $transaction->rollBack();
-                                    $errors[] = Yii::t('app', 'Product not be empty.');
-                                    break;
-                                }
+                        $product_id = [];
+                        // Save each OrderDetails to database
+                        foreach ($order_details as $order_detail) {
+                            // check if product is unselected
+                            if (!$order_detail->product_id) {
+                                $transaction->rollBack();
+                                $errors[] = Yii::t('app', 'Product not be empty.');
+                                break;
+                            }
 
-                                // check if two same product selected
-                                if ($product_id && in_array($order_detail->product_id, $product_id)) {
-                                    $transaction->rollBack();
-                                    $errors[] = Yii::t('app', 'Each product must be unique.');
-                                    break;
-                                }
+                            // check if two same product selected
+                            if ($product_id && in_array($order_detail->product_id, $product_id)) {
+                                $transaction->rollBack();
+                                $errors[] = Yii::t('app', 'Each product must be unique.');
+                                break;
+                            }
 
-                                $product_id[] = $order_detail->product_id;
+                            $product_id[] = $order_detail->product_id;
 
-                                $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
-                                $today = date("d-m-Y");
-                                $offer_start_date = date("d-m-Y", $offer['start_date']);
-                                $offer_end_date = date("d-m-Y", $offer['end_date']);
-                                if ($offer_start_date <= $today && $today <= $offer_end_date) {
-                                    $product_offer = $offer['discount'];
-                                } else {
-                                    $product_offer = 0;
-                                }
+                            $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
+                            $today = date("d-m-Y");
+                            $offer_start_date = date("d-m-Y", $offer['start_date']);
+                            $offer_end_date = date("d-m-Y", $offer['end_date']);
+                            if ($offer_start_date <= $today && $today <= $offer_end_date) {
+                                $product_offer = $offer['discount'];
+                            } else {
+                                $product_offer = 0;
+                            }
 
-                                $order_detail->order_id = $model->id;
-                                $order_detail->sell_price = Product::find()->where(['id' => $order_detail->product_id])->one()['price'];
-                                $order_detail->discount = $product_offer;
+                            $order_detail->order_id = $model->id;
+                            $order_detail->sell_price = Product::find()->where(['id' => $order_detail->product_id])->one()['price'];
+                            $order_detail->discount = $product_offer;
 
 
-                                if (! ($flag = $order_detail->save())) {
-                                    $transaction->rollBack();
-                                    break;
-                                }
+                            if (!$order_detail->save()) {
+                                $errors[] = current($order_detail->getFirstErrors());
+                                break;
                             }
                         }
-                        if ($flag && empty($errors)) {
-                            if ($transaction->getIsActive()) {
-                                $transaction->commit();
-                            }
 
-                            Yii::$app->getSession()->setFlash('success', [
-                                'type' => 'success',
-                                'duration' => 3000,
-                                'icon' => 'fa fa-plus',
-                                'message' => Yii::t('app', 'Add Order successful.'),
-                                'title' => Yii::t('app', 'Add Order'),
-                            ]);
+                        $voucher = Voucher::findOne(['code' => 'dasd']);
+                        $voucher->order_id = $model->id;
+                        if(!$voucher->save()) {
+                            $errors[] = current($voucher->getFirstErrors());
+                        }
 
-                            Logger::log(Logger::INFO, Yii::t('app', 'Create address success.'), Yii::$app->user->identity->email);
-                            Logger::log(Logger::INFO, Yii::t('app', 'Create guest success.'), Yii::$app->user->identity->email);
-                            Logger::log(Logger::INFO, Yii::t('app', 'Create order success.'), Yii::$app->user->identity->email);
-                            Logger::log(Logger::INFO, Yii::t('app', 'Create order details success.'), Yii::$app->user->identity->email);
+                        if (!empty($errors)) {
 
-                            switch (Yii::$app->request->post('action', 'save')) {
-                                case 'next':
-                                    return $this->redirect(['create']);
-                                default:
-                                    return $this->redirect(['index']);
-                            }
-                        } else {
                             if ($model->order_date) {
                                 $model->order_date = date('m/d/Y', $model->order_date);
                             }
@@ -248,6 +239,31 @@ class OrderController extends Controller
                                 'order_details' => (empty($order_details)) ? [new OrderDetails()] : $order_details,
                             ]);
                         }
+
+                        if ($transaction->getIsActive()) {
+                            $transaction->commit();
+                        }
+
+                        Yii::$app->getSession()->setFlash('success', [
+                            'type' => 'success',
+                            'duration' => 3000,
+                            'icon' => 'fa fa-plus',
+                            'message' => Yii::t('app', 'Add Order successful.'),
+                            'title' => Yii::t('app', 'Add Order'),
+                        ]);
+
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create address success.'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create guest success.'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create order success.'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create order details success.'), Yii::$app->user->identity->email);
+
+                        switch (Yii::$app->request->post('action', 'save')) {
+                            case 'next':
+                                return $this->redirect(['create']);
+                            default:
+                                return $this->redirect(['index']);
+                        }
+
                     } else {
                         if ($model->order_date) {
                             $model->order_date = date('m/d/Y', $model->order_date);
@@ -795,17 +811,17 @@ class OrderController extends Controller
         }
     }
 
-    public function actionGetProductInfo($id) {
-        $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
-        $image = Image::find()->select('path')->where(['product_id' => $id])->one();
-        $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
-        $product_info = [
-            'price' => $product_info->price,
-            'quantity_in_stock' => $product_info->quantity_in_stock,
-            'sold' => $product_info->sold,
-            'unit' => $unit->name,
-            'image' => $image ? $image->path : null,
-        ];
-        echo Json::encode($product_info);
-    }
+//    public function actionGetProductInfo($id) {
+//        $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
+//        $image = Image::find()->select('path')->where(['product_id' => $id])->one();
+//        $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
+//        $product_info = [
+//            'price' => $product_info->price,
+//            'quantity_in_stock' => $product_info->quantity_in_stock,
+//            'sold' => $product_info->sold,
+//            'unit' => $unit->name,
+//            'image' => $image ? $image->path : null,
+//        ];
+//        echo Json::encode($product_info);
+//    }
 }

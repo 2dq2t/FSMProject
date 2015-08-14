@@ -63,7 +63,7 @@ class LogController extends Controller
      */
     protected function getPath()
     {
-        $this->path = Logger::getInstance()->logDirectory;
+        $this->path = Logger::getInstance()->getLogDirectory();
 
         if ( !file_exists($this->path ))
         {
@@ -81,7 +81,7 @@ class LogController extends Controller
     {
         $path = $this->getPath();
         $list = [];
-        $list_files = glob($path . '*.' . Logger::getInstance()->config['extension']);
+        $list_files = glob($path . '*.' . Logger::getInstance()->getConfig()['extension']);
         if ($list_files )
         {
             $list = array_map('basename',$list_files);

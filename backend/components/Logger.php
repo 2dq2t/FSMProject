@@ -28,7 +28,7 @@ class Logger {
      * Directory to the logs
      * @var string
      */
-    public $logDirectory;
+    private $logDirectory;
 
 
     /**
@@ -43,7 +43,7 @@ class Logger {
      */
     private static $fileHandle;
 
-    public $config = [
+    private $config = [
         'extension' => 'txt',
         'dateFormat' => 'Y-m-d G:i:s.u',
         'prefix' => 'log_'
@@ -51,9 +51,8 @@ class Logger {
 
     /**
      * The construct class logger
-     * @param array $config
      */
-    private function __construct(array $config = [])
+    protected function __construct()
     {
         if (!$this->logDirectory) {
             $this->logDirectory = Yii::getAlias('@backend').DIRECTORY_SEPARATOR. 'logs'.DIRECTORY_SEPARATOR;
@@ -63,7 +62,7 @@ class Logger {
             }
         }
 
-        $this->config = array_merge($this->config, $config);
+//        $this->config = array_merge($this->config, $config);
 
 //        $this->setLogFilePath($this->logDirectory);
 //        if(file_exists($this->logFilePath) && !is_writable($this->logFilePath)) {
@@ -92,6 +91,19 @@ class Logger {
         $this->logFilePath = $logDirectory.DIRECTORY_SEPARATOR.$this->config['prefix'].date('Y-m-d').'.'.$this->config['extension'];
     }
 
+
+    public function getLogDirectory(){
+        return $this->logDirectory;
+    }
+
+    public function setConfig(array $config) {
+        $this->config = array_merge($this->config, $config);
+    }
+
+    public function getConfig(){
+        return $this->config;
+    }
+
     /**
      * @param $writeMode
      *
@@ -104,7 +116,7 @@ class Logger {
     /**
      * Class destructor
      */
-    public function __destruct()
+    protected function __destruct()
     {
         if (self::$fileHandle) {
             fclose(self::$fileHandle);
@@ -116,12 +128,12 @@ class Logger {
      *
      * @param mixed $level
      * @param string $message
-     * @param array $beforeChangeValues
-     * @param array $afterChangeValues
+     * @param array $beforeValues
+     * @param array $afterValues
      * @param int $userId
      * @return null
      */
-    public static function log($level, $message, $userId, array $beforeChangeValues = [], array $afterChangeValues = [])
+    public static function log($level, $message, $userId, array $beforeValues = [], array $afterValues = [])
     {
         self::getInstance()->setLogFilePath(self::getInstance()->logDirectory);
         if(file_exists(self::getInstance()->logFilePath) && !is_writable(self::getInstance()->logFilePath)) {
@@ -133,7 +145,7 @@ class Logger {
             throw new RuntimeException(Yii::t('app', 'The file could not be opened. Check permissions.'));
         }
 
-        $changeValues = !empty($beforeChangeValues) && !empty($afterChangeValues) ? self::getInstance()->changeValues($beforeChangeValues, $afterChangeValues) : [];
+        $changeValues = !empty($beforeValues) && !empty($afterValues) ? self::getInstance()->changeValues($beforeValues, $afterValues) : [];
         $message = self::getInstance()->formatMessage($level, $message, $userId, $changeValues);
         self::write($message);
     }
@@ -144,7 +156,7 @@ class Logger {
      * @param string $message Line to write to the log
      * @return void
      */
-    public function write($message)
+    private function write($message)
     {
         if (null !== self::$fileHandle) {
             if (fwrite(self::$fileHandle, $message) === false) {
@@ -223,16 +235,16 @@ class Logger {
     /**
      * Gets the change value
      *
-     * @param array $beforeChangeValues
-     * @param array $afterChangeValues
+     * @param array $beforeValues
+     * @param array $afterValues
      * @return array
      */
-    private function changeValues(array $beforeChangeValues, array $afterChangeValues)
+    private function changeValues(array $beforeValues, array $afterValues)
     {
-        $different = array_diff_assoc($beforeChangeValues, $afterChangeValues);
+        $different = array_diff_assoc($beforeValues, $afterValues);
         $arr = [];
         foreach($different as $key => $value) {
-            $arr[$key] = [$beforeChangeValues[$key] => $afterChangeValues[$key]];
+            $arr[$key] = [$beforeValues[$key] => $afterValues[$key]];
         }
 
         return $arr;

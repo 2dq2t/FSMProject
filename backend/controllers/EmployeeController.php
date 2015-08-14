@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\AccessControl;
 use backend\components\Logger;
 use backend\components\ParserDateTime;
 use common\models\Address;
@@ -35,6 +36,9 @@ class EmployeeController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+//            'access' => [
+//                'class' => AccessControl::className()
+//            ],
         ];
     }
 
@@ -107,12 +111,12 @@ class EmployeeController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
      * Creates a new Employee model.
@@ -160,11 +164,11 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
-                        if($model->assignments == '') {
-                            $model->assignments = [];
+                        if($model->getAssignments() == '') {
+                            $model->setAssignments([]);
                         }
 
-                        foreach ($model->assignments as $assignment) {
+                        foreach ($model->getAssignments() as $assignment) {
                             try {
                                 \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
                             } catch (\Exception $e) {
@@ -277,7 +281,7 @@ class EmployeeController extends Controller
         $model->start_date = date('d/m/Y', $model->start_date);
 
         $prePostAssignments = Yii::$app->getAuthManager()->getAssignments($id);
-        $model->assignments = ArrayHelper::map($prePostAssignments, 'roleName', 'roleName');
+        $model->setAssignments(ArrayHelper::map($prePostAssignments, 'roleName', 'roleName'));
 
         if ($model->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
@@ -322,20 +326,20 @@ class EmployeeController extends Controller
 
 
 
-                        if($model->assignments == '') {
-                            $model->assignments = [];
+                        if($model->getAssignments() == '') {
+                            $model->setAssignments([]);
                         }
 
                         foreach ($prePostAssignments as $assignment) {
-                            $key = array_search($assignment->roleName, $model->assignments);
+                            $key = array_search($assignment->roleName, $model->getAssignments());
                             if ($key === false) {
                                 \Yii::$app->authManager->revoke(new Item(['name' => $assignment->roleName]), $model->id);
                             } else {
-                                unset($model->assignments[$key]);
+                                unset($model->getAssignments()[$key]);
                             }
                         }
 
-                        foreach ($model->assignments as $assignment) {
+                        foreach ($model->getAssignments() as $assignment) {
                             try {
                                 \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
                             } catch (\Exception $e) {
@@ -500,7 +504,7 @@ class EmployeeController extends Controller
      * @return Employee the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = Employee::findOne($id)) !== null) {
             return $model;
@@ -509,7 +513,7 @@ class EmployeeController extends Controller
         }
     }
 
-    public function actionGetdistrict($id = null) {
+    public function actionGetdistrict($id) {
         if (isset($id)) {
             $countDistrict= District::find()
                 ->where(['city_id' => $id])

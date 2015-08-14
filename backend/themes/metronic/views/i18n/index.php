@@ -67,9 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
             '{export}',
         ],
         'pjax' => true,
-        'pjaxSettings'=>[
-            'neverTimeout'=>true,
-        ],
+//        'pjaxSettings'=>[
+//            'neverTimeout'=>true,
+//        ],
         'bordered' => true,
         'striped' => false,
         'condensed' => false,

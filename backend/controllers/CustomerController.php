@@ -291,11 +291,14 @@ class CustomerController extends Controller
         $model->scenario = 'adminEdit';
         $model->password = null;
         $guest = Guest::find()->where(['id' => $model->guest_id])->one();
-        $address = Address::find()->where(['id' => $model->address_id])->one();
-        $district = District::find()->where(['id' => $address->district_id])->one();
-        $city = City::find()->where(['id'=>$district->city_id])->one();
-
-
+        if (trim($model->address_id) !== '') {
+            $address = Address::find()->where(['id' => $model->address_id])->one();
+            $district = District::find()->where(['id' => $address->district_id])->one();
+            $city = City::find()->where(['id'=>$district->city_id])->one();
+        } else {
+            $address = new Address();
+            $city = new City();
+        }
 
         // Load all file from post to model
         if ($model->load(Yii::$app->request->post())
@@ -311,15 +314,9 @@ class CustomerController extends Controller
                 // Save address info to database
                 if($address->save() && $guest->save()) {
 
-                    if ($model->password) {
-                        $model->setPassword($model->password);
-                    }
-
                     $avatar = UploadedFile::getInstance($model,'avatar');
-
                     if($avatar) {
                         $ext = $avatar->extension;
-
                         // generate a unique file name
                         $model->avatar = Yii::$app->security->generateRandomString().".{$ext}";
                     } else {
@@ -327,13 +324,14 @@ class CustomerController extends Controller
                     }
 
                     $model->dob = ParserDateTime::parseToTimestamp(Yii::$app->request->post('Customer')['dob']);
-
                     if (Yii::$app->request->post('Customer')['password'] === '') {
                         $model->password = $model->oldAttributes['password'];
+                    } else {
+                        $model->setPassword(Yii::$app->request->post('Customer')['password']);
                     }
 
                     $model->gender = Yii::$app->request->post('Customer')['gender'] ? Yii::$app->request->post('Customer')['gender'] : $model->oldAttributes['gender'];
-
+                    $model->address_id = $address->id;
                     $model->updated_at = ParserDateTime::getTimeStamp();
 
                     if ($model->save()) {

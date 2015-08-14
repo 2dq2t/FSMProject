@@ -4,7 +4,9 @@ namespace backend\models;
 
 use backend\components\ParserDateTime;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\Json;
+use yii\rbac\DbManager;
 use yii\rbac\Item;
 use yii\web\Application;
 
@@ -35,11 +37,11 @@ class AuthItem extends \yii\db\ActiveRecord
      * This hold the old name of item
      * @var string
      */
-    public $oldName;
+    private $oldName;
     /**
      * @var $error
      */
-    public $items = [];
+    private $items = [];
 
     private $errorMessage;
     /**
@@ -119,44 +121,8 @@ class AuthItem extends \yii\db\ActiveRecord
     }
 
     /**
-     * Save role to [[\yii\rbac\authManager]]
-     * @return boolean
-     */
-    public function saveRole()
-    {
-        if ($this->validate()) {
-            $manager = Yii::$app->authManager;
-            if ($this->_item === null) {
-                if ($this->type == Item::TYPE_ROLE) {
-                    $this->_item = $manager->createRole($this->name);
-                } else {
-                    $this->_item = $manager->createPermission($this->name);
-                }
-                $isNew = true;
-            } else {
-                $isNew = false;
-                $oldName = $this->_item->name;
-            }
-            $this->_item->name = $this->name;
-            $this->_item->description = !empty($this->description) ? $this->description : null;
-            $this->_item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
-            $this->_item->data = $this->data === null || $this->data === '' ? null : Json::decode($this->data);
-            if ($isNew) {
-                $this->_item->createdAt = time();
-                $manager->add($this->_item);
-            } else {
-                $this->_item->updatedAt = time();
-                $manager->update($oldName, $this->_item);
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * @var Item $item
+     * @return boolean
      */
 
     public function createItem()
@@ -171,19 +137,25 @@ class AuthItem extends \yii\db\ActiveRecord
             ]
         );
 
-        Yii::$app->getAuthManager()->add($item);
-        foreach ($this->items as $value) {
-
-            try {
-                Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
-            } catch (\Exception $ex) {
-                $this->errorMessage .= Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
-                        'value' => $value,
-                    ])
-                    . " " . $ex->getMessage() . "<br />";
+        try {
+            Yii::$app->getAuthManager()->add($item);
+            foreach ($this->items as $value) {
+                try {
+                    Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
+                } catch (\Exception $ex) {
+                    $this->errorMessage .= Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
+                            'value' => $value,
+                        ])
+                        . " " . $ex->getMessage() . "<br />";
+                    return false;
+                }
             }
+        } catch (Exception $e) {
+            $this->errorMessage .= $e->getMessage();
+            return false;
         }
-        return $item;
+
+        return true;
     }
 
     public function updateItem()
@@ -193,31 +165,92 @@ class AuthItem extends \yii\db\ActiveRecord
         $item->type = $this->type;
         $item->description = !empty(trim($this->description)) ? trim($this->description) : null;
         $item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
-        Yii::$app->getAuthManager()->update($this->oldName, $item);
-        $children = Yii::$app->getAuthManager()->getChildren($item->name);
-        foreach ($children as $value) {
-            $key = array_search($value->name, $this->items);
-            if ($key === false) {
-                Yii::$app->getAuthManager()->removeChild($item, $value);
-            } else {
-                unset($this->items[$key]);
+
+        try {
+//            Yii::$app->getAuthManager()->update($this->oldName, $item);
+            $dbManager = new DbManager();
+            $dbManager->update($this->oldName, $item);
+            if ($item->name !== $this->oldName) {
+                Yii::$app->db->createCommand()
+                    ->update($dbManager->itemChildTable, ['parent' => $item->name], ['parent' => $this->oldName])
+                    ->execute();
+                Yii::$app->db->createCommand()
+                    ->update($dbManager->itemChildTable, ['child' => $item->name], ['child' => $this->oldName])
+                    ->execute();
+                Yii::$app->db->createCommand()
+                    ->update($dbManager->assignmentTable, ['item_name' => $item->name], ['item_name' => $this->oldName])
+                    ->execute();
             }
-        }
-        foreach ($this->items as $value) {
-            try {
-                Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
-            } catch (\Exception $ex) {
-                $this->errorMessage .= Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
-                        'value' => $value,
-                    ])
-                    . " " . $ex->getMessage() . "<br />";
+
+            $children = Yii::$app->getAuthManager()->getChildren($item->name);
+
+            foreach ($children as $value) {
+                $key = array_search($value->name, $this->items);
+                if ($key === false) {
+                    Yii::$app->getAuthManager()->removeChild($item, $value);
+                } else {
+                    unset($this->items[$key]);
+                }
             }
+            foreach ($this->items as $value) {
+                try {
+                    Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
+                } catch (\Exception $ex) {
+                    $this->errorMessage .= Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
+                            'value' => $value,
+                        ])
+                        . " " . $ex->getMessage() . "<br />";
+                    return false;
+                }
+            }
+        } catch (Exception $e){
+            $this->errorMessage .= $e->getMessage();
+            return false;
         }
-        return $item;
+
+        return true;
+    }
+
+    public function deleteItem()
+    {
+        try{
+            $dbManager = new DbManager();
+
+            Yii::$app->db->createCommand()
+                ->delete($dbManager->itemChildTable, ['or', '[[parent]]=:name', '[[child]]=:name'], [':name' => $this->name])
+                ->execute();
+            Yii::$app->db->createCommand()
+                ->delete($dbManager->assignmentTable, ['item_name' => $this->name])
+                ->execute();
+
+            Yii::$app->db->createCommand()
+                ->delete($dbManager->itemTable, ['name' => $this->name])
+                ->execute();
+        } catch (Exception $e) {
+            $this->errorMessage .= $e->getMessage();
+            return false;
+        }
+        return true;
     }
 
     public function getErrorMessage()
     {
         return $this->errorMessage;
+    }
+
+    public function getOldName() {
+        return $this->oldName;
+    }
+
+    public function setOldName($oldName) {
+        $this->oldName = $oldName;
+    }
+
+    public function getItems() {
+        return $this->items;
+    }
+
+    public function setItems($items = []) {
+        $this->items = $items;
     }
 }

@@ -113,7 +113,7 @@ EOD;
      */
     public function requiredTemplates()
     {
-        return ['module.php', 'controller.php', 'view.php'];
+        return ['module.php', 'controller.php', 'update.php'];
     }
 
     /**
@@ -133,7 +133,7 @@ EOD;
         );
         $files[] = new CodeFile(
             $modulePath . '/views/default/index.php',
-            $this->render("view.php")
+            $this->render("update.php")
         );
 
         return $files;

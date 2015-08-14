@@ -137,18 +137,14 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
-        $productImages = new Image();
-        $product_seasons = new ProductSeason();
-        $product_tags = new ProductTag();
 
-        $model->price = number_format($model->price, 0, '', ' ');
+//        $model->price = number_format($model->price, 0, '', ' ');
 
         if ($model->load(Yii::$app->request->post())) {
-
             // set create date as timestamp
             $model->create_date = ParserDateTime::getTimeStamp();
 
-            $file = UploadedFile::getInstances($productImages, 'product_image');
+            $product_images = UploadedFile::getInstances($model, 'productImage');
 
             // remove space in product price
             $model->price = preg_replace('/\s/', '', $model->price);
@@ -159,37 +155,32 @@ class ProductController extends Controller
             try {
                 if ($model->save()) {
                     $errors = [];
-                    if ($file) {
-                        $images = '';
-                        foreach ($file as $image) {
-                            // directory to save image in local
-                            $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
-                            $dir_resize = Yii::getAlias('@frontend/web/uploads/products/resizeimages/' . $model->id);
-                            FileHelper::createDirectory($dir);
-                            FileHelper::createDirectory($dir_resize);
-                            // path to save database
-                            $path = 'uploads/products/images/' . $model->id . '/';
-                            $path_resize = 'uploads/products/resizeimages/' . $model->id . '/';
+                    // directory to save image in local
+                    $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
+                    $dir_resize = Yii::getAlias('@frontend/web/uploads/products/resizeimages/' . $model->id);
+                    FileHelper::createDirectory($dir);
+                    FileHelper::createDirectory($dir_resize);
+                    foreach ($product_images as $image) {
+                        // path to save database
+                        $path = 'uploads/products/images/' . $model->id . '/';
+                        $path_resize = 'uploads/products/resizeimages/' . $model->id . '/';
 
-                            $productImages = new Image();
-                            $productImages->product_id = $model->id;
-                            $productImages->name = $image->name;
-                            // generate random name for image save
-                            $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
-                            $productImages->path = $path . $imageName;
-                            $productImages->resize_path = $path_resize . $imageName;
-                            $images .= $imageName . $image->extension . '###';
+                        $productImages = new Image();
+                        $productImages->product_id = $model->id;
+                        $productImages->name = $image->name;
+                        // generate random name for image save
+                        $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
+                        $productImages->path = $path . $imageName;
+                        $productImages->resize_path = $path_resize . $imageName;
 
-                            $productImages->product_image = $images;
-                            if($productImages->save())
-                            {
-                                $image->saveAs($dir . '/' . $imageName);
-                                $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
-                                Logger::log(Logger::INFO, Yii::t('app', 'Add product image success'), Yii::$app->user->identity->email);
-                            } else {
-                                $errors[] = current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image');
-                                Logger::log(Logger::ERROR, Yii::t('app', 'Add product image error:'). current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image'), Yii::$app->user->identity->email);
-                            }
+                        if($productImages->save())
+                        {
+                            $image->saveAs($dir . '/' . $imageName);
+                            $this->resizeImage($dir . '/' . $imageName, $dir_resize . '/' . $imageName, 100, 100, $image->type);
+                            Logger::log(Logger::INFO, Yii::t('app', 'Add product image success'), Yii::$app->user->identity->email);
+                        } else {
+                            $errors[] = current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image');
+                            Logger::log(Logger::ERROR, Yii::t('app', 'Add product image error:'). current($productImages->getFirstErrors()) ? current($productImages->getFirstErrors()) : Yii::t('app', 'Could not save image'), Yii::$app->user->identity->email);
                         }
                     }
 
@@ -198,6 +189,7 @@ class ProductController extends Controller
                     }
 
                     foreach ($model->product_seasons as $product_season) {
+                        $product_seasons = new ProductSeason();
                         $product_seasons->product_id = $model->id;
                         $product_seasons->season_id = $product_season;
 
@@ -215,6 +207,7 @@ class ProductController extends Controller
                     foreach ($model->product_tags as $product_tag) {
                         // check tag exists
                         if (Tag::find()->where(['id' => $product_tag])->exists()) {
+                            $product_tags = new ProductTag();
                             $product_tags->tag_id = $product_tag;
                             $product_tags->product_id = $model->id;
                             if (!$product_tags->save())
@@ -229,15 +222,17 @@ class ProductController extends Controller
                             $tag = new Tag();
                             $tag->name = $product_tag;
                             if ($tag->save()) {
+                                $product_tags = new ProductTag();
                                 $product_tags->tag_id = $tag->id;
                                 $product_tags->product_id = $model->id;
-                                if (!$product_tags->save())
+                                if ($product_tags->save())
                                 {
+                                    Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->user->identity->email);
+                                    Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->user->identity->email);
+                                } else {
                                     $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
                                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->user->identity->email);
                                 }
-                                Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->user->identity->email);
-                                Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->user->identity->email);
                             } else {
                                 $errors[] = current($tag->getFirstErrors()) ? current($tag->getFirstErrors()) : Yii::t('app', 'Could not add tag');
                                 Logger::log(Logger::ERROR, Yii::t('app', 'Add Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save tags.'), Yii::$app->user->identity->email);
@@ -250,6 +245,9 @@ class ProductController extends Controller
                             $transaction->rollBack();
                         }
 
+                        FileHelper::removeDirectory($dir);
+                        FileHelper::removeDirectory($dir_resize);
+
                         Yii::$app->getSession()->setFlash('error', [
                             'type' => 'error',
                             'duration' => 0,
@@ -259,8 +257,7 @@ class ProductController extends Controller
                         ]);
 
                         return $this->render('create', [
-                            'model' => $model,
-                            'productImages' => $productImages
+                            'model' => $model
                         ]);
                     }
 
@@ -293,8 +290,7 @@ class ProductController extends Controller
                     ]);
                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product.'), Yii::$app->user->identity->email);
                     return $this->render('create', [
-                        'model' => $model,
-                        'productImages' => $productImages
+                        'model' => $model
                     ]);
                 }
             } catch (Exception $e) {
@@ -312,16 +308,14 @@ class ProductController extends Controller
                 Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
-                    'model' => $model,
-                    'productImages' => $productImages
+                    'model' => $model
                 ]);
             }
 
         } else {
 
             return $this->render('create', [
-                'model' => $model,
-                'productImages' => $productImages
+                'model' => $model
             ]);
         }
     }
@@ -334,21 +328,20 @@ class ProductController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        $productImages = new Image();
+        $model = new Product();//$this->findModel($id);
+        $images = Image::find()->where(['product_id' => $id])->all();
         $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
         $product_tags = ProductTag::find()->select('tag_id')->where(['product_id' => $id])->all();
 
         $model->product_seasons = ArrayHelper::map($product_seasons, 'season_id', 'season_id');
         $model->product_tags = ArrayHelper::map($product_tags, 'tag_id', 'tag_id');
-        $images = Image::find()->where(['product_id' => $id])->all();
 
         $model->price = number_format($model->price, 0, '', ' ');
 
         if ($model->load(Yii::$app->request->post())) {
             $oldModel = $model->oldAttributes;
             $model->price = preg_replace('/\s/', '', $model->price);
-            $file = UploadedFile::getInstances($productImages, 'product_image');
+            $file = UploadedFile::getInstances($model, 'productImage');
 
             // Begin transaction
             $transaction = Yii::$app->db->beginTransaction();
@@ -365,7 +358,6 @@ class ProductController extends Controller
                         FileHelper::removeDirectory($dir);
                         FileHelper::removeDirectory($dir_resize);
 
-                        $images = '';
                         foreach ($file as $image) {
                             FileHelper::createDirectory($dir);
                             FileHelper::createDirectory($dir_resize);
@@ -380,9 +372,6 @@ class ProductController extends Controller
                             $imageName = Yii::$app->getSecurity()->generateRandomString() . "." . $image->extension;
                             $productImages->path = $path . $imageName;
                             $productImages->resize_path = $path_resize . $imageName;
-                            $images .= $imageName . $image->extension . '###';
-
-                            $productImages->product_image = $images;
                             if($productImages->save())
                             {
                                 $image->saveAs($dir . '/' . $imageName);
@@ -483,9 +472,7 @@ class ProductController extends Controller
 
                         return $this->render('create', [
                             'model' => $model,
-                            'productImages' => $productImages,
-                            'images' => $images,
-                            'product_seasons' => $product_seasons
+                            'images' => $images
                         ]);
                     }
 
@@ -518,9 +505,7 @@ class ProductController extends Controller
 
                     return $this->render('create', [
                         'model' => $model,
-                        'productImages' => $productImages,
-                        'images' => $images,
-                        'product_seasons' => $product_seasons
+                        'images' => $images
                     ]);
                 }
             } catch (Exception $e) {
@@ -539,15 +524,12 @@ class ProductController extends Controller
 
                 return $this->render('update', [
                     'model' => $model,
-                    'productImages' => $productImages,
                     'images' => $images,
-                    'product_seasons' => $product_seasons
                 ]);
             }
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'productImages' => $productImages,
                 'images' => $images,
             ]);
         }

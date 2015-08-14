@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax' => true,
         'pjaxSettings'=>[
-            'neverTimeout'=>true,
+//            'neverTimeout'=>true,
             'options' => [
                 'enablePushState' => false
             ],

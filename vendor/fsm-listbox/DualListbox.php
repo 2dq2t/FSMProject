@@ -2,13 +2,12 @@
 
 namespace fsm\dualistbox;
 
+use backend\components\Logger;
 use yii\widgets\InputWidget;
 
 class DualListbox extends InputWidget
 {
     public $items = [];
-
-    public $options;
 
     public function init()
     {
@@ -21,9 +20,9 @@ class DualListbox extends InputWidget
         $view = $this->getView();
         $inputId = $this->attribute;
         $selectedValues = $this->model->$inputId;
+        $id = static::getId();
 
-        $sel = $this->renderSelect($inputId, $selectedValues);
-
+        $sel = $this->renderSelect($selectedValues, $id);
         $options = '';
         foreach($this->options as $key => $value) {
             $options .= $key . ': ' . '"' . $value . '",';
@@ -31,7 +30,7 @@ class DualListbox extends InputWidget
 
         $js = <<<SCRIPT
 
-            $('#$inputId').bootstrapDualListbox({
+            $('#$id').bootstrapDualListbox({
                 $options
             });
 SCRIPT;
@@ -41,9 +40,9 @@ SCRIPT;
         return $sel;
     }
 
-    public function renderSelect($inputId, $selectedValues)
+    public function renderSelect($selectedValues, $id)
     {
-        $ret = '<select id="' . $inputId . '" name="'.$this->model->formName().'['.$this->attribute.'][]" style="display: none" multiple = "multiple">';
+        $ret = '<select id="' . $id . '" name="'.$this->model->formName().'['.$this->attribute.'][]" style="display: none" multiple = "multiple">';
 
         foreach ($this->items as $keys => $values) {
             if (empty($values)) continue;

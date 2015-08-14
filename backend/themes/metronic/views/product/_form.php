@@ -63,7 +63,8 @@ if(isset($images)) {
 <div class="row">
     <div class="col-md-12">
         <!--        <form class="form-horizontal form-row-seperated" action="#">-->
-        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data', 'class' => 'horizontal-form']]); ?>
+        <?php $form = ActiveForm::begin(['action' => 'adsa/asdsa', 'id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data', 'class' => 'horizontal-form']]);
+        ?>
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
@@ -92,7 +93,11 @@ if(isset($images)) {
                         <!--/span-->
                         <div class="col-md-6">
                             <?= $form->field($model, 'barcode', [
-//                                            'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
+                                'addon' => [
+                                    'prepend' => [
+                                        'content' => '893 12345'
+                                    ]
+                                ]
                             ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode')]) ?>
                         </div>
                         <!--/span-->
@@ -113,7 +118,7 @@ if(isset($images)) {
                                     'append' => [
                                         'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
                                     ],
-                                ]])->textInput(['id' => 'product_quantity', 'maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product')]) ?>
+                                ]])->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product')]) ?>
                         </div>
                     </div>
                     <!--/row-->
@@ -193,7 +198,7 @@ if(isset($images)) {
                     <h3 class="form-section"><?=Yii::t('app','Images')?></h3>
                     <div class="row">
                         <div class="col-md-12 ">
-                            <?= $form->field($productImages, 'product_image[]')
+                            <?= $form->field($model, 'productImage[]')
                                 ->widget(\kartik\widgets\FileInput::className(), [
                                     'options' => [
                                         'accept' => 'image/*',
@@ -258,7 +263,7 @@ if(isset($images)) {
         return x1 + x2;
     }
 
-    $("#product_price, #product_quantity, #product_tax, #product_sold").keypress(function (e) {
+    $("#product_price, #product-quantity_in_stock, #product_tax, #product_sold, #product-barcode").keypress(function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             return false;
         } else {

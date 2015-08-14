@@ -57,34 +57,34 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attributes' => [
                                         'name',
                                         'description:ntext',
-                                        'ruleName',
+                                        'rule_name',
                                         'data:ntext',
                                     ],
                                 ]);
                                 ?>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="col-lg-5">
-                                    <?= Yii::t('app', 'Avaliable') ?>:
-                                    <input id="search-avaliable" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>"><br>
-                                    <select id="list-avaliable" class="form-control" multiple size="20" style="width: 100%">
-                                    </select>
-                                </div>
-                                <div class="col-lg-1">
-                                    <br><br>
-                                    <a href="javascript:" id="btn-add" class="btn btn-success">&gt;&gt;</a><br><br>
-                                    <a href="javascript:" id="btn-remove" class="btn btn-danger">&lt;&lt;</a>
-                                </div>
-                                <div class="col-lg-5">
-                                    <?= Yii::t('app', 'Assigned') ?>:
-                                    <input id="search-assigned" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>"><br>
-                                    <select id="list-assigned" class="form-control" multiple size="20" style="width: 100%">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <div class="col-md-12">-->
+<!--                                <div class="col-lg-5">-->
+<!--                                    --><?//= Yii::t('app', 'Avaliable') ?><!--:-->
+<!--                                    <input id="search-avaliable" class="form-control" placeholder="--><?//= Yii::t('app', 'Filter')?><!--"><br>-->
+<!--                                    <select id="list-avaliable" class="form-control" multiple size="20" style="width: 100%">-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-1">-->
+<!--                                    <br><br>-->
+<!--                                    <a href="javascript:" id="btn-add" class="btn btn-success">&gt;&gt;</a><br><br>-->
+<!--                                    <a href="javascript:" id="btn-remove" class="btn btn-danger">&lt;&lt;</a>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-5">-->
+<!--                                    --><?//= Yii::t('app', 'Assigned') ?><!--:-->
+<!--                                    <input id="search-assigned" class="form-control" placeholder="--><?//= Yii::t('app', 'Filter')?><!--"><br>-->
+<!--                                    <select id="list-assigned" class="form-control" multiple size="20" style="width: 100%">-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     <div class="form-actions">
                         <div class="row">
@@ -101,31 +101,31 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <?php
-$properties = Json::encode([
-        'roleName' => $model->name,
-        'assignUrl' => Url::to(['assign']),
-        'searchUrl' => Url::to(['search']),
-    ]);
-$js = <<<JS
-yii.admin.initProperties({$properties});
-
-$('#search-avaliable').keydown(function () {
-    yii.admin.searchRole('avaliable');
-});
-$('#search-assigned').keydown(function () {
-    yii.admin.searchRole('assigned');
-});
-$('#btn-add').click(function () {
-    yii.admin.addChild('assign');
-    return false;
-});
-$('#btn-remove').click(function () {
-    yii.admin.addChild('remove');
-    return false;
-});
-
-yii.admin.searchRole('avaliable', true);
-yii.admin.searchRole('assigned', true);
-JS;
-$this->registerJs($js);
+//$properties = Json::encode([
+//        'roleName' => $model->name,
+//        'assignUrl' => Url::to(['assign']),
+//        'searchUrl' => Url::to(['search']),
+//    ]);
+//$js = <<<JS
+//yii.admin.initProperties({$properties});
+//
+//$('#search-avaliable').keydown(function () {
+//    yii.admin.searchRole('avaliable');
+//});
+//$('#search-assigned').keydown(function () {
+//    yii.admin.searchRole('assigned');
+//});
+//$('#btn-add').click(function () {
+//    yii.admin.addChild('assign');
+//    return false;
+//});
+//$('#btn-remove').click(function () {
+//    yii.admin.addChild('remove');
+//    return false;
+//});
+//
+//yii.admin.searchRole('avaliable', true);
+//yii.admin.searchRole('assigned', true);
+//JS;
+//$this->registerJs($js);
 

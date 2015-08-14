@@ -3,9 +3,12 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
+use backend\models\AuthAssignment;
 use backend\models\AuthItem;
+use backend\models\AuthItemChild;
 use backend\models\AuthItemSearch;
 use yii\base\Exception;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -57,11 +60,11 @@ class RoleController extends Controller
      * @param  string $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        $model = $this->findModel($id);
-        return $this->render('view', ['model' => $model]);
-    }
+//    public function actionView($id)
+//    {
+//        $model = $this->findModel($id);
+//        return $this->render('view', ['model' => $model]);
+//    }
 
     /**
      * Creates a new AuthItem model.
@@ -72,7 +75,6 @@ class RoleController extends Controller
     {
         $model = new AuthItem();
         $model->type = Item::TYPE_ROLE;
-        $model->items = [];
         $result = [
             'Roles' => [],
             'Permissions' => [],
@@ -92,9 +94,9 @@ class RoleController extends Controller
         }
 
         if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
+            $transaction = Yii::$app->db->beginTransaction();
             try {
-                $model->createItem();
-                if (strlen($model->getErrorMessage()) <= 0) {
+                if ($model->createItem()) {
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => 'success',
                         'duration' => 3000,
@@ -103,6 +105,7 @@ class RoleController extends Controller
                         'title' => Yii::t('app', 'Create Role')
                     ]);
                     Logger::log(Logger::INFO, Yii::t('app', 'Create role success'), Yii::$app->user->identity->email);
+                    $transaction->commit();
                     switch (Yii::$app->request->post('action', 'save')) {
                         case 'next':
                             return $this->redirect(['create']);
@@ -110,6 +113,7 @@ class RoleController extends Controller
                             return $this->redirect(['index']);
                     }
                 } else {
+                    $transaction->rollBack();
                     Yii::$app->getSession()->setFlash('error', [
                         'type' => 'error',
                         'duration' => 0,
@@ -119,11 +123,14 @@ class RoleController extends Controller
                     ]);
 
                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Permission error: ') . Yii::t('app', $model->getErrorMessage()), Yii::$app->user->identity->email);
+
                     return $this->render('create', [
                         'model' => $model,
+                        'item' => $result
                     ]);
                 }
             } catch (Exception $e) {
+                $transaction->rollBack();
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -131,10 +138,10 @@ class RoleController extends Controller
                     'message' => $e->getMessage(),
                     'title' => Yii::t('app', 'Create Role')
                 ]);
-
                 Logger::log(Logger::ERROR, Yii::t('app', 'Add Role error: ') . $e->getMessage(), Yii::$app->user->identity->email);
                 return $this->render('create', [
                     'model' => $model,
+                    'item' => $result
                 ]);
             }
         } else {
@@ -154,7 +161,7 @@ class RoleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->items = array_keys(Yii::$app->authManager->getChildren($id));
+        $model->setItems(array_keys(Yii::$app->authManager->getChildren($id)));
 
         $result = [
             'Roles' => [],
@@ -180,14 +187,17 @@ class RoleController extends Controller
             }
         }
 
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
-            if (empty(array_filter($model->items))) {
-                $model->items = [];
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if (!isset(Yii::$app->request->post('AuthItem')['items'])) {
+                $model->setItems();
             }
 
+            $transaction = Yii::$app->db->beginTransaction();
+            Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
             try {
-                $model->updateItem();
-                if (strlen($model->getErrorMessage()) <= 0) {
+                if ($model->updateItem()) {
+                    Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+                    $transaction->commit();
                     Yii::$app->getSession()->setFlash('success', [
                         'type' => 'success',
                         'duration' => 3000,
@@ -198,6 +208,7 @@ class RoleController extends Controller
                     Logger::log(Logger::INFO, Yii::t('app', "Update role '{role}' success", ['role' => $id]), Yii::$app->user->identity->email);
                     return $this->redirect(['index']);
                 } else {
+                    $transaction->rollBack();
                     Yii::$app->getSession()->setFlash('error', [
                         'type' => 'error',
                         'duration' => 0,
@@ -210,9 +221,11 @@ class RoleController extends Controller
 
                     return $this->render('update', [
                         'model' => $model,
+                        'item' => $result
                     ]);
                 }
             } catch (Exception $e) {
+                $transaction->rollBack();
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
                     'duration' => 0,
@@ -225,13 +238,17 @@ class RoleController extends Controller
 
                 return $this->render('update', [
                     'model' => $model,
+                    'item' => $result
                 ]);
             }
         }
 
-        $model->oldName = $model->name;
+        $model->setOldName($model->name);
 
-        return $this->render('update', ['model' => $model,'item' => $result]);
+        return $this->render('update', [
+            'model' => $model,
+            'item' => $result
+        ]);
     }
 
     /**
@@ -242,37 +259,49 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
+        $transaction = Yii::$app->db->beginTransaction();
         try {
-            Yii::$app->getAuthManager()->remove(new Item(['name' => $id]));
+            $model = $this->findModel($id);
+            Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
+            if ($model->deleteItem()) {
+                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+                $transaction->commit();
 
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Delete Role success'),
-                'title' => Yii::t('app', 'Delete Role'),
-            ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete Role success'), Yii::$app->user->identity->email);
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Delete Role success'),
+                    'title' => Yii::t('app', 'Delete Role'),
+                ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Delete Role success'), Yii::$app->user->identity->email);
+
+            } else {
+                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+                if ($transaction->isActive) {
+                    $transaction->rollBack();
+                }
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'), Yii::$app->user->identity->email);
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-trash-o',
+                    'message' => $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'),
+                    'title' => Yii::t('app', 'Delete Role')
+                ]);
+            }
+
         } catch(Exception $ex){
-            $errors = [];
-            if (!empty(array_filter($children = Yii::$app->getAuthManager()->getChildren($id)))) {
-                $errors[] = Yii::t('app', 'Could not delete role: Role {role} has children: ',['role' => $id]) . " '" . key($children) . "'. " . Yii::t('app', 'Please revoke children before delete role');
+            if ($transaction->isActive) {
+                $transaction->rollBack();
             }
-
-            $model = Yii::$app->db->createCommand('SELECT * FROM auth_assignment WHERE item_name=:item_name');
-            $model->bindParam(':item_name', $id);
-            $isAssignment = $model->queryOne();
-
-            if (!empty(array_filter($isAssignment))) {
-                $errors[] = Yii::t('app', "Could not delete role: Role '{role}' has assigned. ", ['role' => $id]) . Yii::t('app', 'Please revoke assigned before delete');
-            }
-
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . empty(array_filter($errors)) ?  Yii::t('app', 'Role delete error.') : $errors[0], Yii::$app->user->identity->email);
+            Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $ex->getMessage(), Yii::$app->user->identity->email);
             Yii::$app->getSession()->setFlash('error', [
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-trash-o',
-                'message' => !empty(array_filter($errors)) ? $errors[0] : Yii::t('app', 'Role delete error.'),
+                'message' => $ex->getMessage(),
                 'title' => Yii::t('app', 'Delete Role')
             ]);
         }
@@ -286,44 +315,44 @@ class RoleController extends Controller
      * @param string $action
      * @return array
      */
-    public function actionAssign()
-    {
-        $post = Yii::$app->getRequest()->post();
-        $id = $post['id'];
-        $action = $post['action'];
-        $roles = $post['roles'];
-        $manager = Yii::$app->getAuthManager();
-        $parent = $manager->getRole($id);
-        $error = [];
-        if ($action == 'assign') {
-            foreach ($roles as $role) {
-                $child = $manager->getRole($role);
-                $child = $child ? : $manager->getPermission($role);
-                try {
-                    $manager->addChild($parent, $child);
-                    Logger::log(Logger::INFO, Yii::t('app', "Assign router '{router}' to role '{parent}' success", ['router' => $child, 'parent' => $id]), Yii::$app->user->identity->email);
-                } catch (\Exception $e) {
-                    $error[] = $e->getMessage();
-                }
-            }
-        } else {
-            foreach ($roles as $role) {
-                $child = $manager->getRole($role);
-                $child = $child ? : $manager->getPermission($role);
-                try {
-                    $manager->removeChild($parent, $child);
-                } catch (\Exception $e) {
-                    $error[] = $e->getMessage();
-                }
-            }
-        }
-        Yii::$app->response->format = 'json';
-
-        return[
-            'type' => 'S',
-            'errors' => $error,
-        ];
-    }
+//    public function actionAssign()
+//    {
+//        $post = Yii::$app->getRequest()->post();
+//        $id = $post['id'];
+//        $action = $post['action'];
+//        $roles = $post['roles'];
+//        $manager = Yii::$app->getAuthManager();
+//        $parent = $manager->getRole($id);
+//        $error = [];
+//        if ($action == 'assign') {
+//            foreach ($roles as $role) {
+//                $child = $manager->getRole($role);
+//                $child = $child ? : $manager->getPermission($role);
+//                try {
+//                    $manager->addChild($parent, $child);
+//                    Logger::log(Logger::INFO, Yii::t('app', "Assign router '{router}' to role '{parent}' success", ['router' => $child, 'parent' => $id]), Yii::$app->user->identity->email);
+//                } catch (\Exception $e) {
+//                    $error[] = $e->getMessage();
+//                }
+//            }
+//        } else {
+//            foreach ($roles as $role) {
+//                $child = $manager->getRole($role);
+//                $child = $child ? : $manager->getPermission($role);
+//                try {
+//                    $manager->removeChild($parent, $child);
+//                } catch (\Exception $e) {
+//                    $error[] = $e->getMessage();
+//                }
+//            }
+//        }
+//        Yii::$app->response->format = 'json';
+//
+//        return[
+//            'type' => 'S',
+//            'errors' => $error,
+//        ];
+//    }
 
     /**
      * Search role
@@ -332,48 +361,48 @@ class RoleController extends Controller
      * @param string $term
      * @return array
      */
-    public function actionSearch($id, $target, $term = '')
-    {
-        $result = [
-            'Roles' => [],
-            'Permissions' => [],
-            'Routes' => [],
-        ];
-        $authManager = Yii::$app->authManager;
-        if ($target == 'avaliable') {
-            $children = array_keys($authManager->getChildren($id));
-            $children[] = $id;
-            foreach ($authManager->getRoles() as $name => $role) {
-                if (in_array($name, $children)) {
-                    continue;
-                }
-                if (empty($term) or strpos($name, $term) !== false) {
-                    $result['Roles'][$name] = $name;
-                }
-            }
-            foreach ($authManager->getPermissions() as $name => $role) {
-                if (in_array($name, $children)) {
-                    continue;
-                }
-                if (empty($term) or strpos($name, $term) !== false) {
-                    $result[$name[0] === '/' ? 'Routes' : 'Permissions'][$name] = $name;
-                }
-            }
-        } else {
-            foreach ($authManager->getChildren($id) as $name => $child) {
-                if (empty($term) or strpos($name, $term) !== false) {
-                    if ($child->type == Item::TYPE_ROLE) {
-                        $result['Roles'][$name] = $name;
-                    } else {
-                        $result[$name[0] === '/' ? 'Routes' : 'Permissions'][$name] = $name;
-                    }
-                }
-            }
-        }
-        Yii::$app->response->format = 'json';
-
-        return array_filter($result);
-    }
+//    public function actionSearch($id, $target, $term = '')
+//    {
+//        $result = [
+//            'Roles' => [],
+//            'Permissions' => [],
+//            'Routes' => [],
+//        ];
+//        $authManager = Yii::$app->authManager;
+//        if ($target == 'avaliable') {
+//            $children = array_keys($authManager->getChildren($id));
+//            $children[] = $id;
+//            foreach ($authManager->getRoles() as $name => $role) {
+//                if (in_array($name, $children)) {
+//                    continue;
+//                }
+//                if (empty($term) or strpos($name, $term) !== false) {
+//                    $result['Roles'][$name] = $name;
+//                }
+//            }
+//            foreach ($authManager->getPermissions() as $name => $role) {
+//                if (in_array($name, $children)) {
+//                    continue;
+//                }
+//                if (empty($term) or strpos($name, $term) !== false) {
+//                    $result[$name[0] === '/' ? 'Routes' : 'Permissions'][$name] = $name;
+//                }
+//            }
+//        } else {
+//            foreach ($authManager->getChildren($id) as $name => $child) {
+//                if (empty($term) or strpos($name, $term) !== false) {
+//                    if ($child->type == Item::TYPE_ROLE) {
+//                        $result['Roles'][$name] = $name;
+//                    } else {
+//                        $result[$name[0] === '/' ? 'Routes' : 'Permissions'][$name] = $name;
+//                    }
+//                }
+//            }
+//        }
+//        Yii::$app->response->format = 'json';
+//
+//        return array_filter($result);
+//    }
 
     /**
      * Finds the AuthItem model based on its primary key value.

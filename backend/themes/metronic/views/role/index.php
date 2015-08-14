@@ -16,12 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
         <?php
-
         echo lavrentiev\yii2toastr\Toastr::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
-            'clear' => false,
+            'message' => (!empty($message['message'])) ? trim(preg_replace('/\s+/', ' ', $message['message'])) : 'Message Not Set!',
             'options' => [
                 "closeButton" => true,
                 "positionClass" => "toast-top-right",
@@ -84,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
+            'template' => '{update}&nbsp;&nbsp;{delete}',
             'urlCreator' => function ($action, $model, $key, $index) {
                 $params = ['id' => $model->name];
                 $params[0] = $this->context->id ? $this->context->id . '/' . $action : $action;
@@ -108,7 +107,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax' => true,
         'pjaxSettings'=>[
-            'neverTimeout'=>true,
             'options' => [
                 'enablePushState' => false
             ],

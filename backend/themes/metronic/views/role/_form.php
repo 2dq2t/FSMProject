@@ -7,6 +7,7 @@ use yii\helpers\Json;
 /* @var $this yii\web\View */
 /* @var $model backend\models\AuthItem */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $item \yii\rbac\Item */
 ?>
 <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
     <?php if($message) { ?>
@@ -14,7 +15,7 @@ use yii\helpers\Json;
         echo lavrentiev\yii2toastr\Toastr::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'message' => (!empty($message['message'])) ? trim(preg_replace('/\s+/', ' ', $message['message'])) : 'Message Not Set!',
             'clear' => false,
             'options' => [
                 "closeButton" => true,

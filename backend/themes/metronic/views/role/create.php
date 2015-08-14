@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /**
  * @var yii\web\View $this
  * @var backend\models\AuthItem $model
+ * @var \yii\rbac\Item $item
  */
 
 $this->title = Yii::t('app', 'Create Role');

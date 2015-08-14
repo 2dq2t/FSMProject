@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $searchModel backend\models\AssignmentSearch */
+/* @var $searchModel backend\models\EmployeeSearch */
 
 $this->title = Yii::t('app', 'Assignments');
 $this->params['breadcrumbs'][] = $this->title;
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo lavrentiev\yii2toastr\Toastr::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : 'success',
             'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'message' => (!empty($message['message'])) ? trim(preg_replace('/\s+/', ' ', $message['message'])) : 'Message Not Set!',
             'clear' => false,
             'options' => [
                 "closeButton" => true,
@@ -36,11 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn'],
         [
             'class' => 'kartik\grid\DataColumn',
-            'attribute' => $usernameField,
+            'attribute' => 'email',
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template'=>'{view}'
+            'template'=>'{update}'
         ],
     ];
 
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax' => true,
         'pjaxSettings'=>[
-            'neverTimeout'=>true,
+//            'neverTimeout'=>true,
             'options' => [
                 'enablePushState' => false
             ],

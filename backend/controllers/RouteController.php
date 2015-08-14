@@ -5,11 +5,9 @@ namespace backend\controllers;
 use backend\components\Logger;
 use Yii;
 use backend\models\Route;
-use yii\caching\TagDependency;
+use yii\base\Module;
 use yii\web\Response;
-use backend\components\Configs;
 use yii\helpers\Inflector;
-use yii\helpers\VarDumper;
 use Exception;
 
 /**
@@ -24,9 +22,9 @@ class RouteController extends \yii\web\Controller
      * Lists all Route models.
      * @return mixed
      */
+    private $routes = [];
     public function actionIndex()
     {
-        
         return $this->render('index');
     }
 

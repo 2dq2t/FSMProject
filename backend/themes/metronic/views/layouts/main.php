@@ -257,7 +257,6 @@ AppAsset::register($this);
                                     'employee',
                                     'assignment',
                                     'role',
-                                    'permission',
                                     'route']) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
@@ -267,7 +266,6 @@ AppAsset::register($this);
                                 <li class="<?= isActive([
                                     'assignment',
                                     'role',
-                                    'permission',
                                     'route'
                                 ]) ? 'active' : ''?>">
                                     <a href="javascript:;">
@@ -279,9 +277,6 @@ AppAsset::register($this);
                                         </li>
                                         <li class="<?= isActive(['role']) ? 'active' : '' ?>">
                                             <?= HtmL::a('<i class="icon-users"></i> ' . Yii::t('app', 'Role'), ['role/index']) ?>
-                                        </li>
-                                        <li class="<?= isActive(['permission']) ? 'active' : '' ?>">
-                                            <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Permissions'), ['permission/index']) ?>
                                         </li>
                                         <li class="<?= isActive(['route']) ? 'active' : '' ?>">
                                             <?= HtmL::a('<i class="icon-reload"></i> ' . Yii::t('app', 'Route'), ['route/index']) ?>
