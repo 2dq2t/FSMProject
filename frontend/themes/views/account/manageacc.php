@@ -1,7 +1,5 @@
 <?php
 
-use kartik\widgets\ActiveForm;
-
 $this->title = Yii::t('app','MyAccountLabel');
 $baseUrl = Yii::$app->request->baseUrl;
 ?>

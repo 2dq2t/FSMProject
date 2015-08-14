@@ -387,7 +387,7 @@ class AccountController extends Controller{
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
                 } catch (Exception $e) {
-                    $errors = $modelCustomer->getErrors();
+                    $errors = $modelAddress->getErrors();
                     foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,
@@ -428,7 +428,7 @@ class AccountController extends Controller{
                         return $this->redirect(['changeaddress', 'id' => $modelCustomer->id]);
                     }
                 } catch (Exception $e) {
-                    $errors = $modelCustomer->getErrors();
+                    $errors = $modelUpdateAddress->getErrors();
                     foreach ($errors as $error) {
                         Yii::$app->getSession()->setFlash('failed', [
                             'type' => Alert::TYPE_DANGER,

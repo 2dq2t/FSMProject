@@ -6,15 +6,6 @@ use kartik\alert\Alert;
 $this->title = Yii::t('app', 'ChangeAddressInfoLabel');
 require('../themes/views/layouts/_header.php');
 ?>
-<?php
-
-$user_avatar = '';
-
-if(isset($modelCustomer->avatar)) {
-    $user_avatar = Html::img('../../frontend/web/uploads/users/avatar/'. $modelCustomer->id .'/'. $modelCustomer->avatar, ['class' => 'file-preview-image']);
-}
-
-?>
 
 <div class="container content-inner">
     <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
