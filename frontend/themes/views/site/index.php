@@ -21,7 +21,7 @@ echo $this->render('/layouts/_header');
         ?>
     <?php endforeach; ?>
 <div class="container content-inner">
-    <div class="row content-subinner">
+    <div class="row content-subinner" style="padding-top: 0px;">
         <div class="content-top">
             <div id="content">
                 <div class="main-slider">

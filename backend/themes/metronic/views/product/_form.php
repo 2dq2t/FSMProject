@@ -108,7 +108,7 @@ if(isset($images)) {
                             <?= $form->field($model, 'price',
                                 ['addon' => [
                                     'append' => [
-                                        'content' => '<ins>đ</ins>'
+                                        'content' => '<ins>đ</ins> / '.Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
                                     ]
                                 ]])->textInput(['id'=>'product_price','placeholder' => Yii::t('app', 'Enter product price'), 'onkeyup' => 'javascript:this.value=Comma(this.value);']) ?>
                         </div>
@@ -116,9 +116,9 @@ if(isset($images)) {
                             <?= $form->field($model, 'quantity_in_stock',[
                                 'addon' => [
                                     'append' => [
-                                        'content' => Html::activeDropDownList($model, 'unit_id', \yii\helpers\ArrayHelper::map(\common\models\Unit::find()->where(['active' => 1])->all(), 'id', 'name')),
+                                        'content' => 'kg',
                                     ],
-                                ]])->textInput(['maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product')]) ?>
+                                ]])->textInput(['id' => 'product_quantity', 'maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter summery of product')]) ?>
                         </div>
                     </div>
                     <!--/row-->
@@ -144,11 +144,23 @@ if(isset($images)) {
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'sold')->textInput(['id' => 'product_sold','maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product')]) ?>
+                            <?= $form->field($model, 'sold',[
+                                'addon' => [
+                                    'append' => [
+                                        'content' => 'kg',
+                                    ]
+                                ]
+                            ])->textInput(['id' => 'product_sold','maxlength' => 10, 'placeholder' => Yii::t('app', 'Enter sold product')]) ?>
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'tax')->textInput(['id' => 'product_tax', 'placeholder' => Yii::t('app', 'Enter tax of product')]) ?>
+                            <?= $form->field($model, 'tax',[
+                                'addon' => [
+                                    'append' => [
+                                        'content' => '%',
+                                    ]
+                                ]
+                            ])->textInput(['id' => 'product_tax', 'placeholder' => Yii::t('app', 'Enter tax of product')]) ?>
                         </div>
                         <!--/span-->
                     </div>

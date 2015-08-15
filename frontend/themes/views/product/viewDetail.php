@@ -84,11 +84,7 @@ echo $this->render('/layouts/_header');
                         </li>
                         <li>
                             <span><?= Yii::t('app', 'QuantityLabel') ?>
-                                : </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold']; else echo Yii::t('app', 'ProductStatus'); ?>
-                        </li>
-                        <li>
-                            <span><?= Yii::t('app', 'WeightLabel') ?>
-                                : </span><?php if (isset($product_unit['name'])) echo $product_unit['name'] ?>
+                                : </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold']." kg"; else echo Yii::t('app', 'ProductStatus'); ?>
                         </li>
                         <li><p><span><?= Yii::t('app', 'StandardLabel') ?>: </span><span class="inline"
                                                                                          style="margin-left: 3px"><a
@@ -104,17 +100,23 @@ echo $this->render('/layouts/_header');
                         <?php
                         if (!empty($product_offer)) {
                             echo "<li>";
-                            echo "<span class='old-price' style='text-decoration: line-through;'>" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                            if(isset($product_unit['name'])){
+                                echo "<span class='old-price' style='text-decoration: line-through;'>" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']. "</span>";
+                            }
                             echo "<li>";
                         } else {
                             echo "<li class='price-normal''>";
-                            echo "<h1 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . "</h1>";
+                            if(isset($product_unit['name'])){
+                                echo "<h1 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']."</h1>";
+                            }
                             echo "</li>";
                         }
                         if (!empty($product_offer)) {
                             $price_offer = Yii::$app->CommonFunction->getProductPrice($product_detail['price'], $product_offer);;
                             echo "<li>";
-                            echo "<h1 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') . "</h1>";
+                            if(isset($product_unit['name'])){
+                                echo "<h1 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']."</h1>";
+                            }
                             echo "<li>";
                         }
                         ?>

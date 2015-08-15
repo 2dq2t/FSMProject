@@ -39,7 +39,7 @@ $product_in_cart = $cart_info['product_in_cart'];
                                     href="<?php echo $baseUrl . '/index.php?r=product/view-detail&product=' . $product['product_name'] ?>"><?= ucwords($product['product_name']) ?></a>
                             </td>
                             <td class="text-right">x <?= $product['product_quantity'] ?></td>
-                            <td class="text-right"><?= number_format($product['product_price'] * $product['product_quantity']) ?></td>
+                            <td class="text-right"><?= number_format($product['product_price'] * $product['product_quantity'])." ".Yii::t('app', 'VNDLabel') ?></td>
                             <td class="text-center">
                                 <button type="button" onclick="cart.remove(<?= $product['product_id'] ?>);"
                                         title="Remove" class="btn btn-danger btn-xs"><i class="fa fa-times"></i>
@@ -54,7 +54,7 @@ $product_in_cart = $cart_info['product_in_cart'];
                     <table class="table table-bordered">
                         <tr>
                             <td class="text-right"><strong><?= Yii::t('app', 'SumPriceLabel') ?></strong></td>
-                            <td class="text-right"><strong><?= number_format($total_price) ?></strong></td>
+                            <td class="text-right"><strong><?= number_format($total_price)." ".Yii::t('app', 'VNDLabel') ?></strong></td>
                         </tr>
                     </table>
                     <div class="text-right button-container">

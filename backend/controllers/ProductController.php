@@ -328,7 +328,7 @@ class ProductController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = new Product();//$this->findModel($id);
+        $model = $this->findModel($id);
         $images = Image::find()->where(['product_id' => $id])->all();
         $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
         $product_tags = ProductTag::find()->select('tag_id')->where(['product_id' => $id])->all();

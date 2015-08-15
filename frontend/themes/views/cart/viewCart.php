@@ -116,7 +116,7 @@ echo $this->render('/layouts/_header');
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <td class="text-right"><strong><?= Yii::t('app', 'SumPriceLabel') ?>:</strong></td>
+                                <td class="text-right"><strong><?= Yii::t('app', 'SumPriceLabel') ?></strong></td>
                                 <td class="text-right"><?= number_format($total_price) . " " . Yii::t('app', 'VNDLabel') ?></td>
                             </tr>
                             </tbody>
