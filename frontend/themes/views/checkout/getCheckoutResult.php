@@ -50,29 +50,34 @@ echo $this->render('/layouts/_header');
         </column>
         <div id="content" class="col-sm-9">
             <h1 class="page-title"><?= Yii::t('app', 'CheckoutResultLabel') ?></h1>
+            <?php if(empty($order)) {
+                echo Yii::t('app', 'CheckoutResult Fail');
+            }
+            ?>
+            <?php if(!empty($order)): ?>
             <fieldset id="account">
                 <legend><?= Yii::t('app', 'CheckoutResult Personal') ?> </legend>
                 <div class="col-sm-12">
-                    <?php if(empty($order)) {
-                        echo Yii::t('app', 'CheckoutResult Fail');
-                    }
-                    ?>
-                    <?php if(!empty($order)): ?>
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult FullName')?></div>
                     <div class="col-sm-8"><?=$customer_info['full_name']?></div>
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult Email')?></div>
                     <div class="col-sm-8"><?=$customer_info['email']?></div>
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult PhoneNumber')?></div>
                     <div class="col-sm-8"><?=$customer_info['phone_number']?></div>
+
+
+                </div>
+                <legend><?= Yii::t('app', 'CheckoutResult OrderAddress') ?> </legend>
+                <div class="col-sm-12">
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult Address')?></div>
                     <div class="col-sm-8"><?=$address['detail']?></div>
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult District')?></div>
                     <div class="col-sm-8"><?=$district['name']?></div>
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult City')?></div>
                     <div class="col-sm-8"><?=$city['name']?></div>
-                    <?php endif?>
                 </div>
             </fieldset>
+            <?php endif?>
 
         </div>
     </div>

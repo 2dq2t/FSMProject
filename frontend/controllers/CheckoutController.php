@@ -169,7 +169,6 @@ class CheckoutController extends Controller {
                         $note = $checkout_info['note'];
                         if (empty($note))
                             $note = 'null';
-
                         $order = new Order();
                         $order->order_date = $order_date;
                         $order->receiving_date = $receiving_date;
@@ -202,7 +201,7 @@ class CheckoutController extends Controller {
                             $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
                             $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
                                 mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
-                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date']  ){
+                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date'] && empty($check_voucher['order_id']) ){
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
                                 $voucher->order_id = $order->id;
                                 $voucher->update();
@@ -270,7 +269,7 @@ class CheckoutController extends Controller {
 
                         $note = $checkout_info['note'];
                         if (empty($note))
-                            $note = 'test';
+                            $note = 'null';
                         $order = new Order();
                         $order->order_date = $order_date;
                         $order->receiving_date = $receiving_date;
@@ -303,7 +302,7 @@ class CheckoutController extends Controller {
                             $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
                             $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
                                 mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
-                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date']  ){
+                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date'] && empty($check_voucher['order_id']) ){
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
                                 $voucher->order_id = $order->id;
                                 $voucher->update();
