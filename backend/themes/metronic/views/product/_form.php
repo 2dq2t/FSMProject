@@ -63,7 +63,7 @@ if(isset($images)) {
 <div class="row">
     <div class="col-md-12">
         <!--        <form class="form-horizontal form-row-seperated" action="#">-->
-        <?php $form = ActiveForm::begin(['action' => 'adsa/asdsa', 'id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data', 'class' => 'horizontal-form']]);
+        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data', 'class' => 'horizontal-form']]);
         ?>
         <div class="portlet box green">
             <div class="portlet-title">

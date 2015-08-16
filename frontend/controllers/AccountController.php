@@ -462,6 +462,7 @@ class AccountController extends Controller{
 
             $districts = District::find()
                 ->where(['city_id' => $id])
+                ->orderBy('name')
                 ->all();
 
             if ($countDistrict > 0) {

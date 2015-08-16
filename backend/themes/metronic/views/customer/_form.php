@@ -179,15 +179,15 @@ if($model->avatar) {
                                 echo $form->field($city, 'id', [
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+                                    \yii\helpers\ArrayHelper::map(\common\models\City::find()->orderBy('name')->all(), 'id', 'name'),
                                     [
                                         'prompt'=> Yii::t('app', 'Select City'),
                                         'onchange'=>'
                                             $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( file ) {
-                                                $( "select#district-id" ).length = 0;
-                                                $( "select#district-id" ).html( file );
+                                                $( "select#address-district_id" ).length = 0;
+                                                $( "select#address-district_id" ).html( file );
                                                 var event = new Event("change");
-                                                document.getElementById("district-id").dispatchEvent(event);
+                                                document.getElementById("address-district_id").dispatchEvent(event);
                                             });'
                                     ])->label(Yii::t('app','CityLabel'));
                             } else {
@@ -195,7 +195,7 @@ if($model->avatar) {
                                     'template' => "<label class='control-label col-md-3'>{label}</label><div class='col-md-9'>{input}{error}</div>"
                                 ])
                                     ->dropDownList(
-                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->orderBy('name')->all(), 'id', 'name'),
                                         ['prompt'=>Yii::t('app', 'Select City')])->label(Yii::t('app','CityLabel'));
                             }
 
@@ -213,6 +213,7 @@ if($model->avatar) {
                                     \yii\helpers\ArrayHelper::map(
                                         \common\models\District::find()
                                             ->where(['city_id' => $city->id])
+                                            ->orderBy('name')
                                             ->all(), 'id', 'name'),
                                     [
                                         'prompt'=>Yii::t('app', 'Select District'),

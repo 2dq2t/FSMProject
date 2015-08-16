@@ -57,21 +57,21 @@ require('../themes/views/layouts/_header.php');
                         <?php
                             if (isset($modelUpdateAddress)) {
                                 echo $form->field($modelUpdateCity, 'id')->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+                                    \yii\helpers\ArrayHelper::map(\common\models\City::find()->orderBy('name')->all(), 'id', 'name'),
                                     [
-                                        'prompt'=> Yii::t('app', '- Chọn Tỉnh / Thành phố -'),
+                                        'prompt'=> Yii::t('app', 'Select City'),
                                         'onchange'=>'
                                                 $.post( "index.php?r=account/getdistrict&id="+$(this).val(), function( file ) {
-                                                    $( "select#district-id" ).length = 0;
-                                                    $( "select#district-id" ).html( file );
+                                                    $( "select#address-district_id" ).length = 0;
+                                                    $( "select#address-district_id" ).html( file );
                                                     var event = new Event("change");
-                                                    document.getElementById("district-id").dispatchEvent(event);
+                                                    document.getElementById("address-district_id").dispatchEvent(event);
                                                 });'
                                     ])->label(false);
                             } else {
                                 echo $form->field($modelCity, 'id')->dropDownList(
-                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                        ['prompt'=>Yii::t('app', '- Chọn Tỉnh / Thành phố -')])->label(false);
+                                        \yii\helpers\ArrayHelper::map(\common\models\City::find()->orderBy('name')->all(), 'id', 'name'),
+                                        ['prompt'=>Yii::t('app', 'Select City')])->label(false);
                             }
                         ?>
                     </div>
@@ -85,17 +85,18 @@ require('../themes/views/layouts/_header.php');
                                     \yii\helpers\ArrayHelper::map(
                                         \common\models\District::find()
                                             ->where(['city_id' => $modelUpdateCity->id])
+                                            ->orderBy('name')
                                             ->all(), 'id', 'name'),
                                     [
-                                        'prompt'=>Yii::t('app', '- Chọn Quận / Huyện -'),
+                                        'prompt'=>Yii::t('app', 'Select District'),
                                     ]
                                 )->label(false);
                             } else {
                                 echo $form->field($modelAddress, 'district_id')->widget(\kartik\widgets\DepDrop::classname(), [
-                                    'options'=>['prompt' => Yii::t('app', '- Chọn Quận / Huyện -')],
+                                    'options'=>['prompt' => Yii::t('app', 'Select District')],
                                     'pluginOptions'=>[
                                         'depends'=>[Html::getInputId($modelCity, 'id')],
-                                        'placeholder'=>Yii::t('app', '- Chọn Quận / Huyện -'),
+                                        'placeholder'=>Yii::t('app', 'Select District'),
                                         'url'=>\yii\helpers\Url::to(['/account/getdistrict'])
                                     ]
                                 ])->label(false);
