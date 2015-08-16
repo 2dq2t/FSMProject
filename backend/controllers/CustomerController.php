@@ -11,6 +11,7 @@ use common\models\Address;
 use Yii;
 use common\models\Customer;
 use common\models\CustomerSearch;
+use yii\base\ActionFilter;
 use yii\base\Exception;
 use yii\helpers\FileHelper;
 use yii\helpers\Html;
@@ -33,6 +34,9 @@ class CustomerController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                 ],
+            ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
             ],
         ];
     }

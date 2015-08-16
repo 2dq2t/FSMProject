@@ -6,6 +6,7 @@ use backend\components\Logger;
 use Yii;
 use common\models\Category;
 use common\models\CategorySearch;
+use yii\base\ActionFilter;
 use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,6 +26,9 @@ class CategoryController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                 ],
+            ],
+            'access' => [
+                'class' => YII_DEBUG ?  ActionFilter::className() : \backend\components\AccessControl::className()
             ],
         ];
     }

@@ -36,9 +36,9 @@ class EmployeeController extends Controller
                     'delete' => ['post'],
                 ],
             ],
-//            'access' => [
-//                'class' => AccessControl::className()
-//            ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 

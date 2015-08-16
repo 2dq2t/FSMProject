@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Restore;
 use backend\models\UploadBackup;
 use common\models\Image;
+use yii\base\ActionFilter;
 use yii\web\Controller;
 use yii\base\Exception;
 use yii\data\ArrayDataProvider;
@@ -20,6 +21,14 @@ class BackupController extends Controller
     public $back_temp_file = 'db_backup_';
     public $view_table = [];
     public $count = 0;
+
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => YII_DEBUG ?  ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
+        ];
+    }
 
     protected function getPath()
     {

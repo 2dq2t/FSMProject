@@ -28,6 +28,9 @@ class SeasonController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 

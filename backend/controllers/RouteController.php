@@ -20,9 +20,9 @@ class RouteController extends \yii\web\Controller
     public function behaviors()
     {
         return [
-//            'access' => [
-//                'class' => \backend\components\AccessControl::className()
-//            ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
     /**

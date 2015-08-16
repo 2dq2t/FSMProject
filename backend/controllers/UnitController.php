@@ -6,6 +6,8 @@ use backend\components\Logger;
 use Yii;
 use common\models\Unit;
 use common\models\UnitSearch;
+use yii\base\ActionFilter;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,6 +27,9 @@ class UnitController extends Controller
                     'delete' => ['post'],
                     'delete-all' => ['post']
                 ],
+            ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
             ],
         ];
     }

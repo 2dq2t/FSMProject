@@ -36,6 +36,9 @@ class AssignmentController extends Controller
                     'assign' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => YII_DEBUG ?  ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 

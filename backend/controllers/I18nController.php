@@ -21,6 +21,9 @@ class I18nController extends \yii\web\Controller
             'verbs' => [
                 'class' => VerbFilter::className()
             ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 

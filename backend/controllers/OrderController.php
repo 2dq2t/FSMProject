@@ -47,9 +47,9 @@ class OrderController extends Controller
                     'invoice-print' => ['post']
                 ],
             ],
-//            'access' => [
-//                'class' => \backend\components\AccessControl::className()
-//            ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 

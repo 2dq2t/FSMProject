@@ -25,6 +25,9 @@ class GuestController extends Controller
                     'delete-all' => ['post']
                 ],
             ],
+            'access' => [
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
+            ],
         ];
     }
 
