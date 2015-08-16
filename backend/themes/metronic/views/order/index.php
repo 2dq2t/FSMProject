@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'order_date',
             'width' => '15%',
             'value' => function ($model) {
-                return date('m/d/Y', $model->order_date);
+                return date('d/m/Y', $model->order_date);
             },
             'filterType' => GridView::FILTER_DATE,
             'filterWidgetOptions' => [

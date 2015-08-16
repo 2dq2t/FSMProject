@@ -37,7 +37,7 @@ class AssignmentController extends Controller
                 ],
             ],
             'access' => [
-                'class' => YII_DEBUG ?  ActionFilter::className() : \backend\components\AccessControl::className()
+                'class' => YII_DEBUG ?  \yii\base\ActionFilter::className() : \backend\components\AccessControl::className()
             ],
         ];
     }

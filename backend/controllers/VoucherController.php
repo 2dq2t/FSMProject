@@ -124,7 +124,7 @@ class VoucherController extends Controller
     {
         $model = new Voucher();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);
             $model->end_date = ParserDateTime::parseToTimestamp($model->end_date);
 
@@ -167,13 +167,13 @@ class VoucherController extends Controller
             }
 
         } else {
-            if ($model->start_date != '') {
-                $model->start_date = date('d/m/Y', $model->start_date);
-            }
-
-            if($model->end_date != '') {
-                $model->end_date = date('d/m/Y', $model->end_date);
-            }
+//            if ($model->start_date != '') {
+//                $model->start_date = date('d/m/Y', $model->start_date);
+//            }
+//
+//            if($model->end_date != '') {
+//                $model->end_date = date('d/m/Y', $model->end_date);
+//            }
 
             return $this->render('create', [
                 'model' => $model,
@@ -194,7 +194,7 @@ class VoucherController extends Controller
         $model->start_date = date('d/m/Y', $model->start_date);
         $model->end_date = date('d/m/Y', $model->end_date);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $oldModel = $model->oldAttributes;
             $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);

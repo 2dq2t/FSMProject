@@ -75,7 +75,7 @@ class AuthItem extends \yii\db\ActiveRecord
     {
         $authManager = Yii::$app->authManager;
         if ((strlen($this->oldName) == 0 || $this->oldName != $this->name) && ($authManager->getRole($this->name) !== null || $authManager->getPermission($this->name) !== null)) {
-            $this->addError($attribute, Yii::t('yii', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
+            $this->addError($attribute, Yii::t('app', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
 //            $this->errors = Yii::t('yii', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]);
         }
     }
