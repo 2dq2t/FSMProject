@@ -202,6 +202,8 @@ class EmployeeController extends Controller
                                     'title' => Yii::t('app', 'Create Employee'),
                                 ]);
 
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]), Yii::$app->user->identity->email);
+
                                 $model->password = null;
 
                                 return $this->render('create', [
@@ -222,6 +224,9 @@ class EmployeeController extends Controller
                             'message' => Yii::t('app', 'Employee_Add_Success_Msg'),
                             'title' => Yii::t('app', 'Create Employee'),
                         ]);
+
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create Address success'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Employee_Add_Success_Msg'), Yii::$app->user->identity->email);
 
                         switch (Yii::$app->request->post('action', 'save')) {
                             case 'next':
@@ -251,6 +256,8 @@ class EmployeeController extends Controller
                             'title' => Yii::t('app', 'Create Employee'),
                         ]);
 
+                        Logger::log(Logger::ERROR, !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'), Yii::$app->user->identity->email);
+
                         $model->password = null;
 
                         return $this->render('create', [
@@ -279,6 +286,8 @@ class EmployeeController extends Controller
                     'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Employee_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Employee'),
                 ]);
+
+                Logger::log(Logger::ERROR, $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Employee_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                 $model->password = null;
 
@@ -336,6 +345,8 @@ class EmployeeController extends Controller
 
         if ($model->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
+            $oldAddress = $address->oldAttributes;
+            $oldEmployee = $model->oldAttributes;
 
             if (!isset(Yii::$app->request->post("Employee")['assignments'])) {
                 $model->setAssignments([]);
@@ -414,6 +425,8 @@ class EmployeeController extends Controller
                                     'title' => Yii::t('app', 'Update Employee'),
                                 ]);
 
+                                Logger::log(Logger::ERROR, Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]), Yii::$app->user->identity->email);
+
                                 $model->password = null;
 
                                 return $this->render('create', [
@@ -434,6 +447,9 @@ class EmployeeController extends Controller
                             'message' => Yii::t('app', 'Employee_Update_Success_Msg'),
                             'title' => Yii::t('app', 'Update Employee'),
                         ]);
+
+                        Logger::log(Logger::INFO, Yii::t('app', 'Update address success'), Yii::$app->user->identity->email, $oldAddress, $address->attributes);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Employee_Update_Success_Msg'), Yii::$app->user->identity->email, $oldEmployee, $model->attributes);
 
                         switch (Yii::$app->request->post('action', 'save')) {
                             case 'next':
@@ -462,6 +478,8 @@ class EmployeeController extends Controller
                             'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'),
                             'title' => Yii::t('app', 'Update Employee'),
                         ]);
+
+                        Logger::log(Logger::ERROR, !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'), Yii::$app->user->identity->email);
 
                         $model->password = null;
 
@@ -494,6 +512,8 @@ class EmployeeController extends Controller
                         'title' => Yii::t('app', 'Update Employee'),
                     ]);
 
+                    Logger::log(Logger::ERROR, current($address->getFirstErrors()) ? current($address->getFirstErrors()) : Yii::t('app', 'Employee_Update_Error_Msg'), Yii::$app->user->identity->email);
+
                     $model->password = null;
 
                     return $this->render('update', [
@@ -515,6 +535,8 @@ class EmployeeController extends Controller
                     'message' => !empty($errors) != '' ? $errors[0] : $e->getMessage(),
                     'title' => Yii::t('app', 'Edit Employee'),
                 ]);
+
+                Logger::log(Logger::ERROR, !empty($errors) != '' ? $errors[0] : $e->getMessage(), Yii::$app->user->identity->email);
 
                 $model->password = null;
 

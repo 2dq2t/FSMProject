@@ -489,6 +489,8 @@ class ProductController extends Controller
                         'title' => Yii::t('app', 'Update Product'),
                     ]);
 
+                    Logger::log(Logger::INFO, Yii::t('app', 'Product_Update_Success_Msg'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
+
                     return $this->redirect(['index']);
                 } else {
 
