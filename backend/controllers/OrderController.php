@@ -8,12 +8,14 @@ use backend\models\Model;
 use backend\models\OrderStatus;
 use backend\models\OrderView;
 use backend\models\OrderViewSearch;
+use common\functions\checkoutFunctions;
 use common\models\Address;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
 use common\models\Image;
 use common\models\Offer;
+use common\models\OrderAddress;
 use common\models\OrderDetails;
 use common\models\Product;
 use common\models\Unit;
@@ -25,6 +27,7 @@ use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -88,7 +91,7 @@ class OrderController extends Controller
     {
         $model = new Order();
         $guest = new Guest();
-        $address = new Address();
+        $address = new OrderAddress();
         $city = new City();
         $order_details = [new OrderDetails()];
 
@@ -112,7 +115,7 @@ class OrderController extends Controller
             $transaction = \Yii::$app->db->beginTransaction();
             try {
 
-                if($address->save() && $guest->save()) {
+                if($guest->save() && $address->save()) {
                     $model->order_address_id = $address->id;
                     $model->guest_id = $guest->id;
 
@@ -195,12 +198,14 @@ class OrderController extends Controller
                             $order_detail->discount = $product_offer;
 
 
+                            /* @var $order_detail OrderDetails*/
                             if (!$order_detail->save()) {
                                 $errors[] = current($order_detail->getFirstErrors());
                                 break;
                             }
                         }
 
+                        /* @var $voucher Voucher*/
                         $voucher = Voucher::findOne(['code' => 'dasd']);
                         $voucher->order_id = $model->id;
                         if(!$voucher->save()) {
@@ -252,7 +257,7 @@ class OrderController extends Controller
                             'title' => Yii::t('app', 'Add Order'),
                         ]);
 
-                        Logger::log(Logger::INFO, Yii::t('app', 'Create address success.'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Create order address success.'), Yii::$app->user->identity->email);
                         Logger::log(Logger::INFO, Yii::t('app', 'Create guest success.'), Yii::$app->user->identity->email);
                         Logger::log(Logger::INFO, Yii::t('app', 'Create order success.'), Yii::$app->user->identity->email);
                         Logger::log(Logger::INFO, Yii::t('app', 'Create order details success.'), Yii::$app->user->identity->email);
@@ -308,7 +313,7 @@ class OrderController extends Controller
                         'title' => Yii::t('app', 'Add Order'),
                     ]);
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Create address or guest errors:') .current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || Yii::t('app', 'Could not be save the address or guest.') , Yii::$app->user->identity->email);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Create order address or guest errors:') .current($address->getFirstErrors()) ? current($address->getFirstErrors()) :current($guest->getFirstErrors()) || Yii::t('app', 'Could not be save the address or guest.') , Yii::$app->user->identity->email);
 
                     return $this->render('create', [
                         'model' => $model,
@@ -802,7 +807,8 @@ class OrderController extends Controller
                 $parents = $_POST['depdrop_parents'];
                 if ($parents != null) {
                     $city_id = $parents[0];
-                    $out = District::getOptionsByDistrict($city_id);
+                    $data = District::find()->where(['city_id'=>$city_id])->select(['id','name'])->asArray()->all();
+                    $out = (count($data) == 0) ? ['' => ''] : $data;
                     echo Json::encode(['output' => $out, 'selected' => '']);
                     return;
                 }
@@ -811,17 +817,49 @@ class OrderController extends Controller
         }
     }
 
-//    public function actionGetProductInfo($id) {
-//        $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
-//        $image = Image::find()->select('path')->where(['product_id' => $id])->one();
-//        $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
-//        $product_info = [
-//            'price' => $product_info->price,
-//            'quantity_in_stock' => $product_info->quantity_in_stock,
-//            'sold' => $product_info->sold,
-//            'unit' => $unit->name,
-//            'image' => $image ? $image->path : null,
-//        ];
-//        echo Json::encode($product_info);
-//    }
+    public function actionCheckVoucher() {
+        $errors = $success = [];
+        if ($voucher_code = Yii::$app->request->post()['voucher']) {
+            $voucher = Voucher::find()->where(['code' => $voucher_code])->one();
+            $today = ParserDateTime::getTimeStamp();
+            $voucher_start_date = date("d/m/Y", $voucher['start_date']);
+            $voucher_end_date = date("d/m/Y", $voucher['end_date']);
+            if (empty($voucher_code)) {
+                $errors[] = Yii::t('app', 'Please enter voucher');
+            } else if (empty($voucher)) {
+                $errors[] = Yii::t('app', 'InputVoucherMsg04');
+            } else if ($today < $voucher['start_date']) {
+                $errors[] = Yii::t('app', 'InputVoucherMsg02') . $voucher_start_date;
+            } else if ($today > $voucher['end_date']) {
+                $errors[] = Yii::t('app', 'InputVoucherMsg03') . $voucher_end_date;
+            } elseif (!empty($voucher['order_id'])) {
+                $errors[] = Yii::t('app', 'InputVoucherMsg05');
+            } else if ($voucher['active'] == 1) {
+                $discount = $voucher['discount'];
+                $success[] = Yii::t('app', "You get discount {discount}% for discount code {voucher_code}", ['discount' => $discount, 'voucher_code' => $voucher_code]);
+            } else {
+                $errors[] = Yii::t('app', 'InputVoucherMsg01');
+            }
+        }
+
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return [
+            'errors' => $errors,
+            'success' => $success
+        ];
+    }
+
+    public function actionGetProductInfo($id) {
+        $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
+        $image = Image::find()->select('path')->where(['product_id' => $id])->one();
+        $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
+        $product_info = [
+            'price' => $product_info->price,
+            'quantity_in_stock' => $product_info->quantity_in_stock,
+            'sold' => $product_info->sold,
+            'unit' => $unit->name,
+            'image' => $image ? $image->path : null,
+        ];
+        echo Json::encode($product_info);
+    }
 }

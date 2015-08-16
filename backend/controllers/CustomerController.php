@@ -533,7 +533,8 @@ class CustomerController extends Controller
                 $parents = $_POST['depdrop_parents'];
                 if ($parents != null) {
                     $city_id = $parents[0];
-                    $out = District::getOptionsByDistrict($city_id);
+                    $data = District::find()->where(['city_id'=>$city_id])->select(['id','name'])->asArray()->all();
+                    $out = (count($data) == 0) ? ['' => ''] : $data;
                     echo Json::encode(['output' => $out, 'selected' => '']);
                     return;
                 }

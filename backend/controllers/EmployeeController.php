@@ -129,6 +129,16 @@ class EmployeeController extends Controller
         $address = new Address();
         $city = new City();
         $model->scenario = 'adminCreate';
+        $result = [
+            'Roles' => []
+        ];
+
+        $authManager = Yii::$app->authManager;
+        foreach ($authManager->getRoles() as $name => $role) {
+            if (empty($term) or strpos($name, $term) !== false) {
+                $result['Roles'][$name] = $name;
+            }
+        }
 
         if ($model->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
@@ -175,7 +185,31 @@ class EmployeeController extends Controller
                                 if ($transaction->getIsActive()) {
                                     $transaction->rollBack();
                                 }
-                                $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
+                                if ($model->dob != '') {
+                                    $model->dob = date('d/m/Y', $model->dob);
+                                }
+
+                                if($model->start_date != '') {
+                                    $model->start_date = date('d/m/Y', $model->start_date);
+                                }
+
+                                // get errors
+                                Yii::$app->getSession()->setFlash('error', [
+                                    'type' => 'error',
+                                    'duration' => 0,
+                                    'icon' => 'fa fa-plus',
+                                    'message' => Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]),
+                                    'title' => Yii::t('app', 'Create Employee'),
+                                ]);
+
+                                $model->password = null;
+
+                                return $this->render('create', [
+                                    'model' => $model,
+                                    'address' => $address,
+                                    'city' => $city,
+                                    'item' => $result
+                                ]);
                             }
                         }
 
@@ -223,6 +257,7 @@ class EmployeeController extends Controller
                             'model' => $model,
                             'address' => $address,
                             'city' => $city,
+                            'item' => $result
                         ]);
                     }
                 }
@@ -251,6 +286,7 @@ class EmployeeController extends Controller
                     'model' => $model,
                     'address' => $address,
                     'city' => $city,
+                    'item' => $result
                 ]);
             }
         } else {
@@ -258,6 +294,7 @@ class EmployeeController extends Controller
                 'model' => $model,
                 'address' => $address,
                 'city' => $city,
+                'item' => $result
             ]);
         }
     }
@@ -276,6 +313,20 @@ class EmployeeController extends Controller
         $city = City::find()->where(['id'=>$district->city_id])->one();
         $model->scenario = 'adminEdit';
 
+        $result = [
+            'Roles' => []
+        ];
+        $authManager = Yii::$app->authManager;
+
+        foreach ($authManager->getRoles() as $name => $role) {
+            if ($name === $id) {
+                continue;
+            }
+            if (empty($term) or strpos($name, $term) !== false) {
+                $result['Roles'][$name] = $name;
+            }
+        }
+
         $model->password = null;
         $model->dob = date('d/m/Y', $model->dob);
         $model->start_date = date('d/m/Y', $model->start_date);
@@ -286,6 +337,9 @@ class EmployeeController extends Controller
         if ($model->load(Yii::$app->request->post())
             && $address->load(Yii::$app->request->post())) {
 
+            if (!isset(Yii::$app->request->post("Employee")['assignments'])) {
+                $model->setAssignments([]);
+            }
             if(Yii::$app->request->post('Employee')['password'] === '') {
                 $model->password = $model->oldAttributes['password'];
             }
@@ -324,26 +378,50 @@ class EmployeeController extends Controller
                             $image->saveAs($dir . '/' . $model->image);
                         }
 
-
-
-                        if($model->getAssignments() == '') {
-                            $model->setAssignments([]);
-                        }
+                        $assignments = $model->getAssignments();
 
                         foreach ($prePostAssignments as $assignment) {
-                            $key = array_search($assignment->roleName, $model->getAssignments());
+                            $key = array_search($assignment->roleName, $assignments);
                             if ($key === false) {
                                 \Yii::$app->authManager->revoke(new Item(['name' => $assignment->roleName]), $model->id);
                             } else {
-                                unset($model->getAssignments()[$key]);
+                                unset($assignments[$key]);
                             }
                         }
 
-                        foreach ($model->getAssignments() as $assignment) {
+                        foreach ($assignments as $assignment) {
                             try {
                                 \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $model->id);
                             } catch (\Exception $e) {
-                                $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
+                                if ($transaction->getIsActive()) {
+                                    $transaction->rollBack();
+                                }
+
+                                if ($model->dob != '') {
+                                    $model->dob = date('d/m/Y', $model->dob);
+                                }
+
+                                if($model->start_date != '') {
+                                    $model->start_date = date('d/m/Y', $model->start_date);
+                                }
+
+                                // get errors
+                                Yii::$app->getSession()->setFlash('error', [
+                                    'type' => 'error',
+                                    'duration' => 0,
+                                    'icon' => 'fa fa-plus',
+                                    'message' => Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]),
+                                    'title' => Yii::t('app', 'Update Employee'),
+                                ]);
+
+                                $model->password = null;
+
+                                return $this->render('create', [
+                                    'model' => $model,
+                                    'address' => $address,
+                                    'city' => $city,
+                                    'item' => $result
+                                ]);
                             }
                         }
 
@@ -391,6 +469,7 @@ class EmployeeController extends Controller
                             'model' => $model,
                             'address' => $address,
                             'city' => $city,
+                            'item' => $result
                         ]);
                     }
                 } else {
@@ -421,6 +500,7 @@ class EmployeeController extends Controller
                         'model' => $model,
                         'address' => $address,
                         'city' => $city,
+                        'item' => $result
                     ]);
                 }
             } catch (Exception $e) {
@@ -442,6 +522,7 @@ class EmployeeController extends Controller
                     'model' => $model,
                     'address' => $address,
                     'city' => $city,
+                    'item' => $result
                 ]);
             }
         } else {
@@ -449,6 +530,7 @@ class EmployeeController extends Controller
                 'model' => $model,
                 'address' => $address,
                 'city' => $city,
+                'item' => $result
             ]);
         }
     }
@@ -513,7 +595,7 @@ class EmployeeController extends Controller
         }
     }
 
-    public function actionGetdistrict($id) {
+    public function actionGetdistrict($id = null) {
         if (isset($id)) {
             $countDistrict= District::find()
                 ->where(['city_id' => $id])
@@ -536,7 +618,8 @@ class EmployeeController extends Controller
                 $parents = $_POST['depdrop_parents'];
                 if ($parents != null) {
                     $city_id = $parents[0];
-                    $out = District::getOptionsByDistrict($city_id);
+                    $data = District::find()->where(['city_id'=>$city_id])->select(['id','name'])->asArray()->all();
+                    $out = (count($data) == 0) ? ['' => ''] : $data;
                     echo Json::encode(['output' => $out, 'selected' => '']);
                     return;
                 }

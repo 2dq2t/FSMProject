@@ -3,12 +3,11 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
+use backend\components\RouteHelper;
+use backend\models\AuthItem;
 use Yii;
-use backend\models\Route;
-use yii\base\Module;
+use yii\rbac\Item;
 use yii\web\Response;
-use yii\helpers\Inflector;
-use Exception;
 
 /**
  * Description of RuleController
@@ -18,14 +17,38 @@ use Exception;
  */
 class RouteController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+//            'access' => [
+//                'class' => \backend\components\AccessControl::className()
+//            ],
+        ];
+    }
     /**
      * Lists all Route models.
      * @return mixed
      */
-    private $routes = [];
     public function actionIndex()
     {
-        return $this->render('index');
+        $manager = Yii::$app->getAuthManager();
+        $exists = $routes = [];
+        foreach (RouteHelper::getAppRoutes() as $route) {
+            $routes[$route] = $route;
+        }
+        foreach ($manager->getPermissions() as $name => $permission) {
+            if ($name[0] !== '/') {
+                continue;
+            }
+            $exists[$name] = $name;
+            if (isset($routes[$name])) {
+                unset($routes[$name]);
+            }
+        }
+        return $this->render('index', [
+            'new' => $routes,
+            'exists' => $exists
+        ]);
     }
 
     /**
@@ -35,12 +58,43 @@ class RouteController extends \yii\web\Controller
      */
     public function actionCreate()
     {
-        $model = new Route;
+        $model = new AuthItem();
         if ($model->load(Yii::$app->getRequest()->post())) {
+            $model->type = Item::TYPE_PERMISSION;
             if ($model->validate()) {
-                $routes = preg_split('/\s*,\s*/', trim($model->route), -1, PREG_SPLIT_NO_EMPTY);
-                $this->saveNew($routes);
-                $this->redirect(['index']);
+//                $routes = preg_split('/\s*,\s*/', trim($model->name), -1, PREG_SPLIT_NO_EMPTY);
+
+                $model->name = preg_replace('/^[^a-zA-Z]+/', '/', $model->name);
+                if ($model->createItem()) {
+                    Yii::$app->getSession()->setFlash('success', [
+                        'type' => 'success',
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => Yii::t('app', 'Create route success.'),
+                        'title' => Yii::t('app', 'Create Route')
+                    ]);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Create route success'), Yii::$app->user->identity->email);
+                    switch (Yii::$app->request->post('action', 'save')) {
+                        case 'next':
+                            return $this->redirect(['create']);
+                        default:
+                            return $this->redirect(['index']);
+                    }
+                } else {
+                    Yii::$app->getSession()->setFlash('error', [
+                        'type' => 'error',
+                        'duration' => 0,
+                        'icon' => 'fa fa-plus',
+                        'message' => Yii::t('app', $model->getErrorMessage()),//current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save role.'),
+                        'title' => Yii::t('app', 'Create Route')
+                    ]);
+
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Add Route error: ') . Yii::t('app', $model->getErrorMessage()), Yii::$app->user->identity->email);
+
+                    return $this->render('create', [
+                        'model' => $model
+                    ]);
+                }
             }
         }
 
@@ -49,7 +103,6 @@ class RouteController extends \yii\web\Controller
 
     /**
      * Assign or remove items
-     * @param string $action
      * @return array
      */
     public function actionAssign()
@@ -57,189 +110,78 @@ class RouteController extends \yii\web\Controller
         $post = Yii::$app->getRequest()->post();
         $action = $post['action'];
         $routes = $post['routes'];
-        $manager = Yii::$app->getAuthManager();
 
+        $model = new AuthItem();
+        $model->type = Item::TYPE_PERMISSION;
         $error = [];
+        $transaction = Yii::$app->db->beginTransaction();
+        Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
         if ($action == 'assign') {
-            $this->saveNew($routes);
+            foreach ($routes as $route) {
+                $model->name = $route;
+                if (!$model->createItem()) $error[] = $model->getErrorMessage();
+            }
+
+            if (empty($error)) {
+                Logger::log(Logger::INFO, Yii::t('app', 'Assign route success'), Yii::$app->user->identity->email);
+            } else {
+                Logger::log(Logger::ERROR, Yii::t('app', 'Assign route error: ') . $error[0], Yii::$app->user->identity->email);
+            }
         } else {
             foreach ($routes as $route) {
-                $child = $manager->getPermission($route);
-                try {
-                    $manager->remove($child);
-                } catch (Exception $exc) {
-                    $error[] = $exc->getMessage();
-                }
+                $model->name = $route;
+                if (!$model->deleteItem()) $error[] = $model->getErrorMessage();
+            }
+            if (empty($error)) {
+                Logger::log(Logger::INFO, Yii::t('app', 'Delete route success'), Yii::$app->user->identity->email);
+            } else {
+                Logger::log(Logger::ERROR, Yii::t('app', 'Delete route error: ') . $error[0], Yii::$app->user->identity->email);
             }
         }
+
+        Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+        if (empty($error)) {
+            $transaction->commit();
+        } else {
+            $transaction->rollBack();
+        }
+
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
 
         return[
-            'type' => 'S',
             'errors' => $error,
         ];
     }
 
     /**
-     * Save one or more route(s)
-     * @param array $routes
-     */
-    private function saveNew($routes)
-    {
-        $manager = Yii::$app->getAuthManager();
-        foreach ($routes as $route) {
-            try {
-                $item = $manager->createPermission('/' . trim($route, '/'));
-                $manager->add($item);
-            } catch (Exception $e) {
-
-            }
-        }
-    }
-
-    /**
      * Search Route
      * @param string $target
-     * @param string $term
-     * @param string $refresh
      * @return array
      */
-    public function actionSearch($target, $term = '')
+    public function actionGetRoutes($target)
     {
         $results = [];
         $manager = Yii::$app->getAuthManager();
 
         $exists = array_keys($manager->getPermissions());
-        $result = [];
-        $this->getRouteRecursive(Yii::$app, $result);
-
-        $routes = $result;
-        if ($target == 'avaliable') {
+        $routes = RouteHelper::getAppRoutes();
+        if ($target == 'available') {
             foreach ($routes as $route) {
                 if (in_array($route, $exists)) {
                     continue;
                 }
-                if (empty($term) or strpos($route, $term) !== false) {
-                    $results[$route] = true;
-                }
+                $results[$route] = true;
             }
         } else {
             foreach ($exists as $name) {
                 if ($name[0] !== '/') {
                     continue;
                 }
-                if (empty($term) or strpos($name, $term) !== false) {
-                    $r = explode('&', $name);
-                    $results[$name] = !empty($r[0]) && in_array($r[0], $routes);
-                }
+                $results[$name] = true;
             }
         }
 
         Yii::$app->response->format = 'json';
         return $results;
-    }
-
-    /**
-     * Get route(s) recursive
-     * @param \yii\base\Module $module
-     * @param array $result
-     */
-    private function getRouteRecursive($module, &$result)
-    {
-        try {
-            foreach ($module->getModules() as $id => $child) {
-                if (($child = $module->getModule($id)) !== null) {
-                    $this->getRouteRecursive($child, $result);
-                }
-            }
-
-            foreach ($module->module->controllerMap as $id => $type) {
-                $this->getControllerActions($type, $id, $module, $result);
-            }
-
-            $namespace = trim($module->module->controllerNamespace, '\\') . '\\';
-            $this->getControllerFiles($module, $namespace, '', $result);
-            $result[] = ($module->uniqueId === '' ? '' : '/' . $module->uniqueId) . '/*';
-        } catch (\Exception $exc) {
-            Yii::error($exc->getMessage(), __METHOD__);
-        }
-    }
-
-    /**
-     * Get list controller under module
-     * @param \yii\base\Module $module
-     * @param string $namespace
-     * @param string $prefix
-     * @param mixed $result
-     * @return mixed
-     */
-    private function getControllerFiles($module, $namespace, $prefix, &$result)
-    {
-        $path = @Yii::getAlias('@backend' . str_replace('\\', '/', $namespace));
-        $result[] = $path;
-        try {
-            if (!is_dir($path)) {
-                return;
-            }
-            foreach (scandir($path) as $file) {
-                if ($file == '.' || $file == '..') {
-                    continue;
-                }
-                if (is_dir($path . '/' . $file)) {
-                    $this->getControllerFiles($module, $namespace . $file . '\\', $prefix . $file . '/', $result);
-                } elseif (strcmp(substr($file, -14), 'Controller.php') === 0) {
-                    $id = Inflector::camel2id(substr(basename($file), 0, -14));
-                    $className = $namespace . Inflector::id2camel($id) . 'Controller';
-                    if (strpos($className, '-') === false && class_exists($className) && is_subclass_of($className, 'yii\base\Controller')) {
-                        $this->getControllerActions($className, $prefix . $id, $module, $result);
-                    }
-                }
-            }
-        } catch (\Exception $exc) {
-            Yii::error($exc->getMessage(), __METHOD__);
-        }
-    }
-
-    /**
-     * Get list action of controller
-     * @param mixed $type
-     * @param string $id
-     * @param \yii\base\Module $module
-     * @param string $result
-     */
-    private function getControllerActions($type, $id, $module, &$result)
-    {
-        try {
-            /* @var $controller \yii\base\Controller */
-            $controller = Yii::createObject($type, [$id, $module->module]);
-            $this->getActionRoutes($controller, $result);
-            $result[] = '/' . $controller->uniqueId . '/*';
-        } catch (\Exception $exc) {
-            Yii::error($exc->getMessage(), __METHOD__);
-        }
-    }
-
-    /**
-     * Get route of action
-     * @param \yii\base\Controller $controller
-     * @param array $result all controller action.
-     */
-    private function getActionRoutes($controller, &$result)
-    {
-        try {
-            $prefix = '/' . $controller->uniqueId . '/';
-            foreach ($controller->actions() as $id => $value) {
-                $result[] = $prefix . $id;
-            }
-            $class = new \ReflectionClass($controller);
-            foreach ($class->getMethods() as $method) {
-                $name = $method->getName();
-                if ($method->isPublic() && !$method->isStatic() && strpos($name, 'action') === 0 && $name !== 'actions') {
-                    $result[] = $prefix . Inflector::camel2id(substr($name, 6));
-                }
-            }
-        } catch (\Exception $exc) {
-            Yii::error($exc->getMessage(), __METHOD__);
-        }
     }
 }

@@ -43,12 +43,4 @@ class City extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
         ];
     }
-
-    //function get file from City Table
-    public static function getCity(){
-        $data = static::find()->all();
-        $value = (count($data) == 0)? ['' => '']:\yii\helpers\ArrayHelper::map($data, 'id', 'name');
-
-        return $value;
-    }
 }

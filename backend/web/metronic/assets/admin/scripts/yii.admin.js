@@ -1,156 +1,78 @@
 yii.admin = (function ($) {
-    var _onSearch = false;
+    //jQuery.expr[':'].Contains = function(a,i,m){
+    //    return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+    //};
+    //var _onSearch = false;
     var pub = {
-        userId: undefined,
-        roleName: undefined,
         assignUrl: undefined,
-        searchUrl: undefined,
-        assign: function (action) {
-            var params = {
-                id: pub.userId,
-                action: action,
-                roles: $('#list-' + (action == 'assign' ? 'avaliable' : 'assigned')).val(),
-            };
-            $.post(pub.assignUrl, params,
-                function () {
-                    pub.searchAssignmet('avaliable', true);
-                    pub.searchAssignmet('assigned', true);
-                });
-        },
-        searchAssignmet: function (target, force) {
-            if (!_onSearch || force) {
-                _onSearch = true;
-                var $inp = $('#search-' + target);
-                setTimeout(function () {
-                    var data = {
-                        id: pub.userId,
-                        target: target,
-                        term: $inp.val(),
-                    };
-                    $.get(pub.searchUrl, data,
-                        function (r) {
-                            var $list = $('#list-' + target);
-                            $list.html('');
-                            if (r.Roles) {
-                                var $group = $('<optgroup label="Roles">');
-                                $.each(r.Roles, function () {
-                                    $('<option>').val(this).text(this).appendTo($group);
-                                });
-                                $group.appendTo($list);
-                            }
-                            if (r.Permissions) {
-                                var $group = $('<optgroup label="Permissions">');
-                                $.each(r.Permissions, function () {
-                                    $('<option>').val(this).text(this).appendTo($group);
-                                });
-                                $group.appendTo($list);
-                            }
-                        }).done(function () {
-                        _onSearch = false;
-                    });
-                }, 500);
-            }
-        },
-        // role & permission
-        addChild: function (action) {
-            var params = {
-                id: pub.roleName,
-                action: action,
-                roles: $('#list-' + (action == 'assign' ? 'avaliable' : 'assigned')).val(),
-            };
-            $.post(pub.assignUrl, params,
-                function () {
-                    pub.searchRole('avaliable', true);
-                    pub.searchRole('assigned', true);
-                });
-        },
-        searchRole: function (target, force) {
-            if (!_onSearch || force) {
-                _onSearch = true;
-                var $inp = $('#search-' + target);
-                setTimeout(function () {
-                    var data = {
-                        id: pub.roleName,
-                        target: target,
-                        term: $inp.val(),
-                    };
-                    $.get(pub.searchUrl, data,
-                        function (r) {
-                            console.log(r);
-                            var $list = $('#list-' + target);
-                            $list.html('');
-                            if (r.Roles) {
-                                var $group = $('<optgroup label="Roles">');
-                                $.each(r.Roles, function () {
-                                    $('<option>').val(this).text(this).appendTo($group);
-                                });
-                                $group.appendTo($list);
-                            }
-                            if (r.Permissions) {
-                                var $group = $('<optgroup label="Permissions">');
-                                $.each(r.Permissions, function () {
-                                    $('<option>').val(this).text(this).appendTo($group);
-                                });
-                                $group.appendTo($list);
-                            }
-                            if (r.Routes) {
-                                var $group = $('<optgroup label="Routes">');
-                                $.each(r.Routes, function () {
-                                    $('<option>').val(this).text(this).appendTo($group);
-                                });
-                                $group.appendTo($list);
-                            }
-                        }).done(function () {
-                        _onSearch = false;
-                    });
-                }, 500);
-            }
-        },
+        getRoutesUrl: undefined,
         // route
         assignRoute: function (action) {
             var params = {
                 action: action,
-                routes: $('#list-' + (action == 'assign' ? 'avaliable' : 'assigned')).val(),
+                routes: $('#list-' + (action == 'assign' ? 'available' : 'assigned')).val()
             };
-            $.post(pub.assignUrl, params,
-                function () {
-                    pub.searchRoute('avaliable', 0, true);
-                    pub.searchRoute('assigned', 0, true);
+
+            Metronic.blockUI({
+                boxed: true
+            });
+
+            $.post(pub.assignUrl, params, function (data) {
+                Metronic.unblockUI();
+                if (data.errors.length !== 0) {
+                    alert(data.errors[0]);
+                } else {
+                    pub.getRoutes('available', true);
+                    pub.getRoutes('assigned', true);
+                }
+            }).fail(function(data) {
+                    Metronic.unblockUI();
+                    alert(data.responseText);
                 });
         },
-        searchRoute: function (target, refresh, force) {
-            if (!_onSearch || force) {
-                _onSearch = true;
-                var $inp = $('#search-' + target);
-                setTimeout(function () {
-                    var data = {
-                        target: target,
-                        term: $inp.val(),
-                        refresh: refresh,
-                    };
-                    $.get(pub.searchUrl, data,
-                        function (r) {
-                            var $list = $('#list-' + target);
-                            $list.html('');
-                            $.each(r, function (key, val) {
-                                var $opt = $('<option>').val(key).text(key);
-                                if (!val) {
-                                    $opt.addClass('lost');
-                                }
-                                $opt.appendTo($list);
-                            });
-
-                        }).done(function () {
-                        _onSearch = false;
+        listFilter: function(input, select) {
+            $(input)
+                .change( function () {
+                    var filter = $(this).val();
+                    if(filter) {
+                        // this finds all option in select list that contain the input,
+                        // and hide the ones not containing the input while showing the ones that do
+                        $(select).find("option:not(:Contains(" + filter + "))").hide();
+                        $(select).find("option:Contains(" + filter + ")").show();
+                    } else {
+                        $(select).find("option").show();
+                    }
+                    return false;
+                })
+                .keyup( function () {
+                    // fire the above change event after every letter
+                    $(this).change();
+                });
+        },
+        getRoutes: function (target, refresh, force) {
+            setTimeout(function () {
+                var data = {
+                    target: target,
+                    //refresh: refresh
+                };
+                $.get(pub.getRoutesUrl, data, function (r) {
+                    var $list = $('#list-' + target);
+                    $list.html('');
+                    $.each(r, function (key, val) {
+                        var $opt = $('<option>').val(key).text(key);
+                        if (!val) {
+                            $opt.addClass('lost');
+                        }
+                        $opt.appendTo($list);
                     });
-                }, 500);
-            }
+                });
+            }, 500);
         },
         initProperties: function (properties) {
             $.each(properties, function (key, val) {
                 pub[key] = val;
             });
-        },
-    }
+        }
+    };
     return pub;
-})(jQuery)
+})(jQuery);

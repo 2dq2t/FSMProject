@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update Employee');
         'model' => $model,
         'address' => $address,
         'city' => $city,
+        'item' => $item
     ]) ?>
 
 </div>

@@ -57,4 +57,12 @@ class Offer extends \yii\db\ActiveRecord
             'active' => Yii::t('app', 'OfferActive'),
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
 }

@@ -1,8 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use kartik\alert\Alert;
+use kartik\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
@@ -201,7 +200,39 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
+                                <?= $form->field($model, 'voucher', [
+                                    'addon' => [
+                                        'append' => [
+                                            'content' => "<input type='button' value='" . Yii::t('app', 'CheckVoucherLabel') . "' id='button-voucher' class='btn btn-primary'>",
+                                            'asButton' => true
+                                        ],
+                                    ]
+                                ])->textInput(['id' => 'voucher','placeholder' => Yii::t('app', 'Enter voucher if have')])?>
+                                <div id="voucherResult"></div>
                             </div>
+                            <script type="text/javascript">
+                                $('#button-voucher').on('click', function () {
+                                    $('#voucherResult').empty();
+                                    if ($('#voucher').val().length > 0) {
+                                        Metronic.blockUI({
+                                            boxed: true
+                                        });
+                                        $.post("index.php?r=order/check-voucher", {voucher: $('#voucher').val()}, function(data) {
+                                            if(data !== null) {
+                                                if (data.errors.length !== 0) {
+                                                    $('#voucherResult').append('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + data.errors[0] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                } else if (data.success.length !== 0) {
+                                                    $('#voucherResult').append('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> ' + data.success[0] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
+                                                }
+                                            }
+                                        }).done(function(){
+                                            Metronic.unblockUI();
+                                        }).error(function() {
+                                            Metronic.unblockUI();
+                                        });
+                                    }
+                                });
+                            </script>
                             <!--/span-->
                         </div>
                         <!--/row-->

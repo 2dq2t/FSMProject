@@ -63,12 +63,11 @@ class AssignmentController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        /* @var $model Employee*/
+        $model = Employee::findIdentity($id);
 
         $items = [
-            'Roles' => [],
-            'Permissions' => [],
-            'Routes' => [],
+            'Roles' => []
         ];
 
         $authManager = Yii::$app->authManager;
@@ -77,14 +76,8 @@ class AssignmentController extends Controller
                 $items['Roles'][$name] = $name;
             }
         }
-        foreach ($authManager->getPermissions() as $name => $role) {
-            if (empty($term) or strpos($name, $term) !== false) {
-                $items[$name[0] === '/' ? 'Routes' : 'Permissions'][$name] = $name;
-            }
-        }
 
         $model->setAssignments(array_keys(Yii::$app->getAuthManager()->getAssignments($id)));
-//        var_dump(Yii::$app->getAuthManager()->getAssignments($id));return;
 
         if($model->load(Yii::$app->request->post())) {
             if (!empty($model->getAssignments())) {

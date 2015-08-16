@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	echo lavrentiev\yii2toastr\Toastr::widget([
 		'type' => (!empty($message['type'])) ? $message['type'] : 'success',
 		'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
-		'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+		'message' => (!empty($message['message'])) ? trim(preg_replace('/\s+/', ' ', $message['message'])) : 'Message Not Set!',
 		'clear' => false,
 		'options' => [
 			"closeButton" => true,
@@ -40,7 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 <?php $this->endBlock('submit'); ?>
-
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet box green">
@@ -63,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php $form = ActiveForm::begin(); ?>
 				<div class="form-body">
 					<div class="form-group">
-						<?= $form->field($model, 'route')->textInput(['placeholder' => Yii::t('app', 'Enter route name')]) ?>
+						<?= $form->field($model, 'name')->textInput(['placeholder' => Yii::t('app', 'Enter route name')])->label(Yii::t('app', 'Route name')) ?>
 					</div>
 				</div>
 				<div class="form-actions">

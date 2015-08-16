@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string $gender
  * @property string $phone_number
  * @property string $email
+ * @property string $note
  * @property string $image
  * @property string $auth_key
  * @property string $password_reset_token
@@ -52,7 +53,7 @@ class Employee extends ActiveRecord implements IdentityInterface
             [['full_name', 'dob', 'gender', 'phone_number', 'email', 'start_date', 'address_id'], 'required', 'on' => 'adminEdit'],
             [['phone_number', 'status', 'address_id'], 'integer'],
             [['dob', 'start_date'], 'safe'],
-            [['gender'], 'string'],
+            [['gender', 'note'], 'string'],
             [['full_name', 'password', 'email', 'image', 'auth_key', 'password_reset_token'], 'string', 'max' => 255],
             [['password'], 'string', 'min' => 6],
             [['email'], 'unique'],

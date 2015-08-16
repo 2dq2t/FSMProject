@@ -45,9 +45,15 @@ if(Yii::$app->session->getFlash('error')) {
 </div>
 <div class="form-actions">
     <?= Html::submitButton(Yii::t('app','LoginLabel'), ['class' => 'btn btn-success uppercase', 'name' => 'login-button']) ?>
-    <?= $form->field($model, 'rememberMe')->checkbox() ?>
+    <?= $form->field($model, 'rememberMe',[
+        'options' => [
+            'tag' => 'span',
+        ],
+        'template'=> "<label class='rememberme check'><div class='checker focus'><span>{input}\n{label}</span> </div></label>"
+    ])->checkbox([], false) ?>
     <?= Html::a(Yii::t('app', 'ForgottenPasswordLabel'), ['/site/request-password-reset'], ['class' => 'forget-password'])?>
 </div>
+
 <!--</form>-->
 <?php ActiveForm::end(); ?>
 <!-- END LOGIN FORM -->

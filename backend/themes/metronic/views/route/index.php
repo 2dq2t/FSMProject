@@ -11,6 +11,22 @@ $this->title = Yii::t('app', 'Routes');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+    <?php
+    echo lavrentiev\yii2toastr\Toastr::widget([
+        'type' => (!empty($message['type'])) ? $message['type'] : 'success',
+        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+        'message' => (!empty($message['message'])) ? trim(preg_replace('/\s+/', ' ', $message['message'])) : 'Message Not Set!',
+        'clear' => false,
+        'options' => [
+            "closeButton" => true,
+            "positionClass" => "toast-top-right",
+            "timeOut" => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
+        ]
+    ]);
+    ?>
+<?php endforeach; ?>
+
 <div>
 
     <div class="row">
@@ -38,10 +54,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                             <div class="col-md-12">
                                 <div class="col-lg-5">
-                                    <?= Yii::t('app', 'Avaliable') ?>:
-                                    <input id="search-avaliable" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>"><br>
-                                    <select id="list-avaliable" class="form-control" multiple size="20" style="width: 100%">
-                                    </select>
+                                    <?= Yii::t('app', 'Available') ?>:
+                                    <input id="search-available" class="form-control" placeholder="<?= Yii::t('app', 'Filter new')?>"><br>
+                                    <?php
+                                    echo Html::listBox('routes', '', $new, [
+                                        'id' => 'list-available',
+                                        'multiple' => true,
+                                        'size' => 20,
+                                        'style' => 'width:100%',
+                                        'class' => 'form-control',
+                                    ]);
+                                    ?>
                                 </div>
                                 <div class="col-lg-1">
                                     <br><br>
@@ -50,9 +73,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                                 <div class="col-lg-5">
                                     <?= Yii::t('app', 'Assigned') ?>:
-                                    <input id="search-assigned" class="form-control" placeholder="<?= Yii::t('app', 'Filter')?>"><br>
-                                    <select id="list-assigned" class="form-control" multiple size="20" style="width: 100%">
-                                    </select>
+                                    <input id="search-assigned" class="form-control" placeholder="<?= Yii::t('app', 'Filter exists')?>"><br>
+                                    <?php echo Html::listBox('routes', '', $exists, [
+                                        'id' => 'list-assigned',
+                                        'multiple' => true,
+                                        'size' => 20,
+                                        'style' => 'width:100%',
+                                        'class' => 'form-control',
+                                    ]);
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -65,30 +94,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                     </div>
-
                     <!-- END FORM-->
                 </div>
             </div>
             <!-- END PORTLET-->
         </div>
     </div>
-
-
 </div>
 <?php
 $properties = Json::encode([
         'assignUrl' => Url::to(['assign']),
-        'searchUrl' => Url::to(['search']),
+        'getRoutesUrl' => Url::to(['get-routes']),
     ]);
 $js = <<<JS
 yii.admin.initProperties({$properties});
-
-$('#search-avaliable').keydown(function () {
-    yii.admin.searchRoute('avaliable');
-});
-$('#search-assigned').keydown(function () {
-    yii.admin.searchRoute('assigned');
-});
 $('#btn-add').click(function () {
     yii.admin.assignRoute('assign');
     return false;
@@ -97,13 +116,8 @@ $('#btn-remove').click(function () {
     yii.admin.assignRoute('remove');
     return false;
 });
-$('#btn-refresh').click(function () {
-    yii.admin.searchRoute('avaliable',1);
-    return false;
-});
-
-yii.admin.searchRoute('avaliable', 0, true);
-yii.admin.searchRoute('assigned', 0, true);
+yii.admin.listFilter("#search-available", "#list-available");
+yii.admin.listFilter("#search-assigned", "#list-assigned");
 JS;
 $this->registerJs($js);
 

@@ -52,7 +52,7 @@ class Logger {
     /**
      * The construct class logger
      */
-    protected function __construct()
+    public function __construct()
     {
         if (!$this->logDirectory) {
             $this->logDirectory = Yii::getAlias('@backend').DIRECTORY_SEPARATOR. 'logs'.DIRECTORY_SEPARATOR;

@@ -27,6 +27,7 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+    private $voucher;
     /**
      * @inheritdoc
      */
@@ -44,7 +45,8 @@ class Order extends \yii\db\ActiveRecord
             [['order_date', 'receiving_date', 'shipping_fee', 'tax_amount', 'net_amount', 'description', 'guest_id', 'order_status_id', 'order_address_id'], 'required'],
             [['order_date', 'receiving_date', 'tax_amount', 'guest_id', 'order_status_id', 'order_address_id'], 'integer'],
             [['shipping_fee', 'net_amount'], 'number'],
-            [['description'], 'string', 'max' => 255]
+            [['description'], 'string', 'max' => 255],
+            [['voucher'], 'safe']
         ];
     }
 
@@ -65,5 +67,13 @@ class Order extends \yii\db\ActiveRecord
             'order_status_id' => Yii::t('app', 'Order Status ID'),
             'order_address_id' => Yii::t('app', 'Order Address ID'),
         ];
+    }
+
+    public function getVoucher(){
+        return $this->voucher;
+    }
+
+    public function setVoucher($voucher) {
+        $this->voucher = $voucher;
     }
 }
