@@ -174,29 +174,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <h3 class="form-section"><?= Yii::t('app', 'Order Info')?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'order_date')->widget(\kartik\date\DatePicker::classname(), [
-                                    'options' => ['placeholder' => Yii::t('app', 'Enter order date ..')],
-                                    'removeButton' => false,
-                                    'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                                    'pluginOptions' => [
-                                        'autoclose'=>true,
-                                        'startDate' => '-0d',
-                                        'todayHighlight' => true
-                                    ]
-                                ]) ?>
-                            </div>
-                            <!--/span-->
-                            <div class="col-md-6">
                                 <?= $form->field($model, 'order_status_id')->dropDownList(
                                     \yii\helpers\ArrayHelper::map(\backend\models\OrderStatus::find()->all(), 'id', 'name'),
                                     ['prompt'=>Yii::t('app', 'Select Order Status')]
                                 ) ?>
-                            </div>
-                            <!--/span-->
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'description')->textarea(['rows' => 3, 'placeholder' => Yii::t('app', 'Enter order description')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">
@@ -209,6 +190,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     ]
                                 ])->textInput(['id' => 'voucher','placeholder' => Yii::t('app', 'Enter voucher if have')])?>
                                 <div id="voucherResult"></div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $form->field($model, 'description')->textarea(['rows' => 3, 'placeholder' => Yii::t('app', 'Enter order description')]) ?>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+
                             </div>
                             <script type="text/javascript">
                                 $('#button-voucher').on('click', function () {

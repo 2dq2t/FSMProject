@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 
 /**
@@ -40,8 +41,18 @@ class Voucher extends \yii\db\ActiveRecord
             [['discount', 'active', 'order_id'], 'integer'],
             [['start_date', 'end_date'], 'safe'],
             [['name'], 'string', 'max' => 255],
-            [['code'], 'string', 'max' => 45]
+            [['code'], 'string', 'max' => 45],
+            [['discount'], 'integer', 'min' => 0, 'max' => 50, 'tooSmall' => Yii::t('app', 'Discount must be positive number'), 'tooBig' => Yii::t('app', 'Discount must be lest than or equal 50')],
+            [['end_date'], 'validateDate']
         ];
+    }
+
+    public function validateDate($attribute) {
+        if (!empty($this->start_date) && !empty($this->end_date)) {
+            if (ParserDateTime::parseToTimestamp($this->start_date) > ParserDateTime::parseToTimestamp($this->end_date)) {
+                $this->addError($attribute, Yii::t('app', 'Voucher Start Date must greater than Voucher End Date'));
+            }
+        }
     }
 
     /**

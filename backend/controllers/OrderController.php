@@ -120,7 +120,7 @@ class OrderController extends Controller
                     $model->guest_id = $guest->id;
 
                     // convert string date time to timestamp
-                    $model->order_date = ParserDateTime::parseToTimestamp($model->order_date);
+                    $model->order_date = ParserDateTime::getTimeStamp();
                     $model->receiving_date = ParserDateTime::parseToTimestamp($model->receiving_date);
 
                     // count tax amount and net amount
@@ -205,18 +205,20 @@ class OrderController extends Controller
                             }
                         }
 
-                        /* @var $voucher Voucher*/
-                        $voucher = Voucher::findOne(['code' => 'dasd']);
-                        $voucher->order_id = $model->id;
-                        if(!$voucher->save()) {
-                            $errors[] = current($voucher->getFirstErrors());
+                        if (!empty($model->getVoucher())) {
+                            /* @var $voucher Voucher */
+                            $voucher = Voucher::findOne(['code' => $model->getVoucher()]);
+                            $voucher->order_id = $model->id;
+                            if (!$voucher->save()) {
+                                $errors[] = current($voucher->getFirstErrors());
+                            }
                         }
 
                         if (!empty($errors)) {
 
-                            if ($model->order_date) {
-                                $model->order_date = date('m/d/Y', $model->order_date);
-                            }
+//                            if ($model->order_date) {
+//                                $model->order_date = date('m/d/Y', $model->order_date);
+//                            }
 
                             if ($model->receiving_date) {
                                 $model->receiving_date = date('m/d/Y', $model->receiving_date);
@@ -270,9 +272,9 @@ class OrderController extends Controller
                         }
 
                     } else {
-                        if ($model->order_date) {
-                            $model->order_date = date('m/d/Y', $model->order_date);
-                        }
+//                        if ($model->order_date) {
+//                            $model->order_date = date('m/d/Y', $model->order_date);
+//                        }
 
                         if ($model->receiving_date) {
                             $model->receiving_date = date('m/d/Y', $model->receiving_date);
@@ -328,9 +330,9 @@ class OrderController extends Controller
                     $transaction->rollBack();
                 }
 
-                if ($model->order_date) {
-                    $model->order_date = date('m/d/Y', $model->order_date);
-                }
+//                if ($model->order_date) {
+//                    $model->order_date = date('m/d/Y', $model->order_date);
+//                }
 
                 if ($model->receiving_date) {
                     $model->receiving_date = date('m/d/Y', $model->receiving_date);

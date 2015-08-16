@@ -123,7 +123,7 @@ class OfferController extends Controller
     {
         $model = new Offer();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);
             $model->end_date = ParserDateTime::parseToTimestamp($model->end_date);
 
@@ -181,7 +181,7 @@ class OfferController extends Controller
         $model->start_date = date('d/m/Y', $model->start_date);
         $model->end_date = date('d/m/Y', $model->end_date);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->start_date = ParserDateTime::parseToTimestamp($model->start_date);
             $model->end_date = ParserDateTime::parseToTimestamp($model->end_date);
 
