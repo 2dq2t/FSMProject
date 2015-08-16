@@ -12,8 +12,8 @@ $config = [
         'ProductBestSeller'=>[
             'class'=>'frontend\components\ProductBestSeller',
         ],
-        'Category'=>[
-            'class'=>'frontend\components\Category',
+        'ProductCategory'=>[
+            'class'=>'frontend\components\ProductCategory',
         ],
         'SpecialProduct'=>[
             'class'=>'frontend\components\SpecialProduct',

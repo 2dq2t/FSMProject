@@ -76,7 +76,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                 </div>
                 <ul id="navbar" class="main-navigation">
                     <?php $result = array();
-                    $categories = Yii::$app->Category->getCategory();
+                    $categories = Yii::$app->ProductCategory->getCategory();
                     foreach ($categories as $item) {
                         $cat_name = $item['categoryname'];
                         $product_name = $item['productname'];

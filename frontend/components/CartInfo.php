@@ -8,9 +8,8 @@
 namespace frontend\components;
 
 
+use common\models\Product;
 use Yii;
-use yii\base\Component;
-use yii\db\Query;
 
 class CartInfo
 {
@@ -22,14 +21,13 @@ class CartInfo
         $cart_info = array();
         if (!empty($product_cart)) {
             foreach ($product_cart as $key => $item) {
-                $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
+                $product = Product::find()->select(['price','name'])->where(['id' => $item['product_id']])->one();
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
-                $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                $total_price += Yii::$app->CommonFunction->getProductPrice($product['price'], $product_offer) * $item['product_quantity'];
                 $total_product += $item['product_quantity'];
-                $product_cart[$key]['product_price'] = Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer);
+                $product_cart[$key]['product_price'] = Yii::$app->CommonFunction->getProductPrice($product['price'], $product_offer);
                 $product_cart[$key]['product_image'] = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
-                $product_name = (new Query())->select('name')->from('product')->where(['id' => $item['product_id'], 'active' => 1])->one();
-                $product_cart[$key]['product_name'] = $product_name['name'];
+                $product_cart[$key]['product_name'] = $product['name'];
             }
 
             $cart_info['total_product'] = $total_product;
@@ -40,7 +38,6 @@ class CartInfo
             $cart_info['total_price'] = $total_price;
             $cart_info['product_in_cart'] = null;
         }
-
         return $cart_info;
     }
 }

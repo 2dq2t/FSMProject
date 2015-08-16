@@ -17,7 +17,7 @@ echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?= $baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
             <a href="<?php echo Yii::$app->request->baseUrl . "/index.php?r=cart/view-cart"; ?>"
                title="Danh mục yêu thích"><?= Yii::t('app', 'ShoppingCartLabel') ?></a>
@@ -83,26 +83,26 @@ echo $this->render('/layouts/_header');
                                         <h2><?= Yii::t('app', 'Checkout Login') ?></h2>
 
                                         <p><?= Yii::t('app', 'Checkout ReturningCustomer') ?></p>
-                                        <?php if(!empty($modelLogin)):?>
-                                        <?php $form = yii\bootstrap\ActiveForm::begin(['id' => 'form-login', 'method' => 'post']); ?>
-                                        <div class="form-group">
-                                            <label class="control-label"
-                                                   for="input-email"><?= Yii::t('app', 'FLoginUserName') ?></label>
-                                            <?= $form->field($modelLogin, 'username')
-                                                ->label(false)->textInput(['placeholder' => Yii::t('app', 'FLoginUserName')]); ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label"
-                                                   for="input-password"><?= Yii::t('app', 'FLoginPassword') ?></label>
-                                            <?= $form->field($modelLogin, 'password')
-                                                ->label(false)->passwordInput(['placeholder' => Yii::t('app', 'FLoginPassword')]); ?>
-                                            <div class="forget-password"><a
-                                                    href="../web/index.php?r=account/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
-                                                    ?</a></div>
-                                        </div>
-                                        <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>"
-                                               class="btn btn-primary"/>
-                                        <?php yii\bootstrap\ActiveForm::end(); endif?>
+                                        <?php if (!empty($modelLogin)): ?>
+                                            <?php $form = yii\bootstrap\ActiveForm::begin(['id' => 'form-login', 'method' => 'post']); ?>
+                                            <div class="form-group">
+                                                <label class="control-label"
+                                                       for="input-email"><?= Yii::t('app', 'FLoginUserName') ?></label>
+                                                <?= $form->field($modelLogin, 'username')
+                                                    ->label(false)->textInput(['placeholder' => Yii::t('app', 'FLoginUserName')]); ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label"
+                                                       for="input-password"><?= Yii::t('app', 'FLoginPassword') ?></label>
+                                                <?= $form->field($modelLogin, 'password')
+                                                    ->label(false)->passwordInput(['placeholder' => Yii::t('app', 'FLoginPassword')]); ?>
+                                                <div class="forget-password"><a
+                                                        href="../web/index.php?r=account/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?>
+                                                        ?</a></div>
+                                            </div>
+                                            <input type="submit" value="<?= Yii::t('app', 'LoginLabel') ?>"
+                                                   class="btn btn-primary"/>
+                                            <?php yii\bootstrap\ActiveForm::end(); endif ?>
                                     </div>
                                 <?php } else { ?>
                                     <div class="col-sm-12"> <?= Yii::t('app', 'Checkout Step1 Customer') ?></div>
@@ -116,10 +116,10 @@ echo $this->render('/layouts/_header');
                     <div class="panel-heading">
                         <h4 class="panel-title"><a href="#collapse-payment-address" data-toggle="collapse"
                                                    data-parent="#accordion"
-                                                   class="accordion-toggle"><?= Yii::t('app', 'Checkout Step2') ?><?php if(empty($hideStep2)) echo "<i
-                                    class='fa fa-caret-down'></i>";?> </a></h4>
+                                                   class="accordion-toggle"><?= Yii::t('app', 'Checkout Step2') ?><?php if (empty($hideStep2)) echo "<i
+                                    class='fa fa-caret-down'></i>"; ?> </a></h4>
                     </div>
-                    <?php if(!empty($modelGuest)):?>
+                    <?php if (!empty($modelGuest)): ?>
                     <div class="panel-collapse collapse <?php if (!empty($continueStep2)) echo $continueStep2; ?>"
                          id="collapse-payment-address" style="height: auto;">
                         <div class="panel-body">
@@ -202,9 +202,9 @@ echo $this->render('/layouts/_header');
                                                 echo $form->field($modelUpdatedCity, 'id')->dropDownList(
                                                     \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
                                                     [
-                                                        'prompt' => Yii::t('app', '- Chọn Tỉnh / Thành phố -'),
-                                                        'onchange' => '
-                                                $.post( "index.php?r=customer/getdistrict&id="+$(this).val(), function( file ) {
+                                                        'prompt'=> Yii::t('app', '- Chọn Tỉnh / Thành phố -'),
+                                                        'onchange'=>'
+                                                $.post( "index.php?r=account/getdistrict&id="+$(this).val(), function( file ) {
                                                     $( "select#district-id" ).length = 0;
                                                     $( "select#district-id" ).html( file );
                                                     var event = new Event("change");
@@ -214,7 +214,7 @@ echo $this->render('/layouts/_header');
                                             } else {
                                                 echo $form->field($modelCity, 'id')->dropDownList(
                                                     \yii\helpers\ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
-                                                    ['prompt' => Yii::t('app', '- Chọn Tỉnh / Thành phố -')])->label(false);
+                                                    ['prompt'=>Yii::t('app', '- Chọn Tỉnh / Thành phố -')])->label(false);
                                             }
                                             ?>
                                         </div>
@@ -229,16 +229,16 @@ echo $this->render('/layouts/_header');
                                                             ->where(['city_id' => $modelUpdatedCity->id])
                                                             ->all(), 'id', 'name'),
                                                     [
-                                                        'prompt' => Yii::t('app', '- Chọn Quận / Huyện -'),
+                                                        'prompt'=>Yii::t('app', '- Chọn Quận / Huyện -'),
                                                     ]
                                                 )->label(false);
                                             } else {
                                                 echo $form->field($modelAddress, 'district_id')->widget(\kartik\widgets\DepDrop::classname(), [
-                                                    'options' => ['prompt' => Yii::t('app', '- Chọn Quận / Huyện -')],
-                                                    'pluginOptions' => [
-                                                        'depends' => [\yii\helpers\Html::getInputId($modelCity, 'id')],
-                                                        'placeholder' => Yii::t('app', '- Chọn Quận / Huyện -'),
-                                                        'url' => \yii\helpers\Url::to(['/customer/getdistrict'])
+                                                    'options'=>['prompt' => Yii::t('app', '- Chọn Quận / Huyện -')],
+                                                    'pluginOptions'=>[
+                                                        'depends'=>[\yii\helpers\Html::getInputId($modelCity, 'id')],
+                                                        'placeholder'=>Yii::t('app', '- Chọn Quận / Huyện -'),
+                                                        'url'=>\yii\helpers\Url::to(['/account/getdistrict'])
                                                     ]
                                                 ])->label(false);
                                             }

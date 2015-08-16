@@ -155,7 +155,7 @@ echo $this->render('/layouts/_header');
                                     </div>
                                     <div class="button-group">
                                         <button type="button" title="<?= Yii::t('app', 'AddToCartLabel') ?>"
-                                                class="addtocart" onclick="cart.add('31');">
+                                                class="addtocart" onclick="cart.add('<?= $product['product_id'] ?>');">
                                             <span><?= Yii::t('app', 'AddToCartLabel') ?></span></button>
 
                                     </div>

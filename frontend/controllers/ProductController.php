@@ -9,6 +9,9 @@
 namespace frontend\controllers;
 
 
+use common\models\ProductTag;
+use common\models\Tag;
+use common\models\Unit;
 use yii\web\Controller;
 use Yii;
 use common\models\ProductRating;
@@ -19,6 +22,7 @@ use yii\db\Query;
 use yii\data\Pagination;
 
 class ProductController extends Controller{
+    const STATUS_ACTIVE = 1;
 
     public function actionRating()
     {
@@ -38,7 +42,7 @@ class ProductController extends Controller{
 
                     $json['error'] = Yii::t('app', 'RatingProductMsg02');
                 } else {
-                    if (Product::find()->where(['id' => $product_id, 'active' => 1])->exists()) {
+                    if (Product::find()->where(['id' => $product_id, 'active' => self::STATUS_ACTIVE])->exists()) {
                         if (isset($postData['score'])) {
                             $score = $postData['score'];
                         } else
@@ -63,7 +67,7 @@ class ProductController extends Controller{
             return $this->goHome();
         }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [json_encode($json)];
+        return json_encode($json);
     }
 
     public function actionViewDetail()
@@ -87,14 +91,15 @@ class ProductController extends Controller{
         $product_image_detail = Image::find()->where(['product_id' => $product_detail['id']])->all();
 
         //get product unit
-        $product_unit = (new Query())->select('name')->from('unit')->where(['id' => $product_detail['unit_id']])->one();
+        $product_unit = Unit::find()->select('name')->where(['id' => $product_detail['unit_id']])->one();
 
         //get product tag
         $product_tag = (new Query())->select('name')->from('tag')->innerJoin('product_tag', 'tag.id = product_tag.tag_id')->where(['product_tag.product_id' => $product_detail['id']])->all();
 
         //get product in same category
+
         $products_same_category = array();
-        $products_category = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => '1', 'category_id' => $product_detail['category_id']])->all();
+        $products_category = (new Query())->select(['id as product_id', 'name as product_name', 'price as product_price', 'tax as product_tax'])->from('product')->where(['active' => self::STATUS_ACTIVE, 'category_id' => $product_detail['category_id']])->all();
         foreach ($products_category as $item) {
             if (!($item['product_id'] == $product_detail['id'])) {
                 //get product image
@@ -159,7 +164,6 @@ class ProductController extends Controller{
                         $order = SORT_DESC;
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
                         , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
-
                 } else {
                     $category_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
                         , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.category_id' => $category_ID['id']])->groupBy('product.id');
@@ -187,8 +191,8 @@ class ProductController extends Controller{
         if (Yii::$app->request->isGet) {
             if (!empty($_GET['tag'])) {
                 $list_id = array();
-                $tag_id = (new Query())->select(['id'])->from('tag')->where(['name' => $_GET['tag']])->one();
-                $product_id = (new Query())->select(['product_id'])->from('product_tag')->where(['tag_id' => $tag_id['id']])->all();
+                $tag_id = Tag::find()->select(['id'])->where(['name' => $_GET['tag']])->one();
+                $product_id = ProductTag::find()->select(['product_id'])->where(['tag_id' => $tag_id['id']])->all();
                 foreach ($product_id as $key) {
                     array_push($list_id, $key['product_id']);
                 }
@@ -200,11 +204,11 @@ class ProductController extends Controller{
                     else
                         $order = SORT_DESC;
                     $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $list_id])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
 
                 } else {
                     $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $list_id])->groupBy('product.id');
+                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id');
                 }
 
                 $countQuery = clone $product_tag_query;

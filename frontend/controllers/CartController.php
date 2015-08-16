@@ -8,8 +8,8 @@
 
 namespace frontend\controllers;
 
+use common\models\Product;
 use yii\web\Controller;
-use yii\db\Query;
 use Yii;
 
 
@@ -45,7 +45,7 @@ class CartController extends Controller{
                 $product_cart = Yii::$app->session->get('product_cart');
                 $product['product_id'] = $product_id;
                 $product['product_quantity'] = $product_quantity;
-                $product_price = (new Query())->select('price')->from('product')->where(['id' => $product_id])->one();
+                $product_price = Product::find()->select(['price'])->where(['id' => $product_id])->one();
                 $product_offer = Yii::$app->CommonFunction->getProductOffer($product_id);
                 $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $product_quantity;
                 $total_product += $product_quantity;
@@ -55,7 +55,7 @@ class CartController extends Controller{
                     $json['total'] = $total_product . " Sản phẩm - " . number_format($total_price) ." ". Yii::t('app', 'VNDLabel');
                 } else {
                     foreach ($product_cart as $key => $item) {
-                        $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
+                        $product_price = Product::find()->select('price')->where(['id' => $item['product_id']])->one();
                         $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                         $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
                         $total_product += $item['product_quantity'];
@@ -132,7 +132,7 @@ class CartController extends Controller{
                     if (($item['product_id'] == $product_id)) {
                         unset($product_cart[$key]);
                     } else {
-                        $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
+                        $product_price = Product::find()->select(['price'])->where(['id' => $item['product_id']])->one();
                         $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                         $total_price += Yii::$app->CommonFunction->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
                         $total_product += $item['product_quantity'];

@@ -1,9 +1,14 @@
 <?php
 namespace frontend\components;
 
+use common\models\Offer;
+use common\models\Product;
+use common\models\ProductRating;
+use common\models\Rating;
+use common\models\Image;
+use common\models\Unit;
+use common\models\WishList;
 use Yii;
-use yii\base\Component;
-use yii\db\Query;
 
 /**
  * Created by PhpStorm.
@@ -13,6 +18,7 @@ use yii\db\Query;
  */
 class CommonFunction
 {
+    const STATUS_ACTIVE = 1;
     public function custom_shuffle($my_array = array())
     {
         $copy = array();
@@ -29,12 +35,12 @@ class CommonFunction
 
     public function getProductRating($product_id)
     {
-        $rating_id = (new Query())->select('rating_id')->from('product_rating')->where(['product_id' => $product_id])->all();
+        $rating_id = ProductRating::find()->select(['rating_id'])->where(['product_id' => $product_id])->all();
         $total_score = 0;
         $count_rating = 0;
         foreach ($rating_id as $rating) {
             $count_rating++;
-            $score = (new Query())->select('rating')->from('rating')->where(['id' => $rating['rating_id']])->one();
+            $score = Rating::find()->select(['rating'])->where(['id' => $rating['rating_id']])->one();
             $total_score += $score['rating'];
         }
         if ($total_score > 0 && $count_rating > 0) {
@@ -46,13 +52,13 @@ class CommonFunction
 
     public function getProductOneImage($product_id)
     {
-        $product_image = (new Query())->select('path')->from('image')->where(['product_id' => $product_id])->one();
+        $product_image = Image::find()->select(['path'])->where(['product_id' => $product_id])->one();
         return $product_image['path'];
     }
 
     public function getProductOffer($product_id)
     {
-        $offer = (new Query())->select('discount,start_date,end_date')->from('offer')->where(['active' => 1, 'product_id' => $product_id])->one();
+        $offer = Offer::find()->select(['discount','start_date','end_date'])->where(['active' => self::STATUS_ACTIVE, 'product_id' => $product_id])->one();
         $today = date("d-m-Y");
         $offer_start_date = date("d-m-Y", $offer['start_date']);
         $offer_end_date = date("d-m-Y", $offer['end_date']);
@@ -65,8 +71,10 @@ class CommonFunction
 
     public function getProductUnit($product_id)
     {
-        $unit_id = (new Query())->select('unit_id')->from('product')->where(['id' => $product_id])->one();
-        $product_unit = (new Query())->select('name')->from('unit')->where(['id' => $unit_id['unit_id']])->one();
+
+        $unit_id =  Product::find()->select(['unit_id'])->where(['id' => $product_id])->one();
+
+        $product_unit =  Unit::find()->select(['name'])->where(['id' => $unit_id['unit_id']])->one();
 
         return $product_unit['name'];
     }
@@ -81,10 +89,10 @@ class CommonFunction
 
     public function  getNumberProductWishList($customer_id)
     {
-        $wish_list_product = (new Query())->select(['product_id'])->from('wish_list')->where(['customer_id' => $customer_id])->all();
+        $wish_list_product = WishList::find()->select(['product_id'])->where(['customer_id' => $customer_id])->all();
         $count = 0;
         foreach($wish_list_product as $item){
-            $product = (new Query())->select(['id'])->from('product')->where(['id'=>$item['product_id'],'active'=>1])->one();
+            $product = Product::find()->select(['id'])->from('product')->where(['id'=>$item['product_id'],'active'=>self::STATUS_ACTIVE])->one();
             if(!empty($product['id'])){
                 $count++;
             }

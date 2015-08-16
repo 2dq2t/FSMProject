@@ -11,7 +11,7 @@
     <div class="box-content ">
         <ul class="box-category treeview-list treeview">
             <?php
-            $categories = Yii::$app->Category->getCategory();
+            $categories = Yii::$app->ProductCategory->getCategory();
             $result = array();
             foreach ($categories as $item) {
                 $cat_name = $item['categoryname'];

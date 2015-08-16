@@ -9,39 +9,13 @@
 namespace frontend\controllers;
 
 
+use common\models\Product;
 use common\models\WishList;
 use yii\web\Controller;
 use yii;
 use yii\db\Query;
 
 class WishListController extends Controller {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => yii\filters\AccessControl::className(),
-                'only' => ['getWishList', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['getWishList'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => yii\filters\VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     public function actionGetWishList()
     {
@@ -49,10 +23,10 @@ class WishListController extends Controller {
             return $this->goHome();
         else {
             $customer_id = Yii::$app->user->identity->getId();
-            $product_list = (new Query())->select('product_id')->from('wish_list')->where(['customer_id' => $customer_id])->all();
+            $product_list = WishList::find()->select('product_id')->where(['customer_id' => $customer_id])->all();
             $wish_list_product = array();
             foreach ($product_list as $item) {
-                $product_detail = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.quantity_in_stock as product_quantity', 'product.tax as product_tax', 'product.sold as product_sold', 'product.price as product_price', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $item['product_id']])->one();
+                $product_detail = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.quantity_in_stock as product_quantity', 'product.tax as product_tax', 'product.sold as product_sold', 'product.price as product_price', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => Product::STATUS_ACTIVE, 'product.id' => $item['product_id']])->one();
                 if (!empty($product_detail['product_id'])) {
                     $product_detail['product_offer'] = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
                     $product_detail['product_unit'] = Yii::$app->CommonFunction->getProductUnit($item['product_id']);
@@ -61,7 +35,7 @@ class WishListController extends Controller {
             }
             $product_session_id = Yii::$app->session->get('product_session');
             $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'
-                , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => 1, 'product.id' => $product_session_id])->groupBy('product.id')->all();
+                , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => Product::STATUS_ACTIVE, 'product.id' => $product_session_id])->groupBy('product.id')->all();
 
             return $this->render('getWishList', [
                 'wish_list_product' => $wish_list_product,
@@ -90,7 +64,7 @@ class WishListController extends Controller {
         }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [json_encode($json)];
+        return json_encode($json);
     }
 
     public function actionAddWishList()
@@ -124,7 +98,7 @@ class WishListController extends Controller {
             return $this->goHome();
         }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [json_encode($json)];
+        return json_encode($json);
 
     }
 

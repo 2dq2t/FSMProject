@@ -1,5 +1,6 @@
 <?php
 namespace frontend\components;
+use common\models\Tag;
 use Yii;
 use yii\base\Component;
 use yii\db\Query;
@@ -15,7 +16,7 @@ class ProductBestSeller
     {
         //get bestseller product
         $best_seller_on_tag = array();
-        $tag_id = (new Query())->select('id')->from('tag')->where(['name' => 'bestseller'])->one();
+        $tag_id = Tag::find()->select('id')->where(['name' => 'bestseller'])->one();
         if (!empty($tag_id['id'])) {
             $best_seller_on_tag = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price', 'product.tax as product_tax'])->from('product')->innerJoin('product_tag', 'product.id = product_tag.product_id')->where(['product.active' => 1, 'product_tag.tag_id' => $tag_id['id']])->all();
         }
