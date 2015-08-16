@@ -302,6 +302,11 @@ echo $this->render('/layouts/_header');
                                     </div>
                                     <div id="collapse-coupon" class="panel-collapse collapse">
                                         <div class="panel-body">
+                                            <div class="input-group">
+                                                <label class="center control-label"
+                                                       for="input-coupon"><?= Yii::t('app', 'VoucherRegulation') ?></label>
+                                            </div>
+                                            </br>
                                             <label class="col-sm-2 control-label"
                                                    for="input-coupon"><?= Yii::t('app', 'ShoppingCartNotice03') ?></label>
 
@@ -315,6 +320,7 @@ echo $this->render('/layouts/_header');
                                                        class="btn btn-primary">
                                                 </span>
                                             </div>
+
                                             <div id="voucherResult"></div>
                                             <script type="text/javascript"><!--
                                                 $('#cbUpdateAddress').change(function () {

@@ -198,7 +198,11 @@ class CheckoutController extends Controller {
                             $order_details->save();
                         }
                         if (!empty($_POST['voucher'])) {
-                            if (Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher'])) {
+                            $voucher = $_POST['voucher'];
+                            $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
+                            $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
+                                mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
+                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date']  ){
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
                                 $voucher->order_id = $order->id;
                                 $voucher->update();
@@ -295,10 +299,13 @@ class CheckoutController extends Controller {
                             $order_details->save();
                         }
                         if (!empty($_POST['voucher'])) {
-                            if (Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher'])) {
-                                echo Yii::$app->checkoutFunctions->checkVoucher($_POST['voucher']);
+                            $voucher = $_POST['voucher'];
+                            $check_voucher = Voucher::find()->where(['code' => $voucher])->one();
+                            $today = date_create_from_format('d/m/Y', date("d/m/Y")) ?
+                                mktime(null, null, null, date_create_from_format('d/m/Y', date("d/m/Y"))->format('m'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('d'), date_create_from_format('d/m/Y', date("d/m/Y"))->format('y')) : time();
+                            if ( $check_voucher['start_date'] <= $today && $today <= $check_voucher['end_date']  ){
                                 $voucher = Voucher::find()->where(['code' => $_POST['voucher']])->one();
-                                $voucher->order_id =$order->id;
+                                $voucher->order_id = $order->id;
                                 $voucher->update();
                             }
                         }
@@ -369,7 +376,7 @@ class CheckoutController extends Controller {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg05');
             } else if ($check_voucher['active'] == 1) {
                 $discount = $check_voucher['discount'];
-                $json['success'] = "Bạn được giảm giá " . $discount . "% cho mã giảm giá: " . $voucher . " (mã giảm giá áp dụng với giá trước thuế).</br>Số tiền bạn phải trả còn lại: " . number_format(Yii::$app->checkoutFunctions->getTotalPriceWithVoucher($discount)) . "đ";
+                $json['success'] = "Bạn được giảm giá " . $discount . "% cho mã giảm giá: " . $voucher . ".</br>Số tiền bạn phải trả còn lại: " . number_format(Yii::$app->checkoutFunctions->getTotalPriceWithVoucher($discount)) . "đ";
             } else {
                 $json['error'] = Yii::t('app', 'InputVoucherMsg01');
             }

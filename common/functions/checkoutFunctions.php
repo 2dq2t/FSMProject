@@ -49,12 +49,17 @@ class CheckoutFunctions {
         }
         else {
             $total_price = 0;
+            $total_price_before_tax = 0;
             foreach ($product_cart as $key => $item) {
-                $product_price = (new Query())->select('price')->from('product')->where(['id' => $item['product_id']])->one();
+                $product_price = (new Query())->select(['price','tax'])->from('product')->where(['id' => $item['product_id']])->one();
                 $product_offer = \Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
-                $total_price += \Yii::$app->checkoutFunctions->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                $selling_price = \Yii::$app->checkoutFunctions->getProductPrice($product_price['price'], $product_offer) * $item['product_quantity'];
+                $total_price += $selling_price;
+                $price_before_tax = $selling_price - ($selling_price*($product_price['tax']/100));
+                $total_price_before_tax += $price_before_tax;
             }
-            $total_price_with_voucher = $total_price - ($total_price *($voucherDiscount/100));
+            $discount_price = $total_price_before_tax *($voucherDiscount/100);
+            $total_price_with_voucher = $total_price - $discount_price;
             return $total_price_with_voucher;
         }
     }

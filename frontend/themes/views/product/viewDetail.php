@@ -121,6 +121,9 @@ echo $this->render('/layouts/_header');
                         }
                         ?>
                         <br/>
+                        <li class="price-normal">
+                            <?= Yii::t('app', 'PriceIncludeTax')?>
+                        </li>
                     </ul>
                     <div id="product">
 
