@@ -33,10 +33,10 @@ use Yii;
  */
 class Customer extends ActiveRecord implements IdentityInterface
 {
-    private $re_password;
-    private $new_password;
-    private $re_new_password;
-    private $full_name;
+    public  $re_password;
+    public $new_password;
+    public $re_new_password;
+    public $full_name;
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
