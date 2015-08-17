@@ -291,31 +291,33 @@ class SeasonController extends Controller
     public function actionDetails($id) {
         $model = $this->findModel($id);
 
-        $model->products_list = ArrayHelper::map(ProductSeason::find()->where(['season_id' => $id])->all(), 'product_id', 'product_id');
-        $products_list = $model->products_list;
-        $model->products_list = Json::encode($model->products_list);
+        $model->setProductsList(ArrayHelper::map(ProductSeason::find()->where(['season_id' => $id])->all(), 'product_id', 'product_id'));
+        $products_list = $model->getProductsList();
+        $model->setProductsList(Json::encode($model->getProductsList()));
 
         if (Yii::$app->request->isPost) {
 
             if (!$model->load(Yii::$app->request->post())) {
-                $model->products_list = [];
+                $model->setProductsList([]);
             }
 
             $transaction = Yii::$app->db->beginTransaction();
 
+            $product_lists = $model->getProductsList();
+
             try {
                 // check if user remove product then remove this product from product season
                 foreach ($products_list as $product_list) {
-                    $key = array_search($product_list, $model->products_list);
+                    $key = array_search($product_list, $product_lists);
                     if ($key === false) {
                         ProductSeason::find()->where(['product_id' => $product_list])->andWhere(['season_id' => $model->id])->one()->delete();
                     } else {
-                        unset($model->products_list[$key]);
+                        unset($product_lists[$key]);
                     }
                 }
 
                 // insert new product_id to product_season
-                foreach ($model->products_list as $product_list) {
+                foreach ($product_lists as $product_list) {
                     $product_season = new ProductSeason();
                     $product_season->product_id = $product_list;
                     $product_season->season_id = $model->id;
@@ -334,7 +336,7 @@ class SeasonController extends Controller
 
             } catch (Exception $e) {
                 $transaction->rollBack();
-                $model->products_list = Json::encode($model->products_list);
+                $model->setProductsList(Json::encode($model->getProductsList()));
 
                 Yii::$app->getSession()->setFlash('error', [
                     'type' => 'error',
@@ -345,7 +347,7 @@ class SeasonController extends Controller
                 ]);
             }
 
-            $model->products_list = Json::encode($products_list);
+            $model->setProductsList(Json::encode($products_list));
 
             return $this->redirect(['season/details', 'id' => $model->id]);
         }

@@ -86,6 +86,14 @@ class Employee extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function getAssignments(){
+        return $this->assignments;
+    }
+
+    public function setAssignments($assignments) {
+        $this->assignments = $assignments;
+    }
+
     /**
      * @inheritdoc
      */
@@ -215,13 +223,5 @@ class Employee extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
-    }
-
-    public function getAssignments(){
-        return $this->assignments;
-    }
-
-    public function setAssignments($assignments) {
-        $this->assignments = $assignments;
     }
 }

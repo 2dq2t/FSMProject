@@ -42,9 +42,9 @@ class Product extends \yii\db\ActiveRecord
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    public $product_seasons;
-    public $product_tags;
-    private $productImage = [];
+    private $product_seasons;
+    private $product_tags;
+    private $productImage;// = [];
     /**
      * @inheritdoc
      */
@@ -76,37 +76,37 @@ class Product extends \yii\db\ActiveRecord
     /*
      * This is the function to validate Barcode follow format EAN13
     */
-    public function validateBarcode($attribute, $params)
-    {
-        $barcode = substr($this->$attribute, 0, strlen($this->$attribute)-1);
-        // sum each of odd number digits
-        $odd_sum = 0;
-        // sum each of even number digits
-        $even_sum = 0;
-
-        for($i = 0; $i < strlen($barcode); $i++) {
-//            if (!is_int($barcode[$i])) {
-//                $this->addError($attribute, Yii::t('app', 'Invalid barcode format.'));
+//    public function validateBarcode($attribute, $params)
+//    {
+//        $barcode = substr($this->$attribute, 0, strlen($this->$attribute)-1);
+//        // sum each of odd number digits
+//        $odd_sum = 0;
+//        // sum each of even number digits
+//        $even_sum = 0;
+//
+//        for($i = 0; $i < strlen($barcode); $i++) {
+////            if (!is_int($barcode[$i])) {
+////                $this->addError($attribute, Yii::t('app', 'Invalid barcode format.'));
+////            }
+//            if ($i % 2 == 0) {
+//                // 1. sum each of the odd numbered digits
+//                // 2. multiply result by three
+//                $odd_sum += $barcode[$i] * 3;
+//            } else {
+//                // 3. sum of each of the even numbered digits
+//                $even_sum += $barcode[$i];
 //            }
-            if ($i % 2 == 0) {
-                // 1. sum each of the odd numbered digits
-                // 2. multiply result by three
-                $odd_sum += $barcode[$i] * 3;
-            } else {
-                // 3. sum of each of the even numbered digits
-                $even_sum += $barcode[$i];
-            }
-        }
-
-        // 4. subtract the result from the next highest power of 10
-        $checkSum = (ceil(($odd_sum + $even_sum)/10))*10 - ($odd_sum + $even_sum);
-        var_dump(strlen($this->$attribute) - 1);
-
-        // if the check digit and the last digit of the barcode are OK return true;
-        if($checkSum != substr($this->$attribute, -1)) {
-            $this->addError($attribute, Yii::t('app', 'Invalid barcode.'));
-        }
-    }
+//        }
+//
+//        // 4. subtract the result from the next highest power of 10
+//        $checkSum = (ceil(($odd_sum + $even_sum)/10))*10 - ($odd_sum + $even_sum);
+//        var_dump(strlen($this->$attribute) - 1);
+//
+//        // if the check digit and the last digit of the barcode are OK return true;
+//        if($checkSum != substr($this->$attribute, -1)) {
+//            $this->addError($attribute, Yii::t('app', 'Invalid barcode.'));
+//        }
+//    }
 
     /**
      * @inheritdoc
@@ -128,6 +128,38 @@ class Product extends \yii\db\ActiveRecord
             'category_id' => Yii::t('app', 'Category ID'),
             'unit_id' => Yii::t('app', 'Unit ID'),
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductSeasons()
+    {
+        return $this->product_seasons;
+    }
+
+    /**
+     * @param mixed $product_seasons
+     */
+    public function setProductSeasons($product_seasons)
+    {
+        $this->product_seasons = $product_seasons;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTags()
+    {
+        return $this->product_tags;
+    }
+
+    /**
+     * @param mixed $product_tags
+     */
+    public function setProductTags($product_tags)
+    {
+        $this->product_tags = $product_tags;
     }
 
     public function getProductImage()

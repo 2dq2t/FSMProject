@@ -103,7 +103,8 @@ class AccountController extends Controller{
                 if ($modelGuest->save()) {
                     $modelCustomer->guest_id = $modelGuest->id;
                     $modelCustomer->setPassword($modelCustomer->password);
-                    $modelCustomer->re_password = $modelCustomer->password;
+//                    $modelCustomer->re_password = $modelCustomer->password;
+                    $modelCustomer->setRePassword($modelCustomer->password);
                     $modelCustomer->created_at = ParserDateTime::getTimeStamp();
 
                     if ($modelCustomer->save()) {
@@ -306,7 +307,8 @@ class AccountController extends Controller{
         if ($modelCustomer->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $modelCustomer->setPassword($modelCustomer->new_password);
+//                $modelCustomer->setPassword($modelCustomer->new_password);
+                $modelCustomer->setPassword($modelCustomer->getNewPassword());
                 if ($modelCustomer->save()) {
                     $transaction->commit();
 
@@ -477,7 +479,8 @@ class AccountController extends Controller{
                 $parents = $_POST['depdrop_parents'];
                 if ($parents != null) {
                     $city_id = $parents[0];
-                    $out = District::getOptionsByDistrict($city_id);
+                    $data = District::find()->where(['city_id'=>$city_id])->select(['id','name'])->asArray()->all();
+                    $out = (count($data) == 0) ? ['' => ''] : $data;
                     echo Json::encode(['output' => $out, 'selected' => '']);
                     return;
                 }

@@ -354,7 +354,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                     <td class="count"></td>
                                                     <td>
                                                         <div class="col-md-12">
-                                                            <?php echo $form->field($order_item, "[{$i}]product_id")->widget(\kartik\widgets\Select2::className(), [
+                                                            <?php
+                                                            /* @var $order_item \common\models\OrderDetails*/
+                                                            echo $form->field($order_item, "[{$i}]product_id")->widget(\kartik\widgets\Select2::className(), [
                                                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => \common\models\Product::STATUS_ACTIVE])->all(), 'id', 'name'),
                                                                 'options' => ['placeholder' => 'Select a state ...'],
                                                                 'pluginOptions' => [
@@ -369,24 +371,24 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <?php if ($order_item->product_image) { ?>
+                                                        <?php if ($order_item->getProductImage()) { ?>
                                                             <span id="product-<?php echo "{$i}";?>-image" class="product-image">
-                                                            <img src="<?php echo "../../frontend/web/" . $order_item->product_image?>" alt="" class="img-thumbnail" />
-                                                        </span>
+                                                                <img src="<?php echo "../../frontend/web/" . $order_item->getProductImage()?>" alt="" class="img-thumbnail" />
+                                                            </span>
                                                         <?php } else { ?>
                                                             <span id="product-<?php echo "{$i}";?>-image" class="product-image"></span>
                                                         <?php } ?>
                                                     </td>
                                                     <td>
-                                                        <?php if ($order_item->product_unit) { ?>
-                                                            <span id="product-<?php echo "{$i}";?>-unit" class="product-unit"><?php echo $order_item->product_unit?></span>
+                                                        <?php if ($order_item->getProductUnit()) { ?>
+                                                            <span id="product-<?php echo "{$i}";?>-unit" class="product-unit"><?php echo $order_item->getProductUnit()?></span>
                                                         <?php } else { ?>
                                                             <span id="product-<?php echo "{$i}";?>-unit" class="product-unit"></span>
                                                         <?php } ?>
                                                     </td>
                                                     <td>
-                                                        <?php if ($order_item->sell_price) { ?>
-                                                            <span id="product-<?php echo "{$i}";?>-price" class="product-price"><?php echo $order_item->sell_price?></span>
+                                                        <?php if ($order_item->getProductPrice()) { ?>
+                                                            <span id="product-<?php echo "{$i}";?>-price" class="product-price"><?php echo $order_item->getProductPrice()?></span>
                                                         <?php } else { ?>
                                                             <span id="product-<?php echo "{$i}";?>-price" class="product-price"></span>
                                                         <?php } ?>
@@ -414,8 +416,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                         ])?>
                                                     </td>
                                                     <td>
-                                                        <?php if ($order_item->product_total) { ?>
-                                                            <span id="product-<?php echo "{$i}";?>-total" class="product-total"><?php echo $order_item->product_total?></span>
+                                                        <?php if ($order_item->getProductTotal()) { ?>
+                                                            <span id="product-<?php echo "{$i}";?>-total" class="product-total"><?php echo $order_item->getProductTotal()?></span>
                                                         <?php } else { ?>
                                                             <span id="product-<?php echo "{$i}";?>-total" class="product-total"></span>
                                                         <?php } ?>

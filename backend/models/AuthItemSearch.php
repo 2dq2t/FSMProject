@@ -67,29 +67,29 @@ class AuthItemSearch extends AuthItem
             ->andFilterWhere(['like', 'rule_name', $this->rule_name])
             ->andFilterWhere(['like', 'data', $this->data]);
 
-        if ($this->type != Item::TYPE_ROLE) {
-            $models = $dataProvider->models;
-            if ($this->type == Item::TYPE_PERMISSION) {
-                $count = 0;
-                foreach ($models as $model) {
-                    if ($model->name[0] === '/') {
-                        unset($models[$count]);
-                        $count = 0;
-                    }
-                    $count++;
-                }
-            } else {
-                $count=0;
-                foreach($models as $model) {
-                    $count++;
-                    if ($model->name[0] !== '/') {
-                        unset($models[$count]);
-                        $count=0;
-                    }
-                }
-            }
-            $dataProvider->models = array_values($models);
-        }
+//        if ($this->type != Item::TYPE_ROLE) {
+//            $models = $dataProvider->models;
+//            if ($this->type == Item::TYPE_PERMISSION) {
+//                $count = 0;
+//                foreach ($models as $model) {
+//                    if ($model->name[0] === '/') {
+//                        unset($models[$count]);
+//                        $count = 0;
+//                    }
+//                    $count++;
+//                }
+//            } else {
+//                $count=0;
+//                foreach($models as $model) {
+//                    $count++;
+//                    if ($model->name[0] !== '/') {
+//                        unset($models[$count]);
+//                        $count=0;
+//                    }
+//                }
+//            }
+//            $dataProvider->models = array_values($models);
+//        }
 
         return $dataProvider;
     }

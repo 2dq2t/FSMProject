@@ -33,10 +33,10 @@ use Yii;
  */
 class Customer extends ActiveRecord implements IdentityInterface
 {
-    public $re_password;
-    public $new_password;
-    public $re_new_password;
-    public $full_name;
+    private $re_password;
+    private $new_password;
+    private $re_new_password;
+    private $full_name;
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -107,6 +107,70 @@ class Customer extends ActiveRecord implements IdentityInterface
     public function setPassword($password)
     {
         $this->password = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRePassword()
+    {
+        return $this->re_password;
+    }
+
+    /**
+     * @param mixed $re_password
+     */
+    public function setRePassword($re_password)
+    {
+        $this->re_password = $re_password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewPassword()
+    {
+        return $this->new_password;
+    }
+
+    /**
+     * @param mixed $new_password
+     */
+    public function setNewPassword($new_password)
+    {
+        $this->new_password = $new_password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReNewPassword()
+    {
+        return $this->re_new_password;
+    }
+
+    /**
+     * @param mixed $re_new_password
+     */
+    public function setReNewPassword($re_new_password)
+    {
+        $this->re_new_password = $re_new_password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFullName()
+    {
+        return $this->full_name;
+    }
+
+    /**
+     * @param mixed $full_name
+     */
+    public function setFullName($full_name)
+    {
+        $this->full_name = $full_name;
     }
 
     /**

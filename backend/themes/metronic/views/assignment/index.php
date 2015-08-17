@@ -36,6 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn'],
         [
             'class' => 'kartik\grid\DataColumn',
+            'attribute' => 'full_name',
+        ],
+        [
+            'class' => 'kartik\grid\DataColumn',
             'attribute' => 'email',
         ],
         [

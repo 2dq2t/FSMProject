@@ -11,7 +11,6 @@ use common\models\Address;
 use Yii;
 use common\models\Customer;
 use common\models\CustomerSearch;
-use yii\base\ActionFilter;
 use yii\base\Exception;
 use yii\helpers\FileHelper;
 use yii\helpers\Html;
@@ -115,12 +114,12 @@ class CustomerController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+//    public function actionView($id)
+//    {
 //        return $this->render('view', [
 //            'model' => $this->findModel($id),
 //        ]);
-    }
+//    }
 
     /**
      * Creates a new Customer model.

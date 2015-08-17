@@ -8,7 +8,6 @@ use common\models\Image;
 use common\models\ProductSeason;
 use common\models\ProductTag;
 use common\models\Tag;
-use Faker\Provider\File;
 use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
@@ -125,12 +124,12 @@ class ProductController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
      * Creates a new Product model.
@@ -187,11 +186,11 @@ class ProductController extends Controller
                         }
                     }
 
-                    if (empty($model->product_seasons)) {
-                        $model->product_seasons = [];
+                    if (empty($model->getProductSeasons())) {
+                        $model->setProductSeasons([]);
                     }
 
-                    foreach ($model->product_seasons as $product_season) {
+                    foreach ($model->getProductSeasons() as $product_season) {
                         $product_seasons = new ProductSeason();
                         $product_seasons->product_id = $model->id;
                         $product_seasons->season_id = $product_season;
@@ -203,11 +202,11 @@ class ProductController extends Controller
                         Logger::log(Logger::INFO, Yii::t('app', 'Add Product season success'), Yii::$app->user->identity->email);
                     }
 
-                    if (empty($model->product_tags)) {
-                        $model->product_tags = [];
+                    if (empty($model->getProductSeasons())) {
+                        $model->setProductTags([]);
                     }
 
-                    foreach ($model->product_tags as $product_tag) {
+                    foreach ($model->getProductTags() as $product_tag) {
                         // check tag exists
                         if (Tag::find()->where(['id' => $product_tag])->exists()) {
                             $product_tags = new ProductTag();
@@ -336,8 +335,8 @@ class ProductController extends Controller
         $product_seasons = ProductSeason::find()->select('season_id')->where(['product_id' => $id])->all();
         $product_tags = ProductTag::find()->select('tag_id')->where(['product_id' => $id])->all();
 
-        $model->product_seasons = ArrayHelper::map($product_seasons, 'season_id', 'season_id');
-        $model->product_tags = ArrayHelper::map($product_tags, 'tag_id', 'tag_id');
+        $model->setProductSeasons(ArrayHelper::map($product_seasons, 'season_id', 'season_id'));
+        $model->setProductTags(ArrayHelper::map($product_tags, 'tag_id', 'tag_id'));
 
         $model->price = number_format($model->price, 0, '', ' ');
 
@@ -387,20 +386,22 @@ class ProductController extends Controller
                         }
                     }
 
-                    if (empty($model->product_seasons)) {
-                        $model->product_seasons = [];
+                    if (empty($model->getProductSeasons())) {
+                        $model->setProductSeasons([]);
                     }
 
+                    $productSeasons = $model->getProductSeasons();
+
                     foreach ($product_seasons as $product_season) {
-                        $key = array_search($product_season->season_id, $model->product_seasons);
+                        $key = array_search($product_season->season_id, $productSeasons);
                         if ($key === false) {
                             ProductSeason::find()->where(['season_id' => $product_season->season_id])->andWhere(['product_id' => $id])->one()->delete();
                         } else {
-                            unset($model->product_seasons[$key]);
+                            unset($productSeasons[$key]);
                         }
                     }
 
-                    foreach ($model->product_seasons as $season) {
+                    foreach ($productSeasons as $season) {
                         $product_season = new ProductSeason();
                         $product_season->season_id = $season;
                         $product_season->product_id = $model->id;
@@ -411,21 +412,23 @@ class ProductController extends Controller
                         Logger::log(Logger::INFO, Yii::t('app', 'Add Product season success'), Yii::$app->user->identity->email);
                     }
 
-                    if (empty($model->product_tags)) {
-                        $model->product_tags = [];
+                    if (empty($model->getProductTags())) {
+                        $model->setProductTags([]);
                     }
 
+                    $productTags = $model->getProductTags();
+
                     foreach ($product_tags as $tag) {
-                        $key = array_search($tag->tag_id, $model->product_tags);
+                        $key = array_search($tag->tag_id, $productTags);
 
                         if ($key === false) {
                             ProductTag::find()->where(['tag_id' => $tag->tag_id])->andWhere(['product_id' => $id])->one()->delete();
                         } else {
-                            unset($model->product_tags[$key]);
+                            unset($productTags[$key]);
                         }
                     }
 
-                    foreach ($model->product_tags as $tag) {
+                    foreach ($productTags as $tag) {
                         // check tag exists
                         if (Tag::find()->where(['id' => $tag])->exists()) {
                             $product_tag = new ProductTag();

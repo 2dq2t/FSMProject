@@ -3,13 +3,9 @@
 namespace backend\controllers;
 
 use backend\components\Logger;
-use backend\models\AuthAssignment;
 use backend\models\AuthItem;
-use backend\models\AuthItemChild;
 use backend\models\AuthItemSearch;
 use yii\base\Exception;
-use yii\db\Query;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -192,7 +188,7 @@ class RoleController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (!isset(Yii::$app->request->post('AuthItem')['items'])) {
-                $model->setItems();
+                $model->setItems([]);
             }
 
             $transaction = Yii::$app->db->beginTransaction();

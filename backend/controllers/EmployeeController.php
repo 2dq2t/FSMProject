@@ -608,7 +608,7 @@ class EmployeeController extends Controller
      * @return Employee the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    private function findModel($id)
+    protected function findModel($id)
     {
         if (($model = Employee::findOne($id)) !== null) {
             return $model;

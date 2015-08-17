@@ -20,7 +20,23 @@ class Season extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
-    public $products_list;
+    private $products_list;
+
+    /**
+     * @return mixed
+     */
+    public function getProductsList()
+    {
+        return $this->products_list;
+    }
+
+    /**
+     * @param mixed $products_list
+     */
+    public function setProductsList($products_list)
+    {
+        $this->products_list = $products_list;
+    }
     /**
      * @inheritdoc
      */

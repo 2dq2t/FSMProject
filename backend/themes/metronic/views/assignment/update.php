@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
                             'items' => $items,
                             'options' => [
                                 'moveOnSelect' => false,
-                                'selectorMinimalHeight' => '400'
+                                'selectorMinimalHeight' => '200'
                             ]
                         ])->label(false)?>
                     </div>

@@ -6,7 +6,6 @@ use ReflectionClass;
 use yii\caching\TagDependency;
 use yii\helpers\Inflector;
 use \Yii;
-use yii\web\Controller;
 
 /**
  * Class RouteHelper
@@ -46,7 +45,7 @@ class RouteHelper
      * @param \yii\base\Module $module
      * @param array $result
      */
-    private static function getRouteRecursive($module, &$result)
+    private function getRouteRecursive($module, &$result)
     {
         try {
             foreach ($module->getModules() as $id => $child) {
@@ -75,7 +74,7 @@ class RouteHelper
      * @param mixed $result
      * @return mixed
      */
-    private static function getControllerFiles($module, $namespace, $prefix, &$result)
+    private function getControllerFiles($module, $namespace, $prefix, &$result)
     {
         $path = @Yii::getAlias('@backend' . str_replace('\\', '/', $namespace));
         try {
@@ -92,13 +91,7 @@ class RouteHelper
                     $id = Inflector::camel2id(substr(basename($file), 0, -14));
                     $className = $namespace . Inflector::id2camel($id) . 'Controller';
                     if (strpos($className, '-') === false && class_exists($className) && is_subclass_of($className, 'yii\base\Controller')) {
-                        /* @var $controller Controller*/
-                        $controller = Yii::createObject($className, [
-                            $prefix . $id,
-                            $module
-                        ]);
-                        self::getActionRoutes($controller, $result);
-                        $result[] = '/' . $controller->uniqueId . '/*';
+                        self::getControllerActions($className, $prefix . $id, $module, $result);
                     }
                 }
             }
@@ -114,7 +107,7 @@ class RouteHelper
      * @param \yii\base\Module $module
      * @param string $result
      */
-    private static function getControllerActions($type, $id, $module, &$result)
+    private function getControllerActions($type, $id, $module, &$result)
     {
         try {
             /* @var $controller \yii\base\Controller */
@@ -131,7 +124,7 @@ class RouteHelper
      * @param \yii\base\Controller $controller
      * @param array $result all controller action.
      */
-    private static function getActionRoutes($controller, &$result)
+    private function getActionRoutes($controller, &$result)
     {
         try {
             $prefix = '/' . $controller->uniqueId . '/';
@@ -154,7 +147,7 @@ class RouteHelper
      * Refresh file cache
      * @static
      */
-    private static function refreshFileCache()
+    private function refreshFileCache()
     {
         if (($cache = Yii::$app->getCache()) !== null) {
             TagDependency::invalidate($cache, self::ACCESS_CACHE);

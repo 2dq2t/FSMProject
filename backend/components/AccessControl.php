@@ -54,15 +54,6 @@ class AccessControl extends ActionFilter
     }
 
     /**
-     * Set user
-     * @param User|string $user
-     */
-    public function setUser($user)
-    {
-        $this->_user = $user;
-    }
-
-    /**
      * @inheritdoc
      */
     public function beforeAction($action)

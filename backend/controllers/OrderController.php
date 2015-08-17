@@ -4,12 +4,8 @@ namespace backend\controllers;
 
 use backend\components\Logger;
 use backend\components\ParserDateTime;
-use backend\models\Model;
 use backend\models\OrderStatus;
-use backend\models\OrderView;
 use backend\models\OrderViewSearch;
-use common\functions\checkoutFunctions;
-use common\models\Address;
 use common\models\City;
 use common\models\District;
 use common\models\Guest;
@@ -127,10 +123,20 @@ class OrderController extends Controller
                     $net_amount = 0;
                     $tax_amount = 0;
 
-                    foreach ($order_details as $order_detail) {
-                        $product_tax = Product::find()->where(['id' => $order_detail->product_id])->one()['tax'];
-                        $product_price = Product::find()->where(['id' => $order_detail->product_id])->one()['price'];
 
+                    foreach ($order_details as $order_detail) {
+                        $product = Product::find()->where(['id' => $order_detail->product_id])->one();
+                        $product_tax = $product['tax'];
+                        $product_price = $product['price'];
+                        // set order detail if has error and response user selected product list
+                        $order_detail->setProductImage(Image::find()->select('resize_path')->where(['product_id' => $order_detail['product_id']])->one()['resize_path']);
+                        $order_detail->setProductUnit(Unit::find()->select('name')->where(['active' => 1, 'id' => $product['unit_id']])->one()['name']);
+                        $order_detail->setProductPrice($product['price']);
+                        $order_detail->setProductTotal($order_detail['quantity'] * $product['price']);
+
+                        // calculate net_mount and tax_amount
+                        // net_amount =
+                        // tax_amount =
                         $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
                         $today = date("d-m-Y");
                         $offer_start_date = date("d-m-Y", $offer['start_date']);
@@ -149,18 +155,6 @@ class OrderController extends Controller
 
                     $model->net_amount = $net_amount;
                     $model->tax_amount = $tax_amount;
-
-                    // set field value for each order_detail
-//                    foreach($order_details as $i => $order_detail){
-//                        $product = Product::find()->where(['id' => $order_detail['product_id']])->one();
-//                        $order_detail['product_image'] = Image::find()->select('path')->where(['product_id' => $order_detail['product_id']])->one()['path'];
-//                        $unit_id = $product['unit_id'];
-//                        $order_detail['product_unit'] = Unit::find()->select('name')->where(['active' => 1, 'id' => $unit_id])->one()['name'];
-//                        $order_detail['sell_price'] = $product['price'];
-//                        $order_detail['product_total'] = $order_detail['quantity'] * $product['price'];
-//                        $order_detail['max_quantity'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['quantity_in_stock'] - Product::find()->where(['id' => $order_detail['product_id']])->one()['sold'];
-//                        $order_detail['tax'] = Product::find()->where(['id' => $order_detail['product_id']])->one()['tax'];
-//                    }
 
                     $errors = [];
                     if ($model->save()) {
@@ -216,10 +210,6 @@ class OrderController extends Controller
 
                         if (!empty($errors)) {
 
-//                            if ($model->order_date) {
-//                                $model->order_date = date('m/d/Y', $model->order_date);
-//                            }
-
                             if ($model->receiving_date) {
                                 $model->receiving_date = date('m/d/Y', $model->receiving_date);
                             }
@@ -272,10 +262,6 @@ class OrderController extends Controller
                         }
 
                     } else {
-//                        if ($model->order_date) {
-//                            $model->order_date = date('m/d/Y', $model->order_date);
-//                        }
-
                         if ($model->receiving_date) {
                             $model->receiving_date = date('m/d/Y', $model->receiving_date);
                         }
@@ -288,11 +274,11 @@ class OrderController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors[0] : current($model->getFirstErrors()),
+                            'message' => $model->getFirstErrors() ? current($model->getFirstErrors()) : Yii::t('app', 'Could not create order.'),
                             'title' => Yii::t('app', 'Add Order'),
                         ]);
 
-                        Logger::log(Logger::ERROR, Yii::t('app', 'Create order errors:') .!empty($errors) ? $errors[0] : current($model->getFirstErrors()) , Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Create order errors:') .current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not create order.') , Yii::$app->user->identity->email);
 
                         return $this->render('create', [
                             'model' => $model,
@@ -329,10 +315,6 @@ class OrderController extends Controller
                 if ($transaction->getIsActive()) {
                     $transaction->rollBack();
                 }
-
-//                if ($model->order_date) {
-//                    $model->order_date = date('m/d/Y', $model->order_date);
-//                }
 
                 if ($model->receiving_date) {
                     $model->receiving_date = date('m/d/Y', $model->receiving_date);
@@ -852,15 +834,17 @@ class OrderController extends Controller
     }
 
     public function actionGetProductInfo($id) {
+        /* @var $product_info Product*/
+        /* @var $image Image*/
         $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
-        $image = Image::find()->select('path')->where(['product_id' => $id])->one();
+        $image = Image::find()->select('resize_path')->where(['product_id' => $id])->one();
         $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
         $product_info = [
             'price' => $product_info->price,
             'quantity_in_stock' => $product_info->quantity_in_stock,
             'sold' => $product_info->sold,
             'unit' => $unit->name,
-            'image' => $image ? $image->path : null,
+            'image' => $image ? $image->resize_path : null,
         ];
         echo Json::encode($product_info);
     }

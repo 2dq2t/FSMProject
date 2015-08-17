@@ -116,7 +116,7 @@ class Logger {
     /**
      * Class destructor
      */
-    protected function __destruct()
+    public function __destruct()
     {
         if (self::$fileHandle) {
             fclose(self::$fileHandle);
@@ -151,7 +151,7 @@ class Logger {
     }
 
     /**
-     * Writes a line to the log without prepending a status or timestamp
+     * Writes a line to the log
      *
      * @param string $message Line to write to the log
      * @return void

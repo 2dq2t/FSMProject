@@ -47,12 +47,4 @@ class District extends \yii\db\ActiveRecord
             'city_id' => Yii::t('app', 'City ID'),
         ];
     }
-
-    //function get file from District Table
-    public static function getOptionsByDistrict($district_id){
-        $data = static::find()->where(['city_id'=>$district_id])->select(['id','name'])->asArray()->all();
-        $value = (count($data) == 0) ? ['' => ''] : $data;
-
-        return $value;
-    }
 }

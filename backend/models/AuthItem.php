@@ -29,11 +29,6 @@ use yii\web\Application;
 class AuthItem extends \yii\db\ActiveRecord
 {
     /**
-     * @var Item
-     */
-    private $_item;
-
-    /**
      * This hold the old name of item
      * @var string
      */
@@ -62,7 +57,7 @@ class AuthItem extends \yii\db\ActiveRecord
             [['type', 'created_at', 'updated_at'], 'integer'],
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
-            [['name'], 'check'],
+            [['name'], 'checkDuplicate'],
             [['rule_name'], 'in',
                 'range' => array_keys(Yii::$app->authManager->getRules()),
                 'message' => Yii::t('app', 'Rule not exists')],
@@ -71,12 +66,11 @@ class AuthItem extends \yii\db\ActiveRecord
         ];
     }
 
-    public function check($attribute, $params)
+    public function checkDuplicate($attribute)
     {
         $authManager = Yii::$app->authManager;
         if ((strlen($this->oldName) == 0 || $this->oldName != $this->name) && ($authManager->getRole($this->name) !== null || $authManager->getPermission($this->name) !== null)) {
             $this->addError($attribute, Yii::t('app', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
-//            $this->errors = Yii::t('yii', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]);
         }
     }
 
@@ -96,29 +90,29 @@ class AuthItem extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Check if is new record.
-     * @return boolean
-     */
-    public function getIsNewRecord()
-    {
-        return empty($this->oldAttributes);
-    }
+//    /**
+//     * Check if is new record.
+//     * @return boolean
+//     */
+//    public function getIsNewRecord()
+//    {
+//        return empty($this->oldAttributes);
+//    }
 
     /**
      * Find role
      * @param string $id
      * @return null|\self
      */
-    public static function findRole($id)
-    {
-        $item = Yii::$app->authManager->getRole($id);
-        if ($item !== null) {
-            return new self($item);
-        }
-
-        return null;
-    }
+//    public static function findRole($id)
+//    {
+//        $item = Yii::$app->authManager->getRole($id);
+//        if ($item !== null) {
+//            return new self($item);
+//        }
+//
+//        return null;
+//    }
 
     /**
      * @var Item $item
@@ -151,7 +145,7 @@ class AuthItem extends \yii\db\ActiveRecord
                 }
             }
         } catch (Exception $e) {
-            $this->errorMessage .= $e->getMessage();
+            $this->errorMessage = $e->getMessage();
             return false;
         }
 
@@ -196,7 +190,7 @@ class AuthItem extends \yii\db\ActiveRecord
                 try {
                     Yii::$app->getAuthManager()->addChild($item, new Item(['name' => $value]));
                 } catch (\Exception $ex) {
-                    $this->errorMessage .= Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
+                    $this->errorMessage = Yii::t('app', "Item <strong>{value}</strong> is not assigned:", [
                             'value' => $value,
                         ])
                         . " " . $ex->getMessage() . "<br />";
@@ -204,7 +198,7 @@ class AuthItem extends \yii\db\ActiveRecord
                 }
             }
         } catch (Exception $e){
-            $this->errorMessage .= $e->getMessage();
+            $this->errorMessage = $e->getMessage();
             return false;
         }
 
@@ -227,7 +221,7 @@ class AuthItem extends \yii\db\ActiveRecord
                 ->delete($dbManager->itemTable, ['name' => $this->name])
                 ->execute();
         } catch (Exception $e) {
-            $this->errorMessage .= $e->getMessage();
+            $this->errorMessage = $e->getMessage();
             return false;
         }
         return true;
@@ -250,7 +244,7 @@ class AuthItem extends \yii\db\ActiveRecord
         return $this->items;
     }
 
-    public function setItems($items = []) {
+    public function setItems($items) {
         $this->items = $items;
     }
 }
