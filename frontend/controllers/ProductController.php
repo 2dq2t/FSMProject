@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 
 use common\models\ProductTag;
+use common\models\Season;
 use common\models\Tag;
 use common\models\Unit;
 use yii\web\Controller;
@@ -144,7 +145,40 @@ class ProductController extends Controller{
 
     public function actionGetProductSeason()
     {
-
+        if(Yii::$app->request->isGet){
+            if(empty($_GET['season'])){
+                return $this->goHome();
+            }
+            else{
+                $season_name = $_GET['season'];
+                $season_id = Season::find()->select(['id'])->where(['name'=>$season_name])->one();
+                if (!(empty($_GET['sort']) && empty($_GET['order']))) {
+                    $sort = $_GET['sort'];
+                    $order = $_GET['order'];
+                    if ($order == 'ASC')
+                        $order = SORT_ASC;
+                    else
+                        $order = SORT_DESC;
+                    $season_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->innerJoin('product_season', 'product.id = product_season.product_id')->where(['product.active' => 1,'product_season.season_id'=>$season_id['id']])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+                } else {
+                    $season_product_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->innerJoin('product_season', 'product.id = product_season.product_id')->where(['product.active' => 1,'product_season.season_id'=>$season_id['id']])->groupBy('product.id');
+                }
+                $countQuery = clone $season_product_query;
+                $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+                $season_product = $season_product_query->offset($pagination->offset)->limit($pagination->limit)->all();
+                foreach ($season_product as $key => $item) {
+                    $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
+                    $season_product[$key]['product_rating'] = $rating_average;
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $season_product[$key]['product_offer'] = $product_offer;
+                }
+            }
+            return $this->render('getProductSeason', [
+                'season_name' => $season_name, 'season_product' => $season_product, 'pagination' => $pagination
+            ]);
+        }
     }
     public function actionGetProductCategory()
     {

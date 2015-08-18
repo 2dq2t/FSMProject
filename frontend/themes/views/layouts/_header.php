@@ -105,11 +105,32 @@ $baseUrl = Yii::$app->request->baseUrl;
                     <div class="expandable"></div>
                 </div>
                 <ul id="navbar" class="main-navigation">
-                        <li>
-                            <a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home icon-3x"></i> Trang chủ</a>
-                        </li>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/view-detail&product="?>">Rau theo mùa</a>
+                        <a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home icon-3x"></i> <?= Yii::t('app', 'HomeLabel') ?></a>
+                    </li>
+                    <li>
+                        <a href="#"><?=Yii::t('app','ProductSeason')?></a>
+                        <ul>
+                        <?php
+                        $season = Yii::$app->ProductCategory->getSeason();
+                        foreach($season as $item){?>
+                                <li>
+                                    <a href="<?=Yii::$app->request->baseUrl. "/index.php?r=product/get-product-season&season=".$item['name']?>"><?=ucwords($item['name'])?></a>
+                                </li>
+                        <?php };?>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','DelicaciesEveryDay')?></a>
+                    </li>
+                    <li>
+                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','FoodPreservation')?></a>
+                    </li>
+                    <li>
+                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','VietGapStandard')?></a>
+                    </li>
+                    <li>
+                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','Contact')?></a>
                     </li>
                 </ul>
             </div>

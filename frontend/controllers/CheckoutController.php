@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 
 use common\models\Customer;
+use common\models\Image;
 use common\models\OrderAddress;
 use common\models\Product;
 use frontend\models\CheckoutInfo;
@@ -134,7 +135,6 @@ class CheckoutController extends Controller {
                     ]);
                 }
             }  else {
-                /* var_dump(Yii::$app->request->post());*/;
                 if (!empty($_POST['Guest'])) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
@@ -209,24 +209,9 @@ class CheckoutController extends Controller {
                         }
                         $transaction->commit();
                         Yii::$app->session->remove('product_cart');
-                        Yii::$app->getSession()->setFlash('successful', [
-                            'type' => Alert::TYPE_SUCCESS,
-                            'duration' => 5000,
-                            'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'CheckoutResult SuccessMessage'),
-                            'title' => Yii::t('app', 'CheckoutResult SuccessTitle'),
-                        ]);
-
                         return $this->actionGetCheckoutResult($order->id);
 
                     } catch (\yii\db\Exception $ex) {
-                        Yii::$app->getSession()->setFlash('failed', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 5000,
-                            'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'CheckoutResult FailMessage'),
-                            'title' => Yii::t('app', 'CheckoutResult FailTitle'),
-                        ]);
 
                         $transaction->rollBack();
                         $order_id = null;
@@ -310,22 +295,9 @@ class CheckoutController extends Controller {
                         }
                         $transaction->commit();
                         Yii::$app->session->remove('product_cart');
-                        Yii::$app->getSession()->setFlash('successful', [
-                            'type' => Alert::TYPE_SUCCESS,
-                            'duration' => 5000,
-                            'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'CheckoutResult SuccessMessage'),
-                            'title' => Yii::t('app', 'CheckoutResult SuccessTitle'),
-                        ]);
                         return $this->actionGetCheckoutResult($order->id);
-                    } catch (yii\base\Exception $ex) {
-                        Yii::$app->getSession()->setFlash('failed', [
-                            'type' => Alert::TYPE_DANGER,
-                            'duration' => 5000,
-                            'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'CheckoutResult FailMessage'),
-                            'title' => Yii::t('app', 'CheckoutResult FailTitle'),
-                        ]);
+
+                    } catch (\Exception $ex) {
                         $transaction->rollBack();
                         $order_id = null;
                         return $this->actionGetCheckoutResult($order_id);
@@ -338,19 +310,44 @@ class CheckoutController extends Controller {
 
     public function actionGetCheckoutResult($order_id)
     {
-        if (empty($order_id)) {
+       if ($order_id == 'null') {
             $order = null;
             return $this->render('getCheckoutResult', ['order' => $order]);
-        } else {
+       } else {
             $order = Order::find()->where(['id' => $order_id])->one();
             $customer_info = Guest::find()->where(['id' => $order['guest_id']])->one();
             $address = OrderAddress::find()->where(['id' => $order['order_address_id']])->one();
             $district = District::find()->where(['id' => $address['district_id']])->one();
             $city = City::find()->where(['id' => $district['city_id']])->one();
-            return $this->render('getCheckoutResult', ['order' => $order, 'customer_info' => $customer_info,
-                'address' => $address, 'district' => $district, 'city' => $city,
+            $order_detail = (new yii\db\Query())->select(['product_id','sell_price','quantity'])->from('order_details')->where(['order_id'=> $order['id']])->all();
+            $total_price = 0;
+           foreach($order_detail as $key=>$item){
+                $product_name = Product::find()->select('name')->where(['id'=>$item['product_id']])->one();
+                $product_image = Image::find()->select(['resize_path'])->where(['product_id'=>$item['product_id']])->one();
+                $order_detail[$key]['product_name'] = $product_name['name'];
+                $order_detail[$key]['product_image'] = $product_image['resize_path'];
+                $order_detail[$key]['total_price'] = $item['sell_price']*$item['quantity'];
+                $total_price += $item['sell_price']*$item['quantity'];
+            }
+           $voucher = Voucher::find()->select(['code','discount'])->where(['order_id'=>$order_id])->one();
+           $discount_price = 0;
+           if(!empty($voucher)){
+               $total_price = 0;
+               $total_price_before_tax = 0;
+               foreach ($order_detail as $key => $item) {
+                   $product_price = (new yii\db\Query())->select(['price','tax'])->from('product')->where(['id' => $item['product_id']])->one();
+                   $product_offer = \Yii::$app->checkoutFunctions->getProductOffer($item['product_id']);
+                   $selling_price = \Yii::$app->checkoutFunctions->getProductPrice($product_price['price'], $product_offer) * $item['quantity'];
+                   $total_price += $selling_price;
+                   $price_before_tax = $selling_price - ($selling_price*($product_price['tax']/100));
+                   $total_price_before_tax += $price_before_tax;
+               }
+               $discount_price = $total_price_before_tax *($voucher['discount']/100);
+           }
+            return $this->render('getCheckoutResult', ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
+                'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
             ]);
-        }
+       }
     }
 
     public function actionCheckVoucher()

@@ -12,7 +12,7 @@ echo $this->render('/layouts/_header');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name ?>"><?= ucwords($category_name) ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $season_name ?>"><?= ucwords($season_name) ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -49,16 +49,16 @@ echo $this->render('/layouts/_header');
                             <select name="input-sort" class="form-control" onchange="location = this.value;">
                                 <option
                                     <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
-                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=product/get-product-season"?>"><?= Yii::t('app', 'DefaultLabel') ?>
+                                    value="<?= Yii::$app->request->baseUrl. "/index.php?r=product/get-product-season&season=" . $season_name ?>"><?= Yii::t('app', 'DefaultLabel') ?>
                                 </option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-season&season=" . $season_name . "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-season&season=" . $season_name . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-season&season=" . $season_name . "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category=" . $category_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
+                                    value="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-season&season=" . $season_name . "&sort=price&order=DESC" ?>"><?= Yii::t('app', 'PriceHighToLowLabel') ?></option>
                             </select>
                         </div>
                     </div>
@@ -67,7 +67,7 @@ echo $this->render('/layouts/_header');
             </div>
 
             <div class="row productlist-grid">
-                <?php foreach ($category_product as $product) { ?>
+                <?php foreach ($season_product as $product) { ?>
                     <div class="product-layout product-list col-xs-12">
                         <div class="product-thumb product-block">
                             <div class="product-block-inner">
@@ -114,10 +114,10 @@ echo $this->render('/layouts/_header');
 
                                             <div class="price">
                                                 <?php
-                                                if (isset($product['product_offer'])) {
-                                                    echo "<span class='price-old'>" . $product['product_price'] . " " . Yii::t('app', 'VNDLabel') . "</span>";
+                                                if (!empty($product['product_offer'])) {
+                                                    echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
                                                     $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
-                                                    echo "<span class='price-new'>" . $new_price . Yii::t('app', 'VNDLabel') . "</span>";
+                                                    echo "<span class='price-new'>" . number_format($new_price) . Yii::t('app', 'VNDLabel') . "</span>";
                                                 } else
                                                     echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') ?>
                                             </div>

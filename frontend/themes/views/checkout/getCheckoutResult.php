@@ -50,12 +50,12 @@ echo $this->render('/layouts/_header');
         </column>
         <div id="content" class="col-sm-9">
             <h1 class="page-title"><?= Yii::t('app', 'CheckoutResultLabel') ?></h1>
-            <?php if(empty($order)) {
+            <?php if(empty($order['id'])) {
                 echo Yii::t('app', 'CheckoutResult Fail');
             }
             ?>
-            <?php if(!empty($order)): ?>
-            <fieldset id="account">
+            <?php if(!empty($order['id'])): ?>
+            <fieldset id="checkout">
                 <legend><?= Yii::t('app', 'CheckoutResult Personal') ?> </legend>
                 <div class="col-sm-12">
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult FullName')?></div>
@@ -67,6 +67,7 @@ echo $this->render('/layouts/_header');
 
 
                 </div>
+                </br>
                 <legend><?= Yii::t('app', 'CheckoutResult OrderAddress') ?> </legend>
                 <div class="col-sm-12">
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult Address')?></div>
@@ -76,8 +77,87 @@ echo $this->render('/layouts/_header');
                     <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult City')?></div>
                     <div class="col-sm-8"><?=$city['name']?></div>
                 </div>
+                </br>
+                <legend><?= Yii::t('app', 'CheckoutResult OtherInfo') ?> </legend>
+                <div class="col-sm-12">
+                    <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult ReceiverDate')?></div>
+                    <div class="col-sm-8"><?=date('d/m/Y',$order['receiving_date'])?></div>
+                    <div class="col-sm-4"><?=Yii::t('app', 'CheckoutResult Note')?></div>
+                    <?php if($order['description'] != 'null'):?>
+                    <div class="col-sm-8"><?=$order['description']?></div>
+                    <?php endif ?>
+                </div>
+                </br>
+                <legend><?= Yii::t('app', 'CheckoutResult OrderDetail') ?> </legend>
+                <div class="table-responsive">
+                    <table class="table table-bordered shopping-cart">
+                        <thead>
+                        <tr>
+                            <td class="text-center col-sm-2"><?= Yii::t('app', 'CheckoutResult Image') ?></td>
+                            <td class="text-left"><?= Yii::t('app', 'CheckoutResult ProductName') ?></td>
+                            <td class="text-left"><?= Yii::t('app', 'CheckoutResult Quantity') ?></td>
+                            <td class="text-right"><?= Yii::t('app', 'CheckoutResult ProductPrice') ?></td>
+                            <td class="text-right"><?= Yii::t('app', 'CheckoutResult SumPrice') ?></td>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($order_detail as $product) { ?>
+                            <tr >
+                                <td class="text-center  col-sm-2 row-sm-2">
+                                    <a href=""><img
+                                            style="width: 54px;height: 54px"
+                                            src="<?= $product['product_image'] ?>"
+                                            alt="<?= $product['product_name'] ?>"
+                                            title="<?= $product['product_name'] ?>" class="img-thumbnail"/></a>
+                                </td>
+                                <td class="text-left"><a
+                                        href=""><?= ucwords($product['product_name']) ?></a>
+                                    <br/>
+                                </td>
+                                <td class="text-left">
+                                    <?= ucwords($product['quantity']) ?>
+                                </td>
+                                <td class="text-right"><?php
+                                    echo number_format($product['sell_price']) . " " . Yii::t('app', 'VNDLabel');
+                                   ?>
+                                </td>
+                                <td class="text-right"><?php
+                                    echo number_format($product['total_price']) . " " . Yii::t('app', 'VNDLabel');
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row ">
+                    <div class="col-sm-6 col-sm-offset-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td class="text-right"><strong><?= Yii::t('app', 'CheckoutResult SumPriceLabel') ?></strong></td>
+                                <td class="text-right"><?= number_format($total_price) . " " . Yii::t('app', 'VNDLabel') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong><?= Yii::t('app', 'CheckoutResult VoucherLabel') ?></strong></td>
+                                <td class="text-right"><?php if(!empty($voucher)){ echo $voucher['code']."(".$voucher['discount']."%)";} else echo "Không"; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong><?= Yii::t('app', 'CheckoutResult PayPriceLabel') ?></strong></td>
+                                <td class="text-right"><?= number_format($total_price - $discount_price ) . " " . Yii::t('app', 'VNDLabel') ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </fieldset>
             <?php endif?>
+            <div class="buttons">
+                <div class="pull-right"><a
+                        href="<?= $baseUrl ?>"
+                        class="btn btn-default"><?= Yii::t('app', 'ContinueShoppingLabel') ?></a></div>
+            </div>
 
         </div>
     </div>

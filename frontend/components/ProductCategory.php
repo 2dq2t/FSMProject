@@ -6,6 +6,7 @@
  * Time: 12:21 CH
  */
 namespace frontend\components;
+use common\models\Season;
 use Yii;
 use common\models\Category;
 use yii\db\Query;
@@ -18,4 +19,9 @@ class ProductCategory{
             ->from('category')->leftJoin('product', 'category.id = product.category_id')->where(['category.active' => self::STATUS_ACTIVE])->all();
         return $categories;
     }
+    public function getSeason(){
+        $season = Season::find()->select(['id','name'])->where(['active'=>self::STATUS_ACTIVE])->all();
+        return $season;
+    }
+
 }
