@@ -110,7 +110,7 @@ echo $this->render('/layouts/_header');
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="right">
+                                        <div class="left">
 
                                             <div class="price">
                                                 <?php

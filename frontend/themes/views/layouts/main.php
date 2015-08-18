@@ -51,24 +51,22 @@ $baseUrl = Yii::$app->request->baseUrl;
         <div id="footer" class="container">
             <div>
                 <div class="column">
-                    <h5>Information</h5>
+                    <h5>Thông Tin</h5>
                     <ul class="list-unstyled">
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=4">About
-                                Us</a></li>
+                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=4">Về FreshGarden
+                                </a></li>
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=6">Delivery
-                                Information</a></li>
+                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=6">Câu Hỏi Thường Gặp</a></li>
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=3">Privacy
-                                Policy</a></li>
+                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=3">Chính Sách và Quy Định</a></li>
                         <li>
                             <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=5">Terms
                                 &amp; Conditions</a></li>
                     </ul>
                 </div>
                 <div class=" column">
-                    <h5>My Account</h5>
+                    <h5>Tài Khoản Của Tôi</h5>
                     <ul class="list-unstyled">
                         <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">My
                                 Account</a></li>
@@ -83,16 +81,16 @@ $baseUrl = Yii::$app->request->baseUrl;
 
                 <div class="custom_footer_main">
                     <div class="content_footer_right">
-                        <div class="column contact"><h5>Contact Us</h5>
+                        <div class="column contact"><h5>Địa Chỉ Liên Hệ</h5>
                             <ul>
                                 <li>
-                                    <div class="content">My Company<br>42 avenue des Champs<br>Elysées 75000 Paris<br>Tel
-                                        0123-456-789<br>Email <a href="#">sales@company.com</a></div>
+                                    <div class="content">FreshGarden<br>Khu Công Nghệ Cao Hòa Lạc<br>Tel:
+                                        043-987-5643<br>Email: <a href="#">freshgardenhl@gmail.com</a></div>
                                 </li>
                             </ul>
                         </div>
                         <div class="column">
-                            <div class="social_block"><h5>Follow us</h5>
+                            <div class="social_block"><h5>Theo Dõi FreshGarDen</h5>
                                 <ul>
                                     <li class="facebook"><a href="https://www.facebook.com/freshgarden2015">Facebook</a></li>
                                     <li class="twitter"><a href="#">Twitter</a></li>
