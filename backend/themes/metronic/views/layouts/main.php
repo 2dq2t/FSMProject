@@ -7,6 +7,7 @@ use yii\widgets\Breadcrumbs;
 /* @var $content string */
 
 AppAsset::register($this);
+$baseUrl = Yii::$app->request->baseUrl;
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -27,7 +28,7 @@ AppAsset::register($this);
         <meta content="" name="author"/>
         <?= $this->head() ?>
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <!--    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">-->
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -87,8 +88,24 @@ AppAsset::register($this);
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
-                                        <a href="extra_profile.html">
+                                        <a href="<?= $baseUrl."/index.php?r=account/update&id=". Yii::$app->user->identity->id; ?>">
                                             <i class="icon-user"></i> My Profile </a>
+                                    </li>
+                                    <li>
+                                        <a href="page_calendar.html">
+                                            <i class="icon-calendar"></i> My Calendar </a>
+                                    </li>
+                                    <li>
+                                        <a href="inbox.html">
+                                            <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger">
+								3 </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="page_todo.html">
+                                            <i class="icon-rocket"></i> My Tasks <span class="badge badge-success">
+								7 </span>
+                                        </a>
                                     </li>
                                     <li class="divider">
                                     </li>

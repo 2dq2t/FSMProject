@@ -129,7 +129,7 @@ if($model->image) {
                         <!--/row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'gender')->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other', ], ['prompt' => Yii::t('app','Select employee gender')]) ?>
+                                <?= $form->field($model, 'gender')->dropDownList([ 'Male' => 'Nam', 'Female' => 'Nữ', 'Other' => 'Khác', ], ['prompt' => Yii::t('app','Select employee gender')]) ?>
                             </div>
                             <!--/span-->
                             <div class="col-md-6">

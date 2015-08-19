@@ -51,6 +51,7 @@ class Employee extends ActiveRecord implements IdentityInterface
         return [
             [['full_name', 'password', 'dob', 'gender', 'phone_number', 'email', 'image', 'start_date', 'address_id'], 'required', 'on' => 'adminCreate'],
             [['full_name', 'dob', 'gender', 'phone_number', 'email', 'start_date', 'address_id'], 'required', 'on' => 'adminEdit'],
+            [['full_name', 'dob', 'gender', 'phone_number', 'email', 'address_id'], 'required', 'on' => 'updateProfile'],
             [['phone_number', 'status', 'address_id'], 'integer'],
             [['dob', 'start_date'], 'safe'],
             [['gender', 'note'], 'string'],
