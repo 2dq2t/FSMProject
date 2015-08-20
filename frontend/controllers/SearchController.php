@@ -83,14 +83,14 @@ class SearchController extends Controller{
                     else
                         $order = SORT_DESC;
                     $query = (new Query())
-                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path'])
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path','MATCH(product.name) AGAINST("'."+" . mysql_real_escape_string($q) . '" IN BOOLEAN MODE) AS productName'])
                         ->from('product')
                         ->join('INNER JOIN', 'image', 'product.id = image.product_id')
                         ->join('INNER JOIN', 'category', 'product.category_id = category.id')
                         ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
-                            'MATCH(product.name) AGAINST("'."+" . mysql_real_escape_string($q) . '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(category.name) AGAINST("'."+" . mysql_real_escape_string($q) . '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(product.description) AGAINST("'."+" . mysql_real_escape_string($q) . '" IN BOOLEAN MODE)
+                            'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q)."*" . '" IN BOOLEAN MODE) OR ' .
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
+                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) ."*" . '" IN BOOLEAN MODE)
                          )')
                         ->groupBy('product.id')
                         ->orderBy(['product.' . $sort => $order]);
@@ -100,16 +100,17 @@ class SearchController extends Controller{
                     $search_with_description = 'checked';
                 } else {
                     $query = (new Query())
-                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path'])
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax','category.name', 'image.resize_path as image_path', '(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
                         ->from('product')
                         ->innerJoin('image', 'product.id = image.product_id')
                         ->innerJoin('category', 'product.category_id = category.id')
                         ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
-                            'MATCH(product.name) AGAINST("'."+" . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
-                            'MATCH(category.name) AGAINST("'."+" . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) OR ' .
-                            'MATCH(product.description) AGAINST("'."+" . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE)
+                            'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
+                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
                          )')
-                        ->groupBy('product.id');
+                        ->groupBy('product.id')
+                        ->orderBy('score DESC');
                     $countQuery = clone $query;
                     $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
                     $search_product = $query->offset($pagination->offset)->limit($pagination->limit)->all();
