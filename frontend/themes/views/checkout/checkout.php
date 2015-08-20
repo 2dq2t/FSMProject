@@ -338,7 +338,6 @@ echo $this->render('/layouts/_header');
                                                         },
                                                         success: function (data) {
                                                             $('.alert').remove();
-                                                            console.log(data);
                                                             var json = $.parseJSON(data);
                                                             if (json['success']) {
                                                                 $('#voucherResult').after('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
