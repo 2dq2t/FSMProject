@@ -18,10 +18,10 @@ use Yii;
  */
 class OrderDetails extends \yii\db\ActiveRecord
 {
-    private $product_image;
-    private $product_unit;
-    private $product_price;
-    private $product_total;
+    private $productImage;
+    private $productUnit;
+    private $productPrice;
+    private $productTotal;
 
 
     /**
@@ -63,7 +63,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function getProductImage()
     {
-        return $this->product_image;
+        return $this->productImage;
     }
 
     /**
@@ -71,7 +71,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function setProductImage($product_image)
     {
-        $this->product_image = $product_image;
+        $this->productImage = $product_image;
     }
 
     /**
@@ -79,7 +79,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function getProductTotal()
     {
-        return $this->product_total;
+        return $this->productTotal;
     }
 
     /**
@@ -87,7 +87,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function setProductTotal($product_total)
     {
-        $this->product_total = $product_total;
+        $this->productTotal = $product_total;
     }
 
     /**
@@ -95,7 +95,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function getProductUnit()
     {
-        return $this->product_unit;
+        return $this->productUnit;
     }
 
     /**
@@ -103,7 +103,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function setProductUnit($product_unit)
     {
-        $this->product_unit = $product_unit;
+        $this->productUnit = $product_unit;
     }
 
     /**
@@ -111,7 +111,7 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function getProductPrice()
     {
-        return $this->product_price;
+        return $this->productPrice;
     }
 
     /**
@@ -119,6 +119,6 @@ class OrderDetails extends \yii\db\ActiveRecord
      */
     public function setProductPrice($product_price)
     {
-        $this->product_price = $product_price;
+        $this->productPrice = $product_price;
     }
 }
