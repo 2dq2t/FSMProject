@@ -5,7 +5,7 @@
  * Date: 27/05/2015
  * Time: 3:09 CH
  */
-$this->title = ucwords(Yii::t('app', 'CategoryTitle'));
+$this->title = ucwords($season_name);
 echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">

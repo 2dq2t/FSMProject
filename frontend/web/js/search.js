@@ -61,7 +61,7 @@ $(document).ready(function () {
             $('#search-form').show();
         })
         .on('typeahead:selected', function (evt, data) {
-            window.location.href = remoteHost + 'site/view-detail&product=' + data.product_name;
+            window.location.href = remoteHost + 'product/view-detail&product=' + data.product_name;
         });
 
 });
