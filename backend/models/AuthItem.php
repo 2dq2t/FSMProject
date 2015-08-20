@@ -57,7 +57,7 @@ class AuthItem extends \yii\db\ActiveRecord
             [['type', 'created_at', 'updated_at'], 'integer'],
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
-            [['name'], 'checkDuplicate'],
+            [['name'], 'unique'],
             [['rule_name'], 'in',
                 'range' => array_keys(Yii::$app->authManager->getRules()),
                 'message' => Yii::t('app', 'Rule not exists')],
@@ -66,13 +66,13 @@ class AuthItem extends \yii\db\ActiveRecord
         ];
     }
 
-    public function checkDuplicate($attribute)
-    {
-        $authManager = Yii::$app->authManager;
-        if ((strlen($this->oldName) == 0 || $this->oldName != $this->name) && ($authManager->getRole($this->name) !== null || $authManager->getPermission($this->name) !== null)) {
-            $this->addError($attribute, Yii::t('app', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
-        }
-    }
+//    public function checkDuplicate($attribute)
+//    {
+//        $authManager = Yii::$app->authManager;
+//        if ((strlen($this->oldName) == 0 || $this->oldName != $this->name) && ($authManager->getRole($this->name) !== null || $authManager->getPermission($this->name) !== null)) {
+//            $this->addError($attribute, Yii::t('app', 'Permission name "{value}" has already been taken.', ['attribute' => $attribute, 'value' => $this->name]));
+//        }
+//    }
 
     /**
      * @inheritdoc

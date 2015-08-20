@@ -460,7 +460,7 @@ class OrderController extends Controller
         }
     }
 
-    public function actionInvoicePrint()
+    public function actionInvoice()
     {
         if (Yii::$app->request->post()) {
 

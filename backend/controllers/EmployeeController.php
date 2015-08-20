@@ -617,8 +617,8 @@ class EmployeeController extends Controller
         }
     }
 
-    public function actionGetdistrict($id = null) {
-        if (isset($id)) {
+    public function actionGetdistrict($id = 0) {
+        if ($id > 0) {
             $countDistrict= District::find()
                 ->where(['city_id' => $id])
                 ->count();

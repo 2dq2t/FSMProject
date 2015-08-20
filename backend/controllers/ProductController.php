@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\components\Logger;
 use backend\components\ParserDateTime;
+use backend\models\TmpProduct;
 use common\models\Image;
 use common\models\ProductSeason;
 use common\models\ProductTag;
@@ -139,12 +140,45 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
+        // get barcode
+        // delete all if last use greate than 1 day
+        /** @var  $tmp TmpProduct*/
+        foreach(TmpProduct::find()->where('status = ' . TmpProduct::STATUS_ACTIVE)->all() as $tmp) {
+            if (time() - $tmp->last_used > 1800) {
+                $tmp->status = TmpProduct::STATUS_INACTIVE;
+                $tmp->save();
+            }
+        }
 
-//        $model->price = number_format($model->price, 0, '', ' ');
+        /** @var  $tmpId TmpProduct*/
+        $tmpId = TmpProduct::find()->where('status = '.TmpProduct::STATUS_INACTIVE)->orderBy(['id' => SORT_DESC])->one();
+        $tmpId->status = TmpProduct::STATUS_ACTIVE;
+        $tmpId->last_used = ParserDateTime::getTimeStamp();
+        $tmpId->update();
+
+        $barcode = Yii::$app->params['barcodeCountryCode'] . Yii::$app->params['barcodeBusinessCode'] . $tmpId->id;
+        $odd_sum = 0;
+        $even_sum = 0;
+        for($i = 0; $i < strlen($barcode); $i++) {
+            if ($i % 2 == 0) {
+                // 1. sum each of the odd numbered digits
+                // 2. multiply result by three
+                $odd_sum += $barcode[$i] * 3;
+            } else {
+                // 3. sum of each of the even numbered digits
+                $even_sum += $barcode[$i];
+            }
+        }
+
+        // 4. subtract the result from the next highest power of 10
+        $checkSum = (ceil(($odd_sum + $even_sum)/10))*10 - ($odd_sum + $even_sum);
+
+        $model->barcode = $tmpId->id . $checkSum;
 
         if ($model->load(Yii::$app->request->post())) {
             // set create date as timestamp
             $model->create_date = ParserDateTime::getTimeStamp();
+            $model->barcode = $tmpId->id . $checkSum;
 
             $product_images = UploadedFile::getInstances($model, 'productImage');
 
@@ -155,7 +189,7 @@ class ProductController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
-                if ($model->save()) {
+                if ($model->validate() && $model->save()) {
                     $errors = [];
                     // directory to save image in local
                     $dir = Yii::getAlias('@frontend/web/uploads/products/images/' . $model->id);
@@ -257,6 +291,7 @@ class ProductController extends Controller
                             'message' => $errors[0],
                             'title' => Yii::t('app', 'Create Product'),
                         ]);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . $errors[0], Yii::$app->user->identity->email);
 
                         return $this->render('create', [
                             'model' => $model
@@ -290,6 +325,7 @@ class ProductController extends Controller
                         'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Product_Add_Error_Msg'),
                         'title' => Yii::t('app', 'Create Product'),
                     ]);
+                    $model->price = number_format($model->price, 0, '', ' ');
                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product.'), Yii::$app->user->identity->email);
                     return $this->render('create', [
                         'model' => $model
@@ -306,7 +342,7 @@ class ProductController extends Controller
                     'message' => $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'),
                     'title' => Yii::t('app', 'Create Product'),
                 ]);
-
+                $model->price = number_format($model->price, 0, '', ' ');
                 Logger::log(Logger::ERROR, Yii::t('app', 'Add Product error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Product_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
@@ -315,7 +351,6 @@ class ProductController extends Controller
             }
 
         } else {
-
             return $this->render('create', [
                 'model' => $model
             ]);

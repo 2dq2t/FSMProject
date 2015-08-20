@@ -42,8 +42,8 @@ class Product extends \yii\db\ActiveRecord
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    private $product_seasons;
-    private $product_tags;
+    private $productSeasons;
+    private $productTags;
     private $productImage;// = [];
     /**
      * @inheritdoc
@@ -62,13 +62,14 @@ class Product extends \yii\db\ActiveRecord
             [['barcode', 'name', 'price', 'description', 'intro', 'quantity_in_stock', 'create_date', 'category_id', 'unit_id'], 'required'],
             [['barcode', 'quantity_in_stock', 'sold', 'tax', 'create_date', 'active', 'category_id', 'unit_id'], 'integer'],
             [['price'], 'number'],
-            [['barcode'], 'match', 'pattern' => '/^[0-9]{4}$/', 'message' => Yii::t('app', 'Product barcode must be exactly 4 number')],
+            [['name'], 'unique'],
+            [['barcode'], 'match', 'pattern' => '/^[0-9]{5}$/', 'message' => Yii::t('app', 'Product barcode must be exactly 5 number')],
             [['description', 'intro'], 'string'],
             [['name'], 'string', 'max' => 255],
             [['sold'], 'default','value'=>'0'],
             [['tax'], 'default','value'=>'0'],
             [['quantity_in_stock', 'tax', 'price', 'sold', 'barcode'], 'number','min' => 0],
-            [['product_seasons', 'product_tags'], 'safe'],
+            [['productSeasons', 'productTags'], 'safe'],
             [['productImage'], 'file', 'skipOnEmpty'=> true, 'maxFiles' => 10, 'extensions' => 'jpeg, jpg, png, gif']
         ];
     }
@@ -135,7 +136,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProductSeasons()
     {
-        return $this->product_seasons;
+        return $this->productSeasons;
     }
 
     /**
@@ -143,7 +144,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function setProductSeasons($product_seasons)
     {
-        $this->product_seasons = $product_seasons;
+        $this->productSeasons = $product_seasons;
     }
 
     /**
@@ -151,7 +152,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProductTags()
     {
-        return $this->product_tags;
+        return $this->productTags;
     }
 
     /**
@@ -159,7 +160,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function setProductTags($product_tags)
     {
-        $this->product_tags = $product_tags;
+        $this->productTags = $product_tags;
     }
 
     public function getProductImage()

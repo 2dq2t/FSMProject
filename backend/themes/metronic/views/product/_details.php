@@ -26,7 +26,7 @@ $attributes = [
     [
         'attribute'=>'barcode',
         'format'=>'raw',
-        'value'=>$model->barcode,
+        'value'=>Yii::$app->params['barcodeCountryCode'] . ' ' . Yii::$app->params['barcodeBusinessCode'] . ' ' .$model->barcode,
         'displayOnly'=>true
     ],
     [

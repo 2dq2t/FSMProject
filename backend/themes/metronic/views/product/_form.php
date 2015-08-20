@@ -92,13 +92,20 @@ if(isset($images)) {
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'barcode', [
-                                'addon' => [
-                                    'prepend' => [
-                                        'content' => '893 12345'
-                                    ]
-                                ]
-                            ])->textInput(['maxlength' => 20, 'placeholder' => Yii::t('app', 'Enter barcode')]) ?>
+                            <?php
+//                            echo $form->field($model, 'barcode', [
+//                                'template' => '{label}',
+//                                'addon' => [
+//                                    'append' => [
+//                                        'content' => '<button class="btn btn-default" disabled>' . Yii::$app->params['barcodeCountryCode'] . ' ' . Yii::$app->params['barcodeBusinessCode'] . ' ' . $model->barcode . '</button>',
+//                                    ]
+//                                ]
+//                            ])
+//                            ?>
+                            <div class="form-group">
+                                <?= Html::activeLabel($model, 'barcode')?><br>
+                                <button class="btn btn-default" disabled><?php echo Yii::$app->params['barcodeCountryCode'] . ' ' . Yii::$app->params['barcodeBusinessCode'] . ' ' . $model->barcode?></button>
+                            </div>
                         </div>
                         <!--/span-->
                     </div>
@@ -167,7 +174,7 @@ if(isset($images)) {
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'product_tags')->widget(\kartik\widgets\Select2::className(), [
+                            <?= $form->field($model, 'productTags')->widget(\kartik\widgets\Select2::className(), [
                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Tag::find()->all(), 'id', 'name'),
                                 'options' => [
                                     'placeholder' => Yii::t('app', 'Select tags'),
@@ -181,7 +188,7 @@ if(isset($images)) {
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
-                            <?= $form->field($model, 'product_seasons')->widget(\kartik\widgets\Select2::className(), [
+                            <?= $form->field($model, 'productSeasons')->widget(\kartik\widgets\Select2::className(), [
                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Season::find()->all(), 'id', 'name'),
                                 'options' => [
                                     'placeholder' => Yii::t('app', 'Select season'),
@@ -262,6 +269,9 @@ if(isset($images)) {
 </div>
 
 <script>
+    /**
+     * @return {string}
+     */
     function Comma(num) { //function to add commas to textboxes
         num += '';
         num = num.replace(' ', ''); num = num.replace(' ', ''); num = num.replace(' ', '');
@@ -275,11 +285,7 @@ if(isset($images)) {
         return x1 + x2;
     }
 
-    $("#product_price, #product-quantity_in_stock, #product_tax, #product_sold, #product-barcode").keypress(function (e) {
-        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-            return false;
-        } else {
-            return true;
-        }
+    $("#product_price, #product-quantity_in_stock, #product_tax, #product_sold, #product-barcode #product_quantity").keypress(function (e) {
+        return !(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57));
     });
 </script>
