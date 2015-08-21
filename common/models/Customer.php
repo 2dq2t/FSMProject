@@ -55,8 +55,6 @@ class Customer extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password'], 'required'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => '{attribute} chứa ký tự đặc biệt.'],
-            [['password'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => '{attribute} chứa ký tự đặc biệt.'],
             ['re_password', 'required', 'on' => 'addCustomer'],
             [['username', 'password', 'created_at', 'address_id'], 'required', 'on' => 'adminCreate'],
             [['new_password', 're_new_password'], 'required','on' => 'changePassword' ],
@@ -66,7 +64,6 @@ class Customer extends ActiveRecord implements IdentityInterface
             [['username', 'avatar'], 'string', 'max' => 255, 'min' => 6],
             [['password'], 'string', 'max' => 255, 'min' => 6],
             [['new_password'], 'string', 'max' => 255, 'min' => 6],
-            [['new_password'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => '{attribute} chứa ký tự đặc biệt.'],
             ['re_password', 'compare', 'compareAttribute' => 'password'],
             ['re_new_password', 'compare', 'compareAttribute' => 'new_password'],
             [['auth_key', 'password_reset_token'], 'string', 'max' => 255],

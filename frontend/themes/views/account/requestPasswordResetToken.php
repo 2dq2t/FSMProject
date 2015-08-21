@@ -11,10 +11,10 @@ echo $this->render('/layouts/_header');
         <?php echo $this->render('/layouts/_leftMenuChangePass.php'); ?>
         <div id="content" class="col-sm-9">
             <ul class="breadcrumb">
-                <li><a href="../site/index.php"><i
+                <li><a href="../web/index.php"><i
                             class="fa fa-home"></i></a></li>
-                <li><a href="../site/index.php?r=customer/manageacc"><?= Yii::t('app', 'AccountLabel') ?></a></li>
-                <li><a href="../site/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?></a>
+                <li><a href="../web/index.php?r=customer/manageacc"><?= Yii::t('app', 'AccountLabel') ?></a></li>
+                <li><a href="../web/index.php?r=site/request-password-reset"><?= Yii::t('app', 'ForgottenPasswordLabel') ?></a>
                 </li>
             </ul>
 
@@ -41,7 +41,7 @@ echo $this->render('/layouts/_header');
                 </div>
             </fieldset>
             <div class="buttons clearfix">
-                <div class="pull-left"><a href="../site/index.php?r=site/login"
+                <div class="pull-left"><a href="../web/index.php?r=site/login"
                                           class="btn btn-default"><?= Yii::t('app', 'BackLabel') ?></a></div>
                 <div class="pull-right">
                     <input type="submit" value="<?= Yii::t('app', 'SendLabel') ?>" class="btn btn-primary"/>

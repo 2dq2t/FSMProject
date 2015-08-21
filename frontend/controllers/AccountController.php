@@ -511,6 +511,7 @@ class AccountController extends Controller{
                     'message' => Yii::t('app', 'RequestPasswordResetMsg02'),
                     'title' => Yii::t('app', 'ForgottenPasswordLabel'),
                 ]);
+                return $this->goHome();
             }
         }
 
