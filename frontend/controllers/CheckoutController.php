@@ -9,6 +9,8 @@
 namespace frontend\controllers;
 
 
+use backend\models\OrderView;
+use backend\models\OrderViewSearch;
 use common\models\Customer;
 use common\models\Image;
 use common\models\OrderAddress;
@@ -401,5 +403,29 @@ class CheckoutController extends Controller {
         }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [json_encode($json)];
+    }
+
+    public function actionGetOrderHistory(){
+        if(Yii::$app->user->isGuest){
+            return $this->goHome();
+        }
+        else{
+            $customer = Customer::find()->select(['guest_id'])->where(['id'=>Yii::$app->user->identity->getId()])->one();
+            $order = Order::find()->select(['id'])->where(['guest_id'=>$customer['guest_id']])->all();
+            $order_id = array();
+            foreach($order as $id){
+                array_push($order_id,$id['id']);
+            }
+            $query = OrderView::find()->where(['IN','order_id',$order_id]);
+            $dataProvider = new \yii\data\ActiveDataProvider([
+                'query'=>$query,
+                'pagination' => [
+                    'pagesize' => 7
+                ]
+            ]);
+            return $this->render('getOrderHistory', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
     }
 }

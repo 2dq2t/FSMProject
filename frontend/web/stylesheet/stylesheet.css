@@ -1756,13 +1756,13 @@ ul.box-category > li a.active {
     border-right: 1px solid #dddddd;
     padding: 10px;
 	overflow:hidden;
+    background: none repeat scroll 0 0 #ffffff;
 }
 .col-sm-4.total_amount { margin-top: 70px;}
 .product-tag{margin:10px 0 0;}
 #content .aboutus {
     clear: both;
 }
-
 
 
 .image1 {

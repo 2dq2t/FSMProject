@@ -14,6 +14,11 @@ return [
             ],
         ],
     ],
+    'modules' => [
+        'gridview' => [
+            'class' => '\kartik\grid\Module',
+        ],
+    ],
     'timeZone' => 'Asia/Ho_Chi_Minh',
     'language' => 'vi',
 ];
