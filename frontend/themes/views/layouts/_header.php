@@ -156,7 +156,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                             <a href="<?= $baseUrl."/index.php?r=account/manageacc&id=". Yii::$app->user->identity->id; ?>"><?= Yii::t('app', 'MyAccountLabel') ?></a>
                                         </li>
                                         <li>
-                                            <a href="#"><?= Yii::t('app', 'MyOrderLabel') ?></a>
+                                            <a href="<?= $baseUrl."/index.php?r=account/get-order-history"?>"><?= Yii::t('app', 'MyOrderLabel') ?></a>
                                         </li>
                                         <li>
                                             <a href="<?= $baseUrl . "/index.php?r=account/logout" ?>"

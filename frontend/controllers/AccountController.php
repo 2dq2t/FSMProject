@@ -8,13 +8,17 @@
 
 namespace frontend\controllers;
 
+use backend\models\OrderView;
 use common\models\Guest;
 use common\models\Customer;
 use common\models\Address;
 use common\models\District;
 use common\models\City;
+use common\models\Order;
+use common\models\Voucher;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -558,6 +562,30 @@ class AccountController extends Controller{
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    public function actionGetOrderHistory(){
+        if(Yii::$app->user->isGuest){
+            return $this->goHome();
+        }
+        else{
+            $customer = Customer::find()->select(['guest_id'])->where(['id'=>Yii::$app->user->identity->getId()])->one();
+            $order = Order::find()->select(['id'])->where(['guest_id'=>$customer['guest_id']])->all();
+            $order_id = array();
+            foreach($order as $id){
+                array_push($order_id,$id['id']);
+            }
+            $query = OrderView::find()->where(['IN','order_id',$order_id]);
+            $dataProvider = new \yii\data\ActiveDataProvider([
+                'query'=>$query,
+                'pagination' => [
+                    'pagesize' => 7
+                ]
+            ]);
+
+            return $this->render('getOrderHistory', [
+                'dataProvider' => $dataProvider,
+            ]);
         }
     }
 }

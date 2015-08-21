@@ -5,15 +5,15 @@
  * Date: 21/08/2015
  * Time: 3:09 CH
  */
-use yii\helpers\Html;
 use kartik\grid\GridView;
+$this->title = Yii::t('app','MyOrderLabel');
 echo $this->render('/layouts/_header');
 ?>
 <div class="container content-inner">
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-category&category="  ?>"></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=account/get-order-history"?>"><?=Yii::t('app','MyOrderLabel')?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -101,16 +101,23 @@ echo $this->render('/layouts/_header');
                 'dataProvider' => $dataProvider,
                 'columns' => $gridColumns,
                 'containerOptions' => ['style'=>'overflow: auto'],
-                'pjax' => false,
+                'headerRowOptions'=>['class'=>'kartik-sheet-style'],
+                'pjax' => true,
                 'pjaxSettings'=>[
+                    'neverTimeout'=>true,
                     'options' => [
                         'enablePushState' => false
                     ],
                 ],
                 'options' => [
-                    'id' => 'order-gridview'
+                    'id' => 'order_gridview'
                 ],
-                'bordered' => true,
+                'beforeHeader'=>[
+                    [
+                        'options'=>['class'=>'skip-export'] // remove this row from export
+                    ]
+                ],
+                'bordered'=>true,
                 'striped' => false,
                 'condensed' => false,
                 'responsive' => true,
@@ -119,31 +126,9 @@ echo $this->render('/layouts/_header');
                 'panel' => [
                     'type' => GridView::TYPE_SUCCESS,
                     'heading' => $this->title,
+                    'options'=>['style'=>'color:white']
                 ],
             ]); ?>
-
-            <?php $form = \yii\widgets\ActiveForm::begin(); ?>
-            <input type="hidden" name="ids" id="ids"/>
-            <?php \yii\widgets\ActiveForm::end(); ?>
-
-            <?php
-
-            $js = <<<SCRIPT
-        $("#print_invoice").click(function() {
-                var ids = $("#order-gridview").yiiGridView("getSelectedRows");
-
-                if (!$.isEmptyObject(ids)) {
-                    $('input[name=ids]').val(ids);
-                }
-        });
-SCRIPT;
-
-            $this->registerJs($js);
-
-            ?>
-
-
-
         </div>
     </div>
 </div>
