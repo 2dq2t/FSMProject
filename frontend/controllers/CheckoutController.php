@@ -102,36 +102,47 @@ class CheckoutController extends Controller {
                         'continueStep2' => $continueStep2,
                     ]);
                 }
-            } else if ($modelLogin->load(Yii::$app->request->post()) && $modelLogin->login()) {
-                $customer = Customer::find()->select(['guest_id', 'address_id'])->where(['id' => Yii::$app->user->identity->getId()])->one();
-                $modelGuest = Guest::find()->where(['id' => $customer['guest_id']])->one();
-                $modelUpdatedAddress = Address::find()->where(['id' => $customer['address_id']])->one();
-                if ($modelUpdatedAddress == null) {
-                    $modelAddress = new Address();
-                    $modelCity = new City();
-                    $modelDistrict = new District();
-                    $continueStep2 = ' in';
+            } else if ($modelLogin->load(Yii::$app->request->post()) ) {
+                if($modelLogin->login()) {
+                    $customer = Customer::find()->select(['guest_id', 'address_id'])->where(['id' => Yii::$app->user->identity->getId()])->one();
+                    $modelGuest = Guest::find()->where(['id' => $customer['guest_id']])->one();
+                    $modelUpdatedAddress = Address::find()->where(['id' => $customer['address_id']])->one();
+                    if ($modelUpdatedAddress == null) {
+                        $modelAddress = new Address();
+                        $modelCity = new City();
+                        $modelDistrict = new District();
+                        $continueStep2 = ' in';
 
-                    return $this->render('checkout', [
-                        'modelGuest' => $modelGuest,
-                        'modelAddress' => $modelAddress,
-                        'modelDistrict' => $modelDistrict,
-                        'modelCity' => $modelCity,
-                        'continueStep2' => $continueStep2,
-                        'modelCheckoutInfo' => $modelCheckoutInfo,
-                    ]);
-                } else {
-                    $modelUpdatedDistrict = District::find()->where(['id' => $modelUpdatedAddress->district_id])->one();
-                    $modelUpdatedCity = City::find()->where(['id' => $modelUpdatedDistrict->city_id])->one();
-                    $continueStep2 = ' in';
+                        return $this->render('checkout', [
+                            'modelGuest' => $modelGuest,
+                            'modelAddress' => $modelAddress,
+                            'modelDistrict' => $modelDistrict,
+                            'modelCity' => $modelCity,
+                            'continueStep2' => $continueStep2,
+                            'modelCheckoutInfo' => $modelCheckoutInfo,
+                        ]);
+                    } else {
+                        $modelUpdatedDistrict = District::find()->where(['id' => $modelUpdatedAddress->district_id])->one();
+                        $modelUpdatedCity = City::find()->where(['id' => $modelUpdatedDistrict->city_id])->one();
+                        $continueStep2 = ' in';
 
+                        return $this->render('checkout', [
+                            'modelGuest' => $modelGuest,
+                            'modelUpdatedAddress' => $modelUpdatedAddress,
+                            'modelUpdatedDistrict' => $modelUpdatedDistrict,
+                            'modelUpdatedCity' => $modelUpdatedCity,
+                            'continueStep2' => $continueStep2,
+                            'modelCheckoutInfo' => $modelCheckoutInfo,
+                        ]);
+                    }
+                }
+                else{
+                    $continueStep1 = ' in';
+                    $hideStep2 = 'hide';
                     return $this->render('checkout', [
-                        'modelGuest' => $modelGuest,
-                        'modelUpdatedAddress' => $modelUpdatedAddress,
-                        'modelUpdatedDistrict' => $modelUpdatedDistrict,
-                        'modelUpdatedCity' => $modelUpdatedCity,
-                        'continueStep2' => $continueStep2,
-                        'modelCheckoutInfo' => $modelCheckoutInfo,
+                        'modelLogin' => $modelLogin,
+                        'continueStep1' => $continueStep1,
+                        'hideStep2'=>$hideStep2,
                     ]);
                 }
             }  else {
@@ -344,6 +355,14 @@ class CheckoutController extends Controller {
                }
                $discount_price = $total_price_before_tax *($voucher['discount']/100);
            }
+           \Yii::$app->mailer->compose(['html' => 'checkoutResultInfo','text' => 'checkoutResultInfo'], ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
+               'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
+           ])
+               ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . ' robot'])
+               ->setTo($customer_info['email'])
+               ->setSubject('FreshGarden: Thông tin đơn hàng của bạn')
+               ->send();
+
             return $this->render('getCheckoutResult', ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
                 'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
             ]);

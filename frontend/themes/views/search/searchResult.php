@@ -26,35 +26,7 @@ echo $this->render('/layouts/_header');
                 </li>
             </ul>
             <h1 class="page-title">Search - <?php echo $q;?></h1>
-            <?php \yii\widgets\ActiveForm::begin()?>
-            <form >
-            <fieldset>
-                <label class="control-label " for="input-search"><b>Lựa chọn tìm kiếm</b></label>
 
-                <div class="row">
-                    <div class="col-sm-4">
-                        <input type="text" name="search-key" value="<?php echo $q;?>" placeholder="Keywords" id="input-search"
-                               class="form-control">
-                    </div>
-                    <div class="col-sm-3 sortcat">
-                        <select id="search-option" name="search-option" class="form-control hasCustomSelect" style="-webkit-appearance: menulist-button; width: 226px;  height: 30px; font-size: 14px;">
-                            <option value="all">Tất cả</option>
-                            <option value="name">Tên sản phẩm</option>
-                            <option value="category">Danh mục sản phẩm</option>
-                        </select>
-                    </div>
-
-                    <div class="col-sm-3 subcategory">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" name="description" value="1" <?= $search_with_description?> id="description">
-                            Tìm kiếm với phần miêu tả</label>
-                    </div>
-                </div>
-            </fieldset>
-
-            <input type="submit" value="Tìm kiếm" id="button-search" class="btn btn-primary">
-            </form>
-            <?php \yii\widgets\ActiveForm::end()?>
             <h2>Kết quả tìm kiếm</h2>
 
 
@@ -77,10 +49,6 @@ echo $this->render('/layouts/_header');
                                 <option  <?php if(empty($_GET['sort'])) echo "selected = 'true'"; ?>
                                     value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q ?>"><?= Yii::t('app', 'DefaultLabel') ?>
                                 </option>
-                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
-                                    value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q. "&sort=name&order=ASC" ?>"><?= Yii::t('app', 'NameAtoZLabel') ?></option>
-                                <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'name' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>
-                                    value="<?= Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q . "&sort=name&order=DESC" ?>"><?= Yii::t('app', 'NameZtoALabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'ASC') echo "selected = 'true'";}?>
                                     value="<?=Yii::$app->request->baseUrl."/index.php?r=search/search-result&q=".$q. "&sort=price&order=ASC" ?>"><?= Yii::t('app', 'PriceLowToHighLabel') ?></option>
                                 <option <?php if(isset($_GET['sort']) && isset($_GET['order'])){ if($_GET['sort'] == 'price' && $_GET['order'] == 'DESC') echo "selected = 'true'";}?>

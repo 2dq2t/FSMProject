@@ -252,7 +252,7 @@ echo $this->render('/layouts/_header');
 
                                     <fieldset id="account">
                                         <legend><?= Yii::t('app', 'Checkout OtherInfo') ?> </legend>
-                                        <div class="input-group">
+                                        <div class="input-group col-sm-12">
                                             <div class="input-group required col-sm-6">
                                                 <label class="control-label"
                                                        for="receiving_date"><?= Yii::t('app', 'Checkout ReceivingDate') ?></label>
@@ -338,7 +338,6 @@ echo $this->render('/layouts/_header');
                                                         },
                                                         success: function (data) {
                                                             $('.alert').remove();
-                                                            console.log(data);
                                                             var json = $.parseJSON(data);
                                                             if (json['success']) {
                                                                 $('#voucherResult').after('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
