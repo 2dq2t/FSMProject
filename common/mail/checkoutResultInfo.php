@@ -49,7 +49,7 @@
     <FONT FACE="Arial, serif">Số Điện Thoại</FONT><FONT FACE="Arial, serif">:</FONT><FONT FACE="Arial, serif">
     </FONT><FONT FACE="Arial, serif">    <?=$customer_info['phone_number']?></FONT></P>
 <P STYLE="margin-left: 0.11in; margin-right: 0.56in; margin-bottom: 0in; line-height: 0.26in">
-    <FONT FACE="Arial, serif">Địa chỉ</FONT><FONT FACE="Arial, serif">:</FONT><FONT FACE="Arial, serif">
+    <FONT FACE="Arial, serif">Địa Chỉ Nhận Hàng</FONT><FONT FACE="Arial, serif">:</FONT><FONT FACE="Arial, serif">
     </FONT><FONT FACE="Arial, serif">    <?=$address['detail']?> - <?=$district['name']?> - <?=$city['name']?></FONT></P>
 <P STYLE="margin-left: 0.11in; margin-right: 0.56in; margin-bottom: 0in; line-height: 0.26in">
     <FONT FACE="Arial, serif">Ngày Nhận</FONT><FONT FACE="Arial, serif">:</FONT><FONT FACE="Arial, serif">
@@ -115,7 +115,7 @@
         </I></FONT><FONT FACE="Arial, serif">.........................................................................................................<?= number_format($total_price) . " " . Yii::t('app', 'VNDLabel') ?>..............................................................</FONT></P>
 <P STYLE="margin-left: 0.11in; margin-top: 0.02in; margin-bottom: 0in">
     <FONT FACE="Arial, serif"><I>Mã Giảm Giá</I></FONT><FONT FACE="Arial, serif"><I>:</I></FONT><FONT FACE="Arial, serif"><I>
-        </I></FONT><FONT FACE="Arial, serif">..........................................................................................................<?php if(!empty($voucher)){ echo $voucher['code']."(".$voucher['discount']."%)";} else echo "Không"; ?>............................................................</FONT></P>
+        </I></FONT><FONT FACE="Arial, serif">..................................................................................<?php if(!empty($voucher)){ echo $voucher['code']."(".$voucher['discount']."%)";} else echo "Không..................."; ?>............................................................</FONT></P>
 <P STYLE="margin-left: 0.11in; margin-top: 0.02in; margin-bottom: 0in">
     <FONT FACE="Arial, serif"><I>Số Tiền Phải Trả</I></FONT><FONT FACE="Arial, serif"><I>:</I></FONT><FONT FACE="Arial, serif"><I>
         </I></FONT><FONT FACE="Arial, serif">..........................................................................................................<?= number_format($total_price - $discount_price ) . " " . Yii::t('app', 'VNDLabel') ?>....................................................</FONT></P>
