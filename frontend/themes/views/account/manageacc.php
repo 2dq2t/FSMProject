@@ -21,12 +21,8 @@ require('../themes/views/layouts/_header.php');
                 <li><a href="index.php?r=account/update&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangeAccInfoLabel')?></a></li>
                 <li><a href="index.php?r=account/changepass&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangePassInfoLabel')?></a></li>
                 <li><a href="index.php?r=account/changeaddress&id=<?= Yii::$app->user->identity->id; ?>"><?=Yii::t('app','ChangeAddressInfoLabel')?></a></li>
-                <li><a href="index.php?r=account/wish-list"><?=Yii::t('app','WishListLabel')?></a></li>
-            </ul>
-            <h2 class="h2-account" style="margin-bottom: 5px;"><?=Yii::t('app','MyOrderLabel')?></h2>
-            <ul class="list-unstyled-account">
-                <li><a href="#"><?=Yii::t('app','OrderHistoryLabel')?></a></li>
-                <li><a href="#"><?=Yii::t('app','DownloadLabel')?></a></li>
+                <li><a href="index.php?r=wish-list/get-wish-list"><?=Yii::t('app','WishListLabel')?></a></li>
+                <li><a href="index.php?r=account/get-order-history"><?=Yii::t('app','OrderHistoryLabel')?></a></li>
             </ul>
         </div>
     </div>
