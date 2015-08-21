@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\Logger;
 use backend\models\Restore;
 use backend\models\UploadBackup;
 use common\models\Image;
@@ -238,12 +239,34 @@ class BackupController extends Controller
 
         $tables = $this->getTables();
 
-        if(!$this->StartBackup())
-        {
-            //render error
-            $flashError = 'error';
-            $flashMsg = 'Some errors creating the file';
-            return $this->render('index');
+        try {
+            if (!$this->StartBackup()) {
+                //render error
+                $flashError = 'error';
+                $flashMsg = \Yii::t('app', 'Create backup was error. Please try again.');
+                \Yii::$app->getSession()->setFlash($flashError, [
+                    'type' => $flashError,
+                    'duration' => $flashError == 'success' ? 3000 : 0,
+                    'icon' => 'fa fa-backup',
+                    'message' => $flashMsg,
+                    'title' => \Yii::t('app', 'Backup file')
+                ]);
+
+                Logger::log($flashError == 'success' ? Logger::INFO : Logger::ERROR, $flashMsg, \Yii::$app->user->identity->email);
+
+                return $this->render('index');
+            }
+        } catch (Exception $e) {
+            \Yii::$app->getSession()->setFlash('error', [
+                'type' => 'error',
+                'duration' => 0,
+                'icon' => 'fa fa-backup',
+                'message' => $e->getMessage(),
+                'title' => \Yii::t('app', 'Backup file')
+            ]);
+
+            Logger::log(Logger::ERROR, \Yii::t('app', 'Create backup was error: ') . $e->getMessage(), \Yii::$app->user->identity->email);
+            return $this->redirect('index');
         }
 
         foreach($tables as $tableName)
@@ -257,8 +280,19 @@ class BackupController extends Controller
         $this->EndBackup();
 
         $flashError = 'success';
-        $flashMsg = 'The file was created !!!';
+        $flashMsg = \Yii::t('app', 'The file was created !!!');
         \Yii::$app->getSession()->setFlash($flashError, $flashMsg);
+
+        \Yii::$app->getSession()->setFlash($flashError, [
+            'type' => $flashError,
+            'duration' => $flashError == 'success' ? 3000 : 0,
+            'icon' => 'fa fa-backup',
+            'message' => $flashMsg,
+            'title' => \Yii::t('app', 'Backup file')
+        ]);
+
+        Logger::log($flashError == 'success' ? Logger::INFO : Logger::ERROR, $flashMsg, \Yii::$app->user->identity->email);
+
         $this->redirect(['index']);
     }
 
@@ -266,6 +300,7 @@ class BackupController extends Controller
 
         $file = $_GET[0]['filename'];
 
+        $sqlFile = '';
         if (isset($file)) {
             $sqlFile = $this->getPath() . basename($file);
             if (file_exists($sqlFile)) {
@@ -280,7 +315,17 @@ class BackupController extends Controller
             $flashError = 'error';
             $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['{file}' => $sqlFile]);
         }
-        \Yii::$app->getSession()->setFlash($flashError, $flashMsg);
+
+        \Yii::$app->getSession()->setFlash($flashError, [
+            'type' => $flashError,
+            'duration' => $flashError == 'success' ? 3000 : 0,
+            'icon' => 'fa fa-restore',
+            'message' => $flashMsg,
+            'title' => \Yii::t('app', 'Download file')
+        ]);
+
+        Logger::log($flashError == 'success' ? Logger::INFO : Logger::ERROR, $flashMsg, \Yii::$app->user->identity->email);
+
         $this->redirect(['index']);
     }
 
@@ -330,6 +375,7 @@ class BackupController extends Controller
             $errors[] = \Yii::t('app', 'File not found');
         }
         if ($errors !== []) {
+            Logger::log(Logger::ERROR, \Yii::t('app', 'Download backup file {file} error: ', ['file' => $filename]) . \Yii::t('app', 'File not found'), \Yii::$app->user->identity->email);
             throw new HttpException(403, implode(', ', $errors));
         }
 
@@ -350,11 +396,25 @@ class BackupController extends Controller
             $flashMsg = \Yii::t('app', 'Restore success.');
         } else {
             $flashError = 'error';
-            $flashMsg = \Yii::t('app', 'Problems with the file name');
+            $flashMsg = \Yii::t('app', 'File not found');
         }
-        $this->execSqlFile($sqlFile);
+        try {
+            $this->execSqlFile($sqlFile);
+        } catch (Exception $e) {
+            $flashMsg = 'error';
+            $flashMsg = $e->getMessage();
+        }
 
-        \Yii::$app->getSession()->setFlash($flashError, $flashMsg);
+        \Yii::$app->getSession()->setFlash($flashError, [
+            'type' => $flashError,
+            'duration' => $flashError == 'success' ? 3000 : 0,
+            'icon' => 'fa fa-restore',
+            'message' => $flashMsg,
+            'title' => \Yii::t('app', 'Restore data')
+        ]);
+
+        Logger::log($flashError == 'success' ? Logger::INFO : Logger::ERROR, $flashMsg, \Yii::$app->user->identity->email);
+
         $this->redirect(array('index'));
     }
 

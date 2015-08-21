@@ -267,7 +267,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                             'role',
                             'permission',
                             'route'
-                        ]) ? 'active' : ''?>">
+                        ]) ? 'active open' : ''?>">
                             <a href="javascript:;">
                                 <i class="icon-user"></i>
                                 <span class="title"><?= Yii::t('app', 'Employee')?></span>
@@ -287,7 +287,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     'route'
                                 ]) ? 'active' : ''?>">
                                     <a href="javascript:;">
-                                        <i class="icon-energy"></i> <?= Yii::t('app', 'Authorization')?> <span class="arrow"></span>
+                                        <i class="icon-energy"></i> <span class="title"> <?= Yii::t('app', 'Authorization')?></span> <span class="arrow"></span>
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="<?= isActive(['assignment/index']) ? 'active' : '' ?>">

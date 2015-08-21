@@ -5,14 +5,23 @@ $this->params ['breadcrumbs'] [] = [
 ];
 ?>
 
-<?php
-if(Yii::$app->session->getFlash('success')) {
-    echo '<div class="alert alert-success">' . Yii::$app->session->getFlash('success') . "</div>\n";
-}
-if(Yii::$app->session->getFlash('error')) {
-    echo '<div class="alert alert-error">' . Yii::$app->session->getFlash('error') . "</div>\n";
-}
-?>
+<?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+    <?php if($message) { ?>
+        <?php
+        echo lavrentiev\yii2toastr\Toastr::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : 'success',
+            'title' => (!empty($message['title'])) ? \yii\helpers\Html::encode($message['title']) : 'Title Not Set!',
+            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'clear' => false,
+            'options' => [
+                "closeButton" => true,
+                "positionClass" => "toast-top-right",
+                "timeOut" => (!empty($message['duration'])) ? \yii\helpers\Html::encode($message['duration']) : 0,
+            ]
+        ]);
+    }
+    ?>
+<?php endforeach; ?>
 
 <div class="backup-index">
     <div class="row">

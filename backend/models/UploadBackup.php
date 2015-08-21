@@ -26,7 +26,7 @@ class UploadBackup extends Model
     public function attributeLabels()
     {
         return [
-            'upload_file' => \Yii::t('app', 'Upload File'),
+            'upload_file' => \Yii::t('app', 'Upload file'),
         ];
     }
 }

@@ -98,7 +98,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             <!--/span-->
                             <div class="col-md-6">
                                 <?= $form->field($model, 'receiving_date')->widget(\kartik\date\DatePicker::classname(), [
-                                    'options' => ['placeholder' => Yii::t('app', 'Enter receiving date ..')],
+                                    'options' => ['placeholder' => Yii::t('app', 'Enter receiving date')],
                                     'removeButton' => false,
                                     'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
                                     'pluginOptions' => [
@@ -318,22 +318,22 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                     #
                                                 </th>
                                                 <th width="20%" tabindex="0" rowspan="1" colspan="1">
-                                                    Product name
+                                                    <?= Yii::t('app', 'Product name')?>
                                                 </th>
                                                 <th width="10%" tabindex="0" rowspan="1" colspan="1">
-                                                    Image
+                                                    <?= Yii::t('app', 'Image')?>
                                                 </th>
                                                 <th width="5%" tabindex="0" rowspan="1" colspan="1">
-                                                    Unit
+                                                    <?= Yii::t('app', 'Product unit')?>
                                                 </th>
                                                 <th width="10%" tabindex="0" rowspan="1" colspan="1">
-                                                    Price
+                                                    <?= Yii::t('app', 'Price')?>
                                                 </th>
                                                 <th width="15%" tabindex="0" rowspan="1" colspan="1">
-                                                    Quantity
+                                                    <?= Yii::t('app', 'Quantity')?>
                                                 </th>
                                                 <th width="10%" tabindex="0" rowspan="1" colspan="1">
-                                                    Total
+                                                    <?= Yii::t('app', 'Total')?>
                                                 </th>
                                                 <th width="6%" tabindex="0" rowspan="1" colspan="1">
                                                 </th>
@@ -358,7 +358,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                             /* @var $order_item \common\models\OrderDetails*/
                                                             echo $form->field($order_item, "[{$i}]product_id")->widget(\kartik\widgets\Select2::className(), [
                                                                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => \common\models\Product::STATUS_ACTIVE])->all(), 'id', 'name'),
-                                                                'options' => ['placeholder' => 'Select a state ...'],
+                                                                'options' => ['placeholder' => Yii::t('app', 'Select a product...')],
                                                                 'pluginOptions' => [
                                                                     'allowClear' => true
                                                                 ],

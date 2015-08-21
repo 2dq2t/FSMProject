@@ -33,9 +33,10 @@ class Guest extends \yii\db\ActiveRecord
         return [
             [['full_name', 'email', 'phone_number'], 'required'],
             [['phone_number'], 'integer'],
+            [['phone_number'], 'match', 'pattern' => '/^[0](\d{3})(\d{3})(\d{3,4})$/', 'message' => 'Phone number must have \'0\' in first and contain 10 or 11 digit number.'],
             [['full_name', 'email'], 'string', 'max' => 255],
             [['email'],'email'],
-            [['phone_number'], 'string', 'max' => 15, 'min' => 10],
+//            [['phone_number'], 'string', 'max' => 15, 'min' => 10],
         ];
     }
 

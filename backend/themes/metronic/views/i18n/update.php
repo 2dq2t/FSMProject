@@ -9,7 +9,7 @@
 
 use kartik\helpers\Html;
 
-$this->title = Yii::t('app', 'Update messages "{alias}"', ['alias' => $alias]);
+$this->title = Yii::t('app', 'Update messages :{alias}', ['alias' => $alias]);
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('app', 'I18n'),

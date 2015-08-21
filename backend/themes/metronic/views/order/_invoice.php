@@ -59,16 +59,16 @@ foreach ($models as $model) { ?>
                         <h3><?=Yii::t('app', 'Invoice Details')?></h3>
                         <ul class="list-unstyled">
                             <li>
-                                <strong><?= Yii::t('app', 'Order #: ')?></strong> <?= $model['order_view']->order_id ?>
+                                <strong><?= Yii::t('app', 'Order')?>#</strong> <?= $model['order_view']->order_id ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Order Date: ')?></strong> <?= date('M d Y', $model['order_view']->order_date) ?>
+                                <strong><?= Yii::t('app', 'Order Date')?>:</strong> <?= date('M d Y', $model['order_view']->order_date) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Receiving Date: ')?></strong> <?= date('M d Y', $model['order_view']->receiving_date) ?>
+                                <strong><?= Yii::t('app', 'Receiving Date')?>:</strong> <?= date('M d Y', $model['order_view']->receiving_date) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Order Status: ')?></strong> <?php
+                                <strong><?= Yii::t('app', 'Order Status')?>:</strong> <?php
                                 if ($model['order_view']->order_status_id === 1) {
                                     $label_class = 'label-info';
                                     $value = \backend\models\OrderStatus::find()->where(['id' => $model['order_view']->order_status_id])->one()['name'];
@@ -153,25 +153,25 @@ foreach ($models as $model) { ?>
                     <div class="col-xs-5 invoice-block ">
                         <ul class="list-unstyled amounts">
                             <li>
-                                <strong ><?= Yii::t('app', 'Shipping fee:')?></strong><?= number_format($model['order_view']->shipping_fee, 2) ?>
+                                <strong ><?= Yii::t('app', 'Shipping fee')?>:</strong><?= number_format($model['order_view']->shipping_fee, 2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total (before tax): ')?></strong> <?= number_format($total_before_tax, 2)?>
+                                <strong><?= Yii::t('app', 'Total (before tax)')?>:</strong> <?= number_format($total_before_tax, 2)?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total tax: ')?></strong> <?= number_format($total_tax,2) ?>
+                                <strong><?= Yii::t('app', 'Total tax')?>:</strong> <?= number_format($total_tax,2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total (after tax): ')?></strong> <?= number_format($total_after_tax,2) ?>
+                                <strong><?= Yii::t('app', 'Total (after tax)')?>:</strong> <?= number_format($total_after_tax,2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total discount: ')?></strong> <?= number_format($total_discount, 2) ?>
+                                <strong><?= Yii::t('app', 'Total discount')?>:</strong> <?= number_format($total_discount, 2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Voucher discount: ')?></strong> <?= number_format($model['order_view']->voucher_discount != null ? $total_before_tax * $model['order_view']->voucher_discount / 100 : $total_before_tax, 2) ?>
+                                <strong><?= Yii::t('app', 'Voucher discount')?>:</strong> <?= number_format($model['order_view']->voucher_discount != null ? $total_before_tax * $model['order_view']->voucher_discount / 100 : $total_before_tax, 2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total: ')?></strong> <?= number_format($total_after_tax + $model['order_view']->shipping_fee, 2) ?>
+                                <strong><?= Yii::t('app', 'Total')?>:</strong> <?= number_format($total_after_tax + $model['order_view']->shipping_fee, 2) ?>
                             </li>
                         </ul>
                         <br/>
