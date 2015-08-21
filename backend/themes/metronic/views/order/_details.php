@@ -61,20 +61,25 @@ $total_after_tax = 0;
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <?php foreach($order_details_extend as $order_details){ ?>
+
+                                                    <?php
+                                                    /** @var $order_details \backend\models\OrderDetailsExtend*/
+                                                    foreach($order_details_extend as $order_details){
+                                                        ?>
                                                         <tr>
                                                             <td class="text-center count"></td>
                                                             <td><?= $order_details->name?></td>
                                                             <td><?= $order_details->tax . ' %'?></td>
-                                                            <td class="text-right"><?= $order_details->sell_price ?> </td>
+                                                            <td class="text-right"><?= number_format($order_details->sell_price + $order_details->sell_price*$order_details->discount/100,2) ?> </td>
                                                             <td class="text-right"><?= $order_details->quantity ?></td>
-                                                            <td class="text-right"><?= $order_details->quantity * $order_details->sell_price * $order_details->tax/100; ?></td>
+                                                            <td class="text-right"><?= number_format($order_details->quantity * $order_details->sell_price * $order_details->tax/100, 2); ?></td>
                                                             <?php $total_tax += $order_details->quantity * $order_details->sell_price * $order_details->tax/100?>
-                                                            <td class="text-right"><?= $order_details->quantity * ($order_details->sell_price - ($order_details->sell_price * ($order_details->tax/100))); ?></td>
-                                                            <td class="text-right"><?= $order_details->discount . " %" ?></td>
-                                                            <td class="text-right"><?= $order_details->sell_price * $order_details->quantity - ($order_details->quantity * $order_details->sell_price * $order_details->tax/100) ?></td>
+                                                            <td class="text-right"><?= number_format($order_details->quantity * ($order_details->sell_price - ($order_details->sell_price * ($order_details->tax/100))), 2); ?></td>
+                                                            <td class="text-right"><?= number_format($order_details->discount) . " %" ?></td>
+                                                            <?php $total_discount += $order_details->sell_price*$order_details->discount/100*$order_details->quantity?>
+                                                            <td class="text-right"><?= number_format($order_details->sell_price * $order_details->quantity - ($order_details->quantity * $order_details->sell_price * $order_details->tax/100), 2) ?></td>
                                                             <?php $total_before_tax += $order_details->sell_price * $order_details->quantity - ($order_details->quantity * $order_details->sell_price * $order_details->tax/100) ?>
-                                                            <td class="text-right"><?= $order_details->sell_price * $order_details->quantity?></td>
+                                                            <td class="text-right"><?= number_format($order_details->sell_price * $order_details->quantity, 2)?></td>
                                                             <?php $total_after_tax += $order_details->sell_price * $order_details->quantity?>
                                                         </tr>
                                                     <?php } ?>
@@ -95,7 +100,7 @@ $total_after_tax = 0;
                                                 <?= Yii::t('app', 'Shipping fee:')?>
                                             </div>
                                             <div class="col-md-3 value">
-                                                <?= $model->shipping_fee ?>
+                                                <?= number_format($model->shipping_fee, 2) ?>
                                             </div>
                                         </div>
                                         <div class="row static-info align-reverse">
@@ -103,7 +108,7 @@ $total_after_tax = 0;
                                                 <?= Yii::t('app', 'Total (before tax): ')?>
                                             </div>
                                             <div class="col-md-3 value">
-                                                <?= $total_before_tax?>
+                                                <?= number_format($total_before_tax, 2)?>
                                             </div>
                                         </div>
                                         <div class="row static-info align-reverse">
@@ -111,7 +116,7 @@ $total_after_tax = 0;
                                                 <?= Yii::t('app', 'Total tax: ')?>
                                             </div>
                                             <div class="col-md-3 value">
-                                                <?= $total_tax ?>
+                                                <?= number_format($total_tax,2) ?>
                                             </div>
                                         </div>
                                         <div class="row static-info align-reverse">
@@ -119,7 +124,23 @@ $total_after_tax = 0;
                                                 <?= Yii::t('app', 'Total (after tax): ')?>
                                             </div>
                                             <div class="col-md-3 value">
-                                                <?= $total_after_tax ?>
+                                                <?= number_format($total_after_tax,2) ?>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info align-reverse">
+                                            <div class="col-md-8 name">
+                                                <?= Yii::t('app', 'Total discount: ')?>
+                                            </div>
+                                            <div class="col-md-3 value">
+                                                <?= number_format($total_discount, 2) ?>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info align-reverse">
+                                            <div class="col-md-8 name">
+                                                <?= Yii::t('app', 'Voucher discount: ')?>
+                                            </div>
+                                            <div class="col-md-3 value">
+                                                <?= number_format($model->voucher_discount != null ? $total_before_tax * $model->voucher_discount / 100 : $total_before_tax, 2) ?>
                                             </div>
                                         </div>
                                         <div class="row static-info align-reverse">
@@ -127,7 +148,7 @@ $total_after_tax = 0;
                                                 <?= Yii::t('app', 'Total: ')?>
                                             </div>
                                             <div class="col-md-3 value">
-                                                <?= $total_after_tax + $model->shipping_fee ?>
+                                                <?= number_format($total_after_tax + $model->shipping_fee, 2) ?>
                                             </div>
                                         </div>
                                     </div>

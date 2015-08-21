@@ -4,7 +4,9 @@ namespace backend\controllers;
 
 use backend\components\Logger;
 use backend\components\ParserDateTime;
+use backend\models\OrderDetailsExtend;
 use backend\models\OrderStatus;
+use backend\models\OrderView;
 use backend\models\OrderViewSearch;
 use common\models\City;
 use common\models\District;
@@ -20,7 +22,9 @@ use Yii;
 use common\models\Order;
 use yii\base\Exception;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\NotAcceptableHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
@@ -124,32 +128,25 @@ class OrderController extends Controller
                     $tax_amount = 0;
 
 
+                    /** @var $order_detail OrderDetails*/
                     foreach ($order_details as $order_detail) {
+                        /** @var $product Product*/
                         $product = Product::find()->where(['id' => $order_detail->product_id])->one();
                         $product_tax = $product['tax'];
-                        $product_price = $product['price'];
+
                         // set order detail if has error and response user selected product list
                         $order_detail->setProductImage(Image::find()->select('resize_path')->where(['product_id' => $order_detail['product_id']])->one()['resize_path']);
                         $order_detail->setProductUnit(Unit::find()->select('name')->where(['active' => 1, 'id' => $product['unit_id']])->one()['name']);
                         $order_detail->setProductPrice($product['price']);
                         $order_detail->setProductTotal($order_detail['quantity'] * $product['price']);
 
-                        // calculate net_mount and tax_amount
-                        // net_amount =
-                        // tax_amount =
-                        $offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
-                        $today = date("d-m-Y");
-                        $offer_start_date = date("d-m-Y", $offer['start_date']);
-                        $offer_end_date = date("d-m-Y", $offer['end_date']);
-                        if ($offer_start_date <= $today && $today <= $offer_end_date) {
-                            $product_offer = $offer['discount'];
-                        } else {
-                            $product_offer = 0;
-                        }
+                        // count real product price if exists offer
+                        /** @var $product_offer Offer */
+                        $product_offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $order_detail->product_id])->one();
+                        $discount = isset($product_offer) && ($product_offer->start_date <= time() && time() <= $product_offer->end_date) ? $product_offer->discount : 0;
+                        $product_price = $discount > 0 ? $product->price * (1 - $discount/100) : $product->price;
 
-                        $product_price = $product_price * (1 - $product_offer / 100);
-
-                        $net_amount += $order_detail->quantity * ($product_price - ($product_price * ($product_tax/100)));
+                        $net_amount += $order_detail->quantity * ($product_price * (1 - ($product_tax/100)));
                         $tax_amount += $order_detail->quantity * $product_price * $product_tax/100;
                     }
 
@@ -462,9 +459,26 @@ class OrderController extends Controller
 
     public function actionInvoice()
     {
-        if (Yii::$app->request->post()) {
+        if (Yii::$app->request->get('ids')) {
+            $order_ids = explode(',', Yii::$app->request->get('ids'));
+            if (!ctype_digit(implode('', $order_ids))) {
+                throw new NotAcceptableHttpException(Yii::t('app', 'Invalid an order id.'));
+            }
 
-            return $this->renderPartial('_invoice');
+            $models = [];
+            foreach($order_ids as $order_id) {
+                if (empty(Order::find()->where(['id' => $order_id])->one())) {
+                    throw new BadRequestHttpException(Yii::t('app', 'An order with id = {id} is do not exists', ['id' => $order_id]));
+                }
+                $models[$order_id]['order_view'] = OrderView::find()->where(['order_id' => $order_id])->one();
+                $models[$order_id]['order_details_extend'] = OrderDetailsExtend::find()->where(['order_id' => $order_id])->all();
+            }
+
+            return $this->render('_invoice', [
+                'models' => $models
+            ]);
+        } else {
+            throw new NotFoundHttpException(Yii::t('app', 'Could not found an order.'));
         }
     }
 
@@ -836,11 +850,18 @@ class OrderController extends Controller
     public function actionGetProductInfo($id) {
         /* @var $product_info Product*/
         /* @var $image Image*/
+        /** @var $product_offer Offer*/
+
         $product_info = Product::find()->select('price, quantity_in_stock, sold, unit_id')->where(['id' => $id, 'active' => Product::STATUS_ACTIVE])->one();
+        // count real product price if exists offer
+        $product_offer = Offer::find()->select('discount,start_date,end_date')->where(['active' => 1, 'product_id' => $id])->one();
+        $discount = isset($product_offer) && ($product_offer->start_date <= time() && time() <= $product_offer->end_date) ? $product_offer->discount : 0;
+        $product_price = $discount > 0 ? $product_info->price *(1 - $discount/100) : $product_info->price;
+
         $image = Image::find()->select('resize_path')->where(['product_id' => $id])->one();
         $unit = Unit::find()->select('name')->where(['active' => Unit::STATUS_ACTIVE, 'id' => $product_info->unit_id])->one();
         $product_info = [
-            'price' => $product_info->price,
+            'price' => $product_price,
             'quantity_in_stock' => $product_info->quantity_in_stock,
             'sold' => $product_info->sold,
             'unit' => $unit->name,

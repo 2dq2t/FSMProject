@@ -80,7 +80,7 @@ class AuthItem extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('app', 'Name'),
+            'name' => $this->type == Item::TYPE_PERMISSION ? Yii::t('app', 'Permission') : Yii::t('app', 'Role name'),
             'type' => Yii::t('app', 'Type'),
             'description' => Yii::t('app', 'Description'),
             'rule_name' => Yii::t('app', 'Rule Name'),

@@ -17,6 +17,7 @@ use Yii;
  * @property string $phone_number
  * @property integer $order_status_id
  * @property string $address
+ * @property string $voucher_discount
  */
 class OrderView extends \yii\db\ActiveRecord
 {
@@ -38,7 +39,7 @@ class OrderView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'order_date', 'receiving_date', 'order_status_id'], 'integer'],
+            [['order_id', 'order_date', 'receiving_date', 'order_status_id', 'voucher_discount'], 'integer'],
             [['order_date', 'receiving_date', 'shipping_fee', 'description', 'full_name', 'email', 'phone_number', 'address'], 'required'],
             [['shipping_fee'], 'number'],
             [['address'], 'string'],
@@ -63,6 +64,7 @@ class OrderView extends \yii\db\ActiveRecord
             'phone_number' => Yii::t('app', 'Phone Number'),
             'order_status_id' => Yii::t('app', 'Order Status ID'),
             'address' => Yii::t('app', 'Address'),
+            'voucher_discount' => Yii::t('app', 'Voucher Discount'),
         ];
     }
 }

@@ -143,35 +143,38 @@ class ProductController extends Controller
         // get barcode
         // delete all if last use greate than 1 day
         /** @var  $tmp TmpProduct*/
-        foreach(TmpProduct::find()->where('status = ' . TmpProduct::STATUS_ACTIVE)->all() as $tmp) {
+        foreach(TmpProduct::find()
+                    ->where(['status' => TmpProduct::STATUS_ACTIVE])
+                    ->andWhere(['<>', 'last_used', null])->all() as $tmp) {
+            // if last used greater than 1 day then delete
             if (time() - $tmp->last_used > 1800) {
                 $tmp->status = TmpProduct::STATUS_INACTIVE;
+                $tmp->last_used = null;
                 $tmp->save();
             }
         }
 
         /** @var  $tmpId TmpProduct*/
-        $tmpId = TmpProduct::find()->where('status = '.TmpProduct::STATUS_INACTIVE)->orderBy(['id' => SORT_DESC])->one();
+        $tmpId = TmpProduct::find()->where('status = '.TmpProduct::STATUS_INACTIVE)->orderBy(['id' => SORT_ASC])->one();
         $tmpId->status = TmpProduct::STATUS_ACTIVE;
         $tmpId->last_used = ParserDateTime::getTimeStamp();
         $tmpId->update();
 
         $barcode = Yii::$app->params['barcodeCountryCode'] . Yii::$app->params['barcodeBusinessCode'] . $tmpId->id;
-        $odd_sum = 0;
-        $even_sum = 0;
-        for($i = 0; $i < strlen($barcode); $i++) {
-            if ($i % 2 == 0) {
-                // 1. sum each of the odd numbered digits
+        $sum = 0;;
+        for($i = strlen($barcode)-1; $i >= 0; $i--) {
+            if ($i % 2 != 0) {
+                // 1. sum each of the even numbered digits
                 // 2. multiply result by three
-                $odd_sum += $barcode[$i] * 3;
+                $sum += $barcode[$i] * 3;
             } else {
-                // 3. sum of each of the even numbered digits
-                $even_sum += $barcode[$i];
+                // 3. sum of each of the odd numbered digits
+                $sum += $barcode[$i];
             }
         }
 
         // 4. subtract the result from the next highest power of 10
-        $checkSum = (ceil(($odd_sum + $even_sum)/10))*10 - ($odd_sum + $even_sum);
+        $checkSum = 10 - $sum % 10;
 
         $model->barcode = $tmpId->id . $checkSum;
 
@@ -275,6 +278,13 @@ class ProductController extends Controller
                             }
                         }
                     }
+
+                    $tmp = TmpProduct::find()
+                        ->where(['status' => TmpProduct::STATUS_ACTIVE])
+                        ->andWhere(['<>', 'last_used', null])
+                        ->andWhere(['id' => substr($model->barcode, 0, 3)])->one();
+                    $tmp->last_used = null;
+                    if (!$tmp->update()) $errors[] = current($tmp->getFirstErrors()) ? current($tmp->getFirstErrors()) : Yii::t('app', 'Could not save temp barcode.');
 
                     if (!empty($errors)) {
                         if ($transaction->getIsActive()) {

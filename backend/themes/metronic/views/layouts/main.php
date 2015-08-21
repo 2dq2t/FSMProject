@@ -11,8 +11,8 @@ $baseUrl = Yii::$app->request->baseUrl;
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
-    <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-    <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+    <!--[if IE 8]> <html lang="<?= Yii::$app->language ?>" class="ie8 no-js"> <![endif]-->
+    <!--[if IE 9]> <html lang="<?= Yii::$app->language ?>" class="ie9 no-js"> <![endif]-->
     <!--[if !IE]><!-->
     <html lang="<?= Yii::$app->language ?>">
     <!--<![endif]-->
@@ -28,7 +28,8 @@ $baseUrl = Yii::$app->request->baseUrl;
         <meta content="" name="author"/>
         <?= $this->head() ?>
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+        <!--        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">-->
+        <link href="metronic/assets/global/css/opensans/opensans.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
         <link href="metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -89,7 +90,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
                                         <a href="<?= $baseUrl."/index.php?r=account/update&id=". Yii::$app->user->identity->id; ?>">
-                                            <i class="icon-user"></i> My Profile </a>
+                                            <i class="icon-user"></i> <?=Yii::t('app', 'My Profile')?> </a>
                                     </li>
                                     <li>
                                         <a href="page_calendar.html">
@@ -286,7 +287,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     'route'
                                 ]) ? 'active' : ''?>">
                                     <a href="javascript:;">
-                                        <i class="icon-energy"></i> <?= Yii::t('app', 'Authentication')?> <span class="arrow"></span>
+                                        <i class="icon-energy"></i> <?= Yii::t('app', 'Authorization')?> <span class="arrow"></span>
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="<?= isActive(['assignment/index']) ? 'active' : '' ?>">

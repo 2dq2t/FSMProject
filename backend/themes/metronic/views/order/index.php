@@ -165,13 +165,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax' => true,
         'pjaxSettings'=>[
-//            'neverTimeout'=>true,
+            'neverTimeout'=>true,
             'options' => [
                 'enablePushState' => false
             ],
         ],
         'options' => [
-            'id' => 'order-gridview'
+            'id' => 'order_gridview'
         ],
         'bordered' => true,
         'striped' => false,
@@ -186,19 +186,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?php $form = \yii\widgets\ActiveForm::begin(['id' => 'invoice-print', 'options' => ['target'=> '_blank'], 'action' => ['order/invoice-print']]); ?>
+    <?php $form = \yii\widgets\ActiveForm::begin(['id' => 'invoice_print', 'method' => 'get', 'action' => ['order/invoice']]); ?>
         <input type="hidden" name="ids" id="ids"/>
     <?php \yii\widgets\ActiveForm::end(); ?>
 
     <?php
 
     $js = <<<SCRIPT
-        $("#print_invoice").click(function() {
-                var ids = $("#order-gridview").yiiGridView("getSelectedRows");
-
-                if (!$.isEmptyObject(ids)) {
-                    $('input[name=ids]').val(ids);
-                }
+    $(document).on("click","#print_invoice",function(){
+            var ids = $("#order_gridview").yiiGridView("getSelectedRows");
+            if (!$.isEmptyObject(ids)) {
+                $('input[id=ids]').val(ids);
+                $('#invoice_print').submit();
+            }
         });
 SCRIPT;
 

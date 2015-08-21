@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use backend\components\ParserDateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -18,7 +19,7 @@ class OrderViewSearch extends OrderView
     public function rules()
     {
         return [
-            [['order_id', 'receiving_date', 'order_status_id'], 'integer'],
+            [['order_id', 'receiving_date', 'order_status_id', 'voucher_discount'], 'integer'],
             [['shipping_fee'], 'number'],
             [['description', 'full_name', 'email', 'phone_number', 'address', 'order_date'], 'safe'],
         ];
@@ -58,10 +59,11 @@ class OrderViewSearch extends OrderView
 
         $query->andFilterWhere([
             'order_id' => $this->order_id,
-            'order_date' => $this->order_date,
+            'order_date' => ParserDateTime::parseToTimestamp($this->order_date) ? ParserDateTime::parseToTimestamp($this->order_date) : $this->order_date,
             'receiving_date' => $this->receiving_date,
             'shipping_fee' => $this->shipping_fee,
             'order_status_id' => $this->order_status_id,
+            'voucher_discount' => $this->voucher_discount,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description])

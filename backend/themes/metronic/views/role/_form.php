@@ -71,13 +71,6 @@ use yii\helpers\Json;
                         <div class="form-group">
                             <?= $form->field($model, 'description')->textarea(['rows' => 3, 'placeholder' => Yii::t('app', 'Enter role description')]) ?>
                         </div>
-
-                        <div class="form-group">
-                            <?= $form->field($model, 'rule_name')->dropDownList(\yii\helpers\ArrayHelper::map(\Yii::$app->getAuthManager()->getRules(), 'name', 'name'), ['prompt' => 'Choose rule']) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $form->field($model, 'data')->textarea(['rows' => 6, 'placeholder' => Yii::t('app', 'Enter role data')])?>
-                        </div>
                         <div class="form-group">
                             <?= $form->field($model, 'items')->widget(\fsm\dualistbox\DualListbox::className(), [
                                 'items' => $item,
