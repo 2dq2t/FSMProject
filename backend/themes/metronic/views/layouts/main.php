@@ -61,8 +61,8 @@ $baseUrl = Yii::$app->request->baseUrl;
             <div class="page-header-inner">
                 <!-- BEGIN LOGO -->
                 <div class="page-logo">
-                    <a href="index.html">
-                        <img src="metronic/assets/admin/img/logo-light.png" alt="logo" class="logo-default"/>
+                    <a href="<?= \yii\helpers\Url::home()?>">
+                        <img src="metronic/assets/admin/img/logo-big-freshgarden.png" alt="logo" class="logo-default"/>
                     </a>
                     <div class="menu-toggler sidebar-toggler">
                         <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->

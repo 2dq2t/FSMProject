@@ -103,8 +103,24 @@ if(isset($images)) {
 //                            ])
 //                            ?>
                             <div class="form-group">
-                                <?= Html::activeLabel($model, 'barcode')?><br>
-                                <button class="btn btn-default" disabled><?php echo Yii::$app->params['barcodeCountryCode'] . ' ' . Yii::$app->params['barcodeBusinessCode'] . ' ' . $model->barcode?></button>
+                                <div class="col-md-6">
+                                    <?= Html::activeLabel($model, 'barcode')?><br>
+                                    <button class="btn btn-default" disabled><?php echo Yii::$app->params['barcodeCountryCode'] . ' ' . Yii::$app->params['barcodeBusinessCode'] . ' ' . $model->barcode?></button>
+                                    <?= $form->field($model, 'barcode')->hiddenInput()->label(false)?>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="barcode-image"></div>
+                                    <?php
+                                    \barcode\barcode\BarcodeGenerator::widget([
+                                        'value' => Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode'].$model->barcode,
+                                        'elementId' => 'barcode-image',
+                                        'type' => 'ean13'
+                                    ]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
                             </div>
                         </div>
                         <!--/span-->

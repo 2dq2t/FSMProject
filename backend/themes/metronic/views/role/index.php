@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;&nbsp;{delete}',
+            'template' => '{update}',
             'urlCreator' => function ($action, $model, $key, $index) {
                 $params = ['id' => $model->name];
                 $params[0] = $this->context->id ? $this->context->id . '/' . $action : $action;
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'resizableColumns' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
-            'heading' => '',
+            'heading' => $this->title,
             'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '. Yii::t('app', 'Create Role'), ['create'], ['class' => 'btn btn-success']),
         ],
     ]); ?>

@@ -35,7 +35,9 @@
         "kartik-v/yii2-krajee-base": "dev-master",
         "maksyutin/yii2-dual-list-box": "dev-master",
         "lavrentiev/yii2-toastr": "1.0.1",
-        "devgroup/yii2-jsoneditor": "*"
+        "devgroup/yii2-jsoneditor": "*",
+        "miloschuman/yii2-highcharts-widget": "dev-master",
+        "vilochane/yii2-barcode-generator": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

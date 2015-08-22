@@ -408,4 +408,22 @@ return array (
       '@devgroup/jsoneditor' => $vendorDir . '/devgroup/yii2-jsoneditor',
     ),
   ),
+  'miloschuman/yii2-highcharts-widget' => 
+  array (
+    'name' => 'miloschuman/yii2-highcharts-widget',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@miloschuman/highcharts' => $vendorDir . '/miloschuman/yii2-highcharts-widget/src',
+    ),
+  ),
+  'vilochane/yii2-barcode-generator' => 
+  array (
+    'name' => 'vilochane/yii2-barcode-generator',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@barcode/barcode' => $vendorDir . '/vilochane/yii2-barcode-generator',
+    ),
+  ),
 );

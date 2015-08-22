@@ -63,7 +63,9 @@ class Customer extends ActiveRecord implements IdentityInterface
             [['gender'], 'string'],
             [['username', 'avatar'], 'string', 'max' => 255, 'min' => 6],
             [['password'], 'string', 'max' => 255, 'min' => 6],
-            [['password'], 'match', 'pattern' => '/^(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$/', 'message' => Yii::t('app', 'Password must contain at least one letter and be longer than six characters.')],
+            [['password'], 'match', 'pattern' => '/^(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$/', 'message' => Yii::t('app', 'Password must contain at least one letter and be longer than six characters.'), 'when' => function($model){
+                return !isset($model->password);
+            }],
             [['new_password'], 'string', 'max' => 255, 'min' => 6],
             ['re_password', 'compare', 'compareAttribute' => 'password'],
             ['re_new_password', 'compare', 'compareAttribute' => 'new_password'],

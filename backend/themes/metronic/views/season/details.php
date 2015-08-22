@@ -69,6 +69,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         'nonSelectedListLabel' => Yii::t('app', 'Product'),
                                         'selectedListLabel' => Yii::t('app', 'Product in {season}', ['season' => $model->name]),
 //                                        'moveOnSelect' => false,
+                                        'selectorMinimalHeight' => '400'
                                     ]
                                 ])->label(false)?>
                             </div>

@@ -93,10 +93,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <h3 class="form-section"><?= Yii::t('app', 'Shipping')?></h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'shipping_fee')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter shipping fee')]) ?>
-                            </div>
-                            <!--/span-->
-                            <div class="col-md-6">
+                                <?php
+//                                $form->field($model, 'shipping_fee')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter shipping fee')])
+                                ?>
                                 <?= $form->field($model, 'receiving_date')->widget(\kartik\date\DatePicker::classname(), [
                                     'options' => ['placeholder' => Yii::t('app', 'Enter receiving date')],
                                     'removeButton' => false,
@@ -109,13 +108,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 ]) ?>
                             </div>
                             <!--/span-->
-                        </div>
-                        <!--/row-->
-                        <div class="row">
                             <div class="col-md-6">
                                 <?= $form->field($address, 'detail')->textInput(['maxlength' => 100, 'placeholder' => Yii::t('app', 'Enter shipping address')])->label("Address") ?>
                             </div>
                             <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <div class="row">
                             <div class="col-md-6">
                                 <?php
                                 if ($city->id) {
@@ -138,9 +137,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 ?>
                             </div>
                             <!--/span-->
-                        </div>
-                        <!--/row-->
-                        <div class="row">
                             <div class="col-md-6">
                                 <?php
                                 if ($city->id) {
@@ -166,11 +162,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 ?>
                             </div>
                             <!--/span-->
-                            <div class="col-md-6">
-                            </div>
-                            <!--/span-->
                         </div>
-                        <!--/row-->
                         <h3 class="form-section"><?= Yii::t('app', 'Order Info')?></h3>
                         <div class="row">
                             <div class="col-md-6">

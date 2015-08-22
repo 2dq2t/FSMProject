@@ -256,57 +256,57 @@ class RoleController extends Controller
      * @param  string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            $model = $this->findModel($id);
-            Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
-            if ($model->deleteItem()) {
-                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
-                $transaction->commit();
-
-                Yii::$app->getSession()->setFlash('success', [
-                    'type' => 'success',
-                    'duration' => 3000,
-                    'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Delete Role success'),
-                    'title' => Yii::t('app', 'Delete Role'),
-                ]);
-                Logger::log(Logger::INFO, Yii::t('app', 'Delete Role success'), Yii::$app->user->identity->email);
-
-            } else {
-                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
-                if ($transaction->isActive) {
-                    $transaction->rollBack();
-                }
-
-                Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'), Yii::$app->user->identity->email);
-                Yii::$app->getSession()->setFlash('error', [
-                    'type' => 'error',
-                    'duration' => 0,
-                    'icon' => 'fa fa-trash-o',
-                    'message' => $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'),
-                    'title' => Yii::t('app', 'Delete Role')
-                ]);
-            }
-
-        } catch(Exception $ex){
-            if ($transaction->isActive) {
-                $transaction->rollBack();
-            }
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $ex->getMessage(), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => $ex->getMessage(),
-                'title' => Yii::t('app', 'Delete Role')
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $transaction = Yii::$app->db->beginTransaction();
+//        try {
+//            $model = $this->findModel($id);
+//            Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
+//            if ($model->deleteItem()) {
+//                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+//                $transaction->commit();
+//
+//                Yii::$app->getSession()->setFlash('success', [
+//                    'type' => 'success',
+//                    'duration' => 3000,
+//                    'icon' => 'fa fa-plus',
+//                    'message' => Yii::t('app', 'Delete Role success'),
+//                    'title' => Yii::t('app', 'Delete Role'),
+//                ]);
+//                Logger::log(Logger::INFO, Yii::t('app', 'Delete Role success'), Yii::$app->user->identity->email);
+//
+//            } else {
+//                Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+//                if ($transaction->isActive) {
+//                    $transaction->rollBack();
+//                }
+//
+//                Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'), Yii::$app->user->identity->email);
+//                Yii::$app->getSession()->setFlash('error', [
+//                    'type' => 'error',
+//                    'duration' => 0,
+//                    'icon' => 'fa fa-trash-o',
+//                    'message' => $model->getErrorMessage() ? $model->getErrorMessage() : Yii::t('app', 'Role delete error.'),
+//                    'title' => Yii::t('app', 'Delete Role')
+//                ]);
+//            }
+//
+//        } catch(Exception $ex){
+//            if ($transaction->isActive) {
+//                $transaction->rollBack();
+//            }
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete role error: ') . $ex->getMessage(), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => $ex->getMessage(),
+//                'title' => Yii::t('app', 'Delete Role')
+//            ]);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Assign or remove items
