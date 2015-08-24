@@ -83,7 +83,7 @@ class CheckoutController extends Controller {
             }
             else if (Yii::$app->request->post() && !empty($_POST['account'])) {
                 if ($_POST['account'] == 'register')
-                    return $this->redirect('index.php?r=site/register');
+                    return $this->redirect('index.php?r=account/register');
                 else {
                     $modelGuest = new Guest();
                     $modelAddress = new Address();
@@ -329,15 +329,15 @@ class CheckoutController extends Controller {
             $address = OrderAddress::find()->where(['id' => $order['order_address_id']])->one();
             $district = District::find()->where(['id' => $address['district_id']])->one();
             $city = City::find()->where(['id' => $district['city_id']])->one();
-            $order_detail = (new yii\db\Query())->select(['product_id','sell_price','quantity'])->from('order_details')->where(['order_id'=> $order['id']])->all();
+            $order_detail = (new yii\db\Query())->select(['product_id','sell_price','quantity','discount'])->from('order_details')->where(['order_id'=> $order['id']])->all();
             $total_price = 0;
            foreach($order_detail as $key=>$item){
                 $product_name = Product::find()->select('name')->where(['id'=>$item['product_id']])->one();
                 $product_image = Image::find()->select(['resize_path'])->where(['product_id'=>$item['product_id']])->one();
                 $order_detail[$key]['product_name'] = $product_name['name'];
                 $order_detail[$key]['product_image'] = $product_image['resize_path'];
-                $order_detail[$key]['total_price'] = $item['sell_price']*$item['quantity'];
-                $total_price += $item['sell_price']*$item['quantity'];
+                $order_detail[$key]['total_price'] = Yii::$app->checkoutFunctions->getProductPrice($item['sell_price'], $item['discount'])*$item['quantity'];
+                $total_price += Yii::$app->checkoutFunctions->getProductPrice($item['sell_price'], $item['discount'])*$item['quantity'];
             }
            $voucher = Voucher::find()->select(['code','discount'])->where(['order_id'=>$order_id])->one();
            $discount_price = 0;

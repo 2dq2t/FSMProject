@@ -36,7 +36,18 @@ class WishListController extends Controller {
             $product_session_id = Yii::$app->session->get('product_session');
             $product_session = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.price as product_price'
                 , 'product.tax as product_tax', 'image.resize_path as product_image'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => Product::STATUS_ACTIVE, 'product.id' => $product_session_id])->groupBy('product.id')->all();
+            foreach ($product_session as $key=>$item) {
+                    //get product image
+                    $product_image = Yii::$app->CommonFunction->getProductOneImage($item['product_id']);
+                    $product_session[$key]['product_image'] = $product_image;
+                    //get product offer
+                    $product_offer = Yii::$app->CommonFunction->getProductOffer($item['product_id']);
+                    $product_session[$key]['product_offer'] = $product_offer;
+                    //Get rating average
+                    $rating_average = Yii::$app->CommonFunction->getProductRating($item['product_id']);
+                    $product_session[$key]['product_rating'] = $rating_average;
 
+            }
             return $this->render('getWishList', [
                 'wish_list_product' => $wish_list_product,
                 'product_session' => $product_session,

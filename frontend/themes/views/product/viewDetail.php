@@ -21,7 +21,7 @@ echo $this->render('/layouts/_header');
 </script>
 <div class="container content-inner">
     <ul class="breadcrumb">
-        <li><a href="<?=$baseUrl?>"><i class="fa fa-home"></i></a></li>
+        <li><a href="<?= $baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
             <a href="<?php echo $baseUrl . 'index.php?r=product/view-detail&product=' . $product_detail['name'] ?>"><?php echo ucwords($product_detail['name']) ?></a>
         </li>
@@ -38,6 +38,7 @@ echo $this->render('/layouts/_header');
         <div id="content" class="productpage col-sm-9">
             <div class="row view-detail">
                 <span class="latest_default_width" style="display:none; visibility:hidden"></span>
+
                 <div class="col-sm-6 product-left">
                     <div class="product-info">
                         <ul class="left product-image thumbnails">
@@ -84,7 +85,7 @@ echo $this->render('/layouts/_header');
                         </li>
                         <li>
                             <span><?= Yii::t('app', 'QuantityLabel') ?>
-                                : </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold']." kg"; else echo Yii::t('app', 'ProductStatus'); ?>
+                                : </span><?php if ($product_detail['quantity_in_stock'] - $product_detail['sold'] > 0) echo $product_detail['quantity_in_stock'] - $product_detail['sold'] . " kg"; else echo Yii::t('app', 'ProductStatus'); ?>
                         </li>
                         <li><p><span><?= Yii::t('app', 'StandardLabel') ?>: </span><span class="inline"
                                                                                          style="margin-left: 3px"><a
@@ -100,29 +101,29 @@ echo $this->render('/layouts/_header');
                         <?php
                         if (!empty($product_offer)) {
                             echo "<li>";
-                            if(isset($product_unit['name'])){
-                                echo "<span class='old-price' style='text-decoration: line-through;'>" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']. "</span>";
+                            if (isset($product_unit['name'])) {
+                                echo "<span class='old-price' style='text-decoration: line-through;'>" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . " / " . $product_unit['name'] . "</span>";
                             }
                             echo "<li>";
                         } else {
                             echo "<li class='price-normal''>";
-                            if(isset($product_unit['name'])){
-                                echo "<h1 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']."</h1>";
+                            if (isset($product_unit['name'])) {
+                                echo "<h1 >" . number_format($product_detail['price']) . " " . Yii::t('app', 'VNDLabel') . " / " . $product_unit['name'] . "</h1>";
                             }
                             echo "</li>";
                         }
                         if (!empty($product_offer)) {
                             $price_offer = Yii::$app->CommonFunction->getProductPrice($product_detail['price'], $product_offer);;
                             echo "<li>";
-                            if(isset($product_unit['name'])){
-                                echo "<h1 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') ." / ". $product_unit['name']."</h1>";
+                            if (isset($product_unit['name'])) {
+                                echo "<h1 class='special-price'>" . number_format($price_offer) . " " . Yii::t('app', 'VNDLabel') . " / " . $product_unit['name'] . "</h1>";
                             }
                             echo "<li>";
                         }
                         ?>
                         <br/>
                         <li class="price-normal">
-                            <?= Yii::t('app', 'PriceIncludeTax')?>
+                            <?= Yii::t('app', 'PriceIncludeTax') ?>
                         </li>
                     </ul>
                     <div id="product">
@@ -156,7 +157,7 @@ echo $this->render('/layouts/_header');
                     </div>
 
                     <!-- Like Facebook Button -->
-                    <div class="fb-like" data-href="<?php echo  Yii::$app->request->getUrl(); ?>"
+                    <div class="fb-like" data-href="<?php echo Yii::$app->request->getUrl(); ?>"
                          data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
                     <!-- Like Facebook Button END -->
 
@@ -179,16 +180,15 @@ echo $this->render('/layouts/_header');
                         </div>
                     </div>
                 </div>
-                <div id="slide" class="col-sm-12">
-                    <div class="box">
+                <div id="slide">
+                    <div class="box col-sm-12">
                         <div class="box-heading"><?= Yii::t('app', 'ProductSameCatLabel') ?></div>
                         <div class="box-content">
                             <div class="customNavigation">
                                 <a class="prev">&nbsp;</a>
                                 <a class="next">&nbsp;</a>
                             </div>
-
-                            <div class="box-product product-carousel" id="category-carousel">
+                            <div class="box-product product-carousel" id="latest-carousel">
 
                                 <?php foreach ($products_same_category as $product) { ?>
                                     <div class="slider-item">
@@ -228,7 +228,7 @@ echo $this->render('/layouts/_header');
                                                             <?php
                                                             if (!empty($product['product_offer'])) {
                                                                 echo "<span class='price-old'>" . number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel') . "</span>";
-                                                                $new_price = $product['product_price'] * (100 / $product['product_offer']);
+                                                                $new_price = Yii::$app->CommonFunction->getProductPrice($product['product_price'], $product['product_offer']);
                                                                 echo "<span class='price-new'>" . number_format($new_price) . " VND</span>";
                                                             } else {
                                                                 echo number_format($product['product_price']) . " " . Yii::t('app', 'VNDLabel');
@@ -254,6 +254,7 @@ echo $this->render('/layouts/_header');
                         </div>
                     </div>
                 </div>
+
 
                 <div class="product-tag col-sm-12"><b><?= Yii::t('app', 'TagLabel') ?>:</b>
                     <?php

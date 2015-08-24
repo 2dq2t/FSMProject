@@ -74,7 +74,10 @@ class SearchController extends Controller{
             if (empty($_GET['q']))
                 return $this->goHome();
             else {
-                $q = $_GET['q'];
+                $q = preg_replace('/([^\pL\ \ ]+)/u', '', strip_tags($_GET['q']));
+                if(trim($q) == ""){
+                    return $this->goHome();
+                }
                 if (!(empty($_GET['sort']) && empty($_GET['order']))) {
                     $sort = $_GET['sort'];
                     $order = $_GET['order'];
@@ -83,15 +86,15 @@ class SearchController extends Controller{
                     else
                         $order = SORT_DESC;
                     $query = (new Query())
-                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path','MATCH(product.name) AGAINST("'."+" . mysql_real_escape_string($q) . '" IN BOOLEAN MODE) AS productName'])
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax', 'image.resize_path as image_path','(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
                         ->from('product')
                         ->join('INNER JOIN', 'image', 'product.id = image.product_id')
                         ->join('INNER JOIN', 'category', 'product.category_id = category.id')
                         ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
                             'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q)."*" . '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) ."*" . '" IN BOOLEAN MODE)
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
                          )')
+                        ->having('score > 0.3')
                         ->groupBy('product.id')
                         ->orderBy(['product.' . $sort => $order]);
                     $countQuery = clone $query;
@@ -106,9 +109,9 @@ class SearchController extends Controller{
                         ->innerJoin('category', 'product.category_id = category.id')
                         ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE . ' AND (' .
                             'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
-                            'MATCH(product.description) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
+                            'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
                          )')
+                        ->having('score > 0.3')
                         ->groupBy('product.id')
                         ->orderBy('score DESC');
                     $countQuery = clone $query;

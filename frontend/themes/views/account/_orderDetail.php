@@ -67,10 +67,10 @@ if(!empty($voucher)){
                                                         <tr>
                                                             <td class="text-center count"><?=$i?></td>
                                                             <td><?= $order_details->name?></td>
-                                                            <td class="text-center"><?= number_format($order_details->sell_price) ?> </td>
+                                                            <td class="text-center"><?= number_format( Yii::$app->checkoutFunctions->getProductPrice($order_details->sell_price, $order_details->discount)) ?> </td>
                                                             <td class="text-center"><?= number_format($order_details->quantity) ?></td>
-                                                            <td class="text-center"><?= number_format($order_details->sell_price * $order_details->quantity)?></td>
-                                                            <?php $total_after_tax += $order_details->sell_price * $order_details->quantity?>
+                                                            <td class="text-center"><?= number_format(Yii::$app->checkoutFunctions->getProductPrice($order_details->sell_price, $order_details->discount) * $order_details->quantity)?></td>
+                                                            <?php $total_after_tax += Yii::$app->checkoutFunctions->getProductPrice($order_details->sell_price, $order_details->discount) * $order_details->quantity?>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>

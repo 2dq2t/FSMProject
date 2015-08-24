@@ -119,7 +119,7 @@ echo $this->render('/layouts/_header');
                                     <?= ucwords($product['quantity']) ?>
                                 </td>
                                 <td class="text-right"><?php
-                                    echo number_format($product['sell_price']) . " " . Yii::t('app', 'VNDLabel');
+                                    echo number_format(Yii::$app->checkoutFunctions->getProductPrice($product['sell_price'], $product['discount'])) . " " . Yii::t('app', 'VNDLabel');
                                    ?>
                                 </td>
                                 <td class="text-right"><?php

@@ -100,7 +100,6 @@ class SiteController extends Controller
                             //get product offer
                             $product_offer = Yii::$app->CommonFunction->getProductOffer($product_item['product_id']);
                             $product['product_offer'] = $product_offer;
-
                             //Get rating average
                             $rating_average = Yii::$app->CommonFunction->getProductRating($product_item['product_id']);
                             $product['product_rating'] = $rating_average;
