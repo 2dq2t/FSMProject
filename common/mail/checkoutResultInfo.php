@@ -117,8 +117,12 @@
     <FONT FACE="Arial, serif"><I>Mã Giảm Giá</I></FONT><FONT FACE="Arial, serif"><I>:</I></FONT><FONT FACE="Arial, serif"><I>
         </I></FONT><FONT FACE="Arial, serif">..................................................................................<?php if(!empty($voucher)){ echo $voucher['code']."(".$voucher['discount']."%)";} else echo "Không..................."; ?>............................................................</FONT></P>
 <P STYLE="margin-left: 0.11in; margin-top: 0.02in; margin-bottom: 0in">
+    <FONT FACE="Arial, serif"><I>Phí Vận Chuyển</I></FONT><FONT FACE="Arial, serif"><I>:</I></FONT><FONT FACE="Arial, serif"><I>
+        </I></FONT><FONT FACE="Arial, serif">..........................................................................................................<?= number_format($order['shipping_fee'] ) . " " . Yii::t('app', 'VNDLabel') ?>....................................................</FONT></P>
+
+<P STYLE="margin-left: 0.11in; margin-top: 0.02in; margin-bottom: 0in">
     <FONT FACE="Arial, serif"><I>Số Tiền Phải Trả</I></FONT><FONT FACE="Arial, serif"><I>:</I></FONT><FONT FACE="Arial, serif"><I>
-        </I></FONT><FONT FACE="Arial, serif">..........................................................................................................<?= number_format($total_price - $discount_price ) . " " . Yii::t('app', 'VNDLabel') ?>....................................................</FONT></P>
+        </I></FONT><FONT FACE="Arial, serif">..........................................................................................................<?= number_format(($total_price - $discount_price) + $order['shipping_fee'] ) . " " . Yii::t('app', 'VNDLabel') ?>....................................................</FONT></P>
 <P STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 0.07in"><BR>
 </P>
 <P ALIGN=RIGHT STYLE="margin-right: 0.09in; margin-top: 0.01in; margin-bottom: 0in"><A NAME="_GoBack"></A>

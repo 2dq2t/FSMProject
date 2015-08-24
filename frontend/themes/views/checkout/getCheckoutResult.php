@@ -144,8 +144,12 @@ echo $this->render('/layouts/_header');
                                 <td class="text-right"><?php if(!empty($voucher)){ echo $voucher['code']."(".$voucher['discount']."%)";} else echo "Không"; ?></td>
                             </tr>
                             <tr>
+                                <td class="text-right"><strong><?= Yii::t('app', 'CheckoutResult ShippingFee') ?></strong></td>
+                                <td class="text-right"><?= number_format($order['shipping_fee']). " " . Yii::t('app', 'VNDLabel') ?></td>
+                            </tr>
+                            <tr>
                                 <td class="text-right"><strong><?= Yii::t('app', 'CheckoutResult PayPriceLabel') ?></strong></td>
-                                <td class="text-right"><?= number_format($total_price - $discount_price ) . " " . Yii::t('app', 'VNDLabel') ?></td>
+                                <td class="text-right"><?= number_format(($total_price - $discount_price) + $order['shipping_fee'] ) . " " . Yii::t('app', 'VNDLabel') ?></td>
                             </tr>
                             </tbody>
                         </table>

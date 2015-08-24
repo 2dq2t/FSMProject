@@ -100,6 +100,7 @@ return array (
   'CheckoutResult SumPriceLabel' => 'Tổng Tiền:',
   'CheckoutResult TotalPrice' => 'Tổng Tiền',
   'CheckoutResult VoucherLabel' => 'Mã Giảm Giá:',
+    'CheckoutResult ShippingFee' => 'Phí Vận Chuyển:',
   'Checkout ReturningCustomer' => 'Tôi đã có tài khoản tại FreshGarden',
   'Checkout Step1' => 'Bước 1: Lựa Chọn Đặt Hàng ',
   'Checkout Step1 Customer' => 'Chỉ dành cho khách hàng chưa đăng nhập',

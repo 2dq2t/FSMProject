@@ -28,7 +28,7 @@ use backend\components\ParserDateTime;
 
 class CheckoutController extends Controller {
 
-    const SHIPPING_FEE = 0;
+    const SHIPPING_FEE = 15000;
     const ORDER_STATUS_ID = 1;
     public function actionCheckout()
     {
