@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="col-lg-1">
                                     <br><br>
                                     <a href="javascript:" id="btn-add" class="btn btn-success">&gt;&gt;</a><br><br>
-                                    <a href="javascript:" id="btn-remove" class="btn btn-danger">&lt;&lt;</a>
+<!--                                    <a href="javascript:" id="btn-remove" class="btn btn-danger">&lt;&lt;</a>-->
                                 </div>
                                 <div class="col-lg-5">
                                     <?= Yii::t('app', 'Assigned') ?>:
@@ -112,10 +112,10 @@ $('#btn-add').click(function () {
     yii.admin.assignRoute('assign');
     return false;
 });
-$('#btn-remove').click(function () {
-    yii.admin.assignRoute('remove');
-    return false;
-});
+//$('#btn-remove').click(function () {
+//    yii.admin.assignRoute('remove');
+//    return false;
+//});
 yii.admin.listFilter("#search-available", "#list-available");
 yii.admin.listFilter("#search-assigned", "#list-assigned");
 JS;

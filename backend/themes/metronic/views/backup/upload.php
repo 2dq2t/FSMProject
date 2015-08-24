@@ -11,6 +11,24 @@ $this->params ['breadcrumbs'] [] = [
 ];
 ?>
 
+<?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+    <?php if($message) { ?>
+        <?php
+        echo lavrentiev\yii2toastr\Toastr::widget([
+            'type' => (!empty($message['type'])) ? $message['type'] : 'success',
+            'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+            'message' => (!empty($message['message'])) ? $message['message'] : 'Message Not Set!',
+            'clear' => false,
+            'options' => [
+                "closeButton" => true,
+                "positionClass" => "toast-top-right",
+                "timeOut" => (!empty($message['duration'])) ? Html::encode($message['duration']) : 0,
+            ]
+        ]);
+    }
+    ?>
+<?php endforeach; ?>
+
 <?php $this->beginBlock('submit'); ?>
 <div class="form-group no-margin">
 

@@ -61,8 +61,8 @@ $baseUrl = Yii::$app->request->baseUrl;
             <div class="page-header-inner">
                 <!-- BEGIN LOGO -->
                 <div class="page-logo">
-                    <a href="index.html">
-                        <img src="metronic/assets/admin/img/logo-light.png" alt="logo" class="logo-default"/>
+                    <a href="<?= \yii\helpers\Url::home()?>">
+                        <img src="metronic/assets/admin/img/logo-big-freshgarden.png" alt="logo" class="logo-default"/>
                     </a>
                     <div class="menu-toggler sidebar-toggler">
                         <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -267,7 +267,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                             'role',
                             'permission',
                             'route'
-                        ]) ? 'active' : ''?>">
+                        ]) ? 'active open' : ''?>">
                             <a href="javascript:;">
                                 <i class="icon-user"></i>
                                 <span class="title"><?= Yii::t('app', 'Employee')?></span>
@@ -287,7 +287,7 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     'route'
                                 ]) ? 'active' : ''?>">
                                     <a href="javascript:;">
-                                        <i class="icon-energy"></i> <?= Yii::t('app', 'Authorization')?> <span class="arrow"></span>
+                                        <i class="icon-energy"></i> <span class="title"> <?= Yii::t('app', 'Authorization')?></span> <span class="arrow"></span>
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="<?= isActive(['assignment/index']) ? 'active' : '' ?>">

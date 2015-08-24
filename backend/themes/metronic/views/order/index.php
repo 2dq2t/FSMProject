@@ -33,10 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $gridColumns = [
-        [
-            'class'=>'kartik\grid\SerialColumn',
-            'header'=>'',
-        ],
+//        [
+//            'class'=>'kartik\grid\SerialColumn',
+//            'header'=>'',
+//        ],
         [
             'class'=>'kartik\grid\CheckboxColumn',
         ],
@@ -52,7 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'headerOptions'=>['class'=>'kartik-sheet-style']
         ],
         [
-            'attribute' => 'order_id'
+            'attribute' => 'order_id',
+            'width' => '10%'
         ],
         [
             'attribute' => 'full_name',
@@ -63,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterWidgetOptions'=>[
                 'pluginOptions'=>['allowClear'=>true],
             ],
-            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'customer name')],
+            'filterInputOptions'=>['placeholder'=>Yii::t('app', 'Customer Name')],
             'format'=>'raw'
         ],
         [
@@ -125,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['order/confirm', 'id' => $model->order_id],
                             [
                                 'data-method' => 'post',
-                                'title' => Yii::t('app', 'Confirm'),
+                                'title' => Yii::t('app', 'Confirm order'),
                             ]). '&nbsp;<br/>&nbsp;<br/>' : '';
                 },
                 'delivered' => function ($url, $model) {
@@ -133,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['order/delivered', 'id' => $model->order_id],
                             [
                                 'data-method' => 'post',
-                                'title' => Yii::t('app', 'Delivered'),
+                                'title' => Yii::t('app', 'Delivered order'),
                             ]). '&nbsp;<br/>' : '';
                 },
                 'cancel' => function ($url, $model) {
@@ -141,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['order/cancel', 'id' => $model->order_id],
                         [
                             'data-method' => 'post',
-                            'title' => Yii::t('app', 'Cancel'),
+                            'title' => Yii::t('app', 'Cancel order'),
                         ]) : '';
                 }
             ]

@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 <?= Html::a('<i class="fa fa-angle-left"></i> '. Yii::t('app', 'Back'), ['assignment/index'], ['class' => 'btn btn-default btn-circle']) ?>
 
 
-<?= Html::submitButton('<i class="fa fa-check"></i> ' . Yii::t('app', 'Save'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'save']) ?>
+<?= Html::submitButton('<i class="fa fa-check"></i> ' . Yii::t('app', 'SaveLabel'), ['class' => 'btn green-haze btn-circle', 'name' => 'action', 'value' => 'save']) ?>
 <?php $this->endBlock('submit'); ?>
 
 

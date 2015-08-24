@@ -46,26 +46,18 @@ use kartik\alert\Alert;
                 <div class="caption">
                     <i class="fa fa-tags"></i><?= $this->title ?>
                 </div>
-                <div class="tools">
-                    <a href="javascript:;" class="collapse">
-                    </a>
-                    </a>
-                    <a href="javascript:;" class="reload">
-                    </a>
-                    <a href="javascript:;" class="remove">
-                    </a>
-                </div>
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
                 <?php $form = ActiveForm::begin(); ?>
                 <div class="form-body">
                     <div class="form-group">
-                        <?= $form->field($model, 'product_id')
-                            ->dropDownList(
-                                \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => 1])->all(), 'id', 'name'),
-                                ['prompt'=>Yii::t('app', 'Select Product')]
-                            ) ?>
+                        <?= $form->field($model, 'product_id')->widget(\kartik\widgets\Select2::className(), [
+                            'data' => \yii\helpers\ArrayHelper::map(\common\models\Product::find()->where(['active' => \common\models\Product::STATUS_ACTIVE])->all(), 'id', 'name'),
+                            'options' => [
+                                'placeholder' => Yii::t('app', 'Select Product'),
+                            ]
+                        ])?>
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'discount')->textInput(['placeholder' => Yii::t('app', 'Enter offer discount')]) ?>

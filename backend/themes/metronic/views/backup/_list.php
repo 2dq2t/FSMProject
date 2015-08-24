@@ -18,23 +18,40 @@ echo GridView::widget([
     'responsive' => true,
     'hover' => true,
     'panel' => [
-        'heading' => '<h3 class="panel-title"> Database backup files</h3>',
+        'heading' => '<h3 class="panel-title"> ' . Yii::t('app', 'Database backup files') . '</h3>',
         'type' => 'primary',
         'showFooter' => false
     ],
     // set your toolbar
     'toolbar' => [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-plus"></i>  Create Backup', ['create'], ['class' => 'btn btn-success create-backup']). ' '.
-            Html::a('<i class="glyphicon glyphicon-plus"></i>  Upload Backup File', ['upload'], ['class' => 'btn btn-success']),
+            Html::a('<i class="glyphicon glyphicon-plus"></i> '. Yii::t('app', 'Create Backup'), ['create'], ['class' => 'btn btn-success create-backup']). ' '.
+            Html::a('<i class="glyphicon glyphicon-plus"></i> '. Yii::t('app', 'Upload Backup File'), ['upload'], ['class' => 'btn btn-success']),
         ],
     ],
     'columns' => array(
         ['class' => 'kartik\grid\SerialColumn'],
-        'name',
-        'size:size',
-        'create_time',
-        'modified_time:relativeTime',
+        [
+            'attribute' => 'name',
+            'label' => Yii::t('app', 'File Name')
+        ],
+        [
+            'attribute' => 'size',
+            'value' => function($model){
+                $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+                $factor = floor((strlen($model['size']) - 1) / 3);
+                return sprintf("%.2f", $model['size'] / pow(1024, $factor)) . ' ' . @$size[$factor];
+            },
+            'label' => Yii::t('app', 'File Size')
+        ],
+        [
+            'attribute' => 'create_time',
+            'label' => Yii::t('app', 'Create Time'),
+        ],
+//        [
+//            'attribute' => 'modified_time:relativeTime',
+//            'label' => Yii::t('app', 'Modified Time')
+//        ],
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{restore_action}',
@@ -56,7 +73,7 @@ echo GridView::widget([
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{download_action}',
-            'header' => Yii::t('app', 'Download'),
+            'header' => Yii::t('app', 'DownloadLabel'),
             'buttons' => [
                 'download_action' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', $url, [
@@ -75,7 +92,7 @@ echo GridView::widget([
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{delete_action}',
-            'header' => 'Delete file',
+            'header' => Yii::t('app','Delete file'),
             'buttons' => [
                 'delete_action' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [

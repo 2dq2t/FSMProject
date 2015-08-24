@@ -140,48 +140,54 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
-        // get barcode
-        // delete all if last use greate than 1 day
-        /** @var  $tmp TmpProduct*/
-        foreach(TmpProduct::find()
-                    ->where(['status' => TmpProduct::STATUS_ACTIVE])
-                    ->andWhere(['<>', 'last_used', null])->all() as $tmp) {
-            // if last used greater than 1 day then delete
-            if (time() - $tmp->last_used > 1800) {
-                $tmp->status = TmpProduct::STATUS_INACTIVE;
-                $tmp->last_used = null;
-                $tmp->save();
+        if (!Yii::$app->request->post()) {
+            // get barcode
+            // delete all if last use greater than 1 day
+            /** @var  $tmp TmpProduct */
+            foreach (TmpProduct::find()
+                         ->where(['status' => TmpProduct::STATUS_ACTIVE])
+                         ->andWhere(['IS NOT', 'last_used', null])->all() as $tmp) {
+                // if last used greater than 1 day then delete
+                if (ParserDateTime::getTimeStamp() - $tmp->last_used > 1800) {
+                    $tmp->status = TmpProduct::STATUS_INACTIVE;
+                    $tmp->last_used = null;
+                    $tmp->save();
+                }
             }
-        }
 
-        /** @var  $tmpId TmpProduct*/
-        $tmpId = TmpProduct::find()->where('status = '.TmpProduct::STATUS_INACTIVE)->orderBy(['id' => SORT_ASC])->one();
-        $tmpId->status = TmpProduct::STATUS_ACTIVE;
-        $tmpId->last_used = ParserDateTime::getTimeStamp();
-        $tmpId->update();
+            /** @var  $tmpId TmpProduct */
+            $tmpId = TmpProduct::find()
+                ->where('status = ' . TmpProduct::STATUS_INACTIVE)
+                ->andWhere(['IS', 'last_used', null])
+                ->orderBy(['id' => SORT_ASC])->one();
+            $tmpId->status = TmpProduct::STATUS_ACTIVE;
+            $tmpId->last_used = ParserDateTime::getTimeStamp();
+            $tmpId->update();
 
-        $barcode = Yii::$app->params['barcodeCountryCode'] . Yii::$app->params['barcodeBusinessCode'] . $tmpId->id;
-        $sum = 0;;
-        for($i = strlen($barcode)-1; $i >= 0; $i--) {
-            if ($i % 2 != 0) {
-                // 1. sum each of the even numbered digits
-                // 2. multiply result by three
-                $sum += $barcode[$i] * 3;
-            } else {
-                // 3. sum of each of the odd numbered digits
-                $sum += $barcode[$i];
+            $barcode = Yii::$app->params['barcodeCountryCode'] . Yii::$app->params['barcodeBusinessCode'] . $tmpId->id;
+            $sum = 0;
+            for ($i = strlen($barcode) - 1; $i >= 0; $i--) {
+                if ($i % 2 != 0) {
+                    // 1. sum each of the even numbered digits
+                    // 2. multiply result by three
+                    $sum += $barcode[$i] * 3;
+                } else {
+                    // 3. sum of each of the odd numbered digits
+                    $sum += $barcode[$i];
+                }
             }
+
+            // 4. subtract the result from the next highest power of 10
+            $checkSum = $sum % 10 != 0 ? 10 - $sum % 10 : 0;
+
+            $model->barcode = $tmpId->id . $checkSum;
         }
-
-        // 4. subtract the result from the next highest power of 10
-        $checkSum = 10 - $sum % 10;
-
-        $model->barcode = $tmpId->id . $checkSum;
 
         if ($model->load(Yii::$app->request->post())) {
+//            var_dump($model->barcode);return;
             // set create date as timestamp
             $model->create_date = ParserDateTime::getTimeStamp();
-            $model->barcode = $tmpId->id . $checkSum;
+//            $model->barcode = $tmpId->id . $checkSum;
 
             $product_images = UploadedFile::getInstances($model, 'productImage');
 
@@ -281,9 +287,10 @@ class ProductController extends Controller
 
                     $tmp = TmpProduct::find()
                         ->where(['status' => TmpProduct::STATUS_ACTIVE])
-                        ->andWhere(['<>', 'last_used', null])
-                        ->andWhere(['id' => substr($model->barcode, 0, 3)])->one();
+                        ->andWhere(['IS NOT', 'last_used', null])
+                        ->andWhere(['id' => substr($model->barcode, 0, 4)])->one();
                     $tmp->last_used = null;
+
                     if (!$tmp->update()) $errors[] = current($tmp->getFirstErrors()) ? current($tmp->getFirstErrors()) : Yii::t('app', 'Could not save temp barcode.');
 
                     if (!empty($errors)) {

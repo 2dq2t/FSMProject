@@ -115,7 +115,7 @@ class RouteController extends \yii\web\Controller
         $model->type = Item::TYPE_PERMISSION;
         $error = [];
         $transaction = Yii::$app->db->beginTransaction();
-        Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
+//        Yii::$app->db->createCommand('SET foreign_key_checks = 0')->execute();
         if ($action == 'assign') {
             foreach ($routes as $route) {
                 $model->name = $route;
@@ -127,19 +127,20 @@ class RouteController extends \yii\web\Controller
             } else {
                 Logger::log(Logger::ERROR, Yii::t('app', 'Assign route error: ') . $error[0], Yii::$app->user->identity->email);
             }
-        } else {
-            foreach ($routes as $route) {
-                $model->name = $route;
-                if (!$model->deleteItem()) $error[] = $model->getErrorMessage();
-            }
-            if (empty($error)) {
-                Logger::log(Logger::INFO, Yii::t('app', 'Delete route success'), Yii::$app->user->identity->email);
-            } else {
-                Logger::log(Logger::ERROR, Yii::t('app', 'Delete route error: ') . $error[0], Yii::$app->user->identity->email);
-            }
         }
+//        else {
+//            foreach ($routes as $route) {
+//                $model->name = $route;
+//                if (!$model->deleteItem()) $error[] = $model->getErrorMessage();
+//            }
+//            if (empty($error)) {
+//                Logger::log(Logger::INFO, Yii::t('app', 'Delete route success'), Yii::$app->user->identity->email);
+//            } else {
+//                Logger::log(Logger::ERROR, Yii::t('app', 'Delete route error: ') . $error[0], Yii::$app->user->identity->email);
+//            }
+//        }
 
-        Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
+//        Yii::$app->db->createCommand('SET foreign_key_checks = 1')->execute();
         if (empty($error)) {
             $transaction->commit();
         } else {

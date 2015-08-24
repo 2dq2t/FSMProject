@@ -59,16 +59,16 @@ foreach ($models as $model) { ?>
                         <h3><?=Yii::t('app', 'Invoice Details')?></h3>
                         <ul class="list-unstyled">
                             <li>
-                                <strong><?= Yii::t('app', 'Order #: ')?></strong> <?= $model['order_view']->order_id ?>
+                                <strong><?= Yii::t('app', 'Order')?>#</strong> <?= $model['order_view']->order_id ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Order Date: ')?></strong> <?= date('M d Y', $model['order_view']->order_date) ?>
+                                <strong><?= Yii::t('app', 'Order Date')?>:</strong> <?= date('M d Y', $model['order_view']->order_date) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Receiving Date: ')?></strong> <?= date('M d Y', $model['order_view']->receiving_date) ?>
+                                <strong><?= Yii::t('app', 'Receiving Date')?>:</strong> <?= date('M d Y', $model['order_view']->receiving_date) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Order Status: ')?></strong> <?php
+                                <strong><?= Yii::t('app', 'Order Status')?>:</strong> <?php
                                 if ($model['order_view']->order_status_id === 1) {
                                     $label_class = 'label-info';
                                     $value = \backend\models\OrderStatus::find()->where(['id' => $model['order_view']->order_status_id])->one()['name'];
@@ -106,7 +106,7 @@ foreach ($models as $model) { ?>
                                 <th class="text-right"><?= Yii::t('app', 'Quantity') ?></th>
                                 <th class="text-right"><?= Yii::t('app', 'Tax amount') ?></th>
                                 <th class="text-right"><?= Yii::t('app', 'Net amount') ?></th>
-                                <th class="text-right"><?= Yii::t('app', 'Discount') ?></th>
+                                <th class="text-right"><?= Yii::t('app', 'Total (after tax)')?></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -118,15 +118,14 @@ foreach ($models as $model) { ?>
                                     <td class="text-center count"></td>
                                     <td><?= $order_details->name?></td>
                                     <td><?= $order_details->tax . ' %'?></td>
-                                    <td class="text-right"><?= number_format($order_details->sell_price + $order_details->sell_price*$order_details->discount/100,2) ?> </td>
+                                    <td class="text-right"><?= number_format($order_details->sell_price,2) ?> </td>
                                     <td class="text-right"><?= $order_details->quantity ?></td>
-                                    <td class="text-right"><?= number_format($order_details->quantity * $order_details->sell_price * $order_details->tax/100, 2); ?></td>
-                                    <?php $total_tax += $order_details->quantity * $order_details->sell_price * $order_details->tax/100?>
-                                    <td class="text-right"><?= number_format($order_details->quantity * ($order_details->sell_price - ($order_details->sell_price * ($order_details->tax/100))), 2); ?></td>
-                                    <td class="text-right"><?= number_format($order_details->discount) . " %" ?></td>
-                                    <?php $total_discount += $order_details->sell_price*$order_details->discount/100*$order_details->quantity?>
-                                    <?php $total_before_tax += $order_details->sell_price * $order_details->quantity - ($order_details->quantity * $order_details->sell_price * $order_details->tax/100) ?>
-                                    <?php $total_after_tax += $order_details->sell_price * $order_details->quantity?>
+                                    <td class="text-right"><?= number_format($order_details->quantity * $order_details->sell_price *(1- $order_details->discount/100) * $order_details->tax/100, 2); ?></td>
+                                    <?php $total_tax += $order_details->quantity * $order_details->sell_price *(1- $order_details->discount/100)* $order_details->tax/100?>
+                                    <td class="text-right"><?= number_format(($order_details->quantity * $order_details->sell_price * (1 - $order_details->discount/100) *(1 - $order_details->tax/100)), 2); ?></td>
+                                    <?php $total_before_tax += $order_details->quantity * $order_details->sell_price * (1 - $order_details->discount/100) * (1 - $order_details->tax/100) ?>
+                                    <td class="text-right"><?= number_format($order_details->sell_price * $order_details->quantity * (1 - $order_details->discount/100), 2)?></td>
+                                    <?php $total_after_tax += $order_details->sell_price * $order_details->quantity * (1 - $order_details->discount / 100)?>
                                 </tr>
                             <?php } ?>
                             </tbody>
@@ -153,25 +152,24 @@ foreach ($models as $model) { ?>
                     <div class="col-xs-5 invoice-block ">
                         <ul class="list-unstyled amounts">
                             <li>
-                                <strong ><?= Yii::t('app', 'Shipping fee:')?></strong><?= number_format($model['order_view']->shipping_fee, 2) ?>
+                                <strong ><?= Yii::t('app', 'Shipping fee')?>:</strong><?= number_format($model['order_view']->shipping_fee, 2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total (before tax): ')?></strong> <?= number_format($total_before_tax, 2)?>
+                                <strong><?= Yii::t('app', 'Net amount')?>:</strong> <?= number_format($total_before_tax, 2)?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total tax: ')?></strong> <?= number_format($total_tax,2) ?>
+                                <strong><?= Yii::t('app', 'Tax amount')?>:</strong> <?= number_format($total_tax,2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total (after tax): ')?></strong> <?= number_format($total_after_tax,2) ?>
+                                <strong><?= Yii::t('app', 'Total (after tax)')?>:</strong> <?= number_format($total_after_tax,2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Total discount: ')?></strong> <?= number_format($total_discount, 2) ?>
+                                <strong><?= Yii::t('app', 'Voucher discount')?>:</strong>
+                                <?php $discount = $model['order_view']->voucher_discount != null ? $total_before_tax * $model['order_view']->voucher_discount / 100 : 0?>
+                                <?= number_format($discount, 2) ?>
                             </li>
                             <li>
-                                <strong><?= Yii::t('app', 'Voucher discount: ')?></strong> <?= number_format($model['order_view']->voucher_discount != null ? $total_before_tax * $model['order_view']->voucher_discount / 100 : $total_before_tax, 2) ?>
-                            </li>
-                            <li>
-                                <strong><?= Yii::t('app', 'Total: ')?></strong> <?= number_format($total_after_tax + $model['order_view']->shipping_fee, 2) ?>
+                                <strong><?= Yii::t('app', 'Total')?>:</strong> <?= number_format($total_after_tax + $model['order_view']->shipping_fee - $discount, 2) ?>
                             </li>
                         </ul>
                         <br/>
@@ -180,6 +178,15 @@ foreach ($models as $model) { ?>
                             <?= Yii::t('app', 'Print Invoice') ?> <i class="fa fa-print"></i>
                         </a>
                     </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h4><?= Yii::t('app', 'Buyer')?></h4>
+                        <div class="center"></div>
+                    </div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4"></div>
                 </div>
             </div>
         </div>

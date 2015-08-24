@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Season */
 
-$this->title = Yii::t('app', 'Details {modelClass}: ', [
+$this->title = Yii::t('app', 'Details {modelClass}:', [
         'modelClass' => Yii::t('app', 'Season'),
     ]) . ' ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Seasons'), 'url' => ['index']];
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     <div class="form-body">
                         <div class="form-group">
                             <div class="col-md-12">
-                                <?= $form->field($model, 'products_list', [
+                                <?= $form->field($model, 'productsList', [
                                     'template' => "<div class='col-md-12'>{input}{error}</div>"
                                 ])->widget(duallistbox\duallistbox\Widget::className(), [
                                     'data' => \common\models\Product::find(),
@@ -69,6 +69,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         'nonSelectedListLabel' => Yii::t('app', 'Product'),
                                         'selectedListLabel' => Yii::t('app', 'Product in {season}', ['season' => $model->name]),
 //                                        'moveOnSelect' => false,
+                                        'selectorMinimalHeight' => '400'
                                     ]
                                 ])->label(false)?>
                             </div>

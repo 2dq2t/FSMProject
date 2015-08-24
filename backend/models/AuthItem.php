@@ -80,7 +80,7 @@ class AuthItem extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => $this->type == Item::TYPE_PERMISSION ? Yii::t('app', 'Permission') : Yii::t('app', 'Role name'),
+            'name' => $this->type == Item::TYPE_PERMISSION ? Yii::t('app', 'Permission Name') : Yii::t('app', 'Role Name'),
             'type' => Yii::t('app', 'Type'),
             'description' => Yii::t('app', 'Description'),
             'rule_name' => Yii::t('app', 'Rule Name'),
@@ -205,27 +205,27 @@ class AuthItem extends \yii\db\ActiveRecord
         return true;
     }
 
-    public function deleteItem()
-    {
-        try{
-            $dbManager = new DbManager();
-
-            Yii::$app->db->createCommand()
-                ->delete($dbManager->itemChildTable, ['or', '[[parent]]=:name', '[[child]]=:name'], [':name' => $this->name])
-                ->execute();
-            Yii::$app->db->createCommand()
-                ->delete($dbManager->assignmentTable, ['item_name' => $this->name])
-                ->execute();
-
-            Yii::$app->db->createCommand()
-                ->delete($dbManager->itemTable, ['name' => $this->name])
-                ->execute();
-        } catch (Exception $e) {
-            $this->errorMessage = $e->getMessage();
-            return false;
-        }
-        return true;
-    }
+//    public function deleteItem()
+//    {
+//        try{
+//            $dbManager = new DbManager();
+//
+//            Yii::$app->db->createCommand()
+//                ->delete($dbManager->itemChildTable, ['or', '[[parent]]=:name', '[[child]]=:name'], [':name' => $this->name])
+//                ->execute();
+//            Yii::$app->db->createCommand()
+//                ->delete($dbManager->assignmentTable, ['item_name' => $this->name])
+//                ->execute();
+//
+//            Yii::$app->db->createCommand()
+//                ->delete($dbManager->itemTable, ['name' => $this->name])
+//                ->execute();
+//        } catch (Exception $e) {
+//            $this->errorMessage = $e->getMessage();
+//            return false;
+//        }
+//        return true;
+//    }
 
     public function getErrorMessage()
     {

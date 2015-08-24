@@ -59,8 +59,12 @@ class Employee extends ActiveRecord implements IdentityInterface
             [['password'], 'string', 'min' => 6],
             [['email'], 'unique'],
             [['email'], 'email'],
-            [['phone_number'], 'string', 'max' => 15, 'min' => 10],
-            [['assignments'], 'safe']
+            [['password'], 'match', 'pattern' => '/^(?=.*[0-9a-zA-Z]+.*)[0-9a-zA-Z]{6,}$/','message' => Yii::t('app', 'Password must contain at least one letter and be longer than six characters.'), 'when' => function($model){
+                return !isset($model->password);
+            }],
+//            [['phone_number'], 'string', 'max' => 15, 'min' => 10],
+            [['assignments'], 'safe'],
+            [['phone_number'], 'match', 'pattern' => '/^[0](\d{3})(\d{3})(\d{3,4})$/', 'message' => 'Phone number must have \'0\' in first and contain 10 or 11 digit number.'],
         ];
     }
 
