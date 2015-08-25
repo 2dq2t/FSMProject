@@ -233,32 +233,32 @@ class OfferController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $offer = $this->findModel($id);
-        $offer->active = Offer::STATUS_INACTIVE;
-        if ($offer->save()) {
-            Logger::log(Logger::INFO, Yii::t('app', 'Offer_Delete_Success_Msg'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Offer_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Offer')
-            ]);
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Could not delete this offer. Please try again.'),
-                'title' => Yii::t('app', 'Delete Offer')
-            ]);
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete offer error: ') . current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Offer delete error.'), Yii::$app->user->identity->email);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $offer = $this->findModel($id);
+//        $offer->active = Offer::STATUS_INACTIVE;
+//        if ($offer->save()) {
+//            Logger::log(Logger::INFO, Yii::t('app', 'Offer_Delete_Success_Msg'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Offer_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Offer')
+//            ]);
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Could not delete this offer. Please try again.'),
+//                'title' => Yii::t('app', 'Delete Offer')
+//            ]);
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete offer error: ') . current($offer->getFirstErrors()) ? current($offer->getFirstErrors()) : Yii::t('app', 'Offer delete error.'), Yii::$app->user->identity->email);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Offer model based on its primary key value.

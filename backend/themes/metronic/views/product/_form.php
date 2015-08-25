@@ -109,13 +109,18 @@ if(isset($images)) {
                                     <?= $form->field($model, 'barcode')->hiddenInput()->label(false)?>
                                 </div>
                                 <div class="col-md-6">
-                                    <div id="barcode-image"></div>
+                                    <canvas id="barcode-image" width="200" height="100"></canvas>
                                     <?php
-                                    \barcode\barcode\BarcodeGenerator::widget([
-                                        'value' => Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode'].$model->barcode,
-                                        'elementId' => 'barcode-image',
-                                        'type' => 'ean13'
-                                    ]);
+//                                    \barcode\barcode\BarcodeGenerator::widget([
+//                                        'value' => Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode'].$model->barcode,
+//                                        'elementId' => 'barcode-image',
+//                                        'type' => 'ean13'
+//                                    ]);
+                                    $barcode = Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode'].$model->barcode;
+
+                                    $this->registerJsFile('metronic/assets/pages/scripts/ean13.min.js');
+                                    $this->registerJs("new EAN13(document.getElementById('barcode-image'),'$barcode');")
+
                                     ?>
                                 </div>
                             </div>
@@ -284,7 +289,9 @@ if(isset($images)) {
     </div>
 </div>
 
+<script type="text/javascript" src="metronic/assets/pages/js/jquery-ean13.min"></script>
 <script>
+
     /**
      * @return {string}
      */

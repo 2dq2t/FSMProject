@@ -211,7 +211,7 @@ class CustomerController extends Controller
 
                         $model->password = null;
 
-                        Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app','Customer_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                         return $this->render('create', [
                             'model' => $model,
@@ -233,7 +233,7 @@ class CustomerController extends Controller
 
                     $model->password = null;
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors())  ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app','Could not create customer.'), Yii::$app->user->identity->email);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Create Customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors())  ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app','Customer_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                     return $this->render('create', [
                         'model' => $model,
@@ -263,7 +263,7 @@ class CustomerController extends Controller
 
                 $model->password = null;
 
-                Logger::log(Logger::ERROR, Yii::t('app', 'Create customer error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Could not add cusomer'), Yii::$app->user->identity->email);
+                Logger::log(Logger::ERROR, Yii::t('app', 'Create customer error: ') . $e->getMessage() ? $e->getMessage() : Yii::t('app', 'Customer_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                 return $this->render('create', [
                     'model' => $model,
@@ -381,7 +381,7 @@ class CustomerController extends Controller
                             'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
-                        Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Update customer error: '), Yii::$app->user->identity->email);
 
                         return $this->render('update', [
                             'model' => $model,
@@ -407,7 +407,7 @@ class CustomerController extends Controller
                         'title' => Yii::t('app', 'Update Customer'),
                     ]);
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors()) ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app', 'Update customer error'), Yii::$app->user->identity->email);
+                    Logger::log(Logger::ERROR, Yii::t('app', 'Update customer error: ') . current($guest->getFirstErrors()) || current($address->getFirstErrors()) ? current($guest->getFirstErrors()) || current($address->getFirstErrors()) : Yii::t('app', 'Update customer error: '), Yii::$app->user->identity->email);
 
                     return $this->render('update', [
                         'model' => $model,
@@ -465,37 +465,37 @@ class CustomerController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $customer = $this->findModel($id);
-        $customer->status = Customer::STATUS_INACTIVE;
-        if ($customer->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app','Customer_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Customer'),
-            ]);
-
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete cutomer success'), Yii::$app->user->identity->email);
-
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app','Could not delete this customer. Please try again.'),
-                'title' => Yii::t('app', 'Delete Customer'),
-            ]);
-
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete customer error: ') . current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app', 'Could not delete customer'),Yii::$app->user->identity->email);
-        }
-
-
-        return $this->redirect(['index']);
-    }
+//     */
+//    public function actionDelete($id)
+//    {
+//        $customer = $this->findModel($id);
+//        $customer->status = Customer::STATUS_INACTIVE;
+//        if ($customer->save()) {
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app','Customer_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Customer'),
+//            ]);
+//
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete cutomer success'), Yii::$app->user->identity->email);
+//
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app','Could not delete this customer. Please try again.'),
+//                'title' => Yii::t('app', 'Delete Customer'),
+//            ]);
+//
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete customer error: ') . current($customer->getFirstErrors()) ? current($customer->getFirstErrors()) : Yii::t('app', 'Could not delete customer'),Yii::$app->user->identity->email);
+//        }
+//
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Customer model based on its primary key value.

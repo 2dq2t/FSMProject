@@ -73,7 +73,7 @@ class RouteController extends \yii\web\Controller
                         'message' => Yii::t('app', 'Create route success.'),
                         'title' => Yii::t('app', 'Create Route')
                     ]);
-                    Logger::log(Logger::INFO, Yii::t('app', 'Create route success'), Yii::$app->user->identity->email);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Create route success.'), Yii::$app->user->identity->email);
                     switch (Yii::$app->request->post('action', 'save')) {
                         case 'next':
                             return $this->redirect(['create']);

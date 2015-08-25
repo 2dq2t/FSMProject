@@ -156,22 +156,22 @@ class OrderStatusController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        Logger::log(Logger::INFO, Yii::t('app', 'OrderStatus_Delete_Success_Msg'), Yii::$app->user->identity->email);
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 3000,
-            'icon' => 'fa fa-plus',
-            'message' => Yii::t('app', 'OrderStatus_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Order Status')
-        ]);
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $this->findModel($id)->delete();
+//
+//        Logger::log(Logger::INFO, Yii::t('app', 'OrderStatus_Delete_Success_Msg'), Yii::$app->user->identity->email);
+//
+//        Yii::$app->getSession()->setFlash('success', [
+//            'type' => 'success',
+//            'duration' => 3000,
+//            'icon' => 'fa fa-plus',
+//            'message' => Yii::t('app', 'OrderStatus_Delete_Success_Msg'),
+//            'title' => Yii::t('app', 'Delete Order Status')
+//        ]);
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the OrderStatus model based on its primary key value.

@@ -248,32 +248,32 @@ class VoucherController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $voucher = $this->findModel($id);
-        $voucher->active = Voucher::STATUS_INACTIVE;
-        if ($voucher->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Voucher_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Voucher')
-            ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Voucher_Delete_Success_Msg'), Yii::$app->user->identity->email);
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Could not delete this voucher. Please try again.'),
-                'title' => Yii::t('app', 'Delete Voucher')
-            ]);
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete Voucher error: ') . current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Voucher delete error.'), Yii::$app->user->identity->email);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $voucher = $this->findModel($id);
+//        $voucher->active = Voucher::STATUS_INACTIVE;
+//        if ($voucher->save()) {
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Voucher_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Voucher')
+//            ]);
+//            Logger::log(Logger::INFO, Yii::t('app', 'Voucher_Delete_Success_Msg'), Yii::$app->user->identity->email);
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Could not delete this voucher. Please try again.'),
+//                'title' => Yii::t('app', 'Delete Voucher')
+//            ]);
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete Voucher error: ') . current($voucher->getFirstErrors()) ? current($voucher->getFirstErrors()) : Yii::t('app', 'Voucher delete error.'), Yii::$app->user->identity->email);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Voucher model based on its primary key value.

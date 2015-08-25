@@ -206,32 +206,32 @@ class CategoryController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $category = $this->findModel($id);
-        $category->active = Category::STATUS_INACTIVE;
-        if($category->save()){
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete category success'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Category_Delete_Success_Msg.'),
-                'title' => Yii::t('app', 'Delete Category')
-            ]);
-        } else {
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete category error: ') . current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'),
-                'title' => Yii::t('app', 'Delete Category')
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $category = $this->findModel($id);
+//        $category->active = Category::STATUS_INACTIVE;
+//        if($category->save()){
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete category success'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Category_Delete_Success_Msg.'),
+//                'title' => Yii::t('app', 'Delete Category')
+//            ]);
+//        } else {
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete category error: ') . current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($category->getFirstErrors()) ? current($category->getFirstErrors()) : Yii::t('app', 'Category delete error.'),
+//                'title' => Yii::t('app', 'Delete Category')
+//            ]);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Category model based on its primary key value.

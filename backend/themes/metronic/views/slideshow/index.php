@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+            'template' => '{update}',
             'buttons' => [
                 'update' => function ($url,$model) {
                     return Html::a(

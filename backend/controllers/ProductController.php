@@ -257,7 +257,7 @@ class ProductController extends Controller
                             $product_tags->product_id = $model->id;
                             if (!$product_tags->save())
                             {
-                                $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag.');
                                 Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->user->identity->email);
                             }
                             Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->user->identity->email);
@@ -275,7 +275,7 @@ class ProductController extends Controller
                                     Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->user->identity->email);
                                     Logger::log(Logger::INFO, Yii::t('app', 'Add Product Tag success'), Yii::$app->user->identity->email);
                                 } else {
-                                    $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                    $errors[] = current($product_tags->getFirstErrors()) ? current($product_tags->getFirstErrors()) : Yii::t('app', 'Could not save product tag,');
                                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->user->identity->email);
                                 }
                             } else {
@@ -291,7 +291,7 @@ class ProductController extends Controller
                         ->andWhere(['id' => substr($model->barcode, 0, 4)])->one();
                     $tmp->last_used = null;
 
-                    if (!$tmp->update()) $errors[] = current($tmp->getFirstErrors()) ? current($tmp->getFirstErrors()) : Yii::t('app', 'Could not save temp barcode.');
+                    if (!$tmp->update()) $errors[] = current($tmp->getFirstErrors()) ? current($tmp->getFirstErrors()) : Yii::t('app', 'Could not update temp barcode.');
 
                     if (!empty($errors)) {
                         if ($transaction->getIsActive()) {
@@ -503,7 +503,7 @@ class ProductController extends Controller
                                 $product_tag->product_id = $model->id;
                                 if (!$product_tag->save())
                                 {
-                                    $errors[] = current($product_tag->getFirstErrors()) ? current($product_tag->getFirstErrors()) : Yii::t('app', 'Could not save product tag');
+                                    $errors[] = current($product_tag->getFirstErrors()) ? current($product_tag->getFirstErrors()) : Yii::t('app', 'Could not save product tag.');
                                     Logger::log(Logger::ERROR, Yii::t('app', 'Add Product Tag error: ') . current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Could not save product tags.'), Yii::$app->user->identity->email);
                                 }
                                 Logger::log(Logger::INFO, Yii::t('app', 'Add Tag success'), Yii::$app->user->identity->email);
@@ -601,32 +601,32 @@ class ProductController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $product = $this->findModel($id);
-        $product->active = Product::STATUS_INACTIVE;
-        if ($product->save()) {
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete product success'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Product_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Product')
-            ]);
-        } else {
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete product error: ') . current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Product delete error.'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Could not delete this product.'),
-                'title' => Yii::t('app', 'Delete Product')
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $product = $this->findModel($id);
+//        $product->active = Product::STATUS_INACTIVE;
+//        if ($product->save()) {
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete product success'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Product_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Product')
+//            ]);
+//        } else {
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete product error: ') . current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Product delete error.'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($product->getFirstErrors()) ? current($product->getFirstErrors()) : Yii::t('app', 'Could not delete this product.'),
+//                'title' => Yii::t('app', 'Delete Product')
+//            ]);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Product model based on its primary key value.

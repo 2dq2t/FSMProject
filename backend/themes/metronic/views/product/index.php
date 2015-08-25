@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'name',
             'value'=>function ($model, $key, $index, $widget) {
                 return Html::a($model->name,
-                    '../../frontend/web/index.php?r=site/view-detail&product=' . $model->name,
+                    '../../frontend/web/index.php?r=product/view-detail&product=' . $model->name,
                     [
                         'title'=>'View product detail',
                         'onclick'=>"window.open(this.href,'_blank');return false;"
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'class' => 'kartik\grid\ActionColumn',
             'width' => '11%',
-            'template' => '{update}&nbsp;&nbsp;&nbsp;&nbsp;{delete}',
+            'template' => '{update}',
         ],
     ];
 

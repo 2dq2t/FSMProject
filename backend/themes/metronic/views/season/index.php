@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
-            'template' => '{update}&nbsp;{delete}&nbsp;{details}',
+            'template' => '{update}&nbsp;&nbsp;{details}',
 			'buttons' => [
 				'details' => function($url, $model) {
                      return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [

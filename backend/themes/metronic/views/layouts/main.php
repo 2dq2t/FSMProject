@@ -417,8 +417,8 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- END SIDEBAR TOGGLER BUTTON -->
         <!-- BEGIN LOGO -->
         <div class="logo">
-            <a href="index.html">
-                <img src="metronic/assets/admin/img/logo-big.png" alt=""/>
+            <a href="<?= \yii\helpers\Url::home()?>">
+                <img src="metronic/assets/admin/img/logo-big-freshgarden.png" alt=""/>
             </a>
         </div>
         <!-- END LOGO -->

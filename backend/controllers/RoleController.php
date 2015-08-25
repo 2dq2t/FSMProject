@@ -103,7 +103,7 @@ class RoleController extends Controller
                         'message' => Yii::t('app', 'Create role success.'),
                         'title' => Yii::t('app', 'Create Role')
                     ]);
-                    Logger::log(Logger::INFO, Yii::t('app', 'Create role success'), Yii::$app->user->identity->email);
+                    Logger::log(Logger::INFO, Yii::t('app', 'Create role success.'), Yii::$app->user->identity->email);
                     $transaction->commit();
                     switch (Yii::$app->request->post('action', 'save')) {
                         case 'next':
@@ -216,7 +216,7 @@ class RoleController extends Controller
                         'title' => Yii::t('app', 'Update Role')
                     ]);
 
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Update Role error: ') . $model->getErrorMessage(), Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, Yii::t('app', 'Update Role error: ') . $model->getErrorMessage(), Yii::$app->user->identity->email);
 
                     return $this->render('update', [
                         'model' => $model,

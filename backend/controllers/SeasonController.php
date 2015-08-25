@@ -259,34 +259,34 @@ class SeasonController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        ProductSeason::deleteAll(['season_id'=>$id]);
-
-        $season = $this->findModel($id);
-        $season->active = Season::STATUS_INACTIVE;
-        if ($season->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Season')
-            ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete season success'), Yii::$app->user->identity->email);
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Could not delete this category. Please try again.'),
-                'title' => Yii::t('app', 'Delete Season')
-            ]);
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete season error: ') . current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Season delete error.'), Yii::$app->user->identity->email);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        ProductSeason::deleteAll(['season_id'=>$id]);
+//
+//        $season = $this->findModel($id);
+//        $season->active = Season::STATUS_INACTIVE;
+//        if ($season->save()) {
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Season_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Season')
+//            ]);
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete season success'), Yii::$app->user->identity->email);
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Could not delete this category. Please try again.'),
+//                'title' => Yii::t('app', 'Delete Season')
+//            ]);
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete season error: ') . current($season->getFirstErrors()) ? current($season->getFirstErrors()) : Yii::t('app', 'Season delete error.'), Yii::$app->user->identity->email);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     public function actionDetails($id) {
         $model = $this->findModel($id);

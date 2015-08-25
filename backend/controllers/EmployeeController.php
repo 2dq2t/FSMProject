@@ -448,7 +448,7 @@ class EmployeeController extends Controller
                             'title' => Yii::t('app', 'Update Employee'),
                         ]);
 
-                        Logger::log(Logger::INFO, Yii::t('app', 'Update address success'), Yii::$app->user->identity->email, $oldAddress, $address->attributes);
+                        Logger::log(Logger::INFO, Yii::t('app', 'Update employee address success'), Yii::$app->user->identity->email, $oldAddress, $address->attributes);
                         Logger::log(Logger::INFO, Yii::t('app', 'Employee_Update_Success_Msg'), Yii::$app->user->identity->email, $oldEmployee, $model->attributes);
 
                         switch (Yii::$app->request->post('action', 'save')) {
@@ -563,43 +563,43 @@ class EmployeeController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-
-        if ($this->findModel($id)->email !== Yii::$app->user->identity->email) {
-            $employee = $this->findModel($id);
-            $employee->status = Employee::STATUS_INACTIVE;
-//            $employee->save();
-
-            if ($employee->save()) {
-                Yii::$app->getSession()->setFlash('success', [
-                    'type' => 'success',
-                    'duration' => 3000,
-                    'icon' => 'fa fa-trash-o',
-                    'message' => Yii::t('app', 'Employee_Delete_Success_Msg'),
-                    'title' => Yii::t('app', 'Delete Employee'),
-                ]);
-            } else {
-                Yii::$app->getSession()->setFlash('error', [
-                    'type' => 'error',
-                    'duration' => 0,
-                    'icon' => 'fa fa-trash-o',
-                    'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Employee_Delete_Error_Msg'),
-                    'title' => Yii::t('app', 'Delete Employee'),
-                ]);
-            }
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-plus',
-                'message' => Yii::t('app', 'Employee_Delete_Error_Msg'),
-                'title' => Yii::t('app', 'Delete Employee'),
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//
+//        if ($this->findModel($id)->email !== Yii::$app->user->identity->email) {
+//            $employee = $this->findModel($id);
+//            $employee->status = Employee::STATUS_INACTIVE;
+////            $employee->save();
+//
+//            if ($employee->save()) {
+//                Yii::$app->getSession()->setFlash('success', [
+//                    'type' => 'success',
+//                    'duration' => 3000,
+//                    'icon' => 'fa fa-trash-o',
+//                    'message' => Yii::t('app', 'Employee_Delete_Success_Msg'),
+//                    'title' => Yii::t('app', 'Delete Employee'),
+//                ]);
+//            } else {
+//                Yii::$app->getSession()->setFlash('error', [
+//                    'type' => 'error',
+//                    'duration' => 0,
+//                    'icon' => 'fa fa-trash-o',
+//                    'message' => current($employee->getFirstErrors()) ? current($employee->getFirstErrors()) : Yii::t('app', 'Employee_Delete_Error_Msg'),
+//                    'title' => Yii::t('app', 'Delete Employee'),
+//                ]);
+//            }
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-plus',
+//                'message' => Yii::t('app', 'Employee_Delete_Error_Msg'),
+//                'title' => Yii::t('app', 'Delete Employee'),
+//            ]);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Employee model based on its primary key value.

@@ -210,33 +210,33 @@ class UnitController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $unit = $this->findModel($id);
-        $unit->active = Unit::STATUS_INACTIVE;
-        if ($unit->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Unit_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete Unit')
-            ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Unit_Delete_Success_Msg'), Yii::$app->user->identity->email);
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Could not delete this unit. Please try again'),
-                'title' => Yii::t('app', 'Delete Unit')
-            ]);
-
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete unit error: ') . current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Unit delete error.'), Yii::$app->user->identity->email);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $unit = $this->findModel($id);
+//        $unit->active = Unit::STATUS_INACTIVE;
+//        if ($unit->save()) {
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Unit_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete Unit')
+//            ]);
+//            Logger::log(Logger::INFO, Yii::t('app', 'Unit_Delete_Success_Msg'), Yii::$app->user->identity->email);
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Could not delete this unit. Please try again'),
+//                'title' => Yii::t('app', 'Delete Unit')
+//            ]);
+//
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete unit error: ') . current($unit->getFirstErrors()) ? current($unit->getFirstErrors()) : Yii::t('app', 'Unit delete error.'), Yii::$app->user->identity->email);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Unit model based on its primary key value.

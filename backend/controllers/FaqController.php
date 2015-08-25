@@ -209,32 +209,32 @@ class FaqController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $faq = $this->findModel($id);
-        $faq->active = Faq::STATUS_INACTIVE;
-        if ($faq->save()) {
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete faqs success'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'FAQs_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete FAQs')
-            ]);
-        } else {
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete faqs error: ') . current($faq->getFirstErrors()) ? current($faq->getFirstErrors()) : Yii::t('app', 'Faqs delete error.'), Yii::$app->user->identity->email);
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'Could not delete this FAQs. Please try again.'),
-                'title' => Yii::t('app', 'Delete FAQs')
-            ]);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $faq = $this->findModel($id);
+//        $faq->active = Faq::STATUS_INACTIVE;
+//        if ($faq->save()) {
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete faqs success'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'FAQs_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete FAQs')
+//            ]);
+//        } else {
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete faqs error: ') . current($faq->getFirstErrors()) ? current($faq->getFirstErrors()) : Yii::t('app', 'Faqs delete error.'), Yii::$app->user->identity->email);
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'Could not delete this FAQs. Please try again.'),
+//                'title' => Yii::t('app', 'Delete FAQs')
+//            ]);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Faq model based on its primary key value.

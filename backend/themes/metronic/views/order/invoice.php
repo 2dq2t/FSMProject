@@ -11,12 +11,22 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => [
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="metronic/assets/pages/css/invoice.css" rel="stylesheet" type="text/css"/>
-
+<style>
+    .sign {
+        display: none!important;
+        visibility: hidden!important
+    }
+    @media print {
+        .sign {
+            display: block!important
+        }
+    }
+</style>
 <?php
 $count = 0;
 foreach ($models as $model) { ?>
     <?php
-    $order_details_extend = \backend\models\OrderDetailsExtend::find()->where(['order_id' => $model["order_view"]->order_id])->all();
+    //$order_details_extend = \backend\models\OrderDetailsExtend::find()->where(['order_id' => $model["order_view"]->order_id])->all();
     $total_tax = 0;
     $total_discount = 0;
     $total_before_tax = 0;
@@ -142,9 +152,8 @@ foreach ($models as $model) { ?>
                                 <abbr title="Phone">P:</abbr> (0942) 145-1810
                             </address>
                             <address>
-                                <strong>FreshGarden</strong><br/>
-                                <a href="http://freshgardenhl.com.vn">
-                                    http://freshgardenhl.com.vn </a>
+                                <strong><?=Yii::t('app', 'Website')?></strong><br/>
+                                    http://freshgardenhl.com.vn
                             </address>
                         </div>
                     </div>
@@ -179,14 +188,23 @@ foreach ($models as $model) { ?>
                         </a>
                     </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-xs-4">
-                        <h4><?= Yii::t('app', 'Buyer')?></h4>
-                        <div class="center"></div>
+                <div class="sign">
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-4 text-center">
+                            <h4><?= Yii::t('app', 'Buyer')?></h4>
+                            <div><?= Yii::t('app', '(purchases through internet)')?></div>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <h4><?= Yii::t('app', 'Shipper')?></h4>
+                            <div><?= Yii::t('app', '(sign full name)')?></div>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <h4><?= Yii::t('app', 'ChiefUnit')?></h4>
+                            <div><?= Yii::t('app', '(sign full name)')?></div>
+                        </div>
                     </div>
-                    <div class="col-xs-4"></div>
-                    <div class="col-xs-4"></div>
+                    <br><br><br><br><br>
                 </div>
             </div>
         </div>

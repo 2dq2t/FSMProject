@@ -161,18 +161,16 @@ class AuthItem extends \yii\db\ActiveRecord
         $item->ruleName = trim($this->rule_name) ? trim($this->rule_name) : null;
 
         try {
-//            Yii::$app->getAuthManager()->update($this->oldName, $item);
-            $dbManager = new DbManager();
-            $dbManager->update($this->oldName, $item);
+            Yii::$app->getAuthManager()->update($this->oldName, $item);
             if ($item->name !== $this->oldName) {
                 Yii::$app->db->createCommand()
-                    ->update($dbManager->itemChildTable, ['parent' => $item->name], ['parent' => $this->oldName])
+                    ->update('auth_item_child', ['parent' => $item->name], ['parent' => $this->oldName])
                     ->execute();
                 Yii::$app->db->createCommand()
-                    ->update($dbManager->itemChildTable, ['child' => $item->name], ['child' => $this->oldName])
+                    ->update('auth_item_child', ['child' => $item->name], ['child' => $this->oldName])
                     ->execute();
                 Yii::$app->db->createCommand()
-                    ->update($dbManager->assignmentTable, ['item_name' => $item->name], ['item_name' => $this->oldName])
+                    ->update('auth_assignment', ['item_name' => $item->name], ['item_name' => $this->oldName])
                     ->execute();
             }
 

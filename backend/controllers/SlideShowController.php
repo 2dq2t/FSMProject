@@ -244,32 +244,32 @@ class SlideShowController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $slideshow = $this->findModel($id);
-        $slideshow->active = SlideShow::STATUS_INACTIVE;
-        if ($slideshow->save()) {
-            Yii::$app->getSession()->setFlash('success', [
-                'type' => 'success',
-                'duration' => 3000,
-                'icon' => 'fa fa-trash-o',
-                'message' => Yii::t('app', 'SlideShow_Delete_Success_Msg'),
-                'title' => Yii::t('app', 'Delete SlideShow'),
-            ]);
-            Logger::log(Logger::INFO, Yii::t('app', 'Delete slide show success'), Yii::$app->user->identity->email);
-        } else {
-            Yii::$app->getSession()->setFlash('error', [
-                'type' => 'error',
-                'duration' => 0,
-                'icon' => 'fa fa-trash-o',
-                'message' => current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Could not delete this slide show. Please try again'),
-                'title' => Yii::t('app', 'Delete SlideShow'),
-            ]);
-            Logger::log(Logger::ERROR, Yii::t('app', 'Delete slide show error: ') . current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Slide show delete error.'), Yii::$app->user->identity->email);
-        }
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $slideshow = $this->findModel($id);
+//        $slideshow->active = SlideShow::STATUS_INACTIVE;
+//        if ($slideshow->save()) {
+//            Yii::$app->getSession()->setFlash('success', [
+//                'type' => 'success',
+//                'duration' => 3000,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => Yii::t('app', 'SlideShow_Delete_Success_Msg'),
+//                'title' => Yii::t('app', 'Delete SlideShow'),
+//            ]);
+//            Logger::log(Logger::INFO, Yii::t('app', 'Delete slide show success'), Yii::$app->user->identity->email);
+//        } else {
+//            Yii::$app->getSession()->setFlash('error', [
+//                'type' => 'error',
+//                'duration' => 0,
+//                'icon' => 'fa fa-trash-o',
+//                'message' => current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Could not delete this slide show. Please try again'),
+//                'title' => Yii::t('app', 'Delete SlideShow'),
+//            ]);
+//            Logger::log(Logger::ERROR, Yii::t('app', 'Delete slide show error: ') . current($slideshow->getFirstErrors()) ? current($slideshow->getFirstErrors()) : Yii::t('app', 'Slide show delete error.'), Yii::$app->user->identity->email);
+//        }
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the SlideShow model based on its primary key value.

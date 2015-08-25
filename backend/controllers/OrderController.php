@@ -384,7 +384,7 @@ class OrderController extends Controller
                 'type' => 'success',
                 'duration' => 3000,
                 'icon' => 'fa fa-check',
-                'message' => Yii::t('app', 'Delivered order successful!'),
+                'message' => Yii::t('app', 'Delivered order successful.'),
                 'title' => Yii::t('app', 'Delivered Order'),
             ]);
             Logger::log(Logger::INFO, Yii::t('app', 'Delivered order successful.'), Yii::$app->user->identity->email);
@@ -393,7 +393,7 @@ class OrderController extends Controller
                 'type' => 'error',
                 'duration' => 0,
                 'icon' => 'fa fa-check',
-                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder failure. Please try again later/'),
+                'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder failure. Please try again later.'),
                 'title' => Yii::t('app', 'Delivered Order'),
             ]);
             Logger::log(Logger::ERROR, Yii::t('app', 'Delivered order confirm errors:'). current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Delivered oder confirm failure. Please try again later.'), Yii::$app->user->identity->email);
@@ -411,7 +411,7 @@ class OrderController extends Controller
                 'type' => 'success',
                 'duration' => 3000,
                 'icon' => 'fa fa-check',
-                'message' => Yii::t('app', 'Cancel order successful!'),
+                'message' => Yii::t('app', 'Cancel order successful.'),
                 'title' => Yii::t('app', 'Cancel Order'),
             ]);
             Logger::log(Logger::INFO, Yii::t('app', 'Cancel order successful.'), Yii::$app->user->identity->email);
@@ -439,7 +439,7 @@ class OrderController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-check',
-                    'message' => Yii::t('app', 'Cancel order successful!'),
+                    'message' => Yii::t('app', 'Update order description successful.'),
                     'title' => Yii::t('app', 'Update order description'),
                 ]);
                 Logger::log(Logger::INFO, Yii::t('app', 'Update order description successful.'), Yii::$app->user->identity->email);
@@ -475,7 +475,7 @@ class OrderController extends Controller
                 $models[$order_id]['order_details_extend'] = OrderDetailsExtend::find()->where(['order_id' => $order_id])->all();
             }
 
-            return $this->render('_invoice', [
+            return $this->render('invoice', [
                 'models' => $models
             ]);
         } else {

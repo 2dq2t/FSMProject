@@ -189,22 +189,22 @@ class RatingController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        Logger::log(Logger::INFO, Yii::t('app', 'Delete rating success'), Yii::$app->user->identity->email);
-
-        Yii::$app->getSession()->setFlash('success', [
-            'type' => 'success',
-            'duration' => 5000,
-            'icon' => 'fa fa-trash-o',
-            'message' => Yii::t('app', 'Rating_Delete_Success_Msg'),
-            'title' => Yii::t('app', 'Delete Rating'),
-        ]);
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $this->findModel($id)->delete();
+//
+//        Logger::log(Logger::INFO, Yii::t('app', 'Delete rating success'), Yii::$app->user->identity->email);
+//
+//        Yii::$app->getSession()->setFlash('success', [
+//            'type' => 'success',
+//            'duration' => 5000,
+//            'icon' => 'fa fa-trash-o',
+//            'message' => Yii::t('app', 'Rating_Delete_Success_Msg'),
+//            'title' => Yii::t('app', 'Delete Rating'),
+//        ]);
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Rating model based on its primary key value.
