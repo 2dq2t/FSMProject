@@ -1762,16 +1762,19 @@ ul.box-category > li a.active {
 .product-tag{margin:10px 0 0;}
 #content .aboutus {
     clear: both;
+    margin-top: 10px;
 }
 
-
+.post-content{
+    margin-right: 10px;
+}
 .image1 {
     background: url("../images/megnor/cms-sprite.png") no-repeat scroll 7px -165px;
     float: left;
     height: 50px;
     width: 60px;
+    margin-right: 5px;
 }
-
 .image2 {
     background: url("../images/megnor/cms-sprite.png") no-repeat scroll 7px -116px;
     float: left;

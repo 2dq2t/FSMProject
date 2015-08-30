@@ -20,7 +20,7 @@ class WishListController extends Controller {
     public function actionGetWishList()
     {
         if (Yii::$app->user->isGuest)
-            return $this->goHome();
+            return $this->redirect('index.php?r=account/register');
         else {
             $customer_id = Yii::$app->user->identity->getId();
             $product_list = WishList::find()->select('product_id')->where(['customer_id' => $customer_id])->all();

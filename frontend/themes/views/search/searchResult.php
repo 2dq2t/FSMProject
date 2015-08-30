@@ -133,13 +133,15 @@ echo $this->render('/layouts/_header');
                     </div>
                 <?php } ?>
             </div>
-            <div class="pagination-wrapper">
-                <?php
-                echo \yii\widgets\LinkPager::widget([
-                    'pagination' => $pagination,
-                ]);
-                ?>
-            </div>
+            <?php if($pagination->totalCount >9):?>
+                <div class="pagination-wrapper">
+                    <?php
+                    echo \yii\widgets\LinkPager::widget([
+                        'pagination' => $pagination,
+                    ]);
+                    ?>
+                </div>
+            <?php endif?>
         </div>
     </div>
 </div>

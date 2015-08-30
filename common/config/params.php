@@ -1,7 +1,7 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
+    'adminEmail' => 'freshgardenhl@gmail.com',
+    'supportEmail' => 'freshgardenhl@gmail.com',
     'user.passwordResetTokenExpire' => 3600,
     'barcodeCountryCode' => 893,
     'barcodeBusinessCode' => 97019,

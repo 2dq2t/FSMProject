@@ -566,7 +566,7 @@ class AccountController extends Controller{
     }
     public function actionGetOrderHistory(){
         if(Yii::$app->user->isGuest){
-            return $this->goHome();
+            return $this->redirect('index.php?r=account/register');
         }
         else{
             $customer = Customer::find()->select(['guest_id'])->where(['id'=>Yii::$app->user->identity->getId()])->one();

@@ -51,50 +51,42 @@ $baseUrl = Yii::$app->request->baseUrl;
         <div id="footer" class="container">
             <div>
                 <div class="column">
-                    <h5>Thông Tin</h5>
+                    <h5><?= Yii::t('app','Index Information')?></h5>
                     <ul class="list-unstyled">
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=4">Về FreshGarden
-                                </a></li>
+                            <a href="<?=Yii::$app->request->baseUrl."/index.php?r=site/about-fresh-garden"?>"><?=Yii::t('app','AboutFreshGarden')?>
+                            </a></li>
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=6">Câu Hỏi Thường Gặp</a></li>
+                            <a href="<?=Yii::$app->request->baseUrl."/index.php?r=site/faq"?>"><?= Yii::t('app','FAQs')?></a></li>
                         <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=3">Chính Sách và Quy Định</a></li>
-                        <li>
-                            <a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/information&amp;information_id=5">Terms
-                                &amp; Conditions</a></li>
+                            <a href="<?=Yii::$app->request->baseUrl."/index.php?r=site/regulation-policy"?>"><?= Yii::t('app','RegulationPolicy')?></a></li>
+
                     </ul>
                 </div>
                 <div class=" column">
-                    <h5>Tài Khoản Của Tôi</h5>
+                    <h5><?=Yii::t('app','MyAccountLabel')?></h5>
                     <ul class="list-unstyled">
-                        <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/account">My
-                                Account</a></li>
-                        <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/order">Order
-                                History</a></li>
-                        <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/wishlist">Wish
-                                List</a></li>
-                        <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/newsletter">Newsletter</a>
-                        </li>
+                        <li><a href="<?= Yii::$app->request->baseUrl ."/index.php?r=account/manageacc"?>" class="list-group-item"><?=Yii::t('app','MyAccountLabel')?></a></li>
+                        <li><a href="<?= Yii::$app->request->baseUrl . "/index.php?r=account/get-order-history"?>"><?=Yii::t('app','MyOrderLabel')?></a></li>
+                        <li><a href="<?= Yii::$app->request->baseUrl . "/index.php?r=wish-list/get-wish-list" ?>"><?= Yii::t('app', 'WishListLabel') ?> </a></li>
                     </ul>
                 </div>
 
                 <div class="custom_footer_main">
                     <div class="content_footer_right">
-                        <div class="column contact"><h5>Địa Chỉ Liên Hệ</h5>
+                        <div class="column contact"><h5><?=Yii::t('app','Index ContactAddress')?></h5>
                             <ul>
                                 <li>
-                                    <div class="content">FreshGarden<br>Khu Công Nghệ Cao Hòa Lạc<br>Tel:
-                                        043-987-5643<br>Email: <a href="#">freshgardenhl@gmail.com</a></div>
+                                    <div class="content"><?=Yii::t('app','Content ContactAddress')?></div>
                                 </li>
                             </ul>
                         </div>
                         <div class="column">
-                            <div class="social_block"><h5>Theo Dõi FreshGarDen</h5>
+                            <div class="social_block"><h5><?=Yii::t('app','FollowFreshGarden')?></h5>
                                 <ul>
-                                    <li class="facebook"><a href="https://www.facebook.com/freshgarden2015">Facebook</a></li>
-                                    <li class="twitter"><a href="#">Twitter</a></li>
-                                    <li class="rss"><a href="#">RSS</a></li>
+                                    <li class="facebook"><a href="https://www.facebook.com/freshgarden2015"><?=Yii::t('app','Facebook')?></a></li>
+                                    <li class="twitter"><a href="#"><?=Yii::t('app','Twitter')?></a></li>
+                                    <li class="rss"><a href="#"><?=Yii::t('app','RSS')?></a></li>
                                 </ul>
                             </div>
                         </div>

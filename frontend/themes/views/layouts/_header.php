@@ -111,26 +111,26 @@ $baseUrl = Yii::$app->request->baseUrl;
                     <li>
                         <a href="#"><?=Yii::t('app','ProductSeason')?></a>
                         <ul>
-                        <?php
-                        $season = Yii::$app->ProductCategory->getSeason();
-                        foreach($season as $item){?>
+                            <?php
+                            $season = Yii::$app->ProductCategory->getSeason();
+                            foreach($season as $item){?>
                                 <li>
                                     <a href="<?=Yii::$app->request->baseUrl. "/index.php?r=product/get-product-season&season=".$item['name']?>"><?=ucwords($item['name'])?></a>
                                 </li>
-                        <?php };?>
+                            <?php };?>
                         </ul>
                     </li>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','DelicaciesEveryDay')?></a>
+                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/recipes" ?>"><?=Yii::t('app','DelicaciesEveryDay')?></a>
                     </li>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','FoodPreservation')?></a>
+                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/food-preservation" ?>"><?=Yii::t('app','FoodPreservation')?></a>
                     </li>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','VietGapStandard')?></a>
+                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/vietgap-standard" ?>"><?=Yii::t('app','VietGapStandard')?></a>
                     </li>
                     <li>
-                        <a href="<?= Yii::$app->request->baseUrl ?>"><?=Yii::t('app','Contact')?></a>
+                        <a href="<?= Yii::$app->request->baseUrl."/index.php?r=site/contact" ?>"><?=Yii::t('app','Contact')?></a>
                     </li>
                 </ul>
             </div>

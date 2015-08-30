@@ -1,12 +1,19 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Faq;
+use common\models\FoodPreservation;
 use common\models\Product;
 use common\models\ProductSeason;
+use common\models\Recipes;
+use common\models\RegulationPolicy;
 use common\models\Season;
 use common\models\SlideShow;
 use common\models\Tag;
+use common\models\VietgapStandard;
+use frontend\models\ContactForm;
 use Yii;
+use yii\data\Pagination;
 use yii\db\Query;
 use yii\web\Controller;
 
@@ -15,12 +22,23 @@ use yii\web\Controller;
  */
 class SiteController extends Controller
 {
-
+    const STATUS_ACTIVE = 1;
 
     /**
      * @inheritdoc
      */
-
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -124,5 +142,79 @@ class SiteController extends Controller
             'slide_show' => $slide_show, 'new_product' => $new_product,
             'product_season' => $product_season,
         ]);
+    }
+    public function actionFaq(){
+        $faq_query = Faq::find()->select(['question','answer'])->where(['active'=>self::STATUS_ACTIVE]);
+        $countQuery = clone $faq_query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+        $faq = $faq_query->offset($pagination->offset)->limit($pagination->limit)->all();
+        return $this->render('faq',['faq'=>$faq,'pagination'=>$pagination]);
+    }
+    public function actionFoodPreservation(){
+        if(!empty($_GET['fp'])){
+            $food_preservation = FoodPreservation::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['fp']])->one();
+            return $this->render('foodPreservation',['food_preservation'=>$food_preservation]);
+        }
+        $food_preservation_query = FoodPreservation::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $countQuery = clone $food_preservation_query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+        $food_preservation = $food_preservation_query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+        return $this->render('foodPreservation',['food_preservation'=>$food_preservation,'pagination'=>$pagination]);
+    }
+    public function actionRecipes(){
+        if(!empty($_GET['recipes'])){
+            $recipes = Recipes::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['recipes']])->one();
+            return $this->render('recipes',['recipes'=>$recipes]);
+        }
+        $recipes_query = Recipes::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $countQuery = clone $recipes_query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+        $recipes = $recipes_query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+        return $this->render('recipes',['recipes'=>$recipes,'pagination'=>$pagination]);
+    }
+    public function actionRegulationPolicy(){
+        if(!empty($_GET['rp'])){
+            $regulation_policy = RegulationPolicy::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['rp']])->one();
+            return $this->render('regulationPolicy',['regulation_policy'=>$regulation_policy]);
+        }
+        $regulation_policy_query = RegulationPolicy::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $countQuery = clone $regulation_policy_query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+        $regulation_policy = $regulation_policy_query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+        return $this->render('regulationPolicy',['regulation_policy'=>$regulation_policy,'pagination'=>$pagination]);
+    }
+    public function actionVietgapStandard(){
+        if(!empty($_GET['vs'])){
+            $vietgap_standard = VietgapStandard::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['vs']])->one();
+            return $this->render('vietgapStandard',['vietgap_standard'=>$vietgap_standard]);
+        }
+        $vietgap_standard_query = VietgapStandard::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $countQuery = clone $vietgap_standard_query;
+        $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
+        $vietgap_standard = $vietgap_standard_query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+        return $this->render('vietgapStandard',['vietgap_standard'=>$vietgap_standard,'pagination'=>$pagination]);
+    }
+    public function actionContact(){
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            } else {
+                Yii::$app->session->setFlash('error', 'There was an error sending email.');
+            }
+
+            return $this->refresh();
+        } else {
+            return $this->render('contact', [
+                'model' => $model,
+            ]);
+        }
+    }
+    public function actionAboutFreshGarden(){
+
     }
 }
