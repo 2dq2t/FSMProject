@@ -12,7 +12,7 @@ echo $this->render('/layouts/_header');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-tag&tag=" . $_GET['tag'] ?>">Tag: <?php $tag = ''; if(isset($_GET['tag'])){ $tag =  $_GET['tag'];echo $tag;} ?> ?></a>
+            <a href="<?= Yii::$app->request->baseUrl . "/index.php?r=product/get-product-tag&tag=" . $_GET['tag'] ?>">Tag: <?php $tag = ''; if(isset($_GET['tag'])){ $tag =  $_GET['tag'];echo $tag;} ?></a>
         </li>
     </ul>
     <div class="row content-subinner">
@@ -26,13 +26,6 @@ echo $this->render('/layouts/_header');
         </column>
         <div id="content" class="col-sm-9 categorypage">
 
-
-            <div class="row category_thumb">
-                <div class="col-sm-2 category_img"><img
-                        src="images/data/inner-banner.jpg"
-                        alt="Electronics" title="Electronics" class="img-thumbnail"/></div>
-            </div>
-            <h2 class="page-title">Tag: <?= $tag ?></h2>
             <div class="category_filter">
                 <div class="col-md-4 btn-list-grid">
                     <div class="btn-group">

@@ -238,11 +238,11 @@ class ProductController extends Controller{
                     else
                         $order = SORT_DESC;
                     $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id')->orderBy(['product.' . $sort => $order]);
 
                 } else {
                     $product_tag_query = (new Query())->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price'
-                        , 'product.tax as product_tax', 'image.resize_path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id');
+                        , 'product.tax as product_tax', 'image.path as image_path'])->from('product')->innerJoin('image', 'product.id = image.product_id')->where(['product.active' => self::STATUS_ACTIVE, 'product.id' => $list_id])->groupBy('product.id');
                 }
 
                 $countQuery = clone $product_tag_query;
