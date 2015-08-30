@@ -94,7 +94,7 @@ class SearchController extends Controller{
                             'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q)."*" . '" IN BOOLEAN MODE) OR ' .
                             'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
                          )')
-                        ->having('score > 0.3')
+                        ->having('score > 0.1')
                         ->groupBy('product.id')
                         ->orderBy(['product.' . $sort => $order]);
                     $countQuery = clone $query;
@@ -111,7 +111,7 @@ class SearchController extends Controller{
                             'MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
                             'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)
                          )')
-                        ->having('score > 0.3')
+                        ->having('score > 0.1')
                         ->groupBy('product.id')
                         ->orderBy('score DESC');
                     $countQuery = clone $query;
