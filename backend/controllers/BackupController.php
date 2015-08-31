@@ -198,7 +198,7 @@ class BackupController extends Controller
         $this->writeComment('Schema fsmdb');
         fwrite ($this-> fp, 'DROP SCHEMA IF EXISTS `fsmdb` ;'.PHP_EOL.PHP_EOL);
         $this->writeComment('Schema fsmdb');
-        fwrite($this->fp, 'CREATE SCHEMA IF NOT EXISTS `fsmdb` DEFAULT CHARACTER SET utf8 ;'.PHP_EOL);
+        fwrite($this->fp, 'CREATE SCHEMA IF NOT EXISTS `fsmdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'.PHP_EOL);
         fwrite($this->fp, 'USE `fsmdb` ;'.PHP_EOL.PHP_EOL);
 
         return true;
@@ -306,14 +306,14 @@ class BackupController extends Controller
             if (file_exists($sqlFile)) {
                 unlink($sqlFile);
                 $flashError = 'success';
-                $flashMsg = \Yii::t('app', 'The file {file} was successfully deleted.', ['{file}' => $sqlFile]);
+                $flashMsg = \Yii::t('app', 'The file {file} was successfully deleted.', ['file' => $sqlFile]);
             } else {
                 $flashError = 'error';
-                $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['{file}' => $sqlFile]);
+                $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['file' => $sqlFile]);
             }
         } else {
             $flashError = 'error';
-            $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['{file}' => $sqlFile]);
+            $flashMsg = \Yii::t('app', 'The file {file} was not found.', ['file' => $sqlFile]);
         }
 
         \Yii::$app->getSession()->setFlash($flashError, [

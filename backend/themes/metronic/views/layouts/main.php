@@ -92,22 +92,6 @@ $baseUrl = Yii::$app->request->baseUrl;
                                         <a href="<?= $baseUrl."/index.php?r=account/update&id=". Yii::$app->user->identity->id; ?>">
                                             <i class="icon-user"></i> <?=Yii::t('app', 'My Profile')?> </a>
                                     </li>
-                                    <li>
-                                        <a href="page_calendar.html">
-                                            <i class="icon-calendar"></i> My Calendar </a>
-                                    </li>
-                                    <li>
-                                        <a href="inbox.html">
-                                            <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger">
-								3 </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="page_todo.html">
-                                            <i class="icon-rocket"></i> My Tasks <span class="badge badge-success">
-								7 </span>
-                                        </a>
-                                    </li>
                                     <li class="divider">
                                     </li>
                                     <li>
@@ -165,7 +149,11 @@ $baseUrl = Yii::$app->request->baseUrl;
                             'voucher',
                             'offer',
                             'slideshow',
-                            'mail'
+                            'email',
+                            'foodpreservation',
+                            'recipes',
+                            'regulationpolicy',
+                            'vietgapstandard'
                         ]) ? 'active open' : '' ?>">
                             <a href="javascript:;">
                                 <i class="icon-bar-chart"></i>
@@ -175,7 +163,11 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     'voucher',
                                     'offer',
                                     'slideshow',
-                                    'mail'
+                                    'email',
+                                    'foodpreservation',
+                                    'recipes',
+                                    'regulationpolicy',
+                                    'vietgapstandard'
                                 ]) ? 'open' : '' ?>"></span>
                             </a>
                             <ul class="sub-menu">
@@ -191,8 +183,20 @@ $baseUrl = Yii::$app->request->baseUrl;
                                 <li class="<?= isActive(['slideshow']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-crop"></i> ' . Yii::t('app', 'Slide Shows'), ['slideshow/index']) ?>
                                 </li>
-                                <li class="<?= isActive(['mail']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['mail/index']) ?>
+                                <li class="<?= isActive(['email']) ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['email/index']) ?>
+                                </li>
+                                <li class="<?= isActive(['foodpreservation']) ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-bag"></i> ' . Yii::t('app', 'Food Preservation'), ['foodpreservation/index']) ?>
+                                </li>
+                                <li class="<?= isActive(['recipes']) ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Recipes'), ['recipes/index']) ?>
+                                </li>
+                                <li class="<?= isActive(['regulationpolicy']) ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-share"></i> ' . Yii::t('app', 'Regulation Policy'), ['regulationpolicy/index']) ?>
+                                </li>
+                                <li class="<?= isActive(['vietgapstandard']) ? 'active' : '' ?>">
+                                    <?= HtmL::a('<i class="icon-link"></i> ' . Yii::t('app', 'Vietgap Standard'), ['vietgapstandard/index']) ?>
                                 </li>
                             </ul>
                         </li>
@@ -399,7 +403,7 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
             <div class="page-footer-inner">
-                2014 &copy; Metronic by keenthemes.
+                <?= date('Y') . ' ' . Yii::t('app', 'FreshGarden')?>
             </div>
             <div class="scroll-to-top">
                 <i class="icon-arrow-up"></i>
@@ -418,7 +422,7 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- BEGIN LOGO -->
         <div class="logo">
             <a href="<?= \yii\helpers\Url::home()?>">
-                <img src="metronic/assets/admin/img/logo-big-freshgarden.png" alt=""/>
+                <img src="metronic/assets/admin/img/Logo-.big.png" alt=""/>
             </a>
         </div>
         <!-- END LOGO -->
@@ -427,7 +431,7 @@ $baseUrl = Yii::$app->request->baseUrl;
             <?= $content ?>
         </div>
         <div class="copyright">
-            2014 © Metronic. Admin Dashboard Template.
+            <?= date('Y') . ' ' . Yii::t('app', 'FreshGarden')?>
         </div>
         <!-- END LOGIN -->
         </body>

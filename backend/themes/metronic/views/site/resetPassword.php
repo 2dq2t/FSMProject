@@ -19,7 +19,7 @@ $this->title = Yii::t('app', 'ChangePassInfoLabel');
     <label class="control-label visible-ie8 visible-ie9"><?= Yii::t('app', 'Employee New Password') ?></label>
     <?= $form->field($model, 'password')->passwordInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
-        'autocomplete' => 'off',
+//        'autocomplete' => 'off',
         'placeholder' => Yii::t('app', 'Employee New Password'),
     ])->label(false) ?>
 </div>

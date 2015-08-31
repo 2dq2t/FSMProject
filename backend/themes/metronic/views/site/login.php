@@ -24,14 +24,14 @@ if(Yii::$app->session->getFlash('error')) {
 <h3 class="form-title"><?= Html::encode($this->title) ?></h3>
 <div class="alert alert-danger display-hide">
     <button class="close" data-close="alert"></button>
-        <span><?= Yii::t('app', 'Enter any email and password.') ?> </span>
+    <span><?= Yii::t('app', 'Enter any email and password.') ?> </span>
 </div>
 <div class="form-group">
     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
     <label class="control-label visible-ie8 visible-ie9"><?= Yii::t('app', 'Username') ?></label>
     <?= $form->field($model, 'email')->textInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
-        'autocomplete' => 'off',
+//        'autocomplete' => 'off',
         'placeholder' => Yii::t('app', 'BLoginEmail'),
     ])->label(false) ?>
 </div>
@@ -39,7 +39,7 @@ if(Yii::$app->session->getFlash('error')) {
     <label class="control-label visible-ie8 visible-ie9"><?= Yii::t('app', 'Password') ?></label>
     <?= $form->field($model, 'password')->passwordInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
-        'autocomplete' => 'off',
+//        'autocomplete' => 'off',
         'placeholder' => Yii::t('app', 'BLoginPassword')
     ])->label(false) ?>
 </div>

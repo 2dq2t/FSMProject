@@ -80,55 +80,57 @@ class AssignmentController extends Controller
         $model->setAssignments(array_keys(Yii::$app->getAuthManager()->getAssignments($id)));
 
         if($model->load(Yii::$app->request->post())) {
-            if (!empty($model->getAssignments())) {
-                $errors = [];
-                $assignments = $model->getAssignments();
-                $transaction = Yii::$app->db->beginTransaction();
-                foreach (Yii::$app->getAuthManager()->getAssignments($id) as $assignment) {
-                    $key = array_search($assignment->roleName, $assignments);
-                    if ($key === false) {
-                        \Yii::$app->authManager->revoke(new Item(['name' => $assignment->roleName]), $id);
-                    } else {
-                        unset($assignments[$key]);
-                    }
-                }
+            if (!isset(Yii::$app->request->post("Employee")['assignments'])) {
+                $model->setAssignments([]);
+            }
 
-                foreach ($assignments as $assignment) {
-                    try {
-                        \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $id);
-                    } catch (\Exception $e) {
-                        $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
-                    }
-                }
-
-                if (!empty($errors)) {
-                    $transaction->rollBack();
-                    Yii::$app->getSession()->setFlash('error', [
-                        'type' => 'error',
-                        'duration' => 0,
-                        'icon' => 'fa fa-plus',
-                        'message' => $errors[0],
-                        'title' => Yii::t('app', 'Assignment to employee')
-                    ]);
-
-                    Logger::log(Logger::ERROR, Yii::t('app', 'Assignment to employee error: ') . $errors[0], Yii::$app->user->identity->email);
-
-                    return $this->render('update', [
-                        'model' => $model,
-                        'items' => $items
-                    ]);
+            $errors = [];
+            $assignments = $model->getAssignments();
+            $transaction = Yii::$app->db->beginTransaction();
+            foreach (Yii::$app->getAuthManager()->getAssignments($id) as $assignment) {
+                $key = array_search($assignment->roleName, $assignments);
+                if ($key === false) {
+                    \Yii::$app->authManager->revoke(new Item(['name' => $assignment->roleName]), $id);
                 } else {
-                    $transaction->commit();
-                    Yii::$app->getSession()->setFlash('success', [
-                        'type' => 'success',
-                        'duration' => 3000,
-                        'icon' => 'fa fa-plus',
-                        'message' => Yii::t('app', 'Assignment success.'),
-                        'title' => Yii::t('app', 'Assignment to employee')
-                    ]);
-                    Logger::log(Logger::INFO, Yii::t('app', 'Assigmnet to employee success'), Yii::$app->user->identity->email);
-                    return $this->redirect(['index']);
+                    unset($assignments[$key]);
                 }
+            }
+
+            foreach ($assignments as $assignment) {
+                try {
+                    \Yii::$app->authManager->assign(new Item(['name' => $assignment]), $id);
+                } catch (\Exception $e) {
+                    $errors[] = Yii::t('app', 'Cannot assign {assignment} to user', ['{assignment}' => $assignment]);
+                }
+            }
+
+            if (!empty($errors)) {
+                $transaction->rollBack();
+                Yii::$app->getSession()->setFlash('error', [
+                    'type' => 'error',
+                    'duration' => 0,
+                    'icon' => 'fa fa-plus',
+                    'message' => $errors[0],
+                    'title' => Yii::t('app', 'Assignment to employee')
+                ]);
+
+                Logger::log(Logger::ERROR, Yii::t('app', 'Assignment to employee error: ') . $errors[0], Yii::$app->user->identity->email);
+
+                return $this->render('update', [
+                    'model' => $model,
+                    'items' => $items
+                ]);
+            } else {
+                $transaction->commit();
+                Yii::$app->getSession()->setFlash('success', [
+                    'type' => 'success',
+                    'duration' => 3000,
+                    'icon' => 'fa fa-plus',
+                    'message' => Yii::t('app', 'Assignment success.'),
+                    'title' => Yii::t('app', 'Assignment to employee')
+                ]);
+                Logger::log(Logger::INFO, Yii::t('app', 'Assigmnet to employee success'), Yii::$app->user->identity->email);
+                return $this->redirect(['index']);
             }
         }
 

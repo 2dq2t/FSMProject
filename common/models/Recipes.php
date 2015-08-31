@@ -17,6 +17,8 @@ use Yii;
  */
 class Recipes extends \yii\db\ActiveRecord
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     /**
      * @inheritdoc
      */
@@ -31,6 +33,12 @@ class Recipes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'alias', 'post_info', 'full_post'], 'required'],
+            [['post_info', 'full_post'], 'string'],
+            [['active'], 'integer'],
+            [['image'], 'required', 'on' => 'adminCreate'],
+            [['title', 'alias', 'image'], 'string', 'max' => 255],
+            [['image'], 'file', 'skipOnEmpty'=> true, 'maxFiles' => 10, 'extensions' => 'jpeg, jpg, png, gif'],
             [['title', 'alias', 'post_info', 'full_post', 'image', 'active'], 'required'],
             [['post_info', 'full_post'], 'string'],
             [['active'], 'integer'],

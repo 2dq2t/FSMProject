@@ -15,11 +15,10 @@ $config = [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'ngoicodoc@gmail.com',
-                'password' => 'jrywzbprbhjrwsce',
-                'port' => '587',
-                'encryption' => 'tls',
+                'host' => 'smtp.mandrillapp.com',
+                'username' => 'freshgardenhl@gmail.com',
+                'password' => 'CWqoJ_Q5xNi76KH2LdWGUA',
+                'port' => '587'
             ],
         ],
     ],

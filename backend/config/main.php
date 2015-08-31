@@ -15,8 +15,10 @@ return [
         'backup' => 'backend\controllers\BackupController',
         'category' => 'backend\controllers\CategoryController',
         'customer' => 'backend\controllers\CustomerController',
+        'email' => 'backend\controllers\EmailController',
         'employee' => 'backend\controllers\EmployeeController',
         'faq' => 'backend\controllers\FaqController',
+        'foodpreservation' => 'backend\controllers\FoodPreservationController',
         'guest' => 'backend\controllers\GuestController',
         'i18n' => 'backend\controllers\I18nController',
         'log' => 'backend\controllers\LogController',
@@ -26,6 +28,8 @@ return [
         'permission' => 'backend\controllers\PermissionController',
         'product' => 'backend\controllers\ProductController',
         'rating' => 'backend\controllers\RatingController',
+        'recipes' => 'backend\controllers\RecipesController',
+        'regulationpolicy' => 'backend\controllers\RegulationPolicyController',
         'role' => 'backend\controllers\RoleController',
         'route' => 'backend\controllers\RouteController',
         'season' => 'backend\controllers\SeasonController',
@@ -33,6 +37,7 @@ return [
         'slideshow' => 'backend\controllers\SlideShowController',
         'tag' => 'backend\controllers\TagController',
         'unit' => 'backend\controllers\UnitController',
+        'vietgapstandard' => 'backend\controllers\VietgapStandardController',
         'voucher' => 'backend\controllers\VoucherController'
     ],
     'bootstrap' => ['log'],
@@ -103,6 +108,12 @@ return [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'php:d/m/Y'
         ],
+        'as access' => [
+            'class' => 'backend\components\AccessControl',
+            'allowActions' => [
+                'site/index'
+            ]
+        ]
     ],
     'params' => $params,
 ];
