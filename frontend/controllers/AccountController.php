@@ -497,25 +497,29 @@ class AccountController extends Controller{
     {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->getSession()->setFlash('successful', [
-                    'type' => Alert::TYPE_SUCCESS,
-                    'duration' => 3000,
-                    'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'RequestPasswordResetMsg01'),
-                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
-                ]);
+            try {
+                if ($model->sendEmail()) {
+                    Yii::$app->getSession()->setFlash('successful', [
+                        'type' => Alert::TYPE_SUCCESS,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => Yii::t('app', 'RequestPasswordResetMsg01'),
+                        'title' => Yii::t('app', 'ForgottenPasswordLabel'),
+                    ]);
 
-                return $this->goHome();
-            } else {
-                Yii::$app->getSession()->setFlash('failed', [
-                    'type' => Alert::TYPE_DANGER,
-                    'duration' => 3000,
-                    'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'RequestPasswordResetMsg02'),
-                    'title' => Yii::t('app', 'ForgottenPasswordLabel'),
-                ]);
-                return $this->goHome();
+                    return $this->goHome();
+                } else {
+                    Yii::$app->getSession()->setFlash('failed', [
+                        'type' => Alert::TYPE_DANGER,
+                        'duration' => 3000,
+                        'icon' => 'fa fa-plus',
+                        'message' => Yii::t('app', 'RequestPasswordResetMsg02'),
+                        'title' => Yii::t('app', 'ForgottenPasswordLabel'),
+                    ]);
+                    return $this->goHome();
+                }
+            }catch (\Exception $ex){
+                return $this->redirect('index.php?r=site/send-mail-error');
             }
         }
 
@@ -566,7 +570,7 @@ class AccountController extends Controller{
     }
     public function actionGetOrderHistory(){
         if(Yii::$app->user->isGuest){
-            return $this->redirect('index.php?r=account/register');
+            return $this->redirect('index.php?r=account/login');
         }
         else{
             $customer = Customer::find()->select(['guest_id'])->where(['id'=>Yii::$app->user->identity->getId()])->one();

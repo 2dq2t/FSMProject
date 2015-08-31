@@ -81,7 +81,7 @@ echo $this->render('/layouts/_header');
                 <div class="col-sm-6 product-right">
                     <h3 class="product-title"><?php echo ucwords($product_detail['name']); ?> </h3>
                     <ul class="list-unstyled">
-                        <li> <div class="form-inline form-group""><span><?= Yii::t('app', 'ProductCode') ?>:&nbsp; </span> <canvas id="barcode-image" width="150" height="70"></canvas></div>
+                        <li> <div class="form-inline form-group""><span><?/*= Yii::t('app', 'ProductCode') */?><!--:&nbsp;--> </span> <canvas id="barcode-image" width="150" height="70"></canvas></div>
                             <?php
                             $barcode = Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode']. $product_detail['barcode'];
 

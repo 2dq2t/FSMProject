@@ -354,14 +354,19 @@ class CheckoutController extends Controller {
                }
                $discount_price = $total_price_before_tax *($voucher['discount']/100);
            }
-           \Yii::$app->mailer->compose(['html' => 'checkoutResultInfo','text' => 'checkoutResultInfo'], ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
-               'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
-           ])
-               ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name])
-               ->setTo($customer_info['email'])
-               ->setSubject('FreshGarden: Thông tin đơn hàng của bạn')
-               ->send();
-
+           try {
+               \Yii::$app->mailer->compose(['html' => 'checkoutResultInfo', 'text' => 'checkoutResultInfo'], ['order' => $order, 'order_detail' => $order_detail, 'customer_info' => $customer_info,
+                   'address' => $address, 'district' => $district, 'city' => $city, 'total_price' => $total_price, 'voucher' => $voucher, 'discount_price' => $discount_price
+               ])
+                   ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name])
+                   ->setTo($customer_info['email'])
+                   ->setSubject('FreshGarden: Thông tin đơn hàng của bạn')
+                   ->send();
+           }catch (\Exception $ex){
+               return $this->render('getCheckoutResult', ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
+                   'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
+               ]);
+           }
             return $this->render('getCheckoutResult', ['order' => $order, 'order_detail'=>$order_detail,'customer_info' => $customer_info,
                 'address' => $address, 'district' => $district, 'city' => $city,'total_price'=>$total_price,'voucher'=>$voucher,'discount_price'=>$discount_price
             ]);

@@ -217,4 +217,7 @@ class SiteController extends Controller
     public function actionAboutFreshGarden(){
 
     }
+    public function actionSendMailError(){
+        return $this->render('sendMailError');
+    }
 }
