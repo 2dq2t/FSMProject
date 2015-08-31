@@ -684,13 +684,13 @@ kiệm chi phí mua hàng.',
     'ProxyErrorContent' => 'Xin vui lòng xem lại kết nối mạng của bạn, có thể bạn đang kết nối qua cổng proxy!',
     'Regulation Policies' => 'Quy Định và Chính Sách',
     'Create Regulation Policy' => 'Tạo bài viết Quy Định và Chính Sách',
-    'Update Regulation Policy' => 'Cập nhật bài viết Quy Định và Chính Sách',
+    'Update Regulation Policy' => 'Cập nhật bài viết Quy Định và Chính Sách:',
     'Food Preservations' => 'Bảo Quản Thực Phẩm',
     'Create Food Preservation' => 'Tạo bài viết Bảo Quản Thực Phẩm',
     'Create Recipes' => 'Tạo bài viết Món Ngon Mỗi Ngày',
-    'Update Recipes' => 'Cập nhật bài viết Món Ngon Mỗi Ngày',
+    'Update Recipes: ' => 'Cập nhật bài viết Món Ngon Mỗi Ngày:',
     'Vietgap Standards' => 'Tiêu Chuẩn VietGap',
     'Create Vietgap Standard' => 'Tạo bài viết Tiêu Chuẩn VietGap',
-    'Update Vietgap Standard' => 'Cập nhật bài viết Tiêu Chuẩn VietGap',
-    'Update Food Preservation' => 'Cập nhật bài viết Bảo Quản Thực Phẩm'
+    'Update Vietgap Standard' => 'Cập nhật bài viết Tiêu Chuẩn VietGap:',
+    'Update Food Preservation' => 'Cập nhật bài viết Bảo Quản Thực Phẩm:'
 );
