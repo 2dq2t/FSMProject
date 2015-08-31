@@ -5,5 +5,6 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'barcodeCountryCode' => 893,
     'barcodeBusinessCode' => 97019,
-    'shippingFee' => 15000
+    'shippingFee' => 15000,
+    'applicationName' => 'FreshGarden'
 ];

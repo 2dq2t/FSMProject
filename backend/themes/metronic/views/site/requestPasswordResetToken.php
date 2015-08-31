@@ -19,12 +19,12 @@ $this->title = Yii::t('app', 'ForgottenPasswordLabel');
     <label class="control-label visible-ie8 visible-ie9"><?= Yii::t('app', 'Email') ?></label>
     <?= $form->field($model, 'email')->textInput([
         'class' => 'form-control form-control-solid placeholder-no-fix',
-        'autocomplete' => 'off',
+//        'autocomplete' => 'off',
         'placeholder' => Yii::t('app', 'BLoginEmail'),
     ])->label(false) ?>
 </div>
 <div class="form-actions">
-<!--    <button type="button" id="back-btn" class="btn btn-default">Back</button>-->
+    <!--    <button type="button" id="back-btn" class="btn btn-default">Back</button>-->
     <?= Html::a(Yii::t('app', 'Back'), ['/site/login'], ['class'=>'btn btn-default']) ?>
     <?= Html::submitButton(Yii::t('app', 'SendLabel'), ['class' => 'btn btn-success uppercase pull-right']) ?>
 </div>

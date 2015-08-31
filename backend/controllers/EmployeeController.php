@@ -252,11 +252,11 @@ class EmployeeController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'),
+                            'message' => current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'),
                             'title' => Yii::t('app', 'Create Employee'),
                         ]);
 
-                        Logger::log(Logger::ERROR, !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, current($model->getFirstErrors()) || Yii::t('app', 'Employee_Add_Error_Msg'), Yii::$app->user->identity->email);
 
                         $model->password = null;
 
@@ -475,11 +475,11 @@ class EmployeeController extends Controller
                             'type' => 'error',
                             'duration' => 0,
                             'icon' => 'fa fa-plus',
-                            'message' => !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'),
+                            'message' => current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'),
                             'title' => Yii::t('app', 'Update Employee'),
                         ]);
 
-                        Logger::log(Logger::ERROR, !empty($errors) ? $errors : current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'), Yii::$app->user->identity->email);
+                        Logger::log(Logger::ERROR, current($model->getFirstErrors()) || Yii::t('app', 'Employee_Update_Error_Msg'), Yii::$app->user->identity->email);
 
                         $model->password = null;
 

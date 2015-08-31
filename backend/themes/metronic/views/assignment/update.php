@@ -63,6 +63,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
                 <?php $form = \yii\widgets\ActiveForm::begin(); ?>
+                <?= $form->field($model, 'id')->hiddenInput()->label(false)?>
                 <div class="form-body">
                     <div class="form-group">
                         <?= $form->field($model, 'assignments')->widget(\fsm\dualistbox\DualListbox::className(), [

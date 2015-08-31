@@ -64,7 +64,9 @@ class Employee extends ActiveRecord implements IdentityInterface
             }],
 //            [['phone_number'], 'string', 'max' => 15, 'min' => 10],
             [['assignments'], 'safe'],
-            [['phone_number'], 'match', 'pattern' => '/^[0](\d{3})(\d{3})(\d{3,4})$/', 'message' => 'Phone number must have \'0\' in first and contain 10 or 11 digit number.'],
+            [['phone_number'], 'match', 'pattern' => '/^[0](\d{3})(\d{3})(\d{3,4})$/', 'message' => 'Phone number must have \'0\' in first and contain 10 or 11 digit number.', 'when' => function ($model) {
+                return !isset($model->phone_number);
+            }],
         ];
     }
 
