@@ -266,8 +266,8 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-8-137x90-137x90.png"
-                                                    alt="Nintendo"/></a>
+                                                    src="images/data/fg.png"
+                                                    alt="FreshGarden"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -275,8 +275,8 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-2-137x90-137x90.png"
-                                                    alt="Manufacturers1"/></a>
+                                                    src="images/data/VietGap.jpg"
+                                                    alt="VietGap"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -284,8 +284,8 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-6-137x90-137x90.png"
-                                                    alt="Burger King"/></a>
+                                                    src="images/data/fg.png"
+                                                    alt="FreshGarden"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -293,8 +293,8 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-8-137x90-137x90.png"
-                                                    alt="Canon"/></a>
+                                                    src="images/data/VietGap.jpg"
+                                                    alt="VietGap"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -302,8 +302,8 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-3-137x90-137x90.png"
-                                                    alt="Harley Davidson"/></a>
+                                                    src="images/data/fg.png"
+                                                    alt="FreshGarden"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -311,29 +311,12 @@ echo $this->render('/layouts/_header');
                                     <div class="product-block">
                                         <div class="product-block-inner">
                                             <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-5-137x90-137x90.png"
-                                                    alt="Dell"/></a>
+                                                    src="images/data/VietGap.jpg"
+                                                    alt="VietGap"/></a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="slider-item">
-                                    <div class="product-block">
-                                        <div class="product-block-inner">
-                                            <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-4-137x90-137x90.png"
-                                                    alt="Disney"/></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slider-item">
-                                    <div class="product-block">
-                                        <div class="product-block-inner">
-                                            <a href="#"><img
-                                                    src="http://opencart-demos.org/OPC05/OPC050107/image/cache/catalog/logo-3-137x90-137x90.png"
-                                                    alt="Starbucks"/></a>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         <span class="module_default_width" style="display:none; visibility:hidden"></span></div>

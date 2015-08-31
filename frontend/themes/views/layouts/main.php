@@ -99,25 +99,9 @@ $baseUrl = Yii::$app->request->baseUrl;
     </div>
     <div id="main_footer">
         <div id="bottomfooter">
-            <ul>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/special">Specials</a>
-                </li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=affiliate/account">Affiliates</a>
-                </li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/voucher">Gift
-                        Vouchers</a></li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=product/manufacturer">Brands</a>
-                </li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=account/return/add">Returns</a>
-                </li>
-                <li><a href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/sitemap">Site Map</a>
-                </li>
-                <li class="login-logout"><a
-                        href="http://opencart-demos.org/OPC05/OPC050107/index.php?route=information/contact">Contact
-                        Us</a></li>
-            </ul>
+
         </div>
-        <div class="copy-right">Powered By <a href="http://www.opencart.com">OpenCart</a> Your Store &copy; 2015</div>
+        <div class="copy-right">Powered By <a href="<?=Yii::$app->request->baseUrl?>">FreshGarden</a> &copy; 2015</div>
     </div>
 </footer>
 </body>
