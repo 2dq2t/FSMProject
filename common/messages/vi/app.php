@@ -692,5 +692,6 @@ kiệm chi phí mua hàng.',
     'Vietgap Standards' => 'Tiêu Chuẩn VietGap',
     'Create Vietgap Standard' => 'Tạo bài viết Tiêu Chuẩn VietGap',
     'Update Vietgap Standard' => 'Cập nhật bài viết Tiêu Chuẩn VietGap:',
-    'Update Food Preservation' => 'Cập nhật bài viết Bảo Quản Thực Phẩm:'
+    'Update Food Preservation' => 'Cập nhật bài viết Bảo Quản Thực Phẩm:',
+    'PhoneNumber Error'=>'Số điện thoại phải có số \'0\' ở đầu và có 10 hoặc 11 chữ số.',
 );
