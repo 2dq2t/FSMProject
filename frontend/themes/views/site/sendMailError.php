@@ -11,7 +11,7 @@ echo $this->render('/layouts/_header');
     <ul class="breadcrumb">
         <li><a href="<?= Yii::$app->request->baseUrl ?>"><i class="fa fa-home"></i></a></li>
         <li>
-            <a><?= Yii::t('app','Recipes') ?></a>
+            <a><?= Yii::t('app','Error') ?></a>
         </li>
     </ul>
     <div class="row content-subinner">

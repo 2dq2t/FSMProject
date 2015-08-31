@@ -187,16 +187,16 @@ $baseUrl = Yii::$app->request->baseUrl;
                                     <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['email/index']) ?>
                                 </li>
                                 <li class="<?= isActive(['foodpreservation']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-bag"></i> ' . Yii::t('app', 'Food Preservation'), ['foodpreservation/index']) ?>
+                                    <?= HtmL::a('<i class="icon-bag"></i> ' . Yii::t('app', 'Food Preservations'), ['foodpreservation/index']) ?>
                                 </li>
                                 <li class="<?= isActive(['recipes']) ? 'active' : '' ?>">
                                     <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Recipes'), ['recipes/index']) ?>
                                 </li>
                                 <li class="<?= isActive(['regulationpolicy']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-share"></i> ' . Yii::t('app', 'Regulation Policy'), ['regulationpolicy/index']) ?>
+                                    <?= HtmL::a('<i class="icon-share"></i> ' . Yii::t('app', 'Regulation Policies'), ['regulationpolicy/index']) ?>
                                 </li>
                                 <li class="<?= isActive(['vietgapstandard']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-link"></i> ' . Yii::t('app', 'Vietgap Standard'), ['vietgapstandard/index']) ?>
+                                    <?= HtmL::a('<i class="icon-link"></i> ' . Yii::t('app', 'Vietgap Standards'), ['vietgapstandard/index']) ?>
                                 </li>
                             </ul>
                         </li>
