@@ -251,7 +251,7 @@ class CheckoutController extends Controller {
                         }
 
                         $guest_id = Customer::find()->select(['guest_id'])->where(['id'=>Yii::$app->user->identity->getId()])->one();
-                        $order_date = ParserDateTime::parseToTimestamp(date("m/d/Y"));
+                        $order_date = strtotime(date("m/d/Y"));
                         $checkout_info = $_POST['CheckoutInfo'];
                         $receiving_date = ParserDateTime::parseToTimestamp($checkout_info['receiving_date']);
 
