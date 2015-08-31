@@ -232,13 +232,6 @@ class CheckoutController extends Controller {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         $address_data = $_POST['Address'];
-                        if (!empty($_POST['updateAddress'])) {
-                            $address_id = Customer::find()->select(['address_id'])->where(['id' => Yii::$app->user->identity->getId()])->one();
-                            $update_customer_address = Address::find()->where(['id' => $address_id['address_id']])->one();
-                            $update_customer_address->detail = $address_data['detail'];
-                            $update_customer_address->district_id = $address_data['district_id'];
-                            $update_customer_address->update();
-                        }
 
                         $order_address = new OrderAddress();
                         $order_address->detail = $address_data['detail'];

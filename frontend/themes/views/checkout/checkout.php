@@ -205,10 +205,10 @@ echo $this->render('/layouts/_header');
                                                         'prompt'=> Yii::t('app', '- Chọn Tỉnh / Thành phố -'),
                                                         'onchange'=>'
                                                 $.post( "index.php?r=account/getdistrict&id="+$(this).val(), function( file ) {
-                                                    $( "select#district-id" ).length = 0;
-                                                    $( "select#district-id" ).html( file );
+                                                    $( "select#address-district_id" ).length = 0;
+                                                    $( "select#address-district_id" ).html( file );
                                                     var event = new Event("change");
-                                                    document.getElementById("district-id").dispatchEvent(event);
+                                                    document.getElementById("address-district_id").dispatchEvent(event);
                                                 });'
                                                     ])->label(false);
                                             } else {
@@ -281,13 +281,6 @@ echo $this->render('/layouts/_header');
 
                                 </div>
                             </div>
-                            <?php if (!Yii::$app->user->isGuest) { ?>
-                                <div class="checkbox">
-                                    <label>
-                                        <input id="cbUpdateAddress" type="checkbox" name="updateAddress" value="FALSE">
-                                        Cập nhật địa chỉ của tôi.</label>
-                                </div>
-                            <?php } ?>
                             <h2><?= Yii::t('app', 'ShoppingCartNotice01') ?></h2>
 
                             <p><?= Yii::t('app', 'ShoppingCartNotice02') ?></p>
@@ -323,10 +316,7 @@ echo $this->render('/layouts/_header');
 
                                             <div id="voucherResult"></div>
                                             <script type="text/javascript"><!--
-                                                $('#cbUpdateAddress').change(function () {
-                                                    cb = $(this);
-                                                    cb.val(cb.prop('checked'));
-                                                });
+
                                                 $('#button-voucher').on('click', function () {
                                                     $.ajax({
                                                         url: 'index.php?r=checkout/check-voucher',
@@ -358,12 +348,17 @@ echo $this->render('/layouts/_header');
                             <div class="buttons">
                                 <div class="pull-right">
                                     <input type="submit" value="<?= Yii::t('app', 'Checkout checkout') ?>"
-                                           id="button-guest"
+                                           id="checkout"
                                            data-loading-text="Loading..." class="btn btn-primary">
                                 </div>
                             </div>
 
                             <?php ActiveForm::end() ?>
+                            <script type="text/javascript">
+                                $('#checkout').one('click',function(){
+                                    document.getElementById("checkout").disable = true;
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>

@@ -155,7 +155,7 @@ class SiteController extends Controller
             $food_preservation = FoodPreservation::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['fp']])->one();
             return $this->render('foodPreservation',['food_preservation'=>$food_preservation]);
         }
-        $food_preservation_query = FoodPreservation::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $food_preservation_query = FoodPreservation::find()->select(['id','title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
         $countQuery = clone $food_preservation_query;
         $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
         $food_preservation = $food_preservation_query->offset($pagination->offset)->limit($pagination->limit)->all();
@@ -167,7 +167,7 @@ class SiteController extends Controller
             $recipes = Recipes::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['recipes']])->one();
             return $this->render('recipes',['recipes'=>$recipes]);
         }
-        $recipes_query = Recipes::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $recipes_query = Recipes::find()->select(['id','title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
         $countQuery = clone $recipes_query;
         $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
         $recipes = $recipes_query->offset($pagination->offset)->limit($pagination->limit)->all();
@@ -179,7 +179,7 @@ class SiteController extends Controller
             $regulation_policy = RegulationPolicy::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['rp']])->one();
             return $this->render('regulationPolicy',['regulation_policy'=>$regulation_policy]);
         }
-        $regulation_policy_query = RegulationPolicy::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $regulation_policy_query = RegulationPolicy::find()->select(['id','title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
         $countQuery = clone $regulation_policy_query;
         $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
         $regulation_policy = $regulation_policy_query->offset($pagination->offset)->limit($pagination->limit)->all();
@@ -191,7 +191,7 @@ class SiteController extends Controller
             $vietgap_standard = VietgapStandard::find()->select(['title','alias','full_post'])->where(['alias'=>$_GET['vs']])->one();
             return $this->render('vietgapStandard',['vietgap_standard'=>$vietgap_standard]);
         }
-        $vietgap_standard_query = VietgapStandard::find()->select(['title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
+        $vietgap_standard_query = VietgapStandard::find()->select(['id','title','alias','image','post_info'])->where(['active'=>self::STATUS_ACTIVE]);
         $countQuery = clone $vietgap_standard_query;
         $pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
         $vietgap_standard = $vietgap_standard_query->offset($pagination->offset)->limit($pagination->limit)->all();

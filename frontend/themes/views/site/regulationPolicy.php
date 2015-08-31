@@ -31,7 +31,7 @@ echo $this->render('/layouts/_header');
             <?php if(!empty($pagination)):?>
             <?php foreach($regulation_policy as $item):?>
             <div class="aboutus" ><h1> <a href="<?= "index.php?r=site/regulation-policy&rp=".$item['alias']?>"></a><?= $item['title']?></h1>
-                <div class="image1"><img src="<?=$item['image']?>">&nbsp;</div>
+                <div class="image1"><img src="<?="uploads/regulationpolicy/".$item['id']."/".$item['image']?>" width="60" height="60">&nbsp;</div>
             <div class="content post-content"><?php $item['post_info']?></div>
         </div>
         <?php endforeach?>
