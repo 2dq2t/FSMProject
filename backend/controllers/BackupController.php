@@ -165,12 +165,28 @@ class BackupController extends Controller
         }
     }
 
+    private function getProcedureCode($procedure)
+    {
+        $sql = "SHOW CREATE PROCEDURE " . $procedure;
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $procedure_code = $cmd->queryAll()[0]['Create Procedure'];
+        fwrite($this->fp, $procedure_code . "$$" . PHP_EOL . "\n");
+    }
+
     public function getTables($dbName = null)
     {
         $sql = 'SHOW TABLES';
         $cmd = \Yii::$app->db->createCommand($sql);
         $tables = $cmd->queryColumn();
         return $tables;
+    }
+
+    private function getProcedures()
+    {
+        $sql = "SHOW PROCEDURE STATUS WHERE Db = '" . $this->getDbName() . "'";
+        $cmd = \Yii::$app->db->createCommand($sql);
+        $procedures = $cmd->queryAll();
+        return $procedures;
     }
 
     public function StartBackup($addcheck = true)
@@ -195,11 +211,11 @@ class BackupController extends Controller
 
         $this->writeComment('START BACKUP');
 
-        $this->writeComment('Schema fsmdb');
-        fwrite ($this-> fp, 'DROP SCHEMA IF EXISTS `fsmdb` ;'.PHP_EOL.PHP_EOL);
-        $this->writeComment('Schema fsmdb');
-        fwrite($this->fp, 'CREATE SCHEMA IF NOT EXISTS `fsmdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'.PHP_EOL);
-        fwrite($this->fp, 'USE `fsmdb` ;'.PHP_EOL.PHP_EOL);
+        $this->writeComment('Schema ' . $this->getDbName());
+        fwrite ($this-> fp, 'DROP SCHEMA IF EXISTS `' . $this->getDbName() . '` ;'.PHP_EOL.PHP_EOL);
+        $this->writeComment('Schema '. $this->getDbName());
+        fwrite($this->fp, 'CREATE SCHEMA IF NOT EXISTS `' . $this->getDbName() . '` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'.PHP_EOL);
+        fwrite($this->fp, 'USE `' . $this->getDbName() . '` ;'.PHP_EOL.PHP_EOL);
 
         return true;
     }
@@ -232,11 +248,17 @@ class BackupController extends Controller
         fwrite ( $this->fp, '-- -------------------------------------------'.PHP_EOL );
     }
 
+    private function getDbName()
+    {
+        return explode('=', \Yii::$app->db->dsn)[2];
+    }
+
     public function actionCreate()
     {
         $flashError = '';
         $flashMsg = '';
 
+        $procedures = $this->getProcedures();
         $tables = $this->getTables();
 
         try {
@@ -267,6 +289,17 @@ class BackupController extends Controller
 
             Logger::log(Logger::ERROR, \Yii::t('app', 'Create backup was error: ') . $e->getMessage(), \Yii::$app->user->identity->email);
             return $this->redirect('index');
+        }
+
+        if ($procedures) {
+            fwrite( $this->fp, 'DELIMITER $$' . PHP_EOL);
+            fwrite( $this->fp, '--'. PHP_EOL);
+            fwrite( $this->fp, '-- Procedures'. PHP_EOL);
+            fwrite( $this->fp, '--'. PHP_EOL);
+            foreach ($procedures as $procedure) {
+                $this->getProcedureCode($procedure['Name']);
+            }
+            fwrite( $this->fp, 'DELIMITER ;' . PHP_EOL);
         }
 
         foreach($tables as $tableName)

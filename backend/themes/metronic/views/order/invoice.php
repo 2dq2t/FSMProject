@@ -39,7 +39,7 @@ foreach ($models as $model) { ?>
                 <div class="row invoice-logo">
                     <div class="col-xs-6 invoice-logo-space">
                         <img
-                            src="../../frontend/web/images/data/logo2.png" class="img-responsive" width="300" height="350" alt=""/>
+                            src="../../frontend/web/images/data/logo.png" class="img-responsive" width="300" height="350" alt=""/>
                     </div>
                     <div class="col-xs-6">
                     </div>
