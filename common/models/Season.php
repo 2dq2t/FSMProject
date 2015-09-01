@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use backend\components\ParserDateTime;
 use Yii;
 
 /**
@@ -21,14 +20,14 @@ class Season extends \yii\db\ActiveRecord
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
-    private $productsList;
+    private $products_list;
 
     /**
      * @return mixed
      */
     public function getProductsList()
     {
-        return $this->productsList;
+        return $this->products_list;
     }
 
     /**
@@ -36,7 +35,7 @@ class Season extends \yii\db\ActiveRecord
      */
     public function setProductsList($products_list)
     {
-        $this->productsList = $products_list;
+        $this->products_list = $products_list;
     }
     /**
      * @inheritdoc
@@ -54,19 +53,10 @@ class Season extends \yii\db\ActiveRecord
         return [
             [['name', 'from', 'to'], 'required'],
             [['active'], 'integer'],
-            [['from', 'to', 'productsList'], 'safe'],
+            [['from', 'to', 'products_list'], 'safe'],
             [['name'], 'string', 'max' => 255],
-            [['name'], 'unique'],
-            [['to'], 'validateDate']
+            [['name'], 'unique']
         ];
-    }
-
-    public function validateDate($attribute) {
-        if (!empty($this->from) && !empty($this->to)) {
-            if (ParserDateTime::parseToTimestamp($this->from) > ParserDateTime::parseToTimestamp($this->to)) {
-                $this->addError($attribute, Yii::t('app', 'Season from date must greater than Season to date'));
-            }
-        }
     }
 
     /**
