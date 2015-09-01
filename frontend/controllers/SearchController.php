@@ -106,7 +106,7 @@ class SearchController extends Controller{
                     $search_with_description = 'checked';
                 } else {
                     $query = (new Query())
-                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax','category.name', 'image.resize_path as image_path', '(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax','category.name', 'image.path as image_path', '(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
                         ->from('product')
                         ->innerJoin('image', 'product.id = image.product_id')
                         ->innerJoin('category', 'product.category_id = category.id')
