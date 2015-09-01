@@ -71,7 +71,7 @@ class Customer extends ActiveRecord implements IdentityInterface
             ['re_new_password', 'compare', 'compareAttribute' => 'new_password'],
             [['auth_key', 'password_reset_token'], 'string', 'max' => 255],
             [['username'], 'unique'],
-            [['username'], 'match', 'pattern' => '/^([a-zA-Z])[a-zA-Z_-]*[\w_-]*[\S]$|^([a-zA-Z])[0-9_-]*[\S]$|^[a-zA-Z]*[\S]$/', 'message' => Yii::t('app', 'User name must valid: is alphanumeric, starts with an alphabet and contains no special characters other than underscore or dash')],
+            [['username'], 'match', 'pattern' => '/^([a-zA-Z0-9]{6,255})$/', 'message' => Yii::t('app', 'User name must valid: is alphanumeric, starts with an alphabet and contains no special characters other than underscore or dash')],
             [['avatar'], 'file', 'extensions' => 'jpeg, jpg, png, gif']
         ];
     }
