@@ -21,7 +21,7 @@ class SearchController extends Controller{
     public function actionAutoComplete($q)
     {
         $query = new Query();
-        $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
+        $query->select(['product.name AS product_name, category.name AS category_name, i.resize_path','(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
             ->from('product')
             ->join('INNER JOIN', 'category', 'category.id = product.category_id')
             ->join('INNER JOIN', '(
@@ -29,7 +29,10 @@ class SearchController extends Controller{
                     FROM image
                     GROUP BY product_id
                 ) AS i', 'i.product_id = product.id')
-            ->where('MATCH(product.name) AGAINST ("+' . mysql_real_escape_string($q) . '*" IN BOOLEAN MODE) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+            ->where('( MATCH(product.name) AGAINST ("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
+                'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+            ->having('score > 0.1')
+            ->orderBy('score DESC')
             ->limit(10);
         $command = $query->createCommand();
         $products = $command->queryAll();
@@ -103,7 +106,7 @@ class SearchController extends Controller{
                     $search_with_description = 'checked';
                 } else {
                     $query = (new Query())
-                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax','category.name', 'image.resize_path as image_path', '(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
+                        ->select(['product.id as product_id', 'product.name as product_name', 'product.intro as product_intro', 'product.price as product_price', 'product.tax as product_tax','category.name', 'image.path as image_path', '(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
                         ->from('product')
                         ->innerJoin('image', 'product.id = image.product_id')
                         ->innerJoin('category', 'product.category_id = category.id')

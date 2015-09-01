@@ -128,7 +128,7 @@ class CategoryController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-plus',
-                    'message' => Yii::t('app', 'Category_Add_Success_Msg.'),
+                    'message' => Yii::t('app', 'Category_Add_Success_Msg'),
                     'title' => Yii::t('app', 'Create Category')
                 ]);
                 Logger::log(Logger::INFO, Yii::t('app', 'Add Category success'), Yii::$app->user->identity->email);
@@ -176,7 +176,7 @@ class CategoryController extends Controller
                     'type' => 'success',
                     'duration' => 3000,
                     'icon' => 'fa fa-pencil',
-                    'message' => Yii::t('app', 'Category_Update_Success_Msg.'),
+                    'message' => Yii::t('app', 'Category_Update_Success_Msg'),
                     'title' => Yii::t('app', 'Update Category')
                 ]);
                 Logger::log(Logger::INFO, Yii::t('app', 'Update Category success'), Yii::$app->user->identity->email, $oldModel, $model->attributes);
@@ -186,7 +186,7 @@ class CategoryController extends Controller
                     'type' => 'error',
                     'duration' => 0,
                     'icon' => 'fa fa-pencil',
-                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category_Update_Error_Msg.'),
+                    'message' => current($model->getFirstErrors()) ? current($model->getFirstErrors()) : Yii::t('app', 'Category_Update_Error_Msg'),
                     'title' => Yii::t('app', 'Update Category')
                 ]);
 

@@ -176,7 +176,7 @@ class CustomerController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-plus',
-                            'message' => Yii::t('app', 'Customer_Add_Success_Msg.'),
+                            'message' => Yii::t('app', 'Customer_Add_Success_Msg'),
                             'title' => Yii::t('app', 'Create Customer'),
                         ]);
 
@@ -353,7 +353,7 @@ class CustomerController extends Controller
                             'type' => 'success',
                             'duration' => 3000,
                             'icon' => 'fa fa-pencil',
-                            'message' => Yii::t('app', 'Customer_Update_Success_Msg.'),
+                            'message' => Yii::t('app', 'Customer_Update_Success_Msg'),
                             'title' => Yii::t('app', 'Update Customer'),
                         ]);
 
