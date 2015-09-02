@@ -1762,12 +1762,9 @@ ul.box-category > li a.active {
 .product-tag{margin:10px 0 0;}
 #content .aboutus {
     clear: both;
-    margin-top: 10px;
+    min-height: 100px;
 }
 
-.post-content{
-    margin-right: 10px;
-}
 .image1 {
     background: url("../images/megnor/cms-sprite.png") no-repeat scroll 7px -165px;
     float: left;
@@ -1799,7 +1796,7 @@ ul.box-category > li a.active {
 .aboutus h2{clear:both;font-size:20px;}
 .about-content{overflow:hidden;}
 
-.aboutus .content{margin-bottom:15px; overflow:hidden;}
+.aboutus .content{margin-bottom:5px; overflow:hidden;}
 
 
 
@@ -1999,8 +1996,6 @@ background: url("../images/megnor/sprite.png") no-repeat scroll 1px -229px trans
 .page-title,.product-title,.product-option ,.information-information h1{
 	font-size: 20px;
 	font-weight: normal;
-	margin-bottom: 15px;
-	margin-top: 0;
 	text-shadow: 0 0 1px rgba(0, 0, 0, 0.01);
 	color:#777;
 }
