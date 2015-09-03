@@ -404,7 +404,7 @@ $this->title = Yii::t('app','HomeTitle');
                                         $new_revenue_by_last_six_month = [];
                                         $tmp_revenue_of_week_by_last_six_month = [];
 
-                                        var_dump($revenue_by_week_of_last_six_month);
+//                                        var_dump($revenue_by_week_of_last_six_month);
                                         foreach($revenue_by_week_of_last_six_month as $key => $value) {
                                             if (empty($tmp_revenue_of_week_by_last_six_month)) {
                                                 $tmp_revenue_of_week_by_last_six_month[$value['month']][] = [Yii::t('app','Week'). $value['weekOfMonth'],intval($value['Total'])];
@@ -918,7 +918,7 @@ $this->title = Yii::t('app','HomeTitle');
                                     $new_revenue_by_last_six_month = [];
                                     $tmp_revenue_of_week_by_last_six_month = [];
 
-                                    var_dump($revenue_by_week_of_last_six_month);
+//                                    var_dump($revenue_by_week_of_last_six_month);
                                     foreach($revenue_by_week_of_last_six_month as $key => $value) {
                                         if (empty($tmp_revenue_of_week_by_last_six_month)) {
                                             $tmp_revenue_of_week_by_last_six_month[$value['month']][] = [Yii::t('app','Week'). $value['weekOfMonth'],intval($value['Total'])];
