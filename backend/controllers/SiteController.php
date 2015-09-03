@@ -134,6 +134,7 @@ class SiteController extends Controller
     public function actionAdmin(){}
     public function actionManage(){}
     public function actionSale(){}
+    public function actionMarketing(){}
 
     public function actionLogin()
     {
