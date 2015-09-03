@@ -1246,6 +1246,7 @@ $this->title = Yii::t('app','HomeTitle');
         </div>
     </div>
 
+        
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light">
