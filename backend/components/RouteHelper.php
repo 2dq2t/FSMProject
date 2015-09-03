@@ -22,7 +22,7 @@ class RouteHelper
      * @param $refresh boolean
      * @return array
      */
-    public static function getAppRoutes($refresh = false)
+    public static function getAppRoutes($refresh = true)
     {
         $key = __METHOD__;
         if ($refresh) self::refreshFileCache();

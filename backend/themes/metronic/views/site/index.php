@@ -9,6 +9,7 @@ $this->title = Yii::t('app','HomeTitle');
     <?php
     \miloschuman\highcharts\HighchartsAsset::register($this)->withScripts(['modules/exporting', 'modules/drilldown']);
     ?>
+    <?php if (Yii::$app->user->can('site/sale')) {?>
     <!-- BEGIN DASHBOARD FOR SALE-->
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
@@ -521,7 +522,7 @@ $this->title = Yii::t('app','HomeTitle');
         </div>
     </div>
     <!-- END DASHBOARD FOR SALE-->
-
+    <?php } else if (Yii::$app->user->can('site/manage')) {?>
 
     <!-- BEGIN DASHBOARD FOR MANAGE-->
     <div class="row">
@@ -791,8 +792,55 @@ $this->title = Yii::t('app','HomeTitle');
         </div>
     </div>
     <!-- END DASHBOARD FOR MANAGE-->
+    <?php } else if (Yii::$app->user->can('site/admin')) { ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-globe"></i><?= $this->title ?>
+                        </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse">
+                            </a>
+                            </a>
+                            <a href="javascript:;" class="remove">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <?= \yii\helpers\Html::beginForm('','get') ?>
+                        <div class="form-body">
+                            <div class="form-group">
+                        <pre class="prettyprint linenums"><?php
+                            while(($buffer = fgets($file_log)) !== false) {
+                                echo $buffer;
+                            }
+                            fclose($context);
+                            ?>
+                        </pre>
+                            </div>
+                        </div>
 
-
+                        <div class="form-actions">
+                            <div class="col-md-3 btn-set pull-right">
+                                <?php echo $this->blocks['submit']; ?>
+                            </div>
+                        </div>
+                        <?= \yii\helpers\Html::endForm() ?>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } else {?>
+        <div class="row">
+            <div class="col-md-12">
+                <h1><?=Yii::t('app', 'Welcome to Fresh Garden System management')?></h1>
+            </div>
+        </div>
+    <?php } ?>
 </div>
 
 <?php

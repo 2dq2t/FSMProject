@@ -21,20 +21,20 @@ class SearchController extends Controller{
     public function actionAutoComplete($q)
     {
         $query = new Query();
-        $query->select(['product.name AS product_name, category.name AS category_name, i.resize_path','(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
-            ->from('product')
-            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
-            ->join('INNER JOIN', '(
-                    SELECT product_id, resize_path
-                    FROM image
-                    GROUP BY product_id
-                ) AS i', 'i.product_id = product.id')
-            ->where('( MATCH(product.name) AGAINST ("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
-                'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
-            ->having('score > 0.1')
-            ->orderBy('score DESC')
-            ->limit(10);
-        $command = $query->createCommand();
+//        $query->select(['product.name AS product_name, category.name AS category_name, i.resize_path','(MATCH(product.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE) + MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) . "*".'" IN BOOLEAN MODE)) AS score'])
+//            ->from('product')
+//            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
+//            ->join('INNER JOIN', '(
+//                    SELECT product_id, resize_path
+//                    FROM image
+//                    GROUP BY product_id
+//                ) AS i', 'i.product_id = product.id')
+//            ->where('( MATCH(product.name) AGAINST ("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE) OR ' .
+//                'MATCH(category.name) AGAINST("' . mysql_real_escape_string($q) ."*". '" IN BOOLEAN MODE)) AND category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+//            ->having('score > 0.1')
+//            ->orderBy('score DESC')
+//            ->limit(10);
+        $command = Yii::$app->db->createCommand("CALL search_autocomplete('" . mysql_real_escape_string($q) . "')");
         $products = $command->queryAll();
         $out = [];
         foreach ($products as $product) {
@@ -46,18 +46,18 @@ class SearchController extends Controller{
 
     public function actionPrefetch()
     {
-        $query = new Query();
-        $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
-            ->from('product')
-            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
-            ->join('INNER JOIN', '(
-                    SELECT product_id, resize_path
-                    FROM image
-                    GROUP BY product_id
-                ) AS i', 'i.product_id = product.id')
-            ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
-            ->limit(10);
-        $command = $query->createCommand();
+//        $query = new Query();
+//        $query->select('product.name AS product_name, category.name AS category_name, i.resize_path')
+//            ->from('product')
+//            ->join('INNER JOIN', 'category', 'category.id = product.category_id')
+//            ->join('INNER JOIN', '(
+//                    SELECT product_id, resize_path
+//                    FROM image
+//                    GROUP BY product_id
+//                ) AS i', 'i.product_id = product.id')
+//            ->where('category.active = ' . Category::STATUS_ACTIVE . ' AND product.active = ' . Product::STATUS_ACTIVE)
+//            ->limit(10);
+        $command = Yii::$app->db->createCommand("CALL search_prefetch()");
         $products = $command->queryAll();
         $out = [];
         foreach ($products as $product) {

@@ -96,6 +96,13 @@ class SiteController extends Controller
             $summary_of_profit = Yii::$app->db->createCommand("CALL summary_of_profit();")->queryAll();
             $summary_of_orders = Yii::$app->db->createCommand("SELECT COUNT(*) AS Total FROM `order`;")->queryAll();
             $summary_sale_by_location = Yii::$app->db->createCommand("CALL summary_sale_by_location(2);")->queryAll();
+
+            $file_log = glob(Logger::getInstance()->getLogDirectory() . '*.' . Logger::getInstance()->getConfig()['extension']);
+            usort($file_log, function($a, $b) {
+                return filemtime($a) < filemtime($b);
+            });
+
+
 //            $query->query()->close();
 
             return $this->render('index', [
@@ -118,10 +125,15 @@ class SiteController extends Controller
                 'summary_sale_by_category_by_years' => $summary_sale_by_category_by_years,
                 'summary_of_profit' => $summary_of_profit,
                 'summary_of_orders' => $summary_of_orders,
-                'summary_sale_by_location' => $summary_sale_by_location
+                'summary_sale_by_location' => $summary_sale_by_location,
+                'file_log' => $file_log[0]
             ]);
         }
     }
+
+    public function actionAdmin(){}
+    public function actionManage(){}
+    public function actionSale(){}
 
     public function actionLogin()
     {

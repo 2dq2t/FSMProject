@@ -8,6 +8,7 @@ $(document).ready(function () {
     template = Handlebars.compile($("#result-template").html());
 
     engine = new Bloodhound({
+        //initialize: false,
         identify: function (o) {
             return o.product_name;
         },
