@@ -420,8 +420,7 @@ class BackupController extends Controller
         $flashMsg = '';
 
         $file = $_GET[0]['filename'];
-//
-//        $this->updateMenuItems();
+
         $sqlFile = $this->path . basename($file);
         if (isset($file)) {
             $sqlFile = $this->path . basename($file);
@@ -431,9 +430,12 @@ class BackupController extends Controller
             $flashError = 'error';
             $flashMsg = \Yii::t('app', 'File not found');
         }
+        $transaction = \Yii::$app->db->beginTransaction();
         try {
             $this->execSqlFile($sqlFile);
+            $transaction->commit();
         } catch (Exception $e) {
+            $transaction->rollBack();
             $flashMsg = 'error';
             $flashMsg = $e->getMessage();
         }

@@ -73,15 +73,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'value' => function ($model) {
                 return date('d/m/Y', $model->order_date);
             },
-            'filterType' => GridView::FILTER_DATE,
-            'filterWidgetOptions' => [
-                'removeButton' => false,
-                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'autoclose' => true,
-                ],
-            ],
+            'filter' => false
+//            'filterType' => GridView::FILTER_DATE,
+//            'filterWidgetOptions' => [
+//                'removeButton' => false,
+//                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+//                'pluginOptions' => [
+//                    'allowClear' => true,
+//                    'autoclose' => true,
+//                ],
+//            ],
         ],
         [
             'attribute' => 'address',

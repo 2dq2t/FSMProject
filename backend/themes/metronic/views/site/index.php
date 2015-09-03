@@ -5,6 +5,7 @@ $this->title = Yii::t('app','HomeTitle');
 ?>
 <div class="site-index">
 
+
     <?php
     \miloschuman\highcharts\HighchartsAsset::register($this)->withScripts(['modules/exporting', 'modules/drilldown']);
     ?>

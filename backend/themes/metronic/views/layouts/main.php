@@ -111,21 +111,21 @@ $baseUrl = Yii::$app->request->baseUrl;
         <!-- END HEADER -->
         <?php
 
-        function isActive($routes = array())
-        {
-            $routeCurrent = '';
-            if (Yii::$app->controller->module !== null) {
-                $routeCurrent .= sprintf('%s/', Yii::$app->controller->module->id);
-            }
-            $routeCurrent .= sprintf('%s/%s', Yii::$app->controller->id, Yii::$app->controller->action->id);
-            foreach ($routes as $route) {
-                $pattern = sprintf('~\b%s\b~', preg_quote($route));
-                if (preg_match($pattern, $routeCurrent)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+//        function isActive($routes = array())
+//        {
+//            $routeCurrent = '';
+//            if (Yii::$app->controller->module !== null) {
+//                $routeCurrent .= sprintf('%s/', Yii::$app->controller->module->id);
+//            }
+//            $routeCurrent .= sprintf('%s/%s', Yii::$app->controller->id, Yii::$app->controller->action->id);
+//            foreach ($routes as $route) {
+//                $pattern = sprintf('~\b%s\b~', preg_quote($route));
+//                if (preg_match($pattern, $routeCurrent)) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
 
         ?>
         <div class="clearfix">
@@ -139,228 +139,194 @@ $baseUrl = Yii::$app->request->baseUrl;
                 <div class="page-sidebar navbar-collapse collapse">
                     <!-- BEGIN SIDEBAR MENU -->
                     <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                        <li class="start <?= isActive(['site/index']) ? 'active' : ''?>">
-                            <?= HtmL::a("<i class='icon-home'></i> <span class='title'>" .Yii::t('app', 'Dashboard'). "</span>" , Yii::$app->homeUrl) ?>
-                        </li>
 
-                        <!--MARKETING-->
-                        <li class="<?= isActive([
-                            'faq',
-                            'voucher',
-                            'offer',
-                            'slideshow',
-                            'email',
-                            'foodpreservation',
-                            'recipes',
-                            'regulationpolicy',
-                            'vietgapstandard'
-                        ]) ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-bar-chart"></i>
-                                <span class="title"><?= Yii::t('app', 'Marketing')?></span>
-                                <span class="arrow <?= isActive([
-                                    'faq',
-                                    'voucher',
-                                    'offer',
-                                    'slideshow',
-                                    'email',
-                                    'foodpreservation',
-                                    'recipes',
-                                    'regulationpolicy',
-                                    'vietgapstandard'
-                                ]) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['faq']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-support"></i> ' . Yii::t('app', 'FAQs'), ['faq/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['voucher']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-wallet"></i> ' . Yii::t('app', 'Voucher'), ['voucher/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['offer']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-share-alt"></i> ' . Yii::t('app', 'Product Offer'), ['offer/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['slideshow']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-crop"></i> ' . Yii::t('app', 'Slide Shows'), ['slideshow/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['email']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-envelope-open"></i> ' . Yii::t('app', 'Mail'), ['email/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['foodpreservation']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-bag"></i> ' . Yii::t('app', 'Food Preservations'), ['foodpreservation/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['recipes']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Recipes'), ['recipes/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['regulationpolicy']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-share"></i> ' . Yii::t('app', 'Regulation Policies'), ['regulationpolicy/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['vietgapstandard']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-link"></i> ' . Yii::t('app', 'Vietgap Standards'), ['vietgapstandard/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END MARKETING-->
+                        <?php
+                        $s = [
+                            [
+                                'url' => ['site/index'],
+                                'label' => Yii::t('app', 'Dashboard'),
+                                'icon' => 'icon-home',
+                                'items' => []
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Marketing'),
+                                'icon' => 'icon-bar-chart',
+                                'items' => [
+                                    [
+                                        'url' => ['faq/index', 'faq/create', 'faq/update'],
+                                        'label' => Yii::t('app', 'FAQs'),
+                                        'icon' => 'icon-support',
+                                    ],
+                                    [
+                                        'url' => ['voucher/index', 'voucher/create', 'voucher/update'],
+                                        'label' => Yii::t('app', 'Voucher'),
+                                        'icon' => 'icon-wallet'
+                                    ],
+                                    [
+                                        'url' => ['offer/index', 'offer/create', 'offer/update'],
+                                        'label' => Yii::t('app', 'Product Offer'),
+                                        'icon' => 'icon-share-alt'
+                                    ],
+                                    [
+                                        'url' => ['slideshow/index', 'slideshow/create', 'slideshow/update'],
+                                        'label' => Yii::t('app', 'Slide Shows'),
+                                        'icon' => 'icon-crop'
+                                    ],
+                                    [
+                                        'url' => ['email/index', 'email/sendemail'],
+                                        'label' => Yii::t('app', 'Mail'),
+                                        'icon' => 'icon-envelope-open'
+                                    ],
+                                    [
+                                        'url' => ['foodpreservation/index', 'foodpreservation/create', 'foodpreservation/update'],
+                                        'label' => Yii::t('app', 'Food Preservations'),
+                                        'icon' => 'icon-bag'
+                                    ],
+                                    [
+                                        'url' => ['recipes/index', 'recipes/create', 'recipes/update'],
+                                        'label' => Yii::t('app', 'Recipes'),
+                                        'icon' => 'icon-note'
+                                    ],
+                                    [
+                                        'url' => ['regulationpolicy/index', 'regulationpolicy/create', 'regulationpolicy/update'],
+                                        'label' => Yii::t('app', 'Regulation Policies'),
+                                        'icon' => 'icon-share'
+                                    ],
+                                    [
+                                        'url' => ['vietgapstandard/index', 'vietgapstandard/create', 'vietgapstandard/update'],
+                                        'label' => Yii::t('app', 'Vietgap Standards'),
+                                        'icon' => 'icon-link'
+                                    ],
+                                ]
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Business'),
+                                'icon' => 'icon-present',
+                                'items' => [
+                                    [
+                                        'url' => ['category/index', 'category/create', 'category/update'],
+                                        'label' => Yii::t('app', 'Categories'),
+                                        'icon' => 'icon-tag',
+                                    ],
+                                    [
+                                        'url' => ['unit/index', 'unit/create', 'unit/update'],
+                                        'label' => Yii::t('app', 'Unit'),
+                                        'icon' => 'icon-list',
+                                    ],
+                                    [
+                                        'url' => ['season/index', 'season/create', 'season/update'],
+                                        'label' => Yii::t('app', 'Season'),
+                                        'icon' => 'icon-grid'
+                                    ],
+                                    [
+                                        'url' => ['tag/index', 'tag/create', 'tag/update'],
+                                        'label' => Yii::t('app', 'Tags'),
+                                        'icon' => 'icon-pin'
+                                    ],
+                                    [
+                                        'url' => ['rating/index', 'rating/create', 'rating/update'],
+                                        'label' => Yii::t('app', 'Rating'),
+                                        'icon' => 'icon-star'
+                                    ],
+                                    [
+                                        'url' => ['product/index', 'product/create', 'product/update'],
+                                        'label' => Yii::t('app', 'Product'),
+                                        'icon' => 'icon-handbag'
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Sale'),
+                                'icon' => 'icon-basket',
+                                'items' => [
+                                    [
+                                        'url' => ['order/index', 'order/create', 'order/update'],
+                                        'label' => Yii::t('app', 'Order'),
+                                        'icon' => 'icon-tag'
+                                    ],
+                                    [
+                                        'url' => ['orderstatus/index', 'orderstatus/create', 'orderstatus/update'],
+                                        'label' => Yii::t('app', 'Order Status'),
+                                        'icon' => 'icon-notebook'
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Employee'),
+                                'icon' => 'icon-user',
+                                'items' => [
+                                    [
+                                        'url' => ['employee/index', 'employee/create', 'employee/update'],
+                                        'label' => Yii::t('app', 'EmployeeInfo'),
+                                        'icon' => 'icon-book-open'
+                                    ],
+                                    [
+                                        'label' => Yii::t('app', 'Authorization'),
+                                        'icon' => 'icon-energy',
+                                        'items' => [
+                                            [
+                                                'url' => ['assignment/index', 'assignment/create', 'assignment/update'],
+                                                'label' => Yii::t('app', 'Assignment'),
+                                                'icon' => 'icon-login'
+                                            ],
+                                            [
+                                                'url' => ['role/index', 'role/create', 'role/update'],
+                                                'label' => Yii::t('app', 'Role'),
+                                                'icon' => 'icon-users'
+                                            ],
+                                            [
+                                                'url' => ['route/index', 'route/create', 'route/assign'],
+                                                'label' => Yii::t('app', 'Route'),
+                                                'icon' => 'icon-reload'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Customer'),
+                                'icon' => 'icon-users',
+                                'items' => [
+                                    [
+                                        'url' => ['guest/index', 'guest/create', 'guest/update'],
+                                        'label' => Yii::t('app', 'Guest'),
+                                        'icon' => 'icon-notebook'
+                                    ],
+                                    [
+                                        'url' => ['customer/index', 'customer/create', 'customer/update'],
+                                        'label' => Yii::t('app', 'Customers'),
+                                        'icon' => 'icon-book-open'
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => Yii::t('app', 'Settings'),
+                                'icon' => 'icon-settings',
+                                'items' => [
+                                    [
+                                        'url' => ['i18n/index', 'i18n/update'],
+                                        'label' => Yii::t('app', 'I18n'),
+                                        'icon' => 'icon-globe'
+                                    ],
+                                    [
+                                        'url' => ['backup/index', 'backup/create', 'backup/delete', 'backup/restore', 'backup/upload'],
+                                        'label' =>  Yii::t('app', 'Backup'),
+                                        'icon' => 'icon-layers'
+                                    ],
+                                    [
+                                        'url' => ['log/index', 'log/index', 'log/view', 'log/delete', 'log/download'],
+                                        'label' => Yii::t('app', 'Log'),
+                                        'icon' => 'icon-note'
+                                    ]
+                                ]
+                            ]
+                        ];
 
-                        <!--BUSINESS-->
-                        <li class="<?= isActive([
-                            'category',
-                            'unit',
-                            'season',
-                            'tag',
-                            'rating',
-                            'product'
-                        ]) ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-present"></i>
-                                <span class="title"><?= Yii::t('app', 'Business')?></span>
-                                <span class="arrow <?= isActive([
-                                    'category',
-                                    'unit',
-                                    'season',
-                                    'tag',
-                                    'rating',
-                                    'product'
-                                ]) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['category']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Categories'), ['category/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['unit']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-list"></i> ' . Yii::t('app', 'Unit'), ['unit/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['season']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-grid"></i> ' . Yii::t('app', 'Season'), ['season/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['tag']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-pin"></i> ' . Yii::t('app', 'Tags'), ['tag/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['rating']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-star"></i> ' . Yii::t('app', 'Rating'), ['rating/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['product']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-handbag"></i> ' . Yii::t('app', 'Product'), ['product/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END BUSINESS-->
+                        echo \backend\widgets\Menu::widget([
+                            'items' => $s
+                        ])
 
-                        <!--SALE-->
-                        <li class="<?= isActive(['order', 'orderstatus']) ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-basket"></i>
-                                <span class="title"><?= Yii::t('app', 'Sale')?></span>
-                                <span class="arrow <?= isActive(['order', 'orderstatus']) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['order']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-tag"></i> ' . Yii::t('app', 'Order'), ['order/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['orderstatus']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Order Status'), ['orderstatus/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END SALE-->
-
-                        <!--EMPLOYEE-->
-                        <li class="<?= isActive( [
-                            'employee',
-                            'assignment',
-                            'role',
-                            'permission',
-                            'route'
-                        ]) ? 'active open' : ''?>">
-                            <a href="javascript:;">
-                                <i class="icon-user"></i>
-                                <span class="title"><?= Yii::t('app', 'Employee')?></span>
-                                <span class="arrow <?= isActive([
-                                    'employee',
-                                    'assignment',
-                                    'role',
-                                    'route']) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['employee']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'EmployeeInfo'), ['employee/index']) ?>
-                                </li>
-                                <li class="<?= isActive([
-                                    'assignment',
-                                    'role',
-                                    'route'
-                                ]) ? 'active' : ''?>">
-                                    <a href="javascript:;">
-                                        <i class="icon-energy"></i> <span class="title"> <?= Yii::t('app', 'Authorization')?></span> <span class="arrow"></span>
-                                    </a>
-                                    <ul class="sub-menu">
-                                        <li class="<?= isActive(['assignment/index']) ? 'active' : '' ?>">
-                                            <?= HtmL::a('<i class="icon-login"></i> ' . Yii::t('app', 'Assignment'), ['assignment/index']) ?>
-                                        </li>
-                                        <li class="<?= isActive(['role']) ? 'active' : '' ?>">
-                                            <?= HtmL::a('<i class="icon-users"></i> ' . Yii::t('app', 'Role'), ['role/index']) ?>
-                                        </li>
-                                        <li class="<?= isActive(['route']) ? 'active' : '' ?>">
-                                            <?= HtmL::a('<i class="icon-reload"></i> ' . Yii::t('app', 'Route'), ['route/index']) ?>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END EMPLOYEE-->
-
-                        <!--CUSTOMER-->
-                        <li class="<?= isActive([
-                            'customer',
-                            'guest'
-                        ]) ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-users"></i>
-                                <span class="title"><?= Yii::t('app', 'Customer')?></span>
-                                <span class="arrow <?= isActive([
-                                    'customer',
-                                    'guest'
-                                ]) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['guest']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-notebook"></i> ' . Yii::t('app', 'Guest'), ['guest/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['customer']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-book-open"></i> ' . Yii::t('app', 'Customers'), ['customer/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END CUSTOMER-->
-
-                        <!--SETTING-->
-                        <li class="<?= isActive([
-                            'i18n',
-                            'backup',
-                            'log'
-                        ]) ? 'active open' : '' ?>">
-                            <a href="javascript:;">
-                                <i class="icon-settings"></i>
-                                <span class="title"><?= Yii::t('app', 'Settings')?></span>
-                                <span class="arrow <?= isActive([
-                                    'i18n',
-                                    'backup',
-                                    'log'
-                                ]) ? 'open' : '' ?>"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="<?= isActive(['i18n']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-globe"></i> ' . Yii::t('app', 'I18n'), ['i18n/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['backup']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-layers"></i> ' . Yii::t('app', 'Backup'), ['backup/index']) ?>
-                                </li>
-                                <li class="<?= isActive(['log']) ? 'active' : '' ?>">
-                                    <?= HtmL::a('<i class="icon-note"></i> ' . Yii::t('app', 'Log'), ['log/index']) ?>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--END SETTING-->
+                        ?>
                     </ul>
                     <!-- END SIDEBAR MENU -->
                 </div>

@@ -66,97 +66,37 @@ class SiteController extends Controller
         if(Yii::$app->user->isGuest) {
             return $this->renderPartial('login');
         } else {
-            $query = Yii::$app->db->createCommand("CALL top_product_sale_by_weekly()");
-            $query->prepare(true);
-            $top_sale_by_weekly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL top_product_sale_by_monthly()");
-            $query->prepare(true);
-            $top_sale_by_monthly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL top_customers_orders_by_weekly()");
-            $query->prepare(true);
-            $top_customers_orders_by_weekly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL top_customers_orders_by_monthly()");
-            $query->prepare(true);
-            $top_customers_orders_by_monthly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL last_10_orders_by_weekly()");
-            $query->prepare(true);
-            $last_10_orders_by_weekly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL last_10_orders_by_monthly()");
-            $query->prepare(true);
-            $last_10_orders_by_monthly = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL revenue_by_week_of_last_six_month()");
-            $query->prepare(true);
-            $revenue_by_week_of_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL revenue_by_last_six_month()");
-            $query->prepare(true);
-            $revenue_by_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL orders_by_week_of_last_six_month()");
-            $query->prepare(true);
-            $orders_by_week_of_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL orders_of_last_six_month()");
-            $query->prepare(true);
-            $orders_of_last_six_month = $query->query()->readAll();
-
-
-
-
-            $query = Yii::$app->db->createCommand("CALL top_ten_sale_product()");
-            $query->prepare(true);
-            $top_sell_products = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL total_profit_by_last_six_month()");
-            $query->prepare(true);
-            $total_profit_by_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("SELECT COUNT(*) AS numberOrder
+            \Yii::$app->db->pdo->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true);
+            $top_sale_by_weekly =  Yii::$app->db->createCommand("CALL top_product_sale_by_weekly();")->queryAll();
+            $top_sale_by_monthly = Yii::$app->db->createCommand("CALL top_product_sale_by_monthly();")->queryAll();
+            $top_customers_orders_by_weekly = Yii::$app->db->createCommand("CALL top_customers_orders_by_weekly();")->queryAll();
+            $top_customers_orders_by_monthly = Yii::$app->db->createCommand("CALL top_customers_orders_by_monthly();")->queryAll();
+            $last_10_orders_by_weekly = Yii::$app->db->createCommand("CALL last_10_orders_by_weekly();")->queryAll();
+            $last_10_orders_by_monthly = Yii::$app->db->createCommand("CALL last_10_orders_by_monthly();")->queryAll();
+            $revenue_by_week_of_last_six_month = Yii::$app->db->createCommand("CALL revenue_by_week_of_last_six_month();")->queryAll();
+            $revenue_by_last_six_month = Yii::$app->db->createCommand("CALL revenue_by_last_six_month();")->queryAll();
+            $orders_by_week_of_last_six_month = Yii::$app->db->createCommand("CALL orders_by_week_of_last_six_month();")->queryAll();
+            $orders_of_last_six_month = Yii::$app->db->createCommand("CALL orders_of_last_six_month();")->queryAll();
+            $top_sell_products = Yii::$app->db->createCommand("CALL top_ten_sale_product();")->queryAll();
+            $total_profit_by_last_six_month = Yii::$app->db->createCommand("CALL total_profit_by_last_six_month();")->queryAll();
+            $total_order_by_last_six_month = Yii::$app->db->createCommand("SELECT COUNT(*) AS numberOrder
                         FROM `order` AS o
                         WHERE FROM_UNIXTIME(o.order_date) < NOW() AND DATE_SUB(FROM_UNIXTIME(o.order_date), INTERVAL -6 MONTH )
-                        ORDER BY o.order_date DESC;");
-            $query->prepare(true);
-            $total_order_by_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("SELECT SUM(od.sell_price * od.quantity * (1-od.discount/100)) AS Total
+                        ORDER BY o.order_date DESC;")->queryAll();
+            $total_revenue_by_last_six_month = Yii::$app->db->createCommand("SELECT SUM(od.sell_price * od.quantity * (1-od.discount/100)) AS Total
                 FROM `order` AS o INNER JOIN order_details AS od ON o.id = od.order_id
                 WHERE o.order_status_id = 4 AND FROM_UNIXTIME(o.order_date) < NOW() AND DATE_SUB(FROM_UNIXTIME(o.order_date), INTERVAL -6 MONTH )
-                ORDER BY o.order_date DESC ;");
-            $query->prepare(true);
-            $total_revenue_by_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("SELECT SUM(o.tax_amount) AS Total
+                ORDER BY o.order_date DESC ;")->queryAll();
+            $total_tax_by_last_six_month = Yii::$app->db->createCommand("SELECT SUM(o.tax_amount) AS Total
                     FROM `order` AS o
                     WHERE o.order_status_id = 4 AND FROM_UNIXTIME(o.order_date) < NOW() AND DATE_SUB(FROM_UNIXTIME(o.order_date), INTERVAL -6 MONTH )
-                    ORDER BY o.order_date DESC ;");
-            $query->prepare(true);
-            $total_tax_by_last_six_month = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL summary_of_sale_by_category()");
-            $query->prepare(true);
-            $summary_sale_by_category = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL summary_of_sale_by_category_by_year()");
-            $query->prepare(true);
-            $summary_sale_by_category_by_years = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL summary_of_profit()");
-            $query->prepare(true);
-            $summary_of_profit = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("SELECT COUNT(*) AS Total FROM `order`");
-            $query->prepare(true);
-            $summary_of_orders = $query->query()->readAll();
-
-            $query = Yii::$app->db->createCommand("CALL summary_sale_by_location(2)");
-            $query->prepare(true);
-            $summary_sale_by_location = $query->query()->readAll();
+                    ORDER BY o.order_date DESC ;")->queryAll();
+            $summary_sale_by_category = Yii::$app->db->createCommand("CALL summary_of_sale_by_category();")->queryAll();
+            $summary_sale_by_category_by_years = Yii::$app->db->createCommand("CALL summary_of_sale_by_category_by_year();")->queryAll();
+            $summary_of_profit = Yii::$app->db->createCommand("CALL summary_of_profit();")->queryAll();
+            $summary_of_orders = Yii::$app->db->createCommand("SELECT COUNT(*) AS Total FROM `order`;")->queryAll();
+            $summary_sale_by_location = Yii::$app->db->createCommand("CALL summary_sale_by_location(2);")->queryAll();
+//            $query->query()->close();
 
             return $this->render('index', [
                 'top_sell_products' => $top_sell_products,
@@ -248,5 +188,18 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionError()
+    {
+//        if($error=Yii::$app->errorHandler->exception)
+//        {
+////            var_dump($error);return;
+////            if(Yii::$app->request->isAjaxRequest)
+////                echo $error['message'];
+////            else
+//
+//        }
+//        return $this->renderFile(dir(__FILE__) . 'error', $error);
     }
 }

@@ -61,7 +61,7 @@ class OrderController extends Controller
     {
         $searchModel = new OrderViewSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setPagination(['pageSize' => 7]);
+        $dataProvider->setPagination(['pageSize' => 20]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -199,10 +199,14 @@ class OrderController extends Controller
 
                         if (!empty($model->getVoucher())) {
                             /* @var $voucher Voucher */
-                            $voucher = Voucher::findOne(['code' => $model->getVoucher()]);
-                            $voucher->order_id = $model->id;
-                            if (!$voucher->save()) {
-                                $errors[] = current($voucher->getFirstErrors());
+                            if ($voucher = Voucher::findOne(['code' => $model->getVoucher(), 'order_id' => null]))
+                            {
+                                $voucher->order_id = $model->id;
+                                if (!$voucher->save()) {
+                                    $errors[] = current($voucher->getFirstErrors());
+                                }
+                            } else {
+                                $errors[] = Yii::t('app', 'Voucher has been used');
                             }
                         }
 

@@ -182,7 +182,7 @@ foreach ($models as $model) { ?>
                             </li>
                         </ul>
                         <br/>
-                        <a class="btn btn-md blue hidden-print margin-bottom-5 print"
+                        <a class="btn btn-md blue hidden-print margin-bottom-5 print button-print"
                            onclick="printF('order_id_<?= $count ?>');">
                             <?= Yii::t('app', 'Print Invoice') ?> <i class="fa fa-print"></i>
                         </a>
@@ -227,8 +227,10 @@ foreach ($models as $model) { ?>
         writeDoc.close();
 
         printWindow.focus();
-        printWindow.print();
-        printWindow.close();
+        setTimeout(function() {
+            printWindow.print();
+            printWindow.close();
+        }, 50);
     }
 
     function docType() {
@@ -248,6 +250,7 @@ foreach ($models as $model) { ?>
 
     function getBody(printElement) {
         var printcontent = document.getElementById(printElement);
+
         return '<body>' +
             '<div class="page-container">\n' +
             '<div class="page-content">\n' +
@@ -256,7 +259,12 @@ foreach ($models as $model) { ?>
             '</div>\n' +
             '</div>\n' +
             '</div>\n' +
-            '</body>\n';
+            '</body>\n' +
+            "<style>" +
+            ".print {" +
+            "display: none!important;visibility: hidden!important" +
+            "}" +
+            "<\/style>";
     }
 
     function Popup() {

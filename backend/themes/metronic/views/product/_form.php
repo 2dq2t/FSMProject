@@ -109,7 +109,7 @@ if(isset($images)) {
                                     <?= $form->field($model, 'barcode')->hiddenInput()->label(false)?>
                                 </div>
                                 <div class="col-md-6">
-                                    <canvas id="barcode-image" width="200" height="100"></canvas>
+                                    <canvas id="barcode-image" width="150" height="75"></canvas>
                                     <?php
 //                                    \barcode\barcode\BarcodeGenerator::widget([
 //                                        'value' => Yii::$app->params['barcodeCountryCode'].Yii::$app->params['barcodeBusinessCode'].$model->barcode,
