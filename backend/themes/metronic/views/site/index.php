@@ -9,7 +9,7 @@ $this->title = Yii::t('app','HomeTitle');
     <?php
     \miloschuman\highcharts\HighchartsAsset::register($this)->withScripts(['modules/exporting', 'modules/drilldown']);
     ?>
-    <?php if (Yii::$app->user->can('site/sale')) {?>
+    <?php if (Yii::$app->user->can('/site/sale')) {?>
     <!-- BEGIN DASHBOARD FOR SALE-->
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
@@ -522,7 +522,7 @@ $this->title = Yii::t('app','HomeTitle');
         </div>
     </div>
     <!-- END DASHBOARD FOR SALE-->
-    <?php } else if (Yii::$app->user->can('site/manage')) {?>
+    <?php } else if (Yii::$app->user->can('/site/manage')) {?>
 
     <!-- BEGIN DASHBOARD FOR MANAGE-->
     <div class="row">
@@ -792,7 +792,7 @@ $this->title = Yii::t('app','HomeTitle');
         </div>
     </div>
     <!-- END DASHBOARD FOR MANAGE-->
-    <?php } else if (Yii::$app->user->can('site/admin')) { ?>
+    <?php } else if (Yii::$app->user->can('/site/admin')) { ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet box green">
