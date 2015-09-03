@@ -134,7 +134,7 @@ class SeasonController extends Controller
             $model->to = date('d/m/Y', $model->to);
         }
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->from = date_create_from_format('d/m/Y', $model->from) ?
                 mktime(null,null,null, date_create_from_format('d/m/Y', $model->from)->format('m'), date_create_from_format('d/m/Y', $model->from)->format('d'), date_create_from_format('d/m/Y', $model->from)->format('y')) : time();
@@ -203,8 +203,7 @@ class SeasonController extends Controller
             $model->to = date('d/m/Y', $model->to);
         }
 
-        if ($model->load(Yii::$app->request->post())) {
-
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $oldModel = $model->oldAttributes;
             $model->from = date_create_from_format('d/m/Y', $model->from) ?
                 mktime(null,null,null, date_create_from_format('d/m/Y', $model->from)->format('m'), date_create_from_format('d/m/Y', $model->from)->format('d'), date_create_from_format('d/m/Y', $model->from)->format('y')) : time();

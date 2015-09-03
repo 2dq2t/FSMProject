@@ -25,7 +25,8 @@ class DualListboxAsset extends \yii\web\AssetBundle
             $minFiles[] = "{$file}.min.{$type}";
         }
         if (empty($this->$type)) {
-            $this->$type = YII_DEBUG ? $srcFiles : $minFiles;
+//            $this->$type = YII_DEBUG ? $srcFiles : $minFiles;
+            $this->$type = $srcFiles;
         }
     }
 
